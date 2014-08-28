@@ -10,4 +10,5 @@
 
 @interface CommonViewController : UIViewController
 
+-(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem;
 @end

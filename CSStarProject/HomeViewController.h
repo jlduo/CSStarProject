@@ -10,4 +10,9 @@
 
 @interface HomeViewController : CommonViewController
 
+@property (weak, nonatomic) IBOutlet UITextView *textField;
+@property (weak, nonatomic) IBOutlet UIButton *reqBtn;
+
+- (IBAction)requestData:(id)sender;
+
 @end

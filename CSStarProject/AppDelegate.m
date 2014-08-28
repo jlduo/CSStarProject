@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-
 @interface AppDelegate ()
 
 @end
@@ -16,9 +15,36 @@
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    //初始化系统整体页面
+//    HomeViewController *view1 = [[HomeViewController alloc]init];//系统首页
+//    GirlsViewController *view2 = [[GirlsViewController alloc]init];//美女私房
+//    StoryViewController *view3 = [[StoryViewController alloc]init];//星城故事
+//    PeopleViewController *view4 = [[PeopleViewController alloc]init];//活动众筹
+//    FriendViewController *view5 = [[FriendViewController alloc]init];//朋友圈
+//    
+//    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:view1];
+//    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:view2];
+//    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:view3];
+//    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:view4];
+//    UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:view5];
+    
+    //初始化导航
+//    InitNavBarViewController *nav1 = [[InitNavBarViewController alloc]initWithRootViewController:view1];
+//    InitNavBarViewController *nav2 = [[InitNavBarViewController alloc]initWithRootViewController:view2];
+//    InitNavBarViewController *nav3 = [[InitNavBarViewController alloc]initWithRootViewController:view3];
+//    InitNavBarViewController *nav4 = [[InitNavBarViewController alloc]initWithRootViewController:view4];
+//    InitNavBarViewController *nav5 = [[InitNavBarViewController alloc]initWithRootViewController:view5];
+    
+//    InitTabBarViewController *tabBar = [[InitTabBarViewController alloc] init];
+//    tabBar.viewControllers = @[nav1,nav2,nav3,nav4,nav5];
+//    
+//    self.window.rootViewController = tabBar;
+//    self.window.backgroundColor = [UIColor whiteColor];
+//    [self.window makeKeyAndVisible];
+    
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -7,6 +7,9 @@
 //
 
 #import "HomeViewController.h"
+#import "UserViewController.h"
+#import "ConvertJSONData.h"
+#import "ConvertXMLData.h"
 
 @interface HomeViewController ()
 
@@ -16,22 +19,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)loadView{
+    [super loadView];
+    [self.view addSubview:[super setNavBarWithTitle:@"首 页" hasLeftItem:NO hasRightItem:YES]];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+#pragma mark 测试请求数据
+- (IBAction)requestData:(id)sender {
+    
+    NSLog(@"requestData....");
+//
+//    ConvertJSONData *convert = [[ConvertJSONData alloc] init];
+//    NSDictionary *weatherInfo = [convert convertJsonDataWithURL:@"http://m.weather.com.cn/data/101180601.html" withDataKey:@"weatherinfo"];
+//    _textField.text = [NSString stringWithFormat:@"今天是 %@  %@  %@  的天气状况是：%@  %@ ",[weatherInfo objectForKey:@"date_y"],[weatherInfo objectForKey:@"week"],[weatherInfo objectForKey:@"city"], [weatherInfo objectForKey:@"weather1"], [weatherInfo objectForKey:@"temp1"]];
+//    NSLog(@"weatherInfo字典里面的内容为--》%@", weatherInfo);
+    
+    ConvertXMLData *xmldata = [[ConvertXMLData alloc]init];
+    //NSString *url = @"http://www.ibiblio.org/xml/examples/shakespeare/all_well.xml";
+    NSDictionary * mydata = [xmldata convertXMLDataWithFileName:@"student"];
+    NSLog(@"xmldata==%@",[[mydata valueForKey:@"student"] valueForKey:@"name"]);
+    _textField.text = @"解析远程xml数据成功啦";
+    
 }
-*/
+
 
 @end
