@@ -110,6 +110,10 @@
 		7EA3317619AF0FDE007FE086 /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317519AF0FDE007FE086 /* XMLDictionary.m */; };
 		7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317819AF106A007FE086 /* ConvertXMLData.m */; };
 		7EA3317B19AF14F5007FE086 /* student.xml in Resources */ = {isa = PBXBuildFile; fileRef = 7EA3317A19AF14F5007FE086 /* student.xml */; };
+		7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317D19AF2A89007FE086 /* PicTableViewCell.m */; };
+		7EA3318019AF2A89007FE086 /* PicTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA3317E19AF2A89007FE086 /* PicTableViewCell.xib */; };
+		7EA3318419AF2A98007FE086 /* VideoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3318219AF2A98007FE086 /* VideoTableViewCell.m */; };
+		7EA3318519AF2A98007FE086 /* VideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA3318319AF2A98007FE086 /* VideoTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -247,6 +251,12 @@
 		7EA3317719AF106A007FE086 /* ConvertXMLData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertXMLData.h; sourceTree = "<group>"; };
 		7EA3317819AF106A007FE086 /* ConvertXMLData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvertXMLData.m; sourceTree = "<group>"; };
 		7EA3317A19AF14F5007FE086 /* student.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = student.xml; sourceTree = "<group>"; };
+		7EA3317C19AF2A89007FE086 /* PicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PicTableViewCell.h; sourceTree = "<group>"; };
+		7EA3317D19AF2A89007FE086 /* PicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PicTableViewCell.m; sourceTree = "<group>"; };
+		7EA3317E19AF2A89007FE086 /* PicTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PicTableViewCell.xib; sourceTree = "<group>"; };
+		7EA3318119AF2A98007FE086 /* VideoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTableViewCell.h; sourceTree = "<group>"; };
+		7EA3318219AF2A98007FE086 /* VideoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTableViewCell.m; sourceTree = "<group>"; };
+		7EA3318319AF2A98007FE086 /* VideoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +360,12 @@
 		7E971F4E19ADC93100858D44 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7EA3317C19AF2A89007FE086 /* PicTableViewCell.h */,
+				7EA3317D19AF2A89007FE086 /* PicTableViewCell.m */,
+				7EA3317E19AF2A89007FE086 /* PicTableViewCell.xib */,
+				7EA3318119AF2A98007FE086 /* VideoTableViewCell.h */,
+				7EA3318219AF2A98007FE086 /* VideoTableViewCell.m */,
+				7EA3318319AF2A98007FE086 /* VideoTableViewCell.xib */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -679,6 +695,7 @@
 				7EA3314619AF0343007FE086 /* iconqq.png in Resources */,
 				7EA3316919AF0343007FE086 /* playtimes.png in Resources */,
 				7EA3312A19AF0343007FE086 /* btncheck.png in Resources */,
+				7EA3318519AF2A98007FE086 /* VideoTableViewCell.xib in Resources */,
 				7EA3316619AF0343007FE086 /* non_payment.png in Resources */,
 				7EA3313019AF0343007FE086 /* discussiconzc.png in Resources */,
 				7EA3316119AF0343007FE086 /* myzonediscuss.png in Resources */,
@@ -701,6 +718,7 @@
 				7EA3314A19AF0343007FE086 /* icontip.png in Resources */,
 				7EA3315519AF0343007FE086 /* lablesuccess.png in Resources */,
 				7EA3315019AF0343007FE086 /* ii.jpg in Resources */,
+				7EA3318019AF2A89007FE086 /* PicTableViewCell.xib in Resources */,
 				7EA3315C19AF0343007FE086 /* myzone_sponsor_on.png in Resources */,
 				7EA3314519AF0343007FE086 /* iconphone.png in Resources */,
 				7EA3315719AF0343007FE086 /* logo_alipay.png in Resources */,
@@ -733,6 +751,7 @@
 			files = (
 				7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */,
 				7EA3317619AF0FDE007FE086 /* XMLDictionary.m in Sources */,
+				7EA3318419AF2A98007FE086 /* VideoTableViewCell.m in Sources */,
 				7EA3317219AF0CD6007FE086 /* ConvertJSONData.m in Sources */,
 				7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
@@ -745,6 +764,7 @@
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
+				7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */,
 				7EA32F7A19AEEC87007FE086 /* CJSONSerializer.m in Sources */,
 				7E971F2819ADC8B600858D44 /* main.m in Sources */,
 				7EA32F5819AEC49B007FE086 /* HomeViewController.m in Sources */,

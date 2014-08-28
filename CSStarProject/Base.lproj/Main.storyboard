@@ -35,28 +35,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="white" text="暂无数据" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rxP-F2-lJh">
-                                <rect key="frame" x="0.0" y="64" width="320" height="304"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O2v-PQ-cR1">
-                                <rect key="frame" x="80" y="397" width="138" height="40"/>
-                                <state key="normal" title="请求json数据">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="requestData:" destination="Dzb-sy-isU" eventType="touchUpInside" id="RRc-AC-9kI"/>
-                                </connections>
-                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="aIi-zu-UcQ">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="1bz-lh-4gl"/>
                     <connections>
-                        <outlet property="reqBtn" destination="O2v-PQ-cR1" id="P9E-vW-her"/>
-                        <outlet property="textField" destination="rxP-F2-lJh" id="ulw-Hi-vK8"/>
+                        <outlet property="homeTable" destination="aIi-zu-UcQ" id="jcA-WC-gqs"/>
+                        <outlet property="homeTableView" destination="aIi-zu-UcQ" id="8Hq-FZ-SUp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Uv-Nz-ATX" userLabel="First Responder" sceneMemberID="firstResponder"/>

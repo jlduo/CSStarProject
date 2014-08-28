@@ -121,7 +121,7 @@
 #pragma mark控制滑动条效果
 -(void)changeTabsFrameWithAnimation:(UIButton *) sender{
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.35 animations:^{
         CGRect labelFrame = CGRectMake(self.selectedIndex * BTN_WIDTH, -1, BTN_WIDTH, SLIDER_HEIGHT);
         [imageView setFrame:labelFrame];
         
