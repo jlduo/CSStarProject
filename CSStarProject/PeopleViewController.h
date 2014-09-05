@@ -10,4 +10,10 @@
 
 @interface PeopleViewController : CommonViewController
 
+#pragma mark 活动众筹 表格视图
+@property (weak, nonatomic) IBOutlet UITableView *peopleTableView;
+
+#pragma mark 活动众筹数据
+@property(nonatomic,retain)NSMutableArray *peopleDataList;
+
 @end

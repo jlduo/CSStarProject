@@ -10,4 +10,10 @@
 
 @interface FriendViewController : CommonViewController
 
+#pragma mark 朋友圈表格视图
+@property (weak, nonatomic) IBOutlet UITableView *friendTableView;
+
+#pragma mark 朋友圈数据
+@property(nonatomic,retain)NSMutableArray *friendDataList;
+
 @end

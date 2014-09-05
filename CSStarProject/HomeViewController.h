@@ -1,17 +1,23 @@
 //
 //  HomeViewController.h
 //  CSStarProject
-// 342424234
+//
 //  Created by jialiduo on 14-8-28.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
-
 #import "CommonViewController.h"
+#import "FFScrollView.h"
+#import "UserViewController.h"
+#import "GirlsVideoViewController.h"
+#import "PicTableViewCell.h"
+#import "VideoTableViewCell.h"
+#import "UILabel+VerticalAlign.h"
 
 @interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>
 
 #pragma mark 表格视图对象
 @property (weak, nonatomic) IBOutlet UITableView *homeTableView;
+@property (nonatomic, strong) UIRefreshControl* refreshControl;
 
 #pragma mark 分组标题数据
 @property(nonatomic,retain)NSMutableArray *headTitleArray;
@@ -23,5 +29,6 @@
 @property(nonatomic,retain)NSMutableArray *peopleDataList;
 #pragma mark 朋友圈数据
 @property(nonatomic,retain)NSMutableArray *friendDataList;
+
 
 @end

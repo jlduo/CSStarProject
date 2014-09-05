@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.8" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Friend View Controller-->
+        <!--Friend View Controller - 朋友圈_ViewController-->
         <scene sceneID="8g0-Fc-4ge">
             <objects>
-                <viewController id="HyK-ek-DHZ" customClass="FriendViewController" sceneMemberID="viewController">
+                <viewController title="朋友圈_ViewController" id="HyK-ek-DHZ" customClass="FriendViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bxO-0G-NuW"/>
                         <viewControllerLayoutGuide type="bottom" id="vMD-3e-53r"/>
@@ -15,18 +16,34 @@
                     <view key="view" contentMode="scaleToFill" id="KBP-R1-SdR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vtw-m5-Cmw">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="vtw-m5-Cmw" secondAttribute="trailing" id="BEh-rc-zZC"/>
+                            <constraint firstAttribute="trailing" secondItem="vtw-m5-Cmw" secondAttribute="trailing" id="M2B-mJ-946"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="leading" secondItem="KBP-R1-SdR" secondAttribute="leading" id="Ujw-27-r0R"/>
+                            <constraint firstAttribute="bottom" secondItem="vtw-m5-Cmw" secondAttribute="bottom" constant="49" id="b1z-iw-ngy"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="top" secondItem="KBP-R1-SdR" secondAttribute="top" constant="64" id="yBi-5h-qhc"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aN2-SE-umZ"/>
+                    <connections>
+                        <outlet property="friendTableView" destination="vtw-m5-Cmw" id="eEo-BJ-YSS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V4X-li-YMy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="1399"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Home View Controller - 首页_ViewController-->
         <scene sceneID="HRF-6I-O9P">
             <objects>
-                <viewController id="Dzb-sy-isU" customClass="HomeViewController" sceneMemberID="viewController">
+                <viewController title="首页_ViewController" id="Dzb-sy-isU" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RHP-dh-KyQ"/>
                         <viewControllerLayoutGuide type="bottom" id="npf-ya-B5b"/>
@@ -35,27 +52,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="aIi-zu-UcQ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="25" sectionFooterHeight="25" translatesAutoresizingMaskIntoConstraints="NO" id="aIi-zu-UcQ">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Dzb-sy-isU" id="NnD-MH-HqZ"/>
+                                    <outlet property="delegate" destination="Dzb-sy-isU" id="S8K-zX-4ax"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="aIi-zu-UcQ" secondAttribute="bottom" constant="49" id="BfA-oq-c5E"/>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="leading" secondItem="Ktn-LO-v4o" secondAttribute="leading" id="WKl-O6-PJ7"/>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="top" secondItem="Ktn-LO-v4o" secondAttribute="top" constant="64" id="ZUY-Mu-Qt4"/>
+                            <constraint firstAttribute="trailing" secondItem="aIi-zu-UcQ" secondAttribute="trailing" id="p2w-00-xHG"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="1bz-lh-4gl"/>
                     <connections>
-                        <outlet property="homeTable" destination="aIi-zu-UcQ" id="jcA-WC-gqs"/>
-                        <outlet property="homeTableView" destination="aIi-zu-UcQ" id="8Hq-FZ-SUp"/>
+                        <outlet property="homeTableView" destination="aIi-zu-UcQ" id="5s7-XU-2Zg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Uv-Nz-ATX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="884" y="-1613"/>
+            <point key="canvasLocation" x="895" y="-1613"/>
         </scene>
-        <!--Girls View Controller-->
+        <!--Girls View Controller - 美女私房_ViewController-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
-                <viewController id="kdO-5D-qrW" customClass="GirlsViewController" sceneMemberID="viewController">
+                <viewController title="美女私房_ViewController" id="kdO-5D-qrW" customClass="GirlsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kAc-yG-8yl"/>
                         <viewControllerLayoutGuide type="bottom" id="fWe-PD-Hdx"/>
@@ -63,18 +89,37 @@
                     <view key="view" contentMode="scaleToFill" id="qRg-y6-2hW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gj1-0U-roh">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="kdO-5D-qrW" id="B87-wd-daZ"/>
+                                    <outlet property="delegate" destination="kdO-5D-qrW" id="Xnb-7H-b0P"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="gj1-0U-roh" secondAttribute="bottom" constant="49" id="27v-CA-fBg"/>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="82P-9K-svc"/>
+                            <constraint firstAttribute="trailing" secondItem="gj1-0U-roh" secondAttribute="trailing" id="cev-jo-R5I"/>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="icK-YM-sDo"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hGs-S2-uNo"/>
+                    <connections>
+                        <outlet property="girlsTableView" destination="gj1-0U-roh" id="Fg0-BK-OWE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LWl-7f-pHL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="-917"/>
         </scene>
-        <!--People View Controller-->
+        <!--People View Controller - 活动众筹个_ViewController-->
         <scene sceneID="bp3-Pq-Adq">
             <objects>
-                <viewController id="oMW-WD-uXC" customClass="PeopleViewController" sceneMemberID="viewController">
+                <viewController title="活动众筹个_ViewController" id="oMW-WD-uXC" customClass="PeopleViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WOJ-a4-Y3K"/>
                         <viewControllerLayoutGuide type="bottom" id="eJF-p7-2nc"/>
@@ -82,18 +127,33 @@
                     <view key="view" contentMode="scaleToFill" id="620-OQ-8TU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rds-N1-qqR">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="1Tv-md-PBr"/>
+                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="1ku-Ut-hxS"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="KIK-VC-nGz"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="Pld-pU-rre"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rZm-zf-UuU"/>
+                    <connections>
+                        <outlet property="peopleTableView" destination="rds-N1-qqR" id="LhR-wE-BHb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqL-1v-6IF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="589"/>
         </scene>
-        <!--Story View Controller-->
+        <!--Story View Controller - 星城故事_ViewController-->
         <scene sceneID="9hq-Y2-9rs">
             <objects>
-                <viewController id="aGx-Wv-JVF" customClass="StoryViewController" sceneMemberID="viewController">
+                <viewController title="星城故事_ViewController" id="aGx-Wv-JVF" customClass="StoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="g8O-AZ-WZi"/>
                         <viewControllerLayoutGuide type="bottom" id="P3L-e3-U0g"/>
@@ -101,9 +161,28 @@
                     <view key="view" contentMode="scaleToFill" id="2bN-EP-5VU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="6PY-A5-rCw">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="aGx-Wv-JVF" id="Nlu-VF-ef8"/>
+                                    <outlet property="delegate" destination="aGx-Wv-JVF" id="OgN-60-KEY"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="leading" secondItem="2bN-EP-5VU" secondAttribute="leading" id="E0B-Ok-2Wc"/>
+                            <constraint firstAttribute="bottom" secondItem="6PY-A5-rCw" secondAttribute="bottom" constant="49" id="Pww-As-0Vq"/>
+                            <constraint firstAttribute="trailing" secondItem="6PY-A5-rCw" secondAttribute="trailing" id="ajz-uU-UeA"/>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="top" secondItem="2bN-EP-5VU" secondAttribute="top" constant="64" id="sLS-86-5GL"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
+                    <connections>
+                        <outlet property="storyTableView" destination="6PY-A5-rCw" id="ZZf-BC-eH0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8t-dG-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -131,7 +210,7 @@
             </objects>
             <point key="canvasLocation" x="-377" y="-742"/>
         </scene>
-        <!--首页-->
+        <!--Navigation Controller - 首页-->
         <scene sceneID="Xg4-s9-CB0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hnA-XZ-2fr" sceneMemberID="viewController">
@@ -150,7 +229,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-1613"/>
         </scene>
-        <!--美女私房-->
+        <!--Navigation Controller - 美女私房-->
         <scene sceneID="HIg-rY-bCW">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fM3-lm-kza" sceneMemberID="viewController">
@@ -172,7 +251,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-917"/>
         </scene>
-        <!--星城故事-->
+        <!--Navigation Controller - 星城故事-->
         <scene sceneID="KaJ-Ym-LEP">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qlb-G1-BnD" sceneMemberID="viewController">
@@ -191,7 +270,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-233"/>
         </scene>
-        <!--活动众筹-->
+        <!--Navigation Controller - 活动众筹-->
         <scene sceneID="sOg-34-kTs">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pkK-FE-J3V" sceneMemberID="viewController">
@@ -210,7 +289,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="589"/>
         </scene>
-        <!--朋友圈-->
+        <!--Navigation Controller - 朋友圈-->
         <scene sceneID="O4t-U1-SSn">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Nl-GP-D9l" sceneMemberID="viewController">
@@ -233,9 +312,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

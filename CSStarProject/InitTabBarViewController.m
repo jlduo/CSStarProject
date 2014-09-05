@@ -9,7 +9,7 @@
 #import "InitTabBarViewController.h"
 
 @interface InitTabBarViewController (){
-    UIButton * _previousBtn;//记录上次选择都按钮
+    UIButton * _previousBtn;//记录上次选择的按钮
     NSMutableArray *btnArray;
     UIView *_tBarView;
     NSString *ctitle;
@@ -67,8 +67,8 @@
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
         
-        [btn setImageEdgeInsets:UIEdgeInsetsMake(0, (BTN_WIDTH-30)/2, 18, (BTN_HEIGHT-30)/2)];
-        [btn setTitleEdgeInsets:UIEdgeInsetsMake(35, -22, 8, 0)];
+        [btn setImageEdgeInsets:UIEdgeInsetsMake(4, (BTN_WIDTH-30)/2, 16, (BTN_HEIGHT-24)/2)];
+        [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -50, 8, 0)];
         
         btn.tag = i+11;
         //监听按钮点击切换视图
@@ -76,7 +76,7 @@
         switch (i) {
             case 0:
                 ctitle = @"首 页";
-                [btn setTitleEdgeInsets:UIEdgeInsetsMake(35, -26, 8, 0)];
+                [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -50, 8, 0)];
                 break;
             case 1:
                 ctitle = @"美女私房";

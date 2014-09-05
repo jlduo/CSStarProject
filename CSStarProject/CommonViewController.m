@@ -28,7 +28,7 @@
 #pragma mark 处理navgationbar
 -(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem{
     
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT)];
+    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
@@ -85,12 +85,9 @@
     
 }
 
-
-
-
 -(void)goPreviou{
     NSLog(@"back");
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)goForward{
@@ -99,5 +96,39 @@
     [self.navigationController pushViewController:userView animated:YES];
     
 }
+
+#pragma mark 获取下拉刷新组件
+-(UIRefreshControl *)getUIRefreshControl:(SEL)action withTarget:(id)target{
+    //初始化UIRefreshControl
+    UIRefreshControl *rc = [[UIRefreshControl alloc] init];
+    rc.attributedTitle = [[NSAttributedString alloc]initWithString:REFRESH_TITLE];
+    [rc addTarget:target action:action forControlEvents:UIControlEventValueChanged];
+    rc.tintColor = [UIColor lightGrayColor];
+    rc.alpha = 0.5f;
+    return rc;
+}
+
+- (UIButton *)getCustomLoadMoreButton {
+    UIButton *_loadMoreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH,40)];
+    [_loadMoreButton setTitle:@"加载更多" forState:UIControlStateNormal];
+    _loadMoreButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [_loadMoreButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_loadMoreButton setBackgroundColor:[UIColor colorWithWhite:0.922 alpha:1.000]];
+    [_loadMoreButton.layer setMasksToBounds:YES];
+    //[_loadMoreButton.layer setCornerRadius:8.0]; //设置矩形四个圆角半径
+    return _loadMoreButton;
+}
+
+
+-(void) alignLabelWithTop:(UILabel *)label {
+    CGSize maxSize = CGSizeMake(label.frame.size.width, 999);
+    label.adjustsFontSizeToFitWidth = NO;
+    CGSize actualSize = [label.text sizeWithFont:label.font constrainedToSize:maxSize lineBreakMode:label.lineBreakMode];
+    CGRect rect = label.frame;
+    rect.size.height = actualSize.height;
+    label.frame = rect;
+}
+
+
 
 @end
