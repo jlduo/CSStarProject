@@ -8,6 +8,7 @@
 
 #import "common.h"
 #import <UIKit/UIKit.h>
+#import "UILabel+ContentSize.h"
 #import "AllAroundPullView.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "VideoTableViewCell.h"
@@ -16,6 +17,8 @@
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate> {
     
     MPMoviePlayerController *moviePlayer;
+    UIActivityIndicatorView *loadingAni;    //加载动画
+    UILabel *loadingLabel;                         //加载提醒
 }
 
 @end

@@ -14,6 +14,7 @@
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
     
+    UILabel *descLabel;
     
     UITableView *videoTableView;
 }
@@ -63,30 +64,40 @@
     UIView *videoDesc = [[UIView alloc]initWithFrame:CGRectMake(0, 224, SCREEN_WIDTH, 60)];
     videoDesc.backgroundColor = [UIColor whiteColor];
     
-    UILabel *descLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
-    [descLabel setText:@"  当电影播放器结束对内容的预加载后发出。"];
-    [descLabel setTextColor:[UIColor blackColor]];
-    [descLabel setNumberOfLines:3];
-    [descLabel setAlpha:0.7];
-    [descLabel setLineBreakMode:NSLineBreakByWordWrapping];
-    descLabel.font = [UIFont fontWithName:@"Arial" size:13.0f];
+    //1.实例化UILabel，其frame设置为CGRectZero，后面会重新设置该值。
+    descLabel = [[UILabel alloc] initWithFrame: CGRectZero];
+    //2.将UILabel设置为自动换行
+    [descLabel setNumberOfLines:0];
+    [descLabel setAlpha:0.7f];
+    //3.具体要自适应处理的字符串实例
+    NSString *s = @"  henh很森第三方女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻";
+    descLabel.text = s;
+    //4.获取所要使用的字体实例
+    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    descLabel.font = font;
+    //5.UILabel字符显示的最大大小
+    CGSize size = CGSizeMake(320,60);
+    //6.计算UILabel字符显示的实际大小
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    //7.重设UILabel实例的frame
+    [descLabel setFrame:CGRectMake(0,0, labelsize.width, labelsize.height)];
+    [videoDesc setFrame:CGRectMake(0,224, labelsize.width, labelsize.height)];
+    //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [videoDesc addSubview:descLabel];
     [self.view addSubview:videoDesc];
-    //videoTableView.tableHeaderView = videoDesc;
 }
 
 -(void)setVideoView:(BOOL)isRemote{
+    
     if(isRemote){
         NSString *remoteUrl = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
         moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
     }else{
-        NSString *moviePath = [[NSBundle mainBundle] pathForResource:@"video" ofType:@"mp4"];
+        NSString *moviePath = [[NSBundle mainBundle] pathForResource:@"testVideo" ofType:@"MOV"];
         if(moviePath){
           NSURL *movieURL = [NSURL fileURLWithPath:moviePath];
           moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:movieURL];
         }
-        
-        
     }
     //设置播放器高度参数
     [[moviePlayer view] setFrame:CGRectMake(0,STATU_BAR_HEIGHT+NAV_TITLE_HEIGHT, MAIN_FRAME_W, 160)];
@@ -96,6 +107,26 @@
     [self addVideoPic];
     [self addPlayBtn];
 
+}
+
+//增加加载提示动画
+-(void)addLoadTip{
+    
+    loadingAni = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(140, 70, 32, 32)];
+    loadingAni.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [self.view addSubview:loadingAni];
+    
+    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 120, 80, 40)];
+    loadingLabel.text = @"加载中...";
+    loadingLabel.textColor = [UIColor whiteColor];
+    loadingLabel.backgroundColor = [UIColor clearColor];
+    
+    [[self view] setBackgroundColor:[UIColor blackColor]];
+    
+    [loadingAni startAnimating];
+    [self.view addSubview:loadingLabel];
+    
+    
 }
 
 -(void)addVideoPic{
@@ -120,6 +151,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification
                                                object:moviePlayer];
+    
+    //添加一个播放状态都通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieLoadingCallback:)
+                                                 name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:moviePlayer];
 }
 
 -(void)removeNotice:(NSNotification*)notify{
@@ -131,6 +167,29 @@
                                                   object:myMovie];
     [myMovie.view removeFromSuperview];
 
+}
+
+//播放状态通知调用
+-(void)myMovieLoadingCallback:(NSNotification*)notify{
+    
+        MPMoviePlayerController *player = notify.object;
+        MPMovieLoadState loadState = player.loadState;
+    
+        NSLog(@"loadState=%d",loadState);
+        if(loadState & MPMovieLoadStateUnknown){
+          
+        }
+        if(loadState & MPMovieLoadStatePlayable){
+            //第一次加载，或者前后拖动完成之后 /
+        }
+        
+        if(loadState & MPMovieLoadStatePlaythroughOK){
+            
+        }
+    
+        if(loadState & MPMovieLoadStateStalled){
+            //网络不好，开始缓冲了
+        }
 }
 
 //播放结束调用

@@ -50,6 +50,11 @@
 		7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E971F3519ADC8B600858D44 /* Images.xcassets */; };
 		7E971F4219ADC8B600858D44 /* CSStarProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */; };
 		7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */; };
+		7E9B680B19BE8DAE0053B50E /* UILabel+ContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B680A19BE8DAE0053B50E /* UILabel+ContentSize.m */; };
+		7E9B680E19BE98840053B50E /* CustomMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B680D19BE98840053B50E /* CustomMoviePlayerViewController.m */; };
+		7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681019BE9DD00053B50E /* CJSONDeserializer.m */; };
+		7E9B681719BE9DD00053B50E /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681219BE9DD00053B50E /* CJSONSerializer.m */; };
+		7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681519BE9DD00053B50E /* NSDictionary_JSONExtensions.m */; };
 		7E9C0ACA19B437EB005D01A3 /* CustomTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C0AC919B437EB005D01A3 /* CustomTableCell.m */; };
 		7E9C546719B7ECFF00851CAB /* tb_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C546519B7ECFF00851CAB /* tb_back.png */; };
 		7E9C546819B7ECFF00851CAB /* tb_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C546619B7ECFF00851CAB /* tb_back@2x.png */; };
@@ -85,9 +90,6 @@
 		7EA32F5E19AEC4D3007FE086 /* GirlsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F5D19AEC4D3007FE086 /* GirlsViewController.m */; };
 		7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F6019AEC4E3007FE086 /* StoryViewController.m */; };
 		7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F6319AEC4F5007FE086 /* PeopleViewController.m */; };
-		7EA32F7919AEEC87007FE086 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F7319AEEC87007FE086 /* CJSONDeserializer.m */; };
-		7EA32F7A19AEEC87007FE086 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F7519AEEC87007FE086 /* CJSONSerializer.m */; };
-		7EA32F7B19AEEC87007FE086 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA32F7819AEEC87007FE086 /* NSDictionary_JSONExtensions.m */; };
 		7EA3317219AF0CD6007FE086 /* ConvertJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317119AF0CD6007FE086 /* ConvertJSONData.m */; };
 		7EA3317619AF0FDE007FE086 /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317519AF0FDE007FE086 /* XMLDictionary.m */; };
 		7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA3317819AF106A007FE086 /* ConvertXMLData.m */; };
@@ -177,6 +179,17 @@
 		7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSStarProjectTests.m; sourceTree = "<group>"; };
 		7E971F5119ADCEE100858D44 /* InitTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitTabBarViewController.h; sourceTree = "<group>"; };
 		7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitTabBarViewController.m; sourceTree = "<group>"; };
+		7E9B680919BE8DAE0053B50E /* UILabel+ContentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+ContentSize.h"; sourceTree = "<group>"; };
+		7E9B680A19BE8DAE0053B50E /* UILabel+ContentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+ContentSize.m"; sourceTree = "<group>"; };
+		7E9B680C19BE98840053B50E /* CustomMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMoviePlayerViewController.h; sourceTree = "<group>"; };
+		7E9B680D19BE98840053B50E /* CustomMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomMoviePlayerViewController.m; sourceTree = "<group>"; };
+		7E9B680F19BE9DD00053B50E /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer.h; sourceTree = "<group>"; };
+		7E9B681019BE9DD00053B50E /* CJSONDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer.m; sourceTree = "<group>"; };
+		7E9B681119BE9DD00053B50E /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
+		7E9B681219BE9DD00053B50E /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
+		7E9B681319BE9DD00053B50E /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		7E9B681419BE9DD00053B50E /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
+		7E9B681519BE9DD00053B50E /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
 		7E9C0AC819B437EB005D01A3 /* CustomTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableCell.h; sourceTree = "<group>"; };
 		7E9C0AC919B437EB005D01A3 /* CustomTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableCell.m; sourceTree = "<group>"; };
 		7E9C546519B7ECFF00851CAB /* tb_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tb_back.png; sourceTree = "<group>"; };
@@ -231,13 +244,6 @@
 		7EA32F6219AEC4F5007FE086 /* PeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
 		7EA32F6319AEC4F5007FE086 /* PeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
 		7EA32F6519AECC7C007FE086 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		7EA32F7219AEEC87007FE086 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJSONDeserializer.h; path = ../../../Downloads/TouchJson/CJSONDeserializer.h; sourceTree = "<group>"; };
-		7EA32F7319AEEC87007FE086 /* CJSONDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CJSONDeserializer.m; path = ../../../Downloads/TouchJson/CJSONDeserializer.m; sourceTree = "<group>"; };
-		7EA32F7419AEEC87007FE086 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJSONSerializer.h; path = ../../../Downloads/TouchJson/CJSONSerializer.h; sourceTree = "<group>"; };
-		7EA32F7519AEEC87007FE086 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CJSONSerializer.m; path = ../../../Downloads/TouchJson/CJSONSerializer.m; sourceTree = "<group>"; };
-		7EA32F7619AEEC87007FE086 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONRepresentation.h; path = ../../../Downloads/TouchJson/JSONRepresentation.h; sourceTree = "<group>"; };
-		7EA32F7719AEEC87007FE086 /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSDictionary_JSONExtensions.h; path = ../../../Downloads/TouchJson/NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
-		7EA32F7819AEEC87007FE086 /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSDictionary_JSONExtensions.m; path = ../../../Downloads/TouchJson/NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
 		7EA3317019AF0CD6007FE086 /* ConvertJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertJSONData.h; sourceTree = "<group>"; };
 		7EA3317119AF0CD6007FE086 /* ConvertJSONData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvertJSONData.m; sourceTree = "<group>"; };
 		7EA3317419AF0FDE007FE086 /* XMLDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLDictionary.h; sourceTree = "<group>"; };
@@ -473,6 +479,8 @@
 				7EA32F5419AEC3EE007FE086 /* CommonViewController.m */,
 				7E9D342C19B6ED71005498D0 /* InitNavBarViewController.h */,
 				7E9D342D19B6ED71005498D0 /* InitNavBarViewController.m */,
+				7E9B680C19BE98840053B50E /* CustomMoviePlayerViewController.h */,
+				7E9B680D19BE98840053B50E /* CustomMoviePlayerViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -513,6 +521,8 @@
 				7E28487B19B54AF300669756 /* DateUtil.m */,
 				7E9C548119B844BC00851CAB /* StringUitl.h */,
 				7E9C548219B844BC00851CAB /* StringUitl.m */,
+				7E9B680919BE8DAE0053B50E /* UILabel+ContentSize.h */,
+				7E9B680A19BE8DAE0053B50E /* UILabel+ContentSize.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -587,13 +597,13 @@
 		7EA32F7119AEEC75007FE086 /* Json */ = {
 			isa = PBXGroup;
 			children = (
-				7EA32F7219AEEC87007FE086 /* CJSONDeserializer.h */,
-				7EA32F7319AEEC87007FE086 /* CJSONDeserializer.m */,
-				7EA32F7419AEEC87007FE086 /* CJSONSerializer.h */,
-				7EA32F7519AEEC87007FE086 /* CJSONSerializer.m */,
-				7EA32F7619AEEC87007FE086 /* JSONRepresentation.h */,
-				7EA32F7719AEEC87007FE086 /* NSDictionary_JSONExtensions.h */,
-				7EA32F7819AEEC87007FE086 /* NSDictionary_JSONExtensions.m */,
+				7E9B680F19BE9DD00053B50E /* CJSONDeserializer.h */,
+				7E9B681019BE9DD00053B50E /* CJSONDeserializer.m */,
+				7E9B681119BE9DD00053B50E /* CJSONSerializer.h */,
+				7E9B681219BE9DD00053B50E /* CJSONSerializer.m */,
+				7E9B681319BE9DD00053B50E /* JSONRepresentation.h */,
+				7E9B681419BE9DD00053B50E /* NSDictionary_JSONExtensions.h */,
+				7E9B681519BE9DD00053B50E /* NSDictionary_JSONExtensions.m */,
 				7EA3317019AF0CD6007FE086 /* ConvertJSONData.h */,
 				7EA3317119AF0CD6007FE086 /* ConvertJSONData.m */,
 			);
@@ -839,6 +849,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */,
 				7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */,
 				7E73E65E19B4598400EB6024 /* StoryTableViewSmallCell.m in Sources */,
 				7EA3317619AF0FDE007FE086 /* XMLDictionary.m in Sources */,
@@ -850,11 +861,13 @@
 				7E9C547E19B81DD500851CAB /* UserInfoViewController.m in Sources */,
 				7ECE643319B06354005EDE82 /* FFScrollView.m in Sources */,
 				7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */,
+				7E9B681719BE9DD00053B50E /* CJSONSerializer.m in Sources */,
 				7E73E66E19B45DCA00EB6024 /* StoryTableViewBigDescCell.m in Sources */,
 				7E9D341A19B6987C005498D0 /* AllAroundPullView.m in Sources */,
 				7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
 				7EA32F5519AEC3EE007FE086 /* CommonViewController.m in Sources */,
+				7E9B680B19BE8DAE0053B50E /* UILabel+ContentSize.m in Sources */,
 				7E9D5DE019B9632B004D32C1 /* GirlsVideoViewController.m in Sources */,
 				7E971F2B19ADC8B600858D44 /* AppDelegate.m in Sources */,
 				7EA32F5E19AEC4D3007FE086 /* GirlsViewController.m in Sources */,
@@ -862,15 +875,14 @@
 				7E9C0ACA19B437EB005D01A3 /* CustomTableCell.m in Sources */,
 				7E28487C19B54AF300669756 /* DateUtil.m in Sources */,
 				7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */,
-				7EA32F7B19AEEC87007FE086 /* NSDictionary_JSONExtensions.m in Sources */,
-				7EA32F7919AEEC87007FE086 /* CJSONDeserializer.m in Sources */,
 				7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */,
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
+				7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
 				7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */,
-				7EA32F7A19AEEC87007FE086 /* CJSONSerializer.m in Sources */,
 				7E9D342E19B6ED71005498D0 /* InitNavBarViewController.m in Sources */,
+				7E9B680E19BE98840053B50E /* CustomMoviePlayerViewController.m in Sources */,
 				7E971F2819ADC8B600858D44 /* main.m in Sources */,
 				7EA32F5819AEC49B007FE086 /* HomeViewController.m in Sources */,
 			);
