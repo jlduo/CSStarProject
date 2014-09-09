@@ -55,6 +55,7 @@
 		7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681019BE9DD00053B50E /* CJSONDeserializer.m */; };
 		7E9B681719BE9DD00053B50E /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681219BE9DD00053B50E /* CJSONSerializer.m */; };
 		7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681519BE9DD00053B50E /* NSDictionary_JSONExtensions.m */; };
+		7E9B681A19BE9FF00053B50E /* con_bg@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7E9B681919BE9FF00053B50E /* con_bg@2x.jpg */; };
 		7E9C0ACA19B437EB005D01A3 /* CustomTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C0AC919B437EB005D01A3 /* CustomTableCell.m */; };
 		7E9C546719B7ECFF00851CAB /* tb_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C546519B7ECFF00851CAB /* tb_back.png */; };
 		7E9C546819B7ECFF00851CAB /* tb_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C546619B7ECFF00851CAB /* tb_back@2x.png */; };
@@ -67,7 +68,6 @@
 		7E9C547619B7F3D700851CAB /* icon_redo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C547419B7F3D700851CAB /* icon_redo@2x.png */; };
 		7E9C547819B7F85600851CAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9C547719B7F85600851CAB /* QuartzCore.framework */; };
 		7E9C547E19B81DD500851CAB /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C547D19B81DD500851CAB /* UserInfoViewController.m */; };
-		7E9C548019B8257200851CAB /* con_bg@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C547F19B8257200851CAB /* con_bg@2x.jpg */; };
 		7E9C548319B844BC00851CAB /* StringUitl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C548219B844BC00851CAB /* StringUitl.m */; };
 		7E9C548819B85A0D00851CAB /* UserBigTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C548619B85A0D00851CAB /* UserBigTableViewCell.m */; };
 		7E9C548919B85A0D00851CAB /* UserBigTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C548719B85A0D00851CAB /* UserBigTableViewCell.xib */; };
@@ -190,6 +190,7 @@
 		7E9B681319BE9DD00053B50E /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		7E9B681419BE9DD00053B50E /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
 		7E9B681519BE9DD00053B50E /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
+		7E9B681919BE9FF00053B50E /* con_bg@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "con_bg@2x.jpg"; sourceTree = "<group>"; };
 		7E9C0AC819B437EB005D01A3 /* CustomTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableCell.h; sourceTree = "<group>"; };
 		7E9C0AC919B437EB005D01A3 /* CustomTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableCell.m; sourceTree = "<group>"; };
 		7E9C546519B7ECFF00851CAB /* tb_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tb_back.png; sourceTree = "<group>"; };
@@ -204,7 +205,6 @@
 		7E9C547719B7F85600851CAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7E9C547C19B81DD500851CAB /* UserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoViewController.h; sourceTree = "<group>"; };
 		7E9C547D19B81DD500851CAB /* UserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoViewController.m; sourceTree = "<group>"; };
-		7E9C547F19B8257200851CAB /* con_bg@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "con_bg@2x.jpg"; path = "../../../Desktop/MicroMessenger.app/con_bg@2x.jpg"; sourceTree = "<group>"; };
 		7E9C548119B844BC00851CAB /* StringUitl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUitl.h; sourceTree = "<group>"; };
 		7E9C548219B844BC00851CAB /* StringUitl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUitl.m; sourceTree = "<group>"; };
 		7E9C548519B85A0D00851CAB /* UserBigTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserBigTableViewCell.h; sourceTree = "<group>"; };
@@ -613,7 +613,7 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				7E9C547F19B8257200851CAB /* con_bg@2x.jpg */,
+				7E9B681919BE9FF00053B50E /* con_bg@2x.jpg */,
 				7E9C546D19B7F24B00851CAB /* LDetailArow@2x.png */,
 				7E9C546F19B7F2C800851CAB /* LLCelIArrow@2x.png */,
 				7E9C546919B7F0F500851CAB /* nav_back.png */,
@@ -808,6 +808,7 @@
 				7E73E66419B45ABC00EB6024 /* StoryTableViewBigCell.xib in Resources */,
 				7E2848A119B5BA0300669756 /* blueArrow@2x.png in Resources */,
 				7E28487919B5456400669756 /* storyDataList.plist in Resources */,
+				7E9B681A19BE9FF00053B50E /* con_bg@2x.jpg in Resources */,
 				7E2848A019B5BA0300669756 /* blueArrow.png in Resources */,
 				7E9C547219B7F34700851CAB /* next_icon@2x.png in Resources */,
 				7E9D341E19B69894005498D0 /* arrow@2x.png in Resources */,
@@ -830,7 +831,6 @@
 				7E73E69319B46C3C00EB6024 /* switchon.png in Resources */,
 				7EA3317B19AF14F5007FE086 /* student.xml in Resources */,
 				7E73E68B19B46C3C00EB6024 /* icontip.png in Resources */,
-				7E9C548019B8257200851CAB /* con_bg@2x.jpg in Resources */,
 				7E73E68619B46C3C00EB6024 /* homestory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
