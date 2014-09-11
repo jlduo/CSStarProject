@@ -14,7 +14,7 @@
 @implementation AppDelegate
             
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions { 
     //初始化系统整体页面
 //    HomeViewController *view1 = [[HomeViewController alloc]init];//系统首页
 //    GirlsViewController *view2 = [[GirlsViewController alloc]init];//美女私房

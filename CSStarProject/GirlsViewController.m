@@ -60,7 +60,7 @@
     
     [bannerBaseView addSubview:bannerView];
     [bannerView addSubview:picTitle];
-    _girlsTableView.tableHeaderView = bannerBaseView;
+    _girlsTableView.tableHeaderView = bannerBaseView; 
     _girlsTableView.backgroundColor = [UIColor whiteColor];
     
 }
