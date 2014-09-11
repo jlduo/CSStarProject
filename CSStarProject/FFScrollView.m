@@ -72,7 +72,7 @@
     
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];
     self.pageControl.backgroundColor = [UIColor blackColor];
-    self.pageControl.alpha = 0.5f;
+    self.pageControl.alpha = 0.4f;
     self.pageControl.numberOfPages = sourceArr.count;
     self.pageControl.currentPage = 0;
     self.pageControl.enabled = YES;

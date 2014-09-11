@@ -10,4 +10,8 @@
 
 @interface InitTabBarViewController : UITabBarController
 
+
+-(void)hiddenDIYTaBar;
+-(void)showDIYTaBar;
+
 @end

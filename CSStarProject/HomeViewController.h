@@ -12,8 +12,12 @@
 #import "PicTableViewCell.h"
 #import "VideoTableViewCell.h"
 #import "UILabel+VerticalAlign.h"
+#import "ViewPassValueDelegate.h"
 
-@interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>
+@interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
+    // 声明一个参数传递代理
+    NSObject<ViewPassValueDelegate> *passValelegate;
+}
 
 #pragma mark 表格视图对象
 @property (weak, nonatomic) IBOutlet UITableView *homeTableView;

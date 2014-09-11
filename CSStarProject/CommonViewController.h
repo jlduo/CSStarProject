@@ -7,6 +7,7 @@
 //
 #import "common.h"
 #import <UIKit/UIKit.h>
+#import "ConvertJSONData.h"
 #import "AllAroundPullView.h"
 
 @interface CommonViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
@@ -25,4 +26,6 @@
 -(void)goPreviou;
 -(void)goForward;
 
+-(BOOL)isEmpty:(NSString *)str;
+-(BOOL)isNotEmpty:(NSString *)str;
 @end

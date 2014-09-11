@@ -7,6 +7,13 @@
 //
 #import "common.h"
 #import "AppDelegate.h"
+//#import "GirlsViewController.h"
+//#import "FriendViewController.h"
+//#import "StoryViewController.h"
+//#import "PeopleViewController.h"
+//#import "HomeViewController.h"
+//#import "InitNavBarViewController.h"
+//#import "InitTabBarViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -21,7 +28,7 @@
 //    StoryViewController *view3 = [[StoryViewController alloc]init];//星城故事
 //    PeopleViewController *view4 = [[PeopleViewController alloc]init];//活动众筹
 //    FriendViewController *view5 = [[FriendViewController alloc]init];//朋友圈
-//    
+
 //    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:view1];
 //    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:view2];
 //    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:view3];
@@ -34,7 +41,7 @@
 //    InitNavBarViewController *nav3 = [[InitNavBarViewController alloc]initWithRootViewController:view3];
 //    InitNavBarViewController *nav4 = [[InitNavBarViewController alloc]initWithRootViewController:view4];
 //    InitNavBarViewController *nav5 = [[InitNavBarViewController alloc]initWithRootViewController:view5];
-    
+//    
 //    InitTabBarViewController *tabBar = [[InitTabBarViewController alloc] init];
 //    tabBar.viewControllers = @[nav1,nav2,nav3,nav4,nav5];
 //    

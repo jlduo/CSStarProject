@@ -6,17 +6,22 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 #import "GirlsVideoViewController.h"
+#import "InitTabBarViewController.h"
 
 @interface GirlsVideoViewController (){
     UIImageView *videoPic;
     UIButton *playBtn;
+    UIView *headView;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
     
     UILabel *descLabel;
+    NSString *dataId;
+    NSDictionary *cellDic;
     
     UITableView *videoTableView;
+    
 }
 
 @end
@@ -27,21 +32,16 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    videoTableView.delegate = self;
-    videoTableView.dataSource = self;
-    
-    //加入播放器
-    [self setVideoView:YES];
     
     //计算高度
-    CGRect tframe = CGRectMake(0, 284, SCREEN_WIDTH,(MAIN_FRAME_H-315));
+    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
     
     videoTableView = [[UITableView alloc] initWithFrame:tframe];
     videoTableView.delegate = self;
     videoTableView.dataSource = self;
     
     [videoTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
-    //videoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    videoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[[UIView alloc]init];
     view.backgroundColor = [UIColor clearColor];
@@ -49,9 +49,13 @@
     videoTableView.showsVerticalScrollIndicator = YES;
     
     //处理头部信息
-    [self setTableHead];
+    [self initBannerData];
+    [self loadGirlsData];
+    //[self setTableHead];
     
-    [self.view addSubview:videoTableView];
+    [self setVideoView:YES];
+    [self initToolBar];
+    
     
     //集成刷新控件
     [self setHeaderRereshing];
@@ -59,32 +63,102 @@
     
 }
 
--(void)setTableHead{
-    //定义描述信息
-    UIView *videoDesc = [[UIView alloc]initWithFrame:CGRectMake(0, 224, SCREEN_WIDTH, 60)];
-    videoDesc.backgroundColor = [UIColor whiteColor];
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        
+        self.tabBarController.hidesBottomBarWhenPushed = YES;
+        
+    }
+    return self;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
     
-    //1.实例化UILabel，其frame设置为CGRectZero，后面会重新设置该值。
-    descLabel = [[UILabel alloc] initWithFrame: CGRectZero];
-    //2.将UILabel设置为自动换行
-    [descLabel setNumberOfLines:0];
-    [descLabel setAlpha:0.7f];
-    //3.具体要自适应处理的字符串实例
-    NSString *s = @"  henh很森第三方女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻女生短发林尼克斯发南斯拉夫苏里科夫康师傅了十分深刻";
-    descLabel.text = s;
-    //4.获取所要使用的字体实例
-    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
-    descLabel.font = font;
-    //5.UILabel字符显示的最大大小
-    CGSize size = CGSizeMake(320,60);
-    //6.计算UILabel字符显示的实际大小
-    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
-    //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,0, labelsize.width, labelsize.height)];
-    [videoDesc setFrame:CGRectMake(0,224, labelsize.width, labelsize.height)];
-    //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
-    [videoDesc addSubview:descLabel];
-    [self.view addSubview:videoDesc];
+    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
+    [customTabar hiddenDIYTaBar];
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
+    [videoTableView setFrame:temFrame];
+    
+}
+
+//初始化头部数据
+-(void)initBannerData{
+    if([self isNotEmpty:dataId]){
+        
+        ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+        NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms/GetArticle/%@",dataId];
+        bannerData = (NSMutableDictionary *)[convertJson requestData:url];
+        //NSLog(@"bannerData===%@",bannerData);
+        
+    }
+}
+
+//初始化底部工具栏
+-(void)initToolBar{
+    
+    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 55)];
+    [toolBar setBackgroundColor:[UIColor whiteColor]];
+    
+    //加入输入框
+    UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+    [textField setBorderStyle:UITextBorderStyleRoundedRect];
+    [textField setBackgroundColor:[UIColor whiteColor]];
+    
+    //加入按钮
+    UIButton *numBtn = [[UIButton alloc]initWithFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+    [numBtn.layer setMasksToBounds:YES];
+    [numBtn.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
+    [numBtn.layer setBorderWidth:0.5];   //边框宽度
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 1 });
+    [numBtn.layer setBorderColor:colorref];
+    [numBtn setBackgroundImage:[UIImage imageNamed:@"con_bg@2x.jpg"] forState:UIControlStateNormal];
+    
+    //给按钮默认显示评论数据
+    [numBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [numBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    
+    //[bannerData valueForKey:@"_click"]
+    [numBtn setTitle:@"123" forState:UIControlStateNormal];
+    [numBtn setTitle:@"123" forState:UIControlStateHighlighted];
+    
+    //给按钮绑定事件
+    [numBtn addTarget:self action:@selector(commentBtnClick) forControlEvents:UIControlEventTouchDown];
+    
+    
+    [toolBar addSubview:textField];
+    [toolBar addSubview:numBtn];
+    
+    
+    [self.view addSubview:toolBar];
+    
+    
+}
+
+-(void)commentBtnClick{
+    
+    NSLog(@"asdasdadadasda");
+}
+
+-(void)loadGirlsData{
+    
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = @"http://192.168.1.210:8888/cms/GetArticles/video/3/is_red=1";
+    NSArray *girlsArr = (NSArray *)[convertJson requestData:url];
+    if(girlsArr!=nil && girlsArr.count>0){
+        topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
+    }
+    //NSLog(@"topVideoArray====%@",topVideoArray);
+    
+}
+
+//传递过来的参数
+-(void)passValue:(NSString *)val{
+    dataId = val;
+    NSLog(@"dataId====%@",dataId);
 }
 
 -(void)setVideoView:(BOOL)isRemote{
@@ -100,49 +174,98 @@
         }
     }
     //设置播放器高度参数
-    [[moviePlayer view] setFrame:CGRectMake(0,STATU_BAR_HEIGHT+NAV_TITLE_HEIGHT, MAIN_FRAME_W, 160)];
-    [self.view addSubview:moviePlayer.view];
+    [[moviePlayer view] setFrame:CGRectMake(0,0, MAIN_FRAME_W, 180)];
+    //[self.view addSubview:moviePlayer.view];
     
+    //定义描述信息
+    UIView *videoDesc = [[UIView alloc]initWithFrame:CGRectMake(0, 180, SCREEN_WIDTH, 0)];
+    videoDesc.backgroundColor = [UIColor whiteColor];
+    
+    //1.实例化UILabel，其frame设置为CGRectZero，后面会重新设置该值。
+    descLabel = [[UILabel alloc] initWithFrame: CGRectZero];
+    //2.将UILabel设置为自动换行
+    [descLabel setNumberOfLines:0];
+    [descLabel setAlpha:0.7f];
+    //3.具体要自适应处理的字符串实例
+    NSString *s = [bannerData valueForKey:@"_zhaiyao"];
+    descLabel.text = [NSString stringWithFormat:@"    %@",s];
+    //4.获取所要使用的字体实例
+    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    descLabel.font = font;
+    //5.UILabel字符显示的最大大小
+    CGSize size = CGSizeMake(SCREEN_WIDTH,80);
+    //6.计算UILabel字符显示的实际大小
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    //7.重设UILabel实例的frame
+    [descLabel setFrame:CGRectMake(0,0, labelsize.width, labelsize.height)];
+    [videoDesc setFrame:CGRectMake(0,180, SCREEN_WIDTH, labelsize.height)];
+    
+    //修改videoTable的frame
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-44));
+    [videoTableView setFrame:temFrame];
+    //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
+    [videoDesc addSubview:descLabel];
+    
+    headView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180+videoDesc.frame.size.height)];
+    [headView addSubview:moviePlayer.view];
+    [headView addSubview:videoDesc];
+    
+    videoTableView.tableHeaderView = headView;
+    [self.view addSubview:videoTableView];
+    
+    
+    
+    //视频监听事件
     [self addNotice];
+    [self addLoadTip];
     [self addVideoPic];
     [self addPlayBtn];
+    
 
 }
 
 //增加加载提示动画
 -(void)addLoadTip{
     
-    loadingAni = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(140, 70, 32, 32)];
+    loadingAni = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-32)/2, (180-50)/2, 32, 32)];
     loadingAni.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    [self.view addSubview:loadingAni];
+    [headView addSubview:loadingAni];
     
-    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 120, 80, 40)];
+    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-40)/2, 90, 80, 40)];
     loadingLabel.text = @"加载中...";
+    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    loadingLabel.font = font;
     loadingLabel.textColor = [UIColor whiteColor];
     loadingLabel.backgroundColor = [UIColor clearColor];
     
-    [[self view] setBackgroundColor:[UIColor blackColor]];
-    
     [loadingAni startAnimating];
-    [self.view addSubview:loadingLabel];
+    [headView addSubview:loadingLabel];
+
+}
+
+//移除提示信息
+-(void)removeLoadTip{
     
+    [loadingAni removeFromSuperview];
+    [loadingLabel removeFromSuperview];
     
 }
 
 -(void)addVideoPic{
     //加载图片视图
-    videoPic = [[UIImageView alloc]initWithFrame:moviePlayer.view.frame];
-    [videoPic setImage:[UIImage imageNamed:@"2.png"]];
-    [self.view addSubview:videoPic];
+    videoPic = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
+    NSString *videoPicUrl = [bannerData valueForKey:@"_img_url"];
+    [videoPic setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoPicUrl]]]];
+    [headView addSubview:videoPic];
 }
 
 -(void)addPlayBtn{
     
-    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-20, 130, 40,40)];
-    [playBtn setBackgroundImage:[UIImage imageNamed:@"playsmall.png"] forState:UIControlStateNormal];
+    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-24, 70, 48,48)];
+    [playBtn setBackgroundImage:[UIImage imageNamed:@"playbig.png"] forState:UIControlStateNormal];
     
     [playBtn addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:playBtn];
+    [headView addSubview:playBtn];
 }
 
 -(void)addNotice{
@@ -152,9 +275,13 @@
                                                  name:MPMoviePlayerPlaybackDidFinishNotification
                                                object:moviePlayer];
     
-    //添加一个播放状态都通知
+    //添加一个加载状态都通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieLoadingCallback:)
                                                  name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:moviePlayer];
+    //添加一个播放状态都通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMoviePlayStateCallback:)
+                                                 name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:moviePlayer];
 }
 
@@ -169,27 +296,31 @@
 
 }
 
-//播放状态通知调用
+//加载状态通知调用
 -(void)myMovieLoadingCallback:(NSNotification*)notify{
     
-        MPMoviePlayerController *player = notify.object;
-        MPMovieLoadState loadState = player.loadState;
+    MPMoviePlayerController *player = notify.object;
+    MPMovieLoadState loadState = player.loadState;
+    if(loadState != MPMovieLoadStateUnknown){
+        [self removeLoadTip];
+    }
     
-        NSLog(@"loadState=%d",loadState);
-        if(loadState & MPMovieLoadStateUnknown){
-          
-        }
-        if(loadState & MPMovieLoadStatePlayable){
-            //第一次加载，或者前后拖动完成之后 /
-        }
-        
-        if(loadState & MPMovieLoadStatePlaythroughOK){
-            
-        }
+}
+
+//播放状态通知调用
+-(void)myMoviePlayStateCallback:(NSNotification*)notify{
     
-        if(loadState & MPMovieLoadStateStalled){
-            //网络不好，开始缓冲了
-        }
+    MPMoviePlayerController *player = notify.object;
+    MPMoviePlaybackState playState = player.playbackState;
+    
+    if(playState==MPMoviePlaybackStatePaused){
+        [self addLoadTip];
+    }
+    
+    if(playState==MPMoviePlaybackStatePlaying){
+        [self removeLoadTip];
+    }
+    
 }
 
 //播放结束调用
@@ -220,7 +351,10 @@
 }
 
 -(void)goPreviou{
-    [super goPreviou];
+    //[super goPreviou];
+    [self dismissViewControllerAnimated:YES completion:^{
+        //关闭时候到操作
+    }];
     [self stopPlay];
 }
 
@@ -302,12 +436,26 @@
 
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return topVideoArray.count;
 }
 
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    return 70;
+    
+}
+
+#pragma mark 行选中事件
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    cellDic = [topVideoArray objectAtIndex:indexPath.row];
+    dataId = [cellDic valueForKey:@"_id"];
+    NSLog(@"newDataId=%@",dataId);
+    
+    GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+    passValelegate = videoView;
+    [passValelegate passValue:dataId];
+    [self.navigationController pushViewController:videoView animated:YES];
     
 }
 
@@ -317,14 +465,23 @@
      UINib *nibCell = [UINib nibWithNibName:@"VideoTableViewCell" bundle:nil];
     [tableView registerNib:nibCell forCellReuseIdentifier:@"VideoCell"];
     VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
+    
+    cellDic = [topVideoArray objectAtIndex:indexPath.row];
     videoCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UIImage *videImg =[UIImage imageNamed:@"1.png"];
-    [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
-    videoCell.videoTitle.text = @"真的很不错哦！！！";
     
-    videoCell.videoDesc.text = @"dasdasdasdasdadsas";
-    videoCell.clickNum.text = @"2222";
+    NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
+    NSRange range = [imgUrl rangeOfString:@"/upload/"];
+    if(range.location!=NSNotFound){//判断加载远程图像
+        UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
+        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+    }
+    
+    videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
+    
+    videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
+    NSNumber * clickNum =[cellDic valueForKey:@"_click"];
+    videoCell.clickNum.text = [clickNum stringValue];
     return videoCell;
 }
 
