@@ -36,7 +36,7 @@
     [self setBannerView];
     
 
-    //_girlsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLineEtched;
+    _girlsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     
 }
@@ -176,7 +176,7 @@
     if([dataType isEqualToString:@"photo"]){
         return 110.0;
     }else{
-        return 60.0;
+        return 70.0;
     }
 }
 
@@ -193,7 +193,7 @@
             isNibregistered = YES;
         }
         
-        PicTableViewCell *picCell = [self.girlsTableView dequeueReusableCellWithIdentifier:@"PicCell"];
+        PicTableViewCell *picCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
         picCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         UIImage *picImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
@@ -212,7 +212,7 @@
             isNibregistered = YES;
         }
         
-        VideoTableViewCell *videoCell = [self.girlsTableView dequeueReusableCellWithIdentifier:@"VideoCell"];
+        VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
         videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
         UIImage *videImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
         [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];

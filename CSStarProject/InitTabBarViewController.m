@@ -33,6 +33,17 @@
 }
 
 
+//隐藏自定义滚动条
+-(void)hiddenDIYTaBar{
+    _tBarView.hidden = YES;
+}
+
+//显示自定义滚动条
+-(void)showDIYTaBar{
+    _tBarView.hidden = NO;
+}
+
+
 #pragma mark 自定义tabbar
 -(void)initCoustomBtnTabar{
     CGRect viewRect = CGRectMake(0, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT);

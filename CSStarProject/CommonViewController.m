@@ -129,6 +129,24 @@
     label.frame = rect;
 }
 
+//判断字符串为空
+-(BOOL)isEmpty:(NSString *)str{
+    if([str isEqual:nil]||[str isEqual:@""]){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//判断字符串不为空
+-(BOOL)isNotEmpty:(NSString *)str{
+    if(![self isEmpty:str]){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 
 @end

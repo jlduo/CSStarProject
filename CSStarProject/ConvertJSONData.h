@@ -14,5 +14,6 @@
 -(NSDictionary*)convertJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey;
 #pragma mark 通过URL请求json数据并解析［TouchJson方法］
 -(NSDictionary*)convertCJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey;
+-(NSObject *)requestData:(NSString*)nurl;
 
 @end
