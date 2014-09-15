@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "LoginViewController.h"
 #import "InitTabBarViewController.h"
 
 @interface HomeViewController (){
@@ -84,8 +85,10 @@
 
 -(void)goForward{
     NSLog(@"go");
-    UserViewController *userPage = [[UserViewController alloc] init];
-    [self.navigationController pushViewController:userPage animated:YES];
+    LoginViewController *userView = [[LoginViewController alloc] init];
+    [self presentViewController:userView animated:YES completion:^{
+        //
+    }];
     
 }
 
@@ -145,7 +148,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES]];
+    [self.view addSubview:[super setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:Nil]];
 }
 
 
@@ -306,7 +309,9 @@
              GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
              passValelegate = videoView;
             [passValelegate passValue:dataId];
-            [self.navigationController presentModalViewController:videoView animated:YES];
+            [self presentViewController:videoView animated:YES completion:^{
+               //
+            }];
         }else{
             
             

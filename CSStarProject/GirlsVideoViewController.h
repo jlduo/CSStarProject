@@ -16,7 +16,7 @@
 #import "ViewPassValueDelegate.h"
 #import "ConvertJSONData.h"
 
-@interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate> {
+@interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,UITextViewDelegate> {
     
     MPMoviePlayerController *moviePlayer;
     UIActivityIndicatorView *loadingAni;    //加载动画

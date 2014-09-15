@@ -12,4 +12,12 @@
 
 @interface StringUitl : NSObject
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
+
++(BOOL)isEmpty:(NSString *)str;
++(BOOL)isNotEmpty:(NSString *)str;
+
++(void)alertMsg:(NSString *)msg withtitle:(NSString *)title;
++(BOOL)validateMobile:(NSString *)mobileNum;
+
 @end
+

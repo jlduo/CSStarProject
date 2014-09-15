@@ -9,7 +9,11 @@
 #import "CommonViewController.h"
 #import "UserViewController.h"
 
-@interface CommonViewController ()
+@interface CommonViewController (){
+    
+    NSString * leftIconName;
+    NSString * rightIconName;
+}
 
 @end
 
@@ -26,7 +30,7 @@
 }
 
 #pragma mark 处理navgationbar
--(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem{
+-(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem leftIcon:(NSString *)leftIcon rightIcon:(NSString *)rightIcon {
     
     UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
@@ -34,11 +38,11 @@
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     
     if(lItem){//设置左边按钮
-        navItem.leftBarButtonItem = [self getLeftUIBarButtonItemWithTarget:self];
+        navItem.leftBarButtonItem = [self getLeftUIBarButtonItemWithTarget:self withIconName:leftIcon];
     }
     
     if(rItem){//设置右边按钮
-        navItem.rightBarButtonItem = [self getRightUIBarButtonItemWithTarget:self];
+        navItem.rightBarButtonItem = [self getRightUIBarButtonItemWithTarget:self withIconName:rightIcon];
     }
     
     navItem.titleView = [self setTitleWithName:title];
@@ -49,11 +53,15 @@
 }
 
 #pragma mark 设置左边按钮
--(UIBarButtonItem *)getLeftUIBarButtonItemWithTarget:(id)target{
-    
+-(UIBarButtonItem *)getLeftUIBarButtonItemWithTarget:(id)target withIconName:(NSString *)iconName{
+    if([self isEmpty:iconName]){
+        leftIconName = NAVBAR_LEFT_ICON;
+    }else{
+        leftIconName = iconName;
+    }
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
-    [lbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_LEFT_ICON] forState:UIControlStateNormal];
+    [lbtn setBackgroundImage:[UIImage imageNamed:leftIconName] forState:UIControlStateNormal];
     [lbtn addTarget:target action:@selector(goPreviou) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
@@ -61,11 +69,15 @@
 }
 
 #pragma mark 设置右边按钮
--(UIBarButtonItem *)getRightUIBarButtonItemWithTarget:(id)target{
-    
+-(UIBarButtonItem *)getRightUIBarButtonItemWithTarget:(id)target withIconName:(NSString *)iconName{
+    if([self isEmpty:iconName]){
+        rightIconName = NAVBAR_RIGHT_ICON;
+    }else{
+        rightIconName = iconName;
+    }
     UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
-    [rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
+    [rbtn setBackgroundImage:[UIImage imageNamed:rightIconName] forState:UIControlStateNormal];
     [rbtn addTarget:target action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
@@ -79,6 +91,7 @@
     [titleLabel setText:titleName];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setFont:Font_Size(22)];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     
     return titleLabel;
@@ -131,7 +144,7 @@
 
 //判断字符串为空
 -(BOOL)isEmpty:(NSString *)str{
-    if([str isEqual:nil]||[str isEqual:@""]){
+    if(Nil==str||0==str.length){
         return true;
     }else{
         return false;
@@ -145,6 +158,17 @@
     }else{
         return false;
     }
+}
+
+//提示信息
+-(void)alertMsg:(NSString *)msg withtitle:(NSString *)title{
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:msg
+                                                   delegate:self
+                                          cancelButtonTitle:@"确 定"
+                                          otherButtonTitles:nil,nil];
+    [alert show];
 }
 
 
