@@ -231,12 +231,10 @@
 int i=60;
 -(void)changeBtnText:(NSTimer *) dt{
     //禁止点击
-    [_checkNumBtn setEnabled:NO];
     [_checkNumBtn setTitle:[NSString stringWithFormat:@"%d秒后重发",i] forState:UIControlStateNormal];
     NSLog(@"%d",i);
     if(i==0){
         [dt invalidate];
-        [_checkNumBtn setEnabled:YES];
     }
     i--;
 }
