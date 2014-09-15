@@ -146,7 +146,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"个人信息" hasLeftItem:YES hasRightItem:NO]];
+    [self.view addSubview:[self setNavBarWithTitle:@"个人信息" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
     
 }
 
@@ -289,7 +289,10 @@
         
         pickerImage.delegate = self;
         pickerImage.allowsEditing = NO;
-        [self presentModalViewController:pickerImage animated:YES];
+        [self presentViewController:pickerImage animated:YES completion:^{
+           //code
+        }];
+        
         
     }
 
@@ -309,7 +312,10 @@
         picker.delegate = self;
         picker.allowsEditing = YES;//设置可编辑
         picker.sourceType = sourceType;
-        [self presentModalViewController:picker animated:YES];//进入照相界面
+        //[self presentModalViewController:picker animated:YES];//进入照相界面
+        [self presentViewController:picker animated:YES completion:^{
+            //code
+        }];
     }
 }
 

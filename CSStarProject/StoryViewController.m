@@ -102,7 +102,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:NO hasRightItem:YES]];
+    [self.view addSubview:[self setNavBarWithTitle:@"星城故事" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 
 //获取数据

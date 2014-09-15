@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "LoginViewController.h"
 #import "InitTabBarViewController.h"
 
 @interface HomeViewController (){
@@ -84,8 +85,10 @@
 
 -(void)goForward{
     NSLog(@"go");
-    UserViewController *userPage = [[UserViewController alloc] init];
-    [self.navigationController pushViewController:userPage animated:YES];
+    LoginViewController *userView = [[LoginViewController alloc] init];
+    [self presentViewController:userView animated:YES completion:^{
+        //
+    }];
     
 }
 
@@ -145,7 +148,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES]];
+    [self.view addSubview:[super setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:Nil]];
 }
 
 
@@ -301,12 +304,14 @@
     if(indexPath.section==0){//跳转到美女私房
         NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
         NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
-        NSString *dataType = [girlCellDic valueForKey:@"_category_call_index"];
-        if([self isNotEmpty:dataId] && [dataType isEqual:@"video"]){
+        NSString *data_type = [girlCellDic valueForKey:@"_category_call_index"];
+        if([self isNotEmpty:dataId] && [data_type isEqual:@"video"]){
              GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
              passValelegate = videoView;
             [passValelegate passValue:dataId];
-            [self.navigationController presentModalViewController:videoView animated:YES];
+            [self presentViewController:videoView animated:YES completion:^{
+               //
+            }];
         }else{
             
             

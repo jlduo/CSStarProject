@@ -7,6 +7,7 @@
 //
 #import "GirlsVideoViewController.h"
 #import "InitTabBarViewController.h"
+#import "CommentListViewController.h"
 
 @interface GirlsVideoViewController (){
     UIImageView *videoPic;
@@ -20,6 +21,11 @@
     NSString *dataId;
     NSDictionary *cellDic;
     
+    UIToolbar *toolBar;
+    UIButton *numBtn;
+    UILabel *plabel;
+    UIImageView *cIconView;
+    UITextView *textField;
     UITableView *videoTableView;
     
 }
@@ -95,19 +101,71 @@
     }
 }
 
+
 //初始化底部工具栏
 -(void)initToolBar{
     
-    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 55)];
+    toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
     [toolBar setBackgroundColor:[UIColor whiteColor]];
     
-    //加入输入框
-    UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
-    [textField setBorderStyle:UITextBorderStyleRoundedRect];
-    [textField setBackgroundColor:[UIColor whiteColor]];
+    [self initTextView];
+    [self initCommentIcon];
+    [self initCommentText];
+    [self initNumButton];
     
+    [self.view addSubview:toolBar];
+    
+    
+}
+
+-(void)initTextView{
+    //加入输入框
+    textField = [[UITextView alloc]initWithFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+    textField.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    textField.layer.borderWidth =0.5;
+    textField.layer.cornerRadius =5.0;
+    textField.delegate = self;
+    //[textField setBackgroundColor:[UIColor whiteColor]];
+    [toolBar addSubview:textField];
+    
+    
+}
+
+-(void)initCommentIcon{
+    //在文本域内加入图标
+    cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 3, 24, 22)];
+    [cIconView setImage:[UIImage imageNamed:@"discussicon.png"]];
+    
+    [textField addSubview:cIconView];
+}
+
+-(void)initCommentText{
+    
+    //加入评论文字
+    plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 0, 40, 26)];
+    [plabel setText:@"评论"];
+    [plabel setFont:Font_Size(12)];
+    [plabel setTextAlignment:NSTextAlignmentCenter];
+    [plabel setTextColor:[UIColor grayColor]];
+    
+    //增加监听，当键盘出现或改变时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    [textField addSubview:plabel];
+    
+}
+
+-(void) initNumButton{
     //加入按钮
-    UIButton *numBtn = [[UIButton alloc]initWithFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+    numBtn = [[UIButton alloc]initWithFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
     [numBtn.layer setMasksToBounds:YES];
     [numBtn.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
     [numBtn.layer setBorderWidth:0.5];   //边框宽度
@@ -122,25 +180,141 @@
     [numBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     
     //[bannerData valueForKey:@"_click"]
-    [numBtn setTitle:@"123" forState:UIControlStateNormal];
-    [numBtn setTitle:@"123" forState:UIControlStateHighlighted];
+    NSInteger clickNum = [self getCommentNum:dataId];
+    [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateNormal];
+    [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateHighlighted];
+    numBtn.titleLabel.font = Font_Size(14);
     
     //给按钮绑定事件
     [numBtn addTarget:self action:@selector(commentBtnClick) forControlEvents:UIControlEventTouchDown];
     
-    
-    [toolBar addSubview:textField];
     [toolBar addSubview:numBtn];
+}
+
+//获取评论条数
+-(NSInteger)getCommentNum:(NSString *)articleId{
     
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"/Comment/GetCommentTotal/%@",articleId];
+    NSMutableDictionary *commentDic = (NSMutableDictionary *)[convertJson requestData:url];
+    NSInteger comments = (NSUInteger)[commentDic valueForKey:@"result"];
+    NSLog(@"评论条数＝＝%d",comments);
     
-    [self.view addSubview:toolBar];
-    
+    return comments;
     
 }
 
+//取消回车事件 改为关闭键盘
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        [self dismissKeyBoard];
+        return NO;
+    }
+    return YES;
+}
+
+//输入文字调用
+-(void)textViewDidChange:(UITextView *)textView{
+    NSString * textVal = textView.text;
+    if([self isNotEmpty:textVal]){
+        [plabel removeFromSuperview];
+        textView.text = textVal;
+    }
+    
+}
+
+//关闭键盘
+-(void) dismissKeyBoard{
+    [textField resignFirstResponder];
+}
+
+
+//当键盘出现或改变时调用
+- (void)keyboardWillShow:(NSNotification *)aNotification
+{
+    //获取键盘的高度
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    int height = keyboardRect.size.height;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [textField setFrame:CGRectMake(5, textField.frame.origin.y,textField.frame.size.width,textField.frame.size.height+30)];
+        [textField setTextAlignment:NSTextAlignmentNatural];
+        [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-50-height, SCREEN_WIDTH,toolBar.frame.size.height+30)];
+        [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 34, 45, 30)];
+        [numBtn setTitle:@"发 表" forState:UIControlStateNormal];
+        [numBtn setTitle:@"发 表" forState:UIControlStateHighlighted];
+        //[numBtn setFont:Font_Size(14)];//过时方法
+        numBtn.titleLabel.font = Font_Size(14);
+        
+        [cIconView removeFromSuperview];
+        [plabel setFrame:CGRectMake(0, plabel.frame.origin.y, plabel.frame.size.width, plabel.frame.size.height)];
+    }];
+    
+}
+
+//当键退出时调用
+- (void)keyboardWillHide:(NSNotification *)aNotification{
+    [UIView animateWithDuration:0.3 animations:^{
+       [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+       [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
+       [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+        NSInteger clickNum = [self getCommentNum:dataId];
+       [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateNormal];
+       [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateHighlighted];
+       numBtn.titleLabel.font = Font_Size(14);
+       
+       if([self isEmpty:textField.text]){
+           [textField addSubview:cIconView];
+           [plabel setFrame:CGRectMake(25, 0, 40, 26)];
+           [textField addSubview:plabel];
+        }
+        
+    }];
+}
+
+
 -(void)commentBtnClick{
     
-    NSLog(@"asdasdadadasda");
+    NSString *btnText = numBtn.titleLabel.text;
+    NSString *textVal = textField.text;
+    NSLog(@"textVal=%@",textVal);
+     NSLog(@"btnText=%@",btnText);
+    
+    if([btnText isEqual:@"发 表"]){//点击发表提交数据
+        NSLog(@"提交数据....");
+        if([self isEmpty:textVal]){
+            [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+        }else{
+            //提交数据
+            //ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+            
+           // NSString *posturl = [NSString stringWithFormat:@"%@",];
+            //[convertJson postData:<#(NSMutableDictionary *)#> withUrl:<#(NSString *)#>];
+            
+            
+        }
+        
+    }else{//点击数字进入评论列表
+        NSLog(@"进入评论列表....");
+        NSLog(@"newDataId=%@",dataId);
+        CommentListViewController *commentController = [[CommentListViewController alloc]init];
+        passValelegate = commentController;
+        [passValelegate passValue:dataId];
+        
+        [self presentViewController:commentController animated:YES completion:^{
+            //code
+        }];
+    }
+}
+
+//提价评论信息
+-(void)postCommetnVal:(NSString *)articelId{
+    
+    
+    
 }
 
 -(void)loadGirlsData{
@@ -216,10 +390,11 @@
     
     
     //视频监听事件
+    [self addPlayBtn];
     [self addNotice];
     [self addLoadTip];
     [self addVideoPic];
-    [self addPlayBtn];
+  
     
 
 }
@@ -255,7 +430,12 @@
     //加载图片视图
     videoPic = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     NSString *videoPicUrl = [bannerData valueForKey:@"_img_url"];
-    [videoPic setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoPicUrl]]]];
+    NSData *imgData =[NSData dataWithContentsOfURL:[NSURL URLWithString:videoPicUrl]];
+    if(imgData==nil || 0==imgData.length){
+        [self removeLoadTip];
+    }
+    [videoPic setImage:[UIImage imageWithData:imgData]];
+    
     [headView addSubview:videoPic];
 }
 
@@ -360,7 +540,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:NO]];
+    [self.view addSubview:[self setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:@"btnshare.png"]];
     
 }
 
@@ -449,13 +629,16 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
-    dataId = [cellDic valueForKey:@"_id"];
-    NSLog(@"newDataId=%@",dataId);
+    NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
+    NSLog(@"newDataId=%@",newId);
     
-    GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
-    passValelegate = videoView;
-    [passValelegate passValue:dataId];
-    [self.navigationController pushViewController:videoView animated:YES];
+    CommentListViewController *commentController = [[CommentListViewController alloc]init];
+    passValelegate = commentController;
+    [passValelegate passValue:newId];
+    
+    [self presentViewController:commentController animated:YES completion:^{
+        //code
+    }];
     
 }
 

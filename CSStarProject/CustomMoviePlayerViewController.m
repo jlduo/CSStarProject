@@ -77,7 +77,9 @@
                                                         name:MPMoviePlayerPlaybackDidFinishNotification
                                                       object:nil];
     
-    [self dismissModalViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:YES completion:^{
+        //code
+    }];
 }
 
 

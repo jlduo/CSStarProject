@@ -20,7 +20,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"活动众筹" hasLeftItem:NO hasRightItem:YES]];
+    [self.view addSubview:[self setNavBarWithTitle:@"活动众筹" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 
 @end

@@ -118,7 +118,7 @@
 -(void)loadView{
     [super loadView];
     //self.navigationController.navigationBarHidden = YES;
-    [self.view addSubview:[super setNavBarWithTitle:@"个人中心" hasLeftItem:YES hasRightItem:NO]];
+    [self.view addSubview:[self setNavBarWithTitle:@"个人中心" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
     
 }
 

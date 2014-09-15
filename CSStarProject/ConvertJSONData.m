@@ -56,15 +56,92 @@
 
 
 -(NSObject *)requestData:(NSString*)nurl{
+    NSObject *jsonObj;
+    NSURL *url = [NSURL URLWithString:nurl];
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20];
+    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    //NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+    if(received!=Nil){
+       jsonObj = [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];
+    }else{
+       jsonObj = Nil;
+    }
+    return jsonObj;
+}
+
+-(id)requestSData:(NSString*)nurl{
     
     NSURL *url = [NSURL URLWithString:nurl];
     NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20];
     NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     //NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
-    NSObject *jsonObj = [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];
-    return jsonObj;
+    return [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];
 }
 
+//提交表单数据
+-(BOOL)postData:(NSMutableDictionary *)paramData withUrl:(NSString *)url{
+    
+    DateUtil *dateUtil = [[DateUtil alloc]init];
+    if (paramData==nil||paramData.count==0) return false;
+    //获取所有keys
+    NSMutableArray *allKey = [NSMutableArray arrayWithArray:paramData.allKeys];
+    //遍历key获取值
+    NSString *val;
+    NSString *nowDateTime =[NSString stringWithFormat:@"now=%@&",[dateUtil getCurDateTimeStr]];
+    NSString *postString = [[NSString alloc]initWithString:nowDateTime];
+    for(int i=0;i<allKey.count;i++){
+        val = [paramData valueForKey:allKey[i]];
+        postString = [postString stringByAppendingString:[NSString stringWithFormat:@"&%@=%@",allKey[i],val]];
+    }//end for
+    
+    NSLog(@"postString:%@",postString);
+    
+    //将NSSrring格式的参数转换格式为NSData，POST提交必须用NSData数据。
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    //计算POST提交数据的长度
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    NSLog(@"postLength=%@",postLength);
+    //定义NSMutableURLRequest
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    //设置提交目的url
+    [request setURL:[NSURL URLWithString:url]];
+    //设置提交方式为 POST
+    [request setHTTPMethod:@"POST"];
+    //设置http-header:Content-Type
+    //这里设置为 application/x-www-form-urlencoded ，如果设置为其它的，比如text/html;charset=utf-8，或者 text/html 等，都会出错。不知道什么原因。
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    //设置http-header:Content-Length
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    //设置需要post提交的内容
+    [request setHTTPBody:postData];
+    
+    //定义
+    NSHTTPURLResponse* urlResponse = nil;
+    NSError *error = [[NSError alloc] init];
+    
+    //设置网络状态显示
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    //同步提交:POST提交并等待返回值（同步），返回值是NSData类型。
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    
+    //将NSData类型的返回值转换成NSString类型
+    //    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    
+    //将NSData装换为字典类型
+    NSError *jsonError = [[NSError alloc] init];
+    NSDictionary *personDictionary = [NSJSONSerialization JSONObjectWithData:responseData
+                                                                     options:NSJSONReadingMutableContainers
+                                                                       error:&jsonError];
+    NSString *status = [personDictionary objectForKey:@"status"];
+    
+    if ([@"ok" compare:status] == NSOrderedSame) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        return YES;
+    }
+    return NO;
+    
+}
 
 
 @end

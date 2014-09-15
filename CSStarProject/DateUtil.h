@@ -23,4 +23,10 @@
 
 -(NSString*)date2StringWithFomat:(NSString *) formater WithDate:(NSDate *)date;
 
+-(NSDate *)stringToDate:(NSString *)strdate;
+-(NSString *)dateToString:(NSDate *)date;
+-(NSString *)getLocalDateFormateUTCDate:(NSString *)utcDate;
+-(NSString *)getLocalDateFormateUTCDate1:(NSString *)utcDate;
+-(NSString *)getUTCFormateLocalDate:(NSString *)localDate;
+
 @end

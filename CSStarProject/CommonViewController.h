@@ -10,7 +10,7 @@
 #import "ConvertJSONData.h"
 #import "AllAroundPullView.h"
 
-@interface CommonViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@interface CommonViewController : UIViewController
 
 @property (nonatomic, strong) UIRefreshControl* refreshControl;
 
@@ -21,11 +21,14 @@
 
 -(UIRefreshControl *)getUIRefreshControl:(SEL)action withTarget:(id)target;
 
--(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem;
+-(UINavigationBar *)setNavBarWithTitle:(NSString *)title hasLeftItem:(BOOL) lItem hasRightItem:(BOOL) rItem leftIcon:(NSString *)leftIcon rightIcon:(NSString *)rightIcon;
 
 -(void)goPreviou;
 -(void)goForward;
 
 -(BOOL)isEmpty:(NSString *)str;
 -(BOOL)isNotEmpty:(NSString *)str;
+
+-(void)alertMsg:(NSString *)msg withtitle:(NSString *)title;
+
 @end
