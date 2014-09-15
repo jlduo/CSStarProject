@@ -22,7 +22,6 @@
 #pragma mark 整个cell视图
 @property (weak, nonatomic) IBOutlet UIView *cellView;
 
-
 #pragma mark 点击事件
 - (IBAction)arrowClick:(id)sender;
 
