@@ -10,7 +10,7 @@
 #import "ConvertJSONData.h"
 #import "AllAroundPullView.h"
 
-@interface CommonViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@interface CommonViewController : UIViewController
 
 @property (nonatomic, strong) UIRefreshControl* refreshControl;
 

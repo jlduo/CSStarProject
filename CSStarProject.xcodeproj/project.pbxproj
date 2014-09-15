@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */; };
 		7E28487919B5456400669756 /* storyDataList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E28487819B5456400669756 /* storyDataList.plist */; };
 		7E28487C19B54AF300669756 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E28487B19B54AF300669756 /* DateUtil.m */; };
 		7E28488D19B5822D00669756 /* tabbar0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28488819B5822D00669756 /* tabbar0@2x.png */; };
@@ -54,6 +55,7 @@
 		7E73E69419B46C3C00EB6024 /* titlebar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E68219B46C3C00EB6024 /* titlebar.png */; };
 		7E73E69719B4714700EB6024 /* playsmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E69519B4714700EB6024 /* playsmall.png */; };
 		7E73E69819B4714700EB6024 /* playtimes.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E69619B4714700EB6024 /* playtimes.png */; };
+		7E8B0F7B19C693680086589F /* heartgray.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8B0F7A19C693680086589F /* heartgray.png */; };
 		7E971F2819ADC8B600858D44 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2719ADC8B600858D44 /* main.m */; };
 		7E971F2B19ADC8B600858D44 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2A19ADC8B600858D44 /* AppDelegate.m */; };
 		7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2C19ADC8B600858D44 /* CSStarProject.xcdatamodeld */; };
@@ -136,6 +138,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailViewController.h; sourceTree = "<group>"; };
+		7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailViewController.m; sourceTree = "<group>"; };
 		7E28487819B5456400669756 /* storyDataList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = storyDataList.plist; sourceTree = "<group>"; };
 		7E28487A19B54AF300669756 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
 		7E28487B19B54AF300669756 /* DateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtil.m; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 		7E73E68219B46C3C00EB6024 /* titlebar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = titlebar.png; sourceTree = "<group>"; };
 		7E73E69519B4714700EB6024 /* playsmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playsmall.png; sourceTree = "<group>"; };
 		7E73E69619B4714700EB6024 /* playtimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playtimes.png; sourceTree = "<group>"; };
+		7E8B0F7A19C693680086589F /* heartgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heartgray.png; sourceTree = "<group>"; };
 		7E971F2219ADC8B600858D44 /* CSStarProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CSStarProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E971F2619ADC8B600858D44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E971F2719ADC8B600858D44 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -671,6 +676,8 @@
 			children = (
 				7EA32F5F19AEC4E3007FE086 /* StoryViewController.h */,
 				7EA32F6019AEC4E3007FE086 /* StoryViewController.m */,
+				7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */,
+				7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */,
 			);
 			name = story;
 			sourceTree = "<group>";
@@ -704,6 +711,7 @@
 			isa = PBXGroup;
 			children = (
 				7E9B681919BE9FF00053B50E /* con_bg@2x.jpg */,
+				7E8B0F7A19C693680086589F /* heartgray.png */,
 				7E9C546D19B7F24B00851CAB /* LDetailArow@2x.png */,
 				7E9C546F19B7F2C800851CAB /* LLCelIArrow@2x.png */,
 				7E9C546919B7F0F500851CAB /* nav_back.png */,
@@ -868,6 +876,7 @@
 				7E9C546E19B7F24B00851CAB /* LDetailArow@2x.png in Resources */,
 				7E28489E19B5BA0300669756 /* blackArrow.png in Resources */,
 				7ECE642919B05EBE005EDE82 /* 7.png in Resources */,
+				7E8B0F7B19C693680086589F /* heartgray.png in Resources */,
 				7ECE642719B05EBE005EDE82 /* 5.png in Resources */,
 				7E73E66F19B45DCA00EB6024 /* StoryTableViewBigDescCell.xib in Resources */,
 				7ECE642619B05EBE005EDE82 /* 4.png in Resources */,
@@ -976,6 +985,7 @@
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
 				7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
+				7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
 				7E64F6CB19BED87400C8C62C /* UIImageView+WTRequestCenter.m in Sources */,
 				7E64F6B819BED84400C8C62C /* WTURLRequestOperation.m in Sources */,

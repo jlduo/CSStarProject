@@ -182,11 +182,31 @@
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
                     <connections>
                         <outlet property="storyTableView" destination="6PY-A5-rCw" id="ZZf-BC-eH0"/>
+                        <segue destination="ciz-TT-mdh" kind="push" id="GwH-Xe-NAD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8t-dG-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="-233"/>
+        </scene>
+        <!--Story Detail View Controller-->
+        <scene sceneID="s72-QE-N4T">
+            <objects>
+                <viewController id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NHl-hp-KHt"/>
+                        <viewControllerLayoutGuide type="bottom" id="6I2-AA-Pew"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Tng-Ry-RTr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Bhw-Sh-89r"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hA3-S3-zak" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1372" y="-233"/>
         </scene>
         <!--Init Tab Bar View Controller-->
         <scene sceneID="d5d-2v-8yF">

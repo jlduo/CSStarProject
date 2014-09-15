@@ -11,8 +11,12 @@
 #import "StoryTableViewBigCell.h"
 #import "StoryTableViewSmallCell.h"
 #import "DateUtil.h"
+#import "ViewPassValueDelegate.h"
 
-@interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>
+@interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
+    // 声明一个参数传递代理
+    NSObject<ViewPassValueDelegate> *delegate;
+}
 
 #pragma mark 星城故事 表格视图
 @property (weak, nonatomic) IBOutlet UITableView *storyTableView;

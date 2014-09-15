@@ -301,8 +301,8 @@
     if(indexPath.section==0){//跳转到美女私房
         NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
         NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
-        NSString *dataType = [girlCellDic valueForKey:@"_category_call_index"];
-        if([self isNotEmpty:dataId] && [dataType isEqual:@"video"]){
+        NSString *data_Type = [girlCellDic valueForKey:@"_category_call_index"];
+        if([self isNotEmpty:dataId] && [data_Type isEqual:@"video"]){
              GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
              passValelegate = videoView;
             [passValelegate passValue:dataId];
