@@ -9,6 +9,7 @@
 #import "common.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "HomeViewController.h"
 #import <UIKit/UIKit.h>
 
 @interface LoginViewController : UIViewController<UITextFieldDelegate>

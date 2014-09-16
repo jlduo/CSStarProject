@@ -182,7 +182,7 @@
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
                     <connections>
                         <outlet property="storyTableView" destination="6PY-A5-rCw" id="ZZf-BC-eH0"/>
-                        <segue destination="ciz-TT-mdh" kind="push" id="GwH-Xe-NAD"/>
+                        <segue destination="ciz-TT-mdh" kind="push" identifier="detail" id="GwH-Xe-NAD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8t-dG-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>

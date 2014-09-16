@@ -83,14 +83,6 @@
     [tabBarController showDIYTaBar];
 }
 
--(void)goForward{
-    NSLog(@"go");
-    LoginViewController *userView = [[LoginViewController alloc] init];
-    [self presentViewController:userView animated:YES completion:^{
-        //
-    }];
-    
-}
 
 //加载头部刷新
 -(void)setHeaderRereshing{

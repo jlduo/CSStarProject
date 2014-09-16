@@ -5,9 +5,9 @@
 //  Created by jialiduo on 14-8-28.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
-#import "common.h"
 #import "CommonViewController.h"
 #import "UserViewController.h"
+#import "LoginViewController.h"
 
 @interface CommonViewController (){
     
@@ -105,8 +105,15 @@
 
 -(void)goForward{
     NSLog(@"go");
-    UserViewController *userView = [[UserViewController alloc] init];
-    [self.navigationController pushViewController:userView animated:YES];
+    if([StringUitl checkLogin]==TRUE){
+        UserViewController *userView = [[UserViewController alloc] init];
+        [self.navigationController pushViewController:userView animated:YES];
+    }else{
+        LoginViewController *userView = [[LoginViewController alloc] init];
+        [self presentViewController:userView animated:YES completion:^{
+            //
+        }];
+    }
     
 }
 

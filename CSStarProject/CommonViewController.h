@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 #import "common.h"
+#import "StringUitl.h"
 #import <UIKit/UIKit.h>
 #import "ConvertJSONData.h"
 #import "AllAroundPullView.h"

@@ -219,27 +219,28 @@
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
         [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
-        NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(changeBtnText:) userInfo:nil repeats:YES];
-        //self.repeatingTimer = timer;
-        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-        [runLoop addTimer:timer forMode:NSDefaultRunLoopMode];
-        [timer fire];
+//        [_checkNumBtn removeTarget:self action:@selector(clickCheckBtn:) forControlEvents:UIControlEventTouchDragInside];
+//        
+//        NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(changeBtnText:) userInfo:nil repeats:YES];
+//        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+//        [runLoop addTimer:timer forMode:NSDefaultRunLoopMode];
+//        [timer fire];
     }
 
 }
 
-int i=60;
--(void)changeBtnText:(NSTimer *) dt{
-    //禁止点击
-    [_checkNumBtn setEnabled:NO];
-    [_checkNumBtn setTitle:[NSString stringWithFormat:@"%d秒后重发",i] forState:UIControlStateNormal];
-    NSLog(@"%d",i);
-    if(i==0){
-        [dt invalidate];
-        [_checkNumBtn setEnabled:YES];
-    }
-    i--;
-}
+//int i=60;
+//-(void)changeBtnText:(NSTimer *) dt{
+//    //禁止点击
+//    [_checkNumBtn setTitle:[NSString stringWithFormat:@"%d秒后重发",i] forState:UIControlStateNormal];
+//    NSLog(@"%d",i);
+//    if(i==0){
+//        [dt invalidate];
+//        [_checkNumBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
+//        [_checkNumBtn addTarget:self action:@selector(clickCheckBtn:) forControlEvents:UIControlEventTouchDragInside];
+//    }
+//    i--;
+//}
 
 - (void)requestRegFinished:(ASIHTTPRequest *)req
 {

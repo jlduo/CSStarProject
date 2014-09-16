@@ -25,8 +25,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-64-49);
+    self.view.backgroundColor = [UIColor lightGrayColor];
+    CGRect tframe = CGRectMake(20, 224, SCREEN_WIDTH-40,MAIN_FRAME_H-64-49);
     stableView = [[UITableView alloc] initWithFrame:tframe];
     stableView.delegate = self;
     stableView.dataSource = self;
@@ -34,7 +34,7 @@
     //处理头部信息
     [self setHeaderView];
     [self.view addSubview:stableView];
-    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
+    //[stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
     stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[ [UIView alloc]init];
@@ -48,7 +48,7 @@
 
 -(void)setHeaderView{
     
-     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
+     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 160)];
     [headView setBackgroundColor:[UIColor grayColor]];
     
     UIButton *imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-100)/2, 20, 100, 100)];
@@ -57,7 +57,7 @@
     
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"myzonebg.png"]];
     
-    [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
+    [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 160)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
     UILabel *userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-110)/2, 90, 120, 100)];
@@ -70,7 +70,7 @@
     [imgView addSubview:imgBtn];
     [headView addSubview:imgView];
     
-    stableView.tableHeaderView = headView;
+    [self.view addSubview: headView];
     
 }
 
@@ -132,7 +132,17 @@
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSLog(@"section==%d",section);
-    return 5;
+    return 6;
+}
+
+#pragma mark 计算行高
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if(indexPath.row==5){
+        return 60;
+    }else{
+        return 45;
+    }
 }
 
 
@@ -170,20 +180,31 @@
             break;
     }
     
-    cellImg = [UIImage imageNamed:imgName];
-    [userCell.cellPic setBackgroundImage:cellImg forState:UIControlStateNormal];
-    [userCell.dataTitle setText:cellTitle];
-    [userCell.dataNum setText:@"9"];
-    //[userCell.layer setMasksToBounds:YES];
-    //userCell.layer.cornerRadius = 8.0;
-//    UIView *container_ = [[UIView alloc] initWithFrame:CGRectMake(0,0,userCell.frame.size.width,userCell.frame.size.height)];
-//    container_.layer.cornerRadius = 8.0;
-//    [userCell.contentView addSubview:container_];
-    
-      //userCell.backgroundColor = [UIColor clearColor];
+    if(indexPath.row<5){
+        cellImg = [UIImage imageNamed:imgName];
+        [userCell.cellPic setBackgroundImage:cellImg forState:UIControlStateNormal];
+        [userCell.dataTitle setText:cellTitle];
+        [userCell.dataNum setText:@"9"];
+        //[userCell.layer setMasksToBounds:YES];
+        //userCell.layer.cornerRadius = 8.0;
+        //UIView *container_ = [[UIView alloc] initWithFrame:CGRectMake(0,0,userCell.frame.size.width,userCell.frame.size.height)];
+        //container_.layer.cornerRadius = 8.0;
+        //[userCell.contentView addSubview:container_];
+        //userCell.backgroundColor = [UIColor clearColor];
+        return userCell;
+    }else{
+        
+        UITableViewCell *newUserCell = [[UITableViewCell alloc]init];
+        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 10, SCREEN_WIDTH-40, 45)];
+        loginOutBtn.layer.cornerRadius = 5.0;
+        loginOutBtn.backgroundColor = [UIColor redColor];
+        
+        [newUserCell addSubview:loginOutBtn];
+        return newUserCell;
+    }
    
     
-    return userCell;
+
 }
 
 
