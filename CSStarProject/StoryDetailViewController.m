@@ -119,7 +119,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 -(void)goPreviou{
     [super goPreviou];

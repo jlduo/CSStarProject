@@ -42,6 +42,11 @@
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
 #define CHECK_CODE_URL @"/AndroidApi/SmsService/SendSMS"//验证码请求地址
 
+#define LOGIN_USER_ID @"login_user_id"
+#define LOGIN_USER_NAME @"login_user_name"
+#define LOGIN_USER_PSWD @"login_user_pswd"
+#define USER_IS_LOGINED @"user_is_logined"
+
 #define DEFAULT_VOID_COLOR [UIColor whiteColor]
 
 //处理日期格式化

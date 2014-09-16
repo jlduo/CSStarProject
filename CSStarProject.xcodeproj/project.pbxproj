@@ -23,6 +23,15 @@
 		7E2848A319B5BA0300669756 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489B19B5BA0300669756 /* grayArrow@2x.png */; };
 		7E2848A419B5BA0300669756 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489C19B5BA0300669756 /* whiteArrow.png */; };
 		7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489D19B5BA0300669756 /* whiteArrow@2x.png */; };
+		7E2944B419C7D24100037D95 /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2944B219C7D24100037D95 /* UserCenterViewController.m */; };
+		7E2944B519C7D24100037D95 /* UserCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B319C7D24100037D95 /* UserCenterViewController.xib */; };
+		7E2944BC19C7D51600037D95 /* myzone-discuss.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B619C7D51600037D95 /* myzone-discuss.png */; };
+		7E2944BD19C7D51600037D95 /* myzone-location.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B719C7D51600037D95 /* myzone-location.png */; };
+		7E2944BE19C7D51600037D95 /* myzone-message.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B819C7D51600037D95 /* myzone-message.png */; };
+		7E2944BF19C7D51600037D95 /* myzone-order.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B919C7D51600037D95 /* myzone-order.png */; };
+		7E2944C019C7D51600037D95 /* myzone-zhongchou.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944BA19C7D51600037D95 /* myzone-zhongchou.png */; };
+		7E2944C119C7D51600037D95 /* myzonebg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944BB19C7D51600037D95 /* myzonebg.png */; };
+		7E2944C319C7D56300037D95 /* myzone-rightarrow-b.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */; };
 		7E64F6D019BED97A00C8C62C /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64F6CF19BED97A00C8C62C /* ImageIO.framework */; };
 		7E73E65E19B4598400EB6024 /* StoryTableViewSmallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E73E65C19B4598400EB6024 /* StoryTableViewSmallCell.m */; };
 		7E73E65F19B4598400EB6024 /* StoryTableViewSmallCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E65D19B4598400EB6024 /* StoryTableViewSmallCell.xib */; };
@@ -160,6 +169,7 @@
 		7EF08DE619C67EF5001F2CCE /* 7.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DDE19C67EF5001F2CCE /* 7.jpeg */; };
 		7EF08DE719C67EF5001F2CCE /* 8.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DDF19C67EF5001F2CCE /* 8.jpeg */; };
 		7EF08DE919C67F61001F2CCE /* background.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DE819C67F61001F2CCE /* background.jpeg */; };
+		7EF6E83D19C6D8B2000C102F /* CommentListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EF6E83C19C6D8B2000C102F /* CommentListViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,6 +185,7 @@
 /* Begin PBXFileReference section */
 		7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailViewController.h; sourceTree = "<group>"; };
 		7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailViewController.m; sourceTree = "<group>"; };
+		7E17A7CA19C6D7F6004C5064 /* CommentListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentListViewController.h; sourceTree = "<group>"; };
 		7E28487819B5456400669756 /* storyDataList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = storyDataList.plist; sourceTree = "<group>"; };
 		7E28487A19B54AF300669756 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
 		7E28487B19B54AF300669756 /* DateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtil.m; sourceTree = "<group>"; };
@@ -191,6 +202,16 @@
 		7E28489B19B5BA0300669756 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		7E28489C19B5BA0300669756 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		7E28489D19B5BA0300669756 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
+		7E2944B119C7D24100037D95 /* UserCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterViewController.h; sourceTree = "<group>"; };
+		7E2944B219C7D24100037D95 /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
+		7E2944B319C7D24100037D95 /* UserCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCenterViewController.xib; sourceTree = "<group>"; };
+		7E2944B619C7D51600037D95 /* myzone-discuss.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-discuss.png"; sourceTree = "<group>"; };
+		7E2944B719C7D51600037D95 /* myzone-location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-location.png"; sourceTree = "<group>"; };
+		7E2944B819C7D51600037D95 /* myzone-message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-message.png"; sourceTree = "<group>"; };
+		7E2944B919C7D51600037D95 /* myzone-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-order.png"; sourceTree = "<group>"; };
+		7E2944BA19C7D51600037D95 /* myzone-zhongchou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-zhongchou.png"; sourceTree = "<group>"; };
+		7E2944BB19C7D51600037D95 /* myzonebg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myzonebg.png; sourceTree = "<group>"; };
+		7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-rightarrow-b.png"; sourceTree = "<group>"; };
 		7E64F63619BEBA2F00C8C62C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		7E64F6CF19BED97A00C8C62C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7E73E65B19B4598400EB6024 /* StoryTableViewSmallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewSmallCell.h; sourceTree = "<group>"; };
@@ -389,6 +410,7 @@
 		7EF08DDE19C67EF5001F2CCE /* 7.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7.jpeg; sourceTree = "<group>"; };
 		7EF08DDF19C67EF5001F2CCE /* 8.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8.jpeg; sourceTree = "<group>"; };
 		7EF08DE819C67F61001F2CCE /* background.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpeg; sourceTree = "<group>"; };
+		7EF6E83C19C6D8B2000C102F /* CommentListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentListViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -491,7 +513,6 @@
 		7E73E67019B46AB500EB6024 /* newDesigner */ = {
 			isa = PBXGroup;
 			children = (
-				7E035DB719C152BF00352F21 /* discussicon.png */,
 				7E28488819B5822D00669756 /* tabbar0@2x.png */,
 				7E28488919B5822D00669756 /* tabbar1@2x.png */,
 				7E28488A19B5822D00669756 /* tabbar2@2x.png */,
@@ -658,6 +679,9 @@
 				7EA32F5119AEB56D007FE086 /* UserViewController.m */,
 				7E9C547C19B81DD500851CAB /* UserInfoViewController.h */,
 				7E9C547D19B81DD500851CAB /* UserInfoViewController.m */,
+				7E2944B119C7D24100037D95 /* UserCenterViewController.h */,
+				7E2944B219C7D24100037D95 /* UserCenterViewController.m */,
+				7E2944B319C7D24100037D95 /* UserCenterViewController.xib */,
 			);
 			name = user;
 			sourceTree = "<group>";
@@ -734,12 +758,12 @@
 		7EA32F3D19AEAC93007FE086 /* girls */ = {
 			isa = PBXGroup;
 			children = (
+				7EF6E83C19C6D8B2000C102F /* CommentListViewController.m */,
+				7E17A7CA19C6D7F6004C5064 /* CommentListViewController.h */,
 				7EA32F5C19AEC4D3007FE086 /* GirlsViewController.h */,
 				7EA32F5D19AEC4D3007FE086 /* GirlsViewController.m */,
 				7E9D5DDE19B9632B004D32C1 /* GirlsVideoViewController.h */,
 				7E9D5DDF19B9632B004D32C1 /* GirlsVideoViewController.m */,
-				7E035DB919C192C700352F21 /* CommentListViewController.h */,
-				7E035DBA19C192C700352F21 /* CommentListViewController.m */,
 			);
 			name = girls;
 			sourceTree = "<group>";
@@ -783,6 +807,13 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */,
+				7E2944B619C7D51600037D95 /* myzone-discuss.png */,
+				7E2944B719C7D51600037D95 /* myzone-location.png */,
+				7E2944B819C7D51600037D95 /* myzone-message.png */,
+				7E2944B919C7D51600037D95 /* myzone-order.png */,
+				7E2944BA19C7D51600037D95 /* myzone-zhongchou.png */,
+				7E2944BB19C7D51600037D95 /* myzonebg.png */,
 				7EF08DE819C67F61001F2CCE /* background.jpeg */,
 				7E9EEC2C19C2E3B700C0514C /* iconchecked.png */,
 				7E9EEC2819C2E14A00C0514C /* iconfinger.png */,
@@ -979,15 +1010,14 @@
 				7E73E68819B46C3C00EB6024 /* header_1@2x.png in Resources */,
 				7E9C546E19B7F24B00851CAB /* LDetailArow@2x.png in Resources */,
 				7E28489E19B5BA0300669756 /* blackArrow.png in Resources */,
-				7ECE642919B05EBE005EDE82 /* 7.png in Resources */,
 				7E8B0F7B19C693680086589F /* heartgray.png in Resources */,
-				7ECE642719B05EBE005EDE82 /* 5.png in Resources */,
 				7E73E66F19B45DCA00EB6024 /* StoryTableViewBigDescCell.xib in Resources */,
 				7E9EEC0819C278C800C0514C /* AppIcon60x60@2x.png in Resources */,
 				7E28489F19B5BA0300669756 /* blackArrow@2x.png in Resources */,
 				7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */,
 				7E28488D19B5822D00669756 /* tabbar0@2x.png in Resources */,
 				7E9EEC0419C278C800C0514C /* AppIcon50x50@2x.png in Resources */,
+				7E2944BD19C7D51600037D95 /* myzone-location.png in Resources */,
 				7E9C547619B7F3D700851CAB /* icon_redo@2x.png in Resources */,
 				7E73E69219B46C3C00EB6024 /* switch.png in Resources */,
 				7EA3318519AF2A98007FE086 /* VideoTableViewCell.xib in Resources */,
@@ -1001,9 +1031,11 @@
 				7E9EEC1319C28F2B00C0514C /* Default@2x.png in Resources */,
 				7E73E69719B4714700EB6024 /* playsmall.png in Resources */,
 				7E28488E19B5822D00669756 /* tabbar1@2x.png in Resources */,
+				7E2944BC19C7D51600037D95 /* myzone-discuss.png in Resources */,
 				7E9EEBEC19C2759A00C0514C /* Default-568h@22x.png in Resources */,
 				7E9C546819B7ECFF00851CAB /* tb_back@2x.png in Resources */,
 				7EF08DE919C67F61001F2CCE /* background.jpeg in Resources */,
+				7E2944C019C7D51600037D95 /* myzone-zhongchou.png in Resources */,
 				7E28488F19B5822D00669756 /* tabbar2@2x.png in Resources */,
 				7E9EEC2B19C2E14A00C0514C /* iconphone.png in Resources */,
 				7E28489119B5822D00669756 /* tabbar4@2x.png in Resources */,
@@ -1016,10 +1048,12 @@
 				7E9EEC2719C2DE5C00C0514C /* RegisterViewController.xib in Resources */,
 				7E73E68919B46C3C00EB6024 /* header_2@2x.png in Resources */,
 				7E9C547019B7F2C800851CAB /* LLCelIArrow@2x.png in Resources */,
+				7E2944BE19C7D51600037D95 /* myzone-message.png in Resources */,
 				7EA3318019AF2A89007FE086 /* PicTableViewCell.xib in Resources */,
 				7E73E68A19B46C3C00EB6024 /* iconi.png in Resources */,
 				7E2848A219B5BA0300669756 /* grayArrow.png in Resources */,
 				7E9EEC2D19C2E3B700C0514C /* iconchecked.png in Resources */,
+				7E2944C119C7D51600037D95 /* myzonebg.png in Resources */,
 				7E9EEC0919C278C800C0514C /* AppIcon72x72.png in Resources */,
 				7E9C548919B85A0D00851CAB /* UserBigTableViewCell.xib in Resources */,
 				7E73E66419B45ABC00EB6024 /* StoryTableViewBigCell.xib in Resources */,
@@ -1028,12 +1062,12 @@
 				7E28487919B5456400669756 /* storyDataList.plist in Resources */,
 				7E9B681A19BE9FF00053B50E /* con_bg@2x.jpg in Resources */,
 				7E2848A019B5BA0300669756 /* blueArrow.png in Resources */,
-				7E035DB819C152BF00352F21 /* discussicon.png in Resources */,
 				7E9C547219B7F34700851CAB /* next_icon@2x.png in Resources */,
 				7EF08DE219C67EF5001F2CCE /* 3.jpeg in Resources */,
 				7E9D341E19B69894005498D0 /* arrow@2x.png in Resources */,
 				7E9C549119B85A3C00851CAB /* UserSmallTableViewCell.xib in Resources */,
 				7E9EEBEA19C2741C00C0514C /* Default@2x.jpg in Resources */,
+				7E2944BF19C7D51600037D95 /* myzone-order.png in Resources */,
 				7E9D343619B71928005498D0 /* avatar.png in Resources */,
 				7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */,
 				7E73E69419B46C3C00EB6024 /* titlebar.png in Resources */,
@@ -1057,6 +1091,7 @@
 				7E9EEC0719C278C800C0514C /* AppIcon60x60.png in Resources */,
 				7E9EEC1C19C2A84000C0514C /* LoginViewController.xib in Resources */,
 				7E9EEC2A19C2E14A00C0514C /* iconfinger.png in Resources */,
+				7E2944C319C7D56300037D95 /* myzone-rightarrow-b.png in Resources */,
 				7E9C546719B7ECFF00851CAB /* tb_back.png in Resources */,
 				7E73E69019B46C3C00EB6024 /* navline.png in Resources */,
 				7E9C546B19B7F0F500851CAB /* nav_back.png in Resources */,
@@ -1067,6 +1102,7 @@
 				7E9EEC0119C278C800C0514C /* AppIcon40x40.png in Resources */,
 				7EA3317B19AF14F5007FE086 /* student.xml in Resources */,
 				7E73E68B19B46C3C00EB6024 /* icontip.png in Resources */,
+				7E2944B519C7D24100037D95 /* UserCenterViewController.xib in Resources */,
 				7E73E68619B46C3C00EB6024 /* homestory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1117,6 +1153,7 @@
 				7E9EEC4A19C2F02D00C0514C /* ASIAuthenticationDialog.m in Sources */,
 				7E9C547E19B81DD500851CAB /* UserInfoViewController.m in Sources */,
 				7E9D341A19B6987C005498D0 /* AllAroundPullView.m in Sources */,
+				7EF6E83D19C6D8B2000C102F /* CommentListViewController.m in Sources */,
 				7ECE643319B06354005EDE82 /* FFScrollView.m in Sources */,
 				7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */,
 				7E9B681719BE9DD00053B50E /* CJSONSerializer.m in Sources */,
@@ -1124,6 +1161,7 @@
 				7E73E66E19B45DCA00EB6024 /* StoryTableViewBigDescCell.m in Sources */,
 				7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
+				7E2944B419C7D24100037D95 /* UserCenterViewController.m in Sources */,
 				7EA32F5519AEC3EE007FE086 /* CommonViewController.m in Sources */,
 				7E9B680B19BE8DAE0053B50E /* UILabel+ContentSize.m in Sources */,
 				7E9EEC1019C27D2600C0514C /* CommentTableListCell.m in Sources */,
@@ -1136,7 +1174,6 @@
 				7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */,
 				7E9EEC4B19C2F02D00C0514C /* ASIDataCompressor.m in Sources */,
 				7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */,
-				7E035DBB19C192C700352F21 /* CommentListViewController.m in Sources */,
 				7E9EEC5019C2F02D00C0514C /* ASIInputStream.m in Sources */,
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
 				7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */,

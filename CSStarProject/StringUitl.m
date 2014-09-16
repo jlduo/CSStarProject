@@ -93,6 +93,43 @@
     }
 }
 
++(NSString *)md5:(NSString *)str
+{
+    const char *cStr = [str UTF8String];
+    unsigned char result[16];
+    CC_MD5(cStr, strlen(cStr), result); // This is the md5 call
+    return [NSString stringWithFormat:
+            @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ]; 
+}
+
+//设置用户信息
++(void)setSessionVal:(NSString*)val withKey:(NSString *)key{
+    [[NSUserDefaults standardUserDefaults]setValue:val forKey:key];
+    NSLog(@"设置%@=%@成功",key,val);
+}
+
+//读取用户信息
++(NSString *)getSessionVal:(NSString*)key{
+    NSString *val = [[NSUserDefaults standardUserDefaults] valueForKey:key];
+    NSLog(@"获取%@的值为:%@",key,val);
+    return val;
+}
+
+//检查登陆
++(BOOL)checkLogin{
+    NSString * isLogin = [self getSessionVal:USER_IS_LOGINED];
+    if([self isNotEmpty:isLogin]&&[isLogin isEqual:@"1"]){
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
 
 //判断字符串为空
 +(BOOL)isEmpty:(NSString *)str{

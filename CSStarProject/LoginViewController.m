@@ -162,7 +162,7 @@
     [request setRequestMethod:@"POST"];
     [request setStringEncoding:NSUTF8StringEncoding];
     [request setPostValue:user_name forKey:@"username"];
-    [request setPostValue:pass_word forKey:@"password"];
+    [request setPostValue:[StringUitl md5:pass_word] forKey:@"password"];
     [request buildPostBody];
     
     [request startAsynchronous];
@@ -177,23 +177,45 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
-        
         [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
+        
+        //存储用户信息
+        //[[NSUserDefaults standardUserDefaults]setValue:_userName.text forKey:LOGIN_USER_NAME];
+        //[[NSUserDefaults standardUserDefaults]setValue:_passWord.text forKey:LOGIN_USER_PSWD];
+        [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
+        [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
+        [StringUitl setSessionVal:_passWord.text withKey:LOGIN_USER_PSWD];
+        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
+        
+        [StringUitl getSessionVal:LOGIN_USER_ID];
+        [StringUitl getSessionVal:LOGIN_USER_NAME];
+        [StringUitl getSessionVal:LOGIN_USER_PSWD];
+        [StringUitl getSessionVal:USER_IS_LOGINED];
+        
+
+        [self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+        [self dismissViewControllerAnimated:YES completion:^{
+            //
+        }];
         
         
-    }else{
+        HomeViewController *homeView = (HomeViewController *)[self parentViewController];
+        [homeView.navigationController popToRootViewControllerAnimated:YES];
+        
+        
+        
         
         
     }
+    
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req
 {
     
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:[req responseData] options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){
-        
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-    }
+    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
 @end
