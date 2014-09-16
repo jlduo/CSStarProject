@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E0129E719C6D8F9009F123D /* CommentListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E0129E619C6D8F9009F123D /* CommentListViewController.m */; };
+		7E04A73819C7DB340026E8BB /* StoryCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E04A73719C7DB340026E8BB /* StoryCommentViewController.m */; };
 		7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */; };
 		7E28487919B5456400669756 /* storyDataList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E28487819B5456400669756 /* storyDataList.plist */; };
 		7E28487C19B54AF300669756 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E28487B19B54AF300669756 /* DateUtil.m */; };
@@ -173,6 +175,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E0129E519C6D8F9009F123D /* CommentListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentListViewController.h; sourceTree = "<group>"; };
+		7E0129E619C6D8F9009F123D /* CommentListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentListViewController.m; sourceTree = "<group>"; };
+		7E04A73619C7DB340026E8BB /* StoryCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCommentViewController.h; sourceTree = "<group>"; };
+		7E04A73719C7DB340026E8BB /* StoryCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCommentViewController.m; sourceTree = "<group>"; };
 		7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailViewController.h; sourceTree = "<group>"; };
 		7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailViewController.m; sourceTree = "<group>"; };
 		7E28487819B5456400669756 /* storyDataList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = storyDataList.plist; sourceTree = "<group>"; };
@@ -491,7 +497,6 @@
 		7E73E67019B46AB500EB6024 /* newDesigner */ = {
 			isa = PBXGroup;
 			children = (
-				7E035DB719C152BF00352F21 /* discussicon.png */,
 				7E28488819B5822D00669756 /* tabbar0@2x.png */,
 				7E28488919B5822D00669756 /* tabbar1@2x.png */,
 				7E28488A19B5822D00669756 /* tabbar2@2x.png */,
@@ -734,12 +739,12 @@
 		7EA32F3D19AEAC93007FE086 /* girls */ = {
 			isa = PBXGroup;
 			children = (
+				7E0129E519C6D8F9009F123D /* CommentListViewController.h */,
+				7E0129E619C6D8F9009F123D /* CommentListViewController.m */,
 				7EA32F5C19AEC4D3007FE086 /* GirlsViewController.h */,
 				7EA32F5D19AEC4D3007FE086 /* GirlsViewController.m */,
 				7E9D5DDE19B9632B004D32C1 /* GirlsVideoViewController.h */,
 				7E9D5DDF19B9632B004D32C1 /* GirlsVideoViewController.m */,
-				7E035DB919C192C700352F21 /* CommentListViewController.h */,
-				7E035DBA19C192C700352F21 /* CommentListViewController.m */,
 			);
 			name = girls;
 			sourceTree = "<group>";
@@ -751,6 +756,8 @@
 				7EA32F6019AEC4E3007FE086 /* StoryViewController.m */,
 				7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */,
 				7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */,
+				7E04A73619C7DB340026E8BB /* StoryCommentViewController.h */,
+				7E04A73719C7DB340026E8BB /* StoryCommentViewController.m */,
 			);
 			name = story;
 			sourceTree = "<group>";
@@ -979,9 +986,7 @@
 				7E73E68819B46C3C00EB6024 /* header_1@2x.png in Resources */,
 				7E9C546E19B7F24B00851CAB /* LDetailArow@2x.png in Resources */,
 				7E28489E19B5BA0300669756 /* blackArrow.png in Resources */,
-				7ECE642919B05EBE005EDE82 /* 7.png in Resources */,
 				7E8B0F7B19C693680086589F /* heartgray.png in Resources */,
-				7ECE642719B05EBE005EDE82 /* 5.png in Resources */,
 				7E73E66F19B45DCA00EB6024 /* StoryTableViewBigDescCell.xib in Resources */,
 				7E9EEC0819C278C800C0514C /* AppIcon60x60@2x.png in Resources */,
 				7E28489F19B5BA0300669756 /* blackArrow@2x.png in Resources */,
@@ -1028,7 +1033,6 @@
 				7E28487919B5456400669756 /* storyDataList.plist in Resources */,
 				7E9B681A19BE9FF00053B50E /* con_bg@2x.jpg in Resources */,
 				7E2848A019B5BA0300669756 /* blueArrow.png in Resources */,
-				7E035DB819C152BF00352F21 /* discussicon.png in Resources */,
 				7E9C547219B7F34700851CAB /* next_icon@2x.png in Resources */,
 				7EF08DE219C67EF5001F2CCE /* 3.jpeg in Resources */,
 				7E9D341E19B69894005498D0 /* arrow@2x.png in Resources */,
@@ -1117,6 +1121,7 @@
 				7E9EEC4A19C2F02D00C0514C /* ASIAuthenticationDialog.m in Sources */,
 				7E9C547E19B81DD500851CAB /* UserInfoViewController.m in Sources */,
 				7E9D341A19B6987C005498D0 /* AllAroundPullView.m in Sources */,
+				7E0129E719C6D8F9009F123D /* CommentListViewController.m in Sources */,
 				7ECE643319B06354005EDE82 /* FFScrollView.m in Sources */,
 				7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */,
 				7E9B681719BE9DD00053B50E /* CJSONSerializer.m in Sources */,
@@ -1136,12 +1141,12 @@
 				7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */,
 				7E9EEC4B19C2F02D00C0514C /* ASIDataCompressor.m in Sources */,
 				7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */,
-				7E035DBB19C192C700352F21 /* CommentListViewController.m in Sources */,
 				7E9EEC5019C2F02D00C0514C /* ASIInputStream.m in Sources */,
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
 				7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */,
 				7E9EEC4F19C2F02D00C0514C /* ASIHTTPRequest.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
+				7E04A73819C7DB340026E8BB /* StoryCommentViewController.m in Sources */,
 				7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
 				7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */,

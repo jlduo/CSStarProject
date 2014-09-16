@@ -9,6 +9,6 @@
 #import "CommonViewController.h"
 #import "StoryViewController.h"
 
-@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate>
+@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate>
 
 @end

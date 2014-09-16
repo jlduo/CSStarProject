@@ -10,8 +10,8 @@
 
 @interface StoryTableViewBigDescCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIButton *imgView;
-@property (weak, nonatomic) IBOutlet UILabel *descView;
+@property (weak, nonatomic) IBOutlet UIImageView *imgView;
+@property (weak, nonatomic) IBOutlet UITextView *descView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 

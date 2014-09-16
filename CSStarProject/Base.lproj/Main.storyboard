@@ -208,6 +208,24 @@
             </objects>
             <point key="canvasLocation" x="1372" y="-233"/>
         </scene>
+        <!--Story Comment View Controller-->
+        <scene sceneID="8Ww-Gb-4iq">
+            <objects>
+                <viewController id="lkv-1K-pr1" customClass="StoryCommentViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OOE-IV-Nj2"/>
+                        <viewControllerLayoutGuide type="bottom" id="BBm-DD-Ldi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7XL-1r-26B">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k6Q-1b-Rnc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1806" y="-233"/>
+        </scene>
         <!--Init Tab Bar View Controller-->
         <scene sceneID="d5d-2v-8yF">
             <objects>

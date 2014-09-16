@@ -371,13 +371,7 @@
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
             [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
-            
-            
-            
-            
-            
         }
-        
     }else{//点击数字进入评论列表
         NSLog(@"进入评论列表....");
         NSLog(@"newDataId=%@",dataId);
