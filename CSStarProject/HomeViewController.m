@@ -81,6 +81,7 @@
     [super viewWillAppear:animated];
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    [tabBarController changeTabsFrame];
 }
 
 

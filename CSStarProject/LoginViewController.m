@@ -183,34 +183,64 @@
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
         
         //存储用户信息
-        //[[NSUserDefaults standardUserDefaults]setValue:_userName.text forKey:LOGIN_USER_NAME];
-        //[[NSUserDefaults standardUserDefaults]setValue:_passWord.text forKey:LOGIN_USER_PSWD];
         [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
         [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
         [StringUitl setSessionVal:_passWord.text withKey:LOGIN_USER_PSWD];
         [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
         
-        [StringUitl getSessionVal:LOGIN_USER_ID];
-        [StringUitl getSessionVal:LOGIN_USER_NAME];
-        [StringUitl getSessionVal:LOGIN_USER_PSWD];
-        [StringUitl getSessionVal:USER_IS_LOGINED];
-        
+        //通过用户名获取信息
+        [self loadUserInfo:_userName.text];
 
         [self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
         [self dismissViewControllerAnimated:YES completion:^{
             //
         }];
         
-        
-        HomeViewController *homeView = (HomeViewController *)[self parentViewController];
-        [homeView.navigationController popToRootViewControllerAnimated:YES];
-        
-        
-        
-        
-        
     }
     
+}
+
+//获取用户信息
+-(void)loadUserInfo:(NSString *)userName{
+    if([StringUitl isNotEmpty:userName]){
+        
+        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
+        [ASIHTTPRequest setSessionCookies:nil];
+        
+        [request setUseCookiePersistence:YES];
+        [request setDelegate:self];
+        [request setRequestMethod:@"GET"];
+        [request setStringEncoding:NSUTF8StringEncoding];
+        [request startAsynchronous];
+        
+        [request setDidFailSelector:@selector(requestLoginFailed:)];
+        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
+        
+    }
+}
+
+- (void)getUserInfoFinished:(ASIHTTPRequest *)req
+{
+    
+    NSLog(@"getUserInfo->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+        
+        //存储用户信息
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+    
+    }
+
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req

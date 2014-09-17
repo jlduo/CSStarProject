@@ -13,5 +13,6 @@
 
 -(void)hiddenDIYTaBar;
 -(void)showDIYTaBar;
+-(void)changeTabsFrame;
 
 @end

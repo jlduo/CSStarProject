@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UserViewController.h"
 #import "UserTableViewCell.h"
+#import "HomeViewController.h"
 #import "UserInfoViewController.h"
 
 @interface UserViewController () <UITableViewDataSource,UITableViewDelegate>{
@@ -25,8 +26,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor lightGrayColor];
-    CGRect tframe = CGRectMake(20, 224, SCREEN_WIDTH-40,MAIN_FRAME_H-64-49);
+    self.view.backgroundColor = [UIColor whiteColor];
+    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49-44);
     stableView = [[UITableView alloc] initWithFrame:tframe];
     stableView.delegate = self;
     stableView.dataSource = self;
@@ -34,7 +35,7 @@
     //处理头部信息
     [self setHeaderView];
     [self.view addSubview:stableView];
-    //[stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
+    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
     stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[ [UIView alloc]init];
@@ -46,22 +47,53 @@
     
 }
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        
+        self.tabBarController.hidesBottomBarWhenPushed = YES;
+        
+    }
+    return self;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
+    [customTabar hiddenDIYTaBar];
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
+    [stableView setFrame:temFrame];
+    
+}
+
 -(void)setHeaderView{
     
-     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 160)];
+     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [headView setBackgroundColor:[UIColor grayColor]];
     
     UIButton *imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-100)/2, 20, 100, 100)];
-    [imgBtn setBackgroundImage:[UIImage imageNamed:@"avatarbig.png"] forState:UIControlStateNormal];
+    imgBtn.layer.masksToBounds = YES;
+    imgBtn.layer.cornerRadius = 50.0f;
+    NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
+    NSRange range = [userLogo rangeOfString:@"upload"];
+    if(range.location==NSNotFound){
+        [imgBtn setBackgroundImage:[UIImage imageNamed:@"avatarbig.png"] forState:UIControlStateNormal];
+    }else{
+        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[StringUitl getSessionVal:USER_LOGO]]];
+       [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+    }
+
+
     [imgBtn addTarget:self action:@selector(imgBtnClick) forControlEvents:UIControlEventTouchDown];
     
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"myzonebg.png"]];
     
-    [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 160)];
+    [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
     UILabel *userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-110)/2, 90, 120, 100)];
-    [userLabel setText:@"jackie"];
+    [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -70,7 +102,7 @@
     [imgView addSubview:imgBtn];
     [headView addSubview:imgView];
     
-    [self.view addSubview: headView];
+    stableView.tableHeaderView = headView;
     
 }
 
@@ -122,6 +154,12 @@
     
 }
 
+-(void)loadUserData{
+    
+    
+    
+}
+
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -139,9 +177,9 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(indexPath.row==5){
-        return 60;
+        return 90;
     }else{
-        return 45;
+        return 50;
     }
 }
 
@@ -185,19 +223,20 @@
         [userCell.cellPic setBackgroundImage:cellImg forState:UIControlStateNormal];
         [userCell.dataTitle setText:cellTitle];
         [userCell.dataNum setText:@"9"];
-        //[userCell.layer setMasksToBounds:YES];
-        //userCell.layer.cornerRadius = 8.0;
-        //UIView *container_ = [[UIView alloc] initWithFrame:CGRectMake(0,0,userCell.frame.size.width,userCell.frame.size.height)];
-        //container_.layer.cornerRadius = 8.0;
-        //[userCell.contentView addSubview:container_];
-        //userCell.backgroundColor = [UIColor clearColor];
+        userCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return userCell;
     }else{
         
         UITableViewCell *newUserCell = [[UITableViewCell alloc]init];
-        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 10, SCREEN_WIDTH-40, 45)];
+        newUserCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 25, SCREEN_WIDTH-40, 45)];
         loginOutBtn.layer.cornerRadius = 5.0;
-        loginOutBtn.backgroundColor = [UIColor redColor];
+        [loginOutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+        [loginOutBtn setTitle:@"退出登录" forState:UIControlStateHighlighted];
+        [loginOutBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+        [loginOutBtn setTitleColor:[UIColor grayColor] forState:(UIControlStateHighlighted)];
+        [loginOutBtn setBackgroundColor:[UIColor redColor]];
+        [loginOutBtn addTarget:self action:@selector(userLoginOut) forControlEvents:UIControlEventTouchUpInside];
         
         [newUserCell addSubview:loginOutBtn];
         return newUserCell;
@@ -205,6 +244,18 @@
    
     
 
+}
+
+
+-(void)userLoginOut{
+    //清空用户信息
+    NSLog(@"清空用户信息成功.....");
+    [StringUitl clearUserInfo];
+    //跳转到首页
+    [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
+    self.parentViewController.tabBarController.selectedIndex = 0;
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
 }
 
 

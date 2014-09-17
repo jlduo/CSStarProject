@@ -110,7 +110,7 @@
 //设置用户信息
 +(void)setSessionVal:(NSString*)val withKey:(NSString *)key{
     [[NSUserDefaults standardUserDefaults]setValue:val forKey:key];
-    NSLog(@"设置%@=%@成功",key,val);
+    NSLog(@"设置【%@=%@】成功",key,val);
 }
 
 //读取用户信息
@@ -130,6 +130,13 @@
     }
 }
 
++(void)clearUserInfo{
+    NSLog(@"清空用户信息成功.....");
+    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_ID];
+    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_NAME];
+    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_PSWD];
+    [StringUitl setSessionVal:Nil withKey:USER_IS_LOGINED];
+}
 
 //判断字符串为空
 +(BOOL)isEmpty:(NSString *)str{

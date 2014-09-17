@@ -41,11 +41,23 @@
 #define LOGIN_URL @"/AndroidApi/LoginService/Login"//登录地址
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
 #define CHECK_CODE_URL @"/AndroidApi/SmsService/SendSMS"//验证码请求地址
+#define USER_CENTER_URL @"/AndroidApi/UsersService/GetUsers"//用户中心接口
+#define EDIT_USER_URL @"/AndroidApi/UsersService/EditUsers"//编辑用户信息
+#define UPLOAD_IMG_URL @"/tools/ApiUpload.ashx?action=UploadImage"//上传图片接口
+#define GET_CITY_URL @"/AndroidApi/UsersService/GetCity"//获取城市
+#define GET_PASSWORD_URL @"/AndroidApi/UsersService/FindPassWord"//找回密码
+#define EDIT_PASSWORD_URL @"/AndroidApi/UsersService/EditPassWord"//修改密码
 
 #define LOGIN_USER_ID @"login_user_id"
 #define LOGIN_USER_NAME @"login_user_name"
 #define LOGIN_USER_PSWD @"login_user_pswd"
 #define USER_IS_LOGINED @"user_is_logined"
+#define USER_NICK_NAME @"nickname"
+#define USER_ADDRESS @"address"
+#define PROVINCE_ID @"provinceid"
+#define CITY_ID @"cityid"
+#define USER_SEX @"sex"
+#define USER_LOGO @"logo"
 
 #define DEFAULT_VOID_COLOR [UIColor whiteColor]
 

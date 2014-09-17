@@ -27,6 +27,7 @@
 
 //检查登录
 +(BOOL)checkLogin;
++(void)clearUserInfo;
 
 @end
 

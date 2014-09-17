@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "common.h"
 #import "CommonViewController.h"
+#import "InitTabBarViewController.h"
 
 @interface UserViewController:CommonViewController
 

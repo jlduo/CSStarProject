@@ -43,7 +43,6 @@
     _tBarView.hidden = NO;
 }
 
-
 #pragma mark 自定义tabbar
 -(void)initCoustomBtnTabar{
     CGRect viewRect = CGRectMake(0, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT);
@@ -69,8 +68,8 @@
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(i*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-        btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tbarbg.png"]];
-        btn.titleLabel.font = Font_Size(8);
+        btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"con_bg@2x.jpg"]];
+        btn.titleLabel.font = Font_Size(10);
         
         [btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateNormal];
         //[btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateHighlighted];
@@ -136,8 +135,20 @@
         CGRect labelFrame = CGRectMake(self.selectedIndex * BTN_WIDTH, -1, BTN_WIDTH, SLIDER_HEIGHT);
         [imageView setFrame:labelFrame];
         
+        
         //NewNavViewController *selectedController = (NewNavViewController *)self.selectedViewController;
         //[self selectedController setItemTitleName:[titleArray objectAtIndex:self.selectedIndex]];
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+}
+
+-(void)changeTabsFrame{
+    
+    [UIView animateWithDuration:0.35 animations:^{
+        CGRect labelFrame = CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT);
+        [imageView setFrame:labelFrame];
     } completion:^(BOOL finished) {
         
     }];
