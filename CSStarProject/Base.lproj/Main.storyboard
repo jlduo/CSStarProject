@@ -182,17 +182,17 @@
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
                     <connections>
                         <outlet property="storyTableView" destination="6PY-A5-rCw" id="ZZf-BC-eH0"/>
-                        <segue destination="ciz-TT-mdh" kind="push" identifier="detail" id="GwH-Xe-NAD"/>
+                        <segue destination="ciz-TT-mdh" kind="push" identifier="storyDetail" id="GwH-Xe-NAD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8t-dG-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="-233"/>
         </scene>
-        <!--Story Detail View Controller-->
+        <!--Story Detail View Controller - 星城故事详情_ViewController-->
         <scene sceneID="s72-QE-N4T">
             <objects>
-                <viewController id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
+                <viewController title="星城故事详情_ViewController" id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NHl-hp-KHt"/>
                         <viewControllerLayoutGuide type="bottom" id="6I2-AA-Pew"/>
@@ -203,10 +203,32 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="Bhw-Sh-89r"/>
+                    <connections>
+                        <segue destination="lkv-1K-pr1" kind="push" identifier="storyComment" id="MOi-UY-ulM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hA3-S3-zak" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1372" y="-233"/>
+        </scene>
+        <!--Story Comment View Controller - 星城故事评论_ViewController-->
+        <scene sceneID="8Ww-Gb-4iq">
+            <objects>
+                <viewController title="星城故事评论_ViewController" id="lkv-1K-pr1" customClass="StoryCommentViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OOE-IV-Nj2"/>
+                        <viewControllerLayoutGuide type="bottom" id="BBm-DD-Ldi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7XL-1r-26B">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="WTo-v7-7cU"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k6Q-1b-Rnc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1806" y="-233"/>
         </scene>
         <!--Init Tab Bar View Controller-->
         <scene sceneID="d5d-2v-8yF">

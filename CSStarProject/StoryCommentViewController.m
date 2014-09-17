@@ -1,42 +1,43 @@
 //
-//  StoryDetailViewController.m
+//  StoryCommentViewController.m
 //  CSStarProject
 //
-//  Created by jialiduo on 14-9-11.
+//  Created by jialiduo on 14-9-16.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import "StoryDetailViewController.h"
+#import "StoryCommentViewController.h"
 
-@interface StoryDetailViewController (){
+@interface StoryCommentViewController (){
     NSString *detailId;
     UIToolbar *toolBar;
     UIButton *numBtn;
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    BOOL isOpen;
+    NSArray *tableArray;
+    UITableView *table;
+    NSInteger pageIndex;
 }
 @end
 
-@implementation StoryDetailViewController
+@implementation StoryCommentViewController
 
+-(void)passValue:(NSString *)val{
+    detailId = val;
+}
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
         self.tabBarController.hidesBottomBarWhenPushed = YES;
-        
     }
     return self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    
 }
 
 - (void)viewDidLoad
@@ -47,11 +48,6 @@
     }
     self.view.backgroundColor = [UIColor whiteColor];
     
-    //添加WebView
-    UIWebView *webDetail = [[UIWebView alloc] init];
-    webDetail.frame = CGRectMake(0, STATU_BAR_HEIGHT + NAV_TITLE_HEIGHT + 70, SCREEN_WIDTH, MAIN_FRAME_H - 150);
-    [self.view addSubview:webDetail];
-
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
     lblDetail.font = [UIFont fontWithName:@"Helvetica" size:24];
@@ -59,66 +55,84 @@
     [self.view addSubview:lblDetail];
     
     //时间
-    UILabel *lblTimeDetail = [[UILabel alloc] init];
-    lblTimeDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
-    lblTimeDetail.textColor = [UIColor grayColor];
-    lblTimeDetail.frame = CGRectMake(5, 104, 65, 30);
-    [self.view addSubview:lblTimeDetail];
+    UILabel *lblTimeComment = [[UILabel alloc] init];
+    lblTimeComment.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblTimeComment.textColor = [UIColor grayColor];
+    lblTimeComment.frame = CGRectMake(5, 104, 115, 30);
+    [self.view addSubview:lblTimeComment];
     
-    //分割线
-    UIImageView *imgHomeDetailOne=[[UIImageView alloc] init];
-    imgHomeDetailOne.frame = CGRectMake(75, 111, 1, 14);
-    imgHomeDetailOne.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    [self.view addSubview:imgHomeDetailOne];
+    //评论数图标
+    UIImageView *imgComment=[[UIImageView alloc] init];
+    imgComment.frame = CGRectMake(120, 110, 20, 20);
+    imgComment.image = [UIImage imageNamed:@"myzone-discuss.png"];
+    [self.view addSubview:imgComment];
     
-    //栏目名称
-    UILabel *lblCategoryDetail = [[UILabel alloc] init];
-    lblCategoryDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
-    lblCategoryDetail.textColor = [UIColor grayColor];
-    lblCategoryDetail.frame = CGRectMake(85, 104, 50, 30);
-    lblCategoryDetail.text =@"星城故事";
-    [self.view addSubview:lblCategoryDetail];
+    //总评论数
+    UILabel *lblClickComment = [[UILabel alloc] init];
+    lblClickComment.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblClickComment.textColor = [UIColor grayColor];
+    lblClickComment.frame = CGRectMake(140, 104, 100, 30);
+    [self.view addSubview:lblClickComment];
     
-    //分割线
-    UIImageView *imgHomeDetailTwo=[[UIImageView alloc] init];
-    imgHomeDetailTwo.frame = CGRectMake(145, 111, 1, 14);
-    imgHomeDetailTwo.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    [self.view addSubview:imgHomeDetailTwo];
-    
-    //点击图标
-    UIImageView *imgCategoryDetail=[[UIImageView alloc] init];
-    imgCategoryDetail.frame = CGRectMake(155, 112, 16, 14);
-    imgCategoryDetail.image = [UIImage imageNamed:@"heartgray.png"];
-    [self.view addSubview:imgCategoryDetail];
-    
-    //点击量
-    UILabel *lblNumberDetail = [[UILabel alloc] init];
-    lblNumberDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
-    lblNumberDetail.textColor = [UIColor grayColor];
-    lblNumberDetail.frame = CGRectMake(175, 104, 100, 30);
-    [self.view addSubview:lblNumberDetail];
-    
-    
+    //现实参数
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
     NSDictionary *dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
     lblDetail.text = [dicContent valueForKey:@"_title"];
-    lblTimeDetail.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
-    NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
-    if (call_index.length > 0) {
-            lblCategoryDetail.text = call_index;
-    }
-    NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
-    lblNumberDetail.text = click;
     
+    NSString *addTime = [dicContent valueForKey:@"_add_time"];
+    DateUtil *utilDate = [[DateUtil alloc] init];
+    addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
+    lblTimeComment.text = addTime;
     
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/newsConte.aspx?newsid=%@",REMOTE_ADMIN_URL,detailId];
-    NSURL *nsUrl = [[NSURL alloc] initWithString:url];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:nsUrl];
-    [webDetail loadRequest:request];
+    NSString *clickNum = [self getCommentNum];
+    lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     
     //评论
+    [self initTable];
     [self initToolBar];
+    //获取评论列表
+    [self getCommentList];
+}
+
+-(void)getCommentList{
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/GetArticleComments/%@/10/%d",REMOTE_URL,detailId,pageIndex];
+    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
+    tableArray = (NSArray *)[jsonData requestData:url];
+}
+
+-(void)initTable{
+    table = [[UITableView alloc] initWithFrame:self.view.frame];
+    table.delegate = self;
+    table.dataSource = self;
+    table.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105); 
+    [self.view addSubview:table];
+    
+    //注册单元格
+    UINib *nibCell = [UINib nibWithNibName:@"StoryCommentTableCell" bundle:nil];
+    [table registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"];
+    NSDictionary *dicComment = [tableArray objectAtIndex:indexPath.row];
+    DateUtil *utilDate = [[DateUtil alloc] init];
+    NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
+    commentCell.commentDateTime.text = addTime;
+    NSString *imgUrl = [dicComment valueForKey:@"_avatar"];
+    UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
+    [commentCell.commentImage setImage:picImg];
+    commentCell.commentTextView.text = [dicComment valueForKey:@"_content"];
+    commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
+    return commentCell;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return tableArray.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return  60;
 }
 
 //初始化底部工具栏
@@ -129,11 +143,9 @@
     [self initTextView];
     [self initCommentIcon];
     [self initCommentText];
-    [self initNumButton];
+    [self initButton];
     
     [self.view addSubview:toolBar];
-    
-    
 }
 
 -(void)initTextView{
@@ -161,7 +173,7 @@
     [plabel setTextAlignment:NSTextAlignmentCenter];
     [plabel setTextColor:[UIColor grayColor]];
     
-    //增加监听，当键盘出现或改变时收出消息 
+    //增加监听，当键盘出现或改变时收出消息
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //增加监听，当键退出时收出消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -169,7 +181,7 @@
     
 }
 
--(void) initNumButton{
+-(void) initButton{
     //加入按钮
     numBtn = [[UIButton alloc]initWithFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
     [numBtn.layer setMasksToBounds:YES];
@@ -179,20 +191,15 @@
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 1 });
     [numBtn.layer setBorderColor:colorref];
-    [numBtn setBackgroundImage:[UIImage imageNamed:@"con_bg@2x.jpg"] forState:UIControlStateNormal];
     
-    //给按钮默认显示评论数据
     [numBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [numBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    
-    NSString *clickNum = [self getCommentNum];
-    [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-    [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
+    [numBtn setTitle:@"发 表" forState:UIControlStateNormal];
+    [numBtn setTitle:@"发 表" forState:UIControlStateHighlighted];
     numBtn.titleLabel.font = Font_Size(14);
     
     //给按钮绑定事件
     [numBtn addTarget:self action:@selector(commentBtnClick) forControlEvents:UIControlEventTouchDown];
-    
     [toolBar addSubview:numBtn];
 }
 
@@ -234,37 +241,21 @@
         [textField setTextAlignment:NSTextAlignmentNatural];
         [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-50-height, SCREEN_WIDTH,toolBar.frame.size.height+30)];
         [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 34, 45, 30)];
-        [numBtn setTitle:@"发 表" forState:UIControlStateNormal];
-        numBtn.titleLabel.font = Font_Size(14);
         
         [cIconView removeFromSuperview];
         [plabel setFrame:CGRectMake(0, plabel.frame.origin.y, plabel.frame.size.width, plabel.frame.size.height)];
     }];
-    
-    isOpen = YES;
 }
 
 //当键退出时调用
 - (void)keyboardWillHide:(NSNotification *)aNotification{
     [UIView animateWithDuration:0.3 animations:^{
+        [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+        [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
+        [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+        
         if([self isEmpty:textField.text]){
-            [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
-            [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
-            [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
-            NSString *clickNum = [self getCommentNum];
-            [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-            [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-            numBtn.titleLabel.font = Font_Size(14);
-            
-            [textField addSubview:cIconView];
-            [plabel setFrame:CGRectMake(25, 2, 40, 26)];
             [textField addSubview:plabel];
-            isOpen = NO;
-        }else{
-            [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
-            [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
-            [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
-            isOpen = YES;
         }
     }];
 }
@@ -273,44 +264,37 @@
 -(void)commentBtnClick{
     NSString *textVal = textField.text;
     //点击发表提交数据
-    if(isOpen){
-        if([self isEmpty:textVal]){
-            [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
-        }else{ 
-            //提交评论
-            NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
-            if ([self isEmpty:userId]) {
-                LoginViewController *login = [[LoginViewController alloc] init];
-                [self.navigationController pushViewController:login animated:YES];
-                return;
-            }
-            NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
-            NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/AddComment/",REMOTE_URL];
-            NSURL *login_url = [NSURL URLWithString:url];
-            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
-            [ASIHTTPRequest setSessionCookies:nil];
-            
-            [request setUseCookiePersistence:YES];
-            [request setDelegate:self];
-            [request setRequestMethod:@"POST"];
-            [request setStringEncoding:NSUTF8StringEncoding];
-            
-            [request setPostValue:detailId forKey:@"articleId"];
-            [request setPostValue:textVal forKey:@"txtContent"];
-            [request setPostValue:userId forKey:@"userid"];
-            [request setPostValue:userName forKey:@"username"];
-            
-            [request buildPostBody];
-            
-            [request startAsynchronous];
-            [request setDidFailSelector:@selector(requestLoginFailed:)];
-            [request setDidFinishSelector:@selector(requestLoginFinished:)];
-        } 
+    if([self isEmpty:textVal]){
+        [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
     }else{
-        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
-        delegate = storyComment;
-        [delegate passValue:detailId];
-        [self.navigationController pushViewController:storyComment animated:YES];
+        //提交评论
+        NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
+        if ([self isEmpty:userId]) {
+            LoginViewController *login = [[LoginViewController alloc] init];
+            [self.navigationController pushViewController:login animated:YES];
+            return;
+        }
+        NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
+        NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/AddComment/",REMOTE_URL];
+        NSURL *login_url = [NSURL URLWithString:url];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
+        [ASIHTTPRequest setSessionCookies:nil];
+        
+        [request setUseCookiePersistence:YES];
+        [request setDelegate:self];
+        [request setRequestMethod:@"POST"];
+        [request setStringEncoding:NSUTF8StringEncoding];
+        
+        [request setPostValue:detailId forKey:@"articleId"];
+        [request setPostValue:textVal forKey:@"txtContent"];
+        [request setPostValue:userId forKey:@"userid"];
+        [request setPostValue:userName forKey:@"username"];
+        
+        [request buildPostBody];
+        
+        [request startAsynchronous];
+        [request setDidFailSelector:@selector(requestLoginFailed:)];
+        [request setDidFinishSelector:@selector(requestLoginFinished:)];
     }
 }
 
@@ -331,8 +315,7 @@
         
         [textField addSubview:cIconView];
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
-        [textField addSubview:plabel];
-        isOpen = NO;
+        [textField addSubview:plabel]; 
         
         [StringUitl alertMsg:@"提交成功" withtitle:nil];
     }else{
@@ -344,15 +327,16 @@
     [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
 
--(void)passValue:(NSString *)val{
-    detailId = val; 
-}
-
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[super setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 -(void)goPreviou{
     [super goPreviou];
 }
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self dismissKeyBoard];
+}
+
 @end

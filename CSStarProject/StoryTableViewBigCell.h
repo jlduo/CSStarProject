@@ -10,7 +10,7 @@
 
 @interface StoryTableViewBigCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIButton *cellImgView;
+@property (weak, nonatomic) IBOutlet UIImageView *cellImgView;
 @property (weak, nonatomic) IBOutlet UILabel *imgTitle;
 
 @end

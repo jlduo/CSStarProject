@@ -38,6 +38,7 @@
 #define DELAY_TIME 2
 
 #define REMOTE_URL @"http://192.168.1.210:8888"
+#define REMOTE_ADMIN_URL @"http://192.168.1.210:888"
 #define LOGIN_URL @"/AndroidApi/LoginService/Login"//登录地址
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
 #define CHECK_CODE_URL @"/AndroidApi/SmsService/SendSMS"//验证码请求地址

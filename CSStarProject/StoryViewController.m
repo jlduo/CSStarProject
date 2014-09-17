@@ -94,7 +94,7 @@
 -(void)callBackMethod:(id) obj
 {
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *url = [[NSString alloc] initWithFormat:@"http://192.168.1.210:8888/cms/GetArticlesByDate/city/%@/0",obj];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticlesByDate/city/%@/0",REMOTE_URL,obj];
     NSMutableArray *addArray = (NSMutableArray *)[jsonData requestData:url];
     if(addArray!=nil && addArray.count>0){
        [_storyDataList addObject:addArray];
@@ -125,7 +125,8 @@
 
 -(void)setTableData{
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSMutableArray *array = (NSMutableArray *)[jsonData requestData:@"http://192.168.1.210:8888/cms/GetArticlesByDate/city/0/0"];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticlesByDate/city/0/0",REMOTE_URL];
+    NSMutableArray *array = (NSMutableArray *)[jsonData requestData:url];
  
     //获取接口数据的日期时间
     NSDictionary *firstDic = [array objectAtIndex:0];
@@ -238,7 +239,7 @@
         
         NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
         UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        [storyBDCell.imgView setBackgroundImage:picImg forState:UIControlStateNormal];
+        storyBDCell.imageView.image = picImg;
         
         storyBDCell.titleView.text = [cellDic valueForKey:@"_title"];
         storyBDCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
@@ -260,7 +261,7 @@
             
             NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-            [storyBCell.cellImgView setBackgroundImage:picImg forState:UIControlStateNormal];
+            storyBCell.cellImgView.image = picImg;
             
             storyBCell.imgTitle.text = [cellDic valueForKey:@"_title"];
             
@@ -279,7 +280,7 @@
             
             NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-            [storySMCell.cellImg setImage:picImg];
+            storySMCell.cellImg.image = picImg;
             storySMCell.cellTitle.text = [cellDic valueForKey:@"_title"];
             
             return storySMCell;
