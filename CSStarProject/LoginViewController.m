@@ -70,7 +70,7 @@
     [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
     [rbtn setTitle:@"注册" forState:UIControlStateNormal];
     [rbtn setTitle:@"注册" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor whiteColor]];
+    [rbtn setTintColor:[UIColor whiteColor]]; 
     [rbtn setFont:Font_Size(16)];
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];

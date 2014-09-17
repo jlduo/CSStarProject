@@ -162,7 +162,7 @@
 -(void)loadCommentData{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"%s/Comment/GetArticleComments/%@/10",REMOTE_URL,dataId];
+    NSString *url = [NSString stringWithFormat:@"%@/Comment/GetArticleComments/%@/10",REMOTE_URL,dataId];
     NSArray *commArr = (NSArray *)[convertJson requestData:url];
     if(commArr!=nil && commArr.count>0){
         commentArray = [NSMutableArray arrayWithArray:commArr];

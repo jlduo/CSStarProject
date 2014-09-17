@@ -18,6 +18,7 @@
     NSArray *tableArray;
     UITableView *table;
     NSInteger pageIndex;
+    UILabel *lblClickComment;
 }
 @end
 
@@ -68,7 +69,7 @@
     [self.view addSubview:imgComment];
     
     //总评论数
-    UILabel *lblClickComment = [[UILabel alloc] init];
+    lblClickComment = [[UILabel alloc] init];
     lblClickComment.font = [UIFont fontWithName:@"Helvetica" size:12];
     lblClickComment.textColor = [UIColor grayColor];
     lblClickComment.frame = CGRectMake(140, 104, 100, 30);
@@ -300,7 +301,6 @@
 
 //请求完成
 - (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSLog(@"login info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     //处理返回
@@ -308,16 +308,16 @@
         textField.text = nil;
         [self dismissKeyBoard];
         
-        NSString *clickNum = [self getCommentNum];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-        numBtn.titleLabel.font = Font_Size(14);
-        
         [textField addSubview:cIconView];
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel]; 
         
         [StringUitl alertMsg:@"提交成功" withtitle:nil];
+        [self getCommentList];
+        [table reloadData];
+        
+        NSString *clickNum = [self getCommentNum];
+        lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     }else{
         [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
     }
