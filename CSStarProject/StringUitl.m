@@ -114,8 +114,8 @@
 }
 
 //读取用户信息
-+(NSString *)getSessionVal:(NSString*)key{
-    NSString *val = [[NSUserDefaults standardUserDefaults] valueForKey:key];
++(NSString *)getSessionVal:(NSString*)key{ 
+    NSString *val = [[NSString alloc] initWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:key]];
     NSLog(@"获取%@的值为:%@",key,val);
     return val;
 }

@@ -7,7 +7,6 @@
 //
 
 #import "StoryDetailViewController.h"
-#import "InitTabBarViewController.h"
 
 @interface StoryDetailViewController (){
     NSString *detailId;
@@ -149,14 +148,14 @@
 
 -(void)initCommentIcon{
     //在文本域内加入图标
-    cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)]; 
+    cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)];
     cIconView.image = [UIImage imageNamed:@"iconchecked.png"];
     [textField addSubview:cIconView];
 }
 
 -(void)initCommentText{
     //加入评论文字
-    plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 0, 40, 26)];
+    plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 2, 40, 26)];
     [plabel setText:@"评论"];
     [plabel setFont:Font_Size(12)];
     [plabel setTextAlignment:NSTextAlignmentCenter];
@@ -206,16 +205,6 @@
     return comments;
 }
 
-//取消回车事件 改为关闭键盘
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"]) {
-        [self dismissKeyBoard];
-        return NO;
-    }
-    return YES;
-}
-
 //输入文字调用
 -(void)textViewDidChange:(UITextView *)textView{
     NSString * textVal = textView.text;
@@ -258,39 +247,101 @@
 //当键退出时调用
 - (void)keyboardWillHide:(NSNotification *)aNotification{
     [UIView animateWithDuration:0.3 animations:^{
-        [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
-        [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
-        [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
-        NSString *clickNum = [self getCommentNum];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-        numBtn.titleLabel.font = Font_Size(14);
-        
         if([self isEmpty:textField.text]){
+            [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+            [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
+            [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+            NSString *clickNum = [self getCommentNum];
+            [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
+            [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
+            numBtn.titleLabel.font = Font_Size(14);
+            
             [textField addSubview:cIconView];
-            [plabel setFrame:CGRectMake(25, 0, 40, 26)];
+            [plabel setFrame:CGRectMake(25, 2, 40, 26)];
             [textField addSubview:plabel];
+            isOpen = NO;
+        }else{
+            [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
+            [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
+            [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
+            isOpen = YES;
         }
     }];
-    
-    isOpen = NO;
 }
 
 
 -(void)commentBtnClick{
     NSString *textVal = textField.text;
-    
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
             [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
-        }else{
-            //Comment/AddComment/{articleId}/{txtContent}/{userid}/{username}
+        }else{ 
             //提交评论
+            NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
+            if ([self isEmpty:userId]) {
+                LoginViewController *login = [[LoginViewController alloc] init];
+                [self.navigationController pushViewController:login animated:YES];
+                return;
+            }
+            NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
+            NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/AddComment/",REMOTE_URL];
+            NSURL *login_url = [NSURL URLWithString:url];
+            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
+            [ASIHTTPRequest setSessionCookies:nil];
+            
+            [request setUseCookiePersistence:YES];
+            [request setDelegate:self];
+            [request setRequestMethod:@"POST"];
+            [request setStringEncoding:NSUTF8StringEncoding];
+            
+            [request setPostValue:detailId forKey:@"articleId"];
+            [request setPostValue:textVal forKey:@"txtContent"];
+            [request setPostValue:userId forKey:@"userid"];
+            [request setPostValue:userName forKey:@"username"];
+            
+            [request buildPostBody];
+            
+            [request startAsynchronous];
+            [request setDidFailSelector:@selector(requestLoginFailed:)];
+            [request setDidFinishSelector:@selector(requestLoginFinished:)];
         } 
     }else{
-        //打开评论视图
+        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
+        delegate = storyComment;
+        [delegate passValue:detailId];
+        [self.navigationController pushViewController:storyComment animated:YES];
     }
+}
+
+//请求完成
+- (void)requestLoginFinished:(ASIHTTPRequest *)req{
+    NSLog(@"login info->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    //处理返回
+    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
+        textField.text = nil;
+        [self dismissKeyBoard];
+        
+        NSString *clickNum = [self getCommentNum];
+        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
+        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
+        numBtn.titleLabel.font = Font_Size(14);
+        
+        [textField addSubview:cIconView];
+        [plabel setFrame:CGRectMake(25, 2, 40, 26)];
+        [textField addSubview:plabel];
+        isOpen = NO;
+        
+        [StringUitl alertMsg:@"提交成功" withtitle:nil];
+    }else{
+        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+    }
+}
+
+- (void)requestLoginFailed:(ASIHTTPRequest *)req{
+    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
 
 -(void)passValue:(NSString *)val{

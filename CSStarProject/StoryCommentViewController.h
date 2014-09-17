@@ -6,8 +6,14 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CommonViewController.h"
+#import "InitTabBarViewController.h"
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
+#import "ViewPassValueDelegate.h"
+#import "LoginViewController.h"
+#import "StoryCommentTableCell.h"
 
-@interface StoryCommentViewController : UIViewController
+@interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,UITableViewDataSource,UITableViewDelegate>
 
 @end
