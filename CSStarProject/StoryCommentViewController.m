@@ -15,9 +15,10 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    NSArray *tableArray;
+    NSMutableArray *tableArray;
     UITableView *table;
     NSInteger pageIndex;
+    UILabel *lblClickComment;
 }
 @end
 
@@ -68,7 +69,7 @@
     [self.view addSubview:imgComment];
     
     //总评论数
-    UILabel *lblClickComment = [[UILabel alloc] init];
+    lblClickComment = [[UILabel alloc] init];
     lblClickComment.font = [UIFont fontWithName:@"Helvetica" size:12];
     lblClickComment.textColor = [UIColor grayColor];
     lblClickComment.frame = CGRectMake(140, 104, 100, 30);
@@ -92,13 +93,17 @@
     [self initTable];
     [self initToolBar];
     //获取评论列表
-    [self getCommentList];
+    pageIndex = 1;
+    tableArray = [self getCommentList];
+    
+    [self setHeaderRereshing];
+    [self setFooterRereshing];
 }
 
--(void)getCommentList{
+-(NSMutableArray *)getCommentList{
     NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/GetArticleComments/%@/10/%d",REMOTE_URL,detailId,pageIndex];
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    tableArray = (NSArray *)[jsonData requestData:url];
+    return (NSMutableArray *)[jsonData requestData:url];
 }
 
 -(void)initTable{
@@ -124,6 +129,7 @@
     [commentCell.commentImage setImage:picImg];
     commentCell.commentTextView.text = [dicComment valueForKey:@"_content"];
     commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
+    commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return commentCell;
 }
 
@@ -133,6 +139,10 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return  60;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self dismissKeyBoard];
 }
 
 //初始化底部工具栏
@@ -300,7 +310,6 @@
 
 //请求完成
 - (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSLog(@"login info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     //处理返回
@@ -308,16 +317,17 @@
         textField.text = nil;
         [self dismissKeyBoard];
         
-        NSString *clickNum = [self getCommentNum];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-        numBtn.titleLabel.font = Font_Size(14);
-        
         [textField addSubview:cIconView];
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel]; 
         
         [StringUitl alertMsg:@"提交成功" withtitle:nil];
+        pageIndex = 1;
+        tableArray = [self getCommentList];
+        [table reloadData];
+        
+        NSString *clickNum = [self getCommentNum];
+        lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     }else{
         [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
     }
@@ -338,6 +348,43 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self dismissKeyBoard];
+}
+
+//加载头部刷新
+-(void)setHeaderRereshing{
+    AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+        pageIndex = 1;
+        [self performSelector:@selector(callBackMethod:) withObject:@"top"];
+        [view performSelector:@selector(finishedLoading)];
+    }];
+    [table addSubview:topPullView];
+}
+
+//加底部部刷新
+-(void)setFooterRereshing{
+    AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+        pageIndex++;
+        [self performSelector:@selector(callBackMethod:) withObject:@"foot"];
+        [view performSelector:@selector(finishedLoading)];
+    }];
+    [table addSubview:bottomPullView];
+}
+
+//请求完成之后，回调方法
+-(void)callBackMethod:(id)isTop
+{
+    NSMutableArray *nextArray = [self getCommentList];
+    if ([isTop isEqualToString:@"top"]) {
+        tableArray = nextArray;
+    } else {
+        [tableArray addObjectsFromArray:nextArray];
+    }
+    if(nextArray!=nil && nextArray.count>0){
+        table.backgroundColor = [UIColor lightGrayColor];
+        [table reloadData];
+    }else{
+        [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"]; 
+    }
 }
 
 @end
