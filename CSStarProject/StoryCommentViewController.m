@@ -332,7 +332,8 @@
     [self.view addSubview:[super setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 -(void)goPreviou{
-    [super goPreviou];
+    //[super goPreviou];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{

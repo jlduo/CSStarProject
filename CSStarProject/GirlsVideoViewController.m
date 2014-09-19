@@ -180,9 +180,9 @@
     [numBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     
     //[bannerData valueForKey:@"_click"]
-    NSInteger clickNum = [self getCommentNum:dataId];
-    [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateNormal];
-    [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateHighlighted];
+    NSString *clickNum = [self getCommentNum:dataId];
+    [numBtn setTitle:clickNum forState:UIControlStateNormal];
+    [numBtn setTitle:clickNum forState:UIControlStateHighlighted];
     numBtn.titleLabel.font = Font_Size(14);
     
     //给按钮绑定事件
@@ -192,13 +192,13 @@
 }
 
 //获取评论条数
--(NSInteger)getCommentNum:(NSString *)articleId{
+-(NSString *)getCommentNum:(NSString *)articleId{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"/Comment/GetCommentTotal/%@",articleId];
+    NSString *url = [NSString stringWithFormat:@"%@/Comment/GetCommentTotal/%@",REMOTE_URL,articleId];
     NSMutableDictionary *commentDic = (NSMutableDictionary *)[convertJson requestData:url];
-    NSInteger comments = (NSUInteger)[commentDic valueForKey:@"result"];
-    NSLog(@"评论条数＝＝%d",comments);
+    NSString *comments = [commentDic valueForKey:@"result"];
+    NSLog(@"评论条数＝＝%@",comments);
     
     return comments;
     
@@ -264,9 +264,9 @@
        [textField setFrame:CGRectMake(6, 5, toolBar.frame.size.width-65, 30)];
        [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
        [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
-        NSInteger clickNum = [self getCommentNum:dataId];
-       [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateNormal];
-       [numBtn setTitle:[NSString stringWithFormat:@"%d",clickNum] forState:UIControlStateHighlighted];
+        NSString *clickNum = [self getCommentNum:dataId];
+       [numBtn setTitle:clickNum forState:UIControlStateNormal];
+       [numBtn setTitle:clickNum forState:UIControlStateHighlighted];
        numBtn.titleLabel.font = Font_Size(14);
        
        if([self isEmpty:textField.text]){
@@ -337,7 +337,7 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"错误提示"];
+        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
