@@ -136,6 +136,11 @@
     [StringUitl setSessionVal:Nil withKey:LOGIN_USER_NAME];
     [StringUitl setSessionVal:Nil withKey:LOGIN_USER_PSWD];
     [StringUitl setSessionVal:Nil withKey:USER_IS_LOGINED];
+    [StringUitl setSessionVal:Nil withKey:PROVINCE_ID];
+    [StringUitl setSessionVal:Nil withKey:CITY_ID];
+    [StringUitl setSessionVal:Nil withKey:USER_LOGO];
+    [StringUitl setSessionVal:Nil withKey:USER_NICK_NAME];
+    [StringUitl setSessionVal:Nil withKey:USER_SEX];
 }
 
 //判断字符串为空
@@ -167,6 +172,72 @@
     [alert show];
 }
 
+
+//获取用户信息
++(void)loadUserInfo:(NSString *)userName{
+    if([StringUitl isNotEmpty:userName]){
+        
+        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
+        NSLog(@"getuser_url=%@",getUserUrl);
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
+        [ASIHTTPRequest setSessionCookies:nil];
+        
+        [request setUseCookiePersistence:YES];
+        [request setDelegate:self];
+        [request setRequestMethod:@"GET"];
+        [request setStringEncoding:NSUTF8StringEncoding];
+        [request startAsynchronous];
+        
+        [request setDidFailSelector:@selector(getUserInfoFailed:)];
+        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
+        
+    }
+}
+
+- (void)getUserInfoFinished:(ASIHTTPRequest *)req
+{
+    
+    NSLog(@"getUserInfo->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+        NSLog(@"userInfo==%@",jsonDic);
+        //存储用户信息
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        
+    }
+    
+}
+
+- (void)getUserInfoFailed:(ASIHTTPRequest *)req
+{
+    
+    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+}
+
+
++(NSMutableDictionary *)getUserData{
+    
+    [self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    
+    NSMutableDictionary *dic =[[NSMutableDictionary alloc]init];
+    [dic setValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:LOGIN_USER_NAME];
+    [dic setValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:LOGIN_USER_ID];
+    [dic setValue:[StringUitl getSessionVal:USER_NICK_NAME] forKey:USER_NICK_NAME];
+    [dic setValue:[StringUitl getSessionVal:CITY_ID] forKey:CITY_ID];
+    [dic setValue:[StringUitl getSessionVal:PROVINCE_ID] forKey:PROVINCE_ID];
+    [dic setValue:[StringUitl getSessionVal:USER_LOGO] forKey:USER_LOGO];
+    [dic setValue:[StringUitl getSessionVal:USER_SEX] forKey:USER_SEX];
+    return dic;
+}
 
 
 @end

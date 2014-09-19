@@ -17,6 +17,8 @@
     NSString *cellTitle;
     
     UITableView *stableView;
+    UIButton *imgBtn;
+    UILabel *userLabel;
 }
 
 @end
@@ -62,27 +64,42 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
     [stableView setFrame:temFrame];
+    
+    //处理数据回填
+    [self setImgBtnImage];
+    [self setUserTitle];
+    
     
 }
 
--(void)setHeaderView{
+-(void)setImgBtnImage{
     
-     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
-    [headView setBackgroundColor:[UIColor grayColor]];
-    
-    UIButton *imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-100)/2, 20, 100, 100)];
-    imgBtn.layer.masksToBounds = YES;
-    imgBtn.layer.cornerRadius = 50.0f;
     NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
     NSRange range = [userLogo rangeOfString:@"upload"];
     if(range.location==NSNotFound){
         [imgBtn setBackgroundImage:[UIImage imageNamed:@"avatarbig.png"] forState:UIControlStateNormal];
     }else{
-        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[StringUitl getSessionVal:USER_LOGO]]];
-       [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:userLogo]];
+        [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
     }
+}
+
+
+-(void)setUserTitle{
+    [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
+}
+-(void)setHeaderView{
+    
+     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
+    [headView setBackgroundColor:[UIColor grayColor]];
+    
+    imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
+    imgBtn.layer.masksToBounds = YES;
+    imgBtn.layer.cornerRadius = 60.0f;
+    
+    [self setImgBtnImage];
 
 
     [imgBtn addTarget:self action:@selector(imgBtnClick) forControlEvents:UIControlEventTouchDown];
@@ -92,8 +109,8 @@
     [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
-    UILabel *userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-110)/2, 90, 120, 100)];
-    [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
+    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 100, 120, 100)];
+    [self setUserTitle];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -195,15 +212,15 @@
     switch (indexPath.row) {
         case 0:
             cellTitle = @"我的评论";
-            imgName =@"myzonediscuss.png";
+            imgName =@"myzone-discuss.png";
             break;
         case 1:
             cellTitle = @"我的消息";
-            imgName =@"myzonemessage.png";
+            imgName =@"myzone-message.png";
             break;
         case 2:
             cellTitle = @"我的众筹";
-            imgName =@"myzonezhongchou.png";
+            imgName =@"myzone-zhongchou.png";
             break;
         case 3:
             cellTitle = @"我的订单";

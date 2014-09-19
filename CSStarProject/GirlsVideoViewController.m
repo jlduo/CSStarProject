@@ -8,6 +8,7 @@
 #import "GirlsVideoViewController.h"
 #import "InitTabBarViewController.h"
 #import "CommentListViewController.h"
+#import "StoryCommentViewController.h"
 
 @interface GirlsVideoViewController (){
     UIImageView *videoPic;
@@ -40,13 +41,13 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
+    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     
     videoTableView = [[UITableView alloc] initWithFrame:tframe];
     videoTableView.delegate = self;
     videoTableView.dataSource = self;
     
-    [videoTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
+    videoTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     videoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[[UIView alloc]init];
@@ -84,7 +85,7 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     [videoTableView setFrame:temFrame];
     
 }
@@ -100,7 +101,6 @@
         
     }
 }
-
 
 //初始化底部工具栏
 -(void)initToolBar{
@@ -229,6 +229,9 @@
     [textField resignFirstResponder];
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self dismissKeyBoard];
+}
 
 //当键盘出现或改变时调用
 - (void)keyboardWillShow:(NSNotification *)aNotification
@@ -289,18 +292,13 @@
             [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
         }else{
             //提交数据
-            //ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-            
-           // NSString *posturl = [NSString stringWithFormat:@"%@",];
-            //[convertJson postData:<#(NSMutableDictionary *)#> withUrl:<#(NSString *)#>];
-            
-            
+            [self postCommetnVal:dataId];
         }
         
     }else{//点击数字进入评论列表
         NSLog(@"进入评论列表....");
         NSLog(@"newDataId=%@",dataId);
-        CommentListViewController *commentController = [[CommentListViewController alloc]init];
+        StoryCommentViewController *commentController = [[StoryCommentViewController alloc]init];
         passValelegate = commentController;
         [passValelegate passValue:dataId];
         
@@ -313,9 +311,50 @@
 //提价评论信息
 -(void)postCommetnVal:(NSString *)articelId{
     
+    NSURL *comment_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL]];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:comment_url];
+    [ASIHTTPRequest setSessionCookies:nil];
     
+    [request setUseCookiePersistence:YES];
+    [request setDelegate:self];
+    [request setRequestMethod:@"POST"];
+    [request setStringEncoding:NSUTF8StringEncoding];
+    [request setPostValue:articelId forKey:@"articleId"];
+    [request setPostValue:textField.text forKey:@"txtContent"];
+    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
+    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
+    [request buildPostBody];
+    
+    [request startAsynchronous];
+    [request setDidFailSelector:@selector(addCommentFailed:)];
+    [request setDidFinishSelector:@selector(addCommentFinished:)];
     
 }
+
+- (void)addCommentFinished:(ASIHTTPRequest *)req
+{
+    NSLog(@"comment info->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
+        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"错误提示"];
+        [textField setText:nil];
+        [self dismissKeyBoard];
+    }
+    if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
+        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"提示信息"];
+        
+    }
+    
+}
+
+- (void)addCommentFailed:(ASIHTTPRequest *)req
+{
+    
+    [StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+}
+
+
 
 -(void)loadGirlsData{
     
@@ -387,13 +426,11 @@
     videoTableView.tableHeaderView = headView;
     [self.view addSubview:videoTableView];
     
-    
-    
     //视频监听事件
-    [self addPlayBtn];
     [self addNotice];
     [self addLoadTip];
     [self addVideoPic];
+    [self addPlayBtn];
   
     
 
@@ -656,8 +693,14 @@
     NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
     NSRange range = [imgUrl rangeOfString:@"/upload/"];
     if(range.location!=NSNotFound){//判断加载远程图像
-        UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+//        UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
+//        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+        
+        //videoCell.videoPic.imageURL = imgUrl;
+        //改写异步加载图片
+        AsynImageView *imaeView = [[AsynImageView alloc]init];
+        imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
+        videoCell.videoPic.image = imaeView.image;
     }
     
     videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];

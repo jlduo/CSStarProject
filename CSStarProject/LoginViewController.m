@@ -15,6 +15,8 @@
 
 @implementation LoginViewController
 
+@synthesize delegate = _delegate;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -40,6 +42,7 @@
     
     //处理导航开始
     [self setNavgationBar];
+    //[self.userName setText:[StringUitl getSessionVal:LOGIN_USER_NAME]];
 
 }
 
@@ -86,6 +89,13 @@
     [self.view addSubview:navgationBar];
     
 }
+
+//-(void)viewWillAppear:(BOOL)animated{
+//    NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
+//    if([StringUitl isNotEmpty:[StringUitl getSessionVal:LOGIN_USER_NAME]]){
+//        _userName.text = userName;
+//    }
+//}
 
 -(void)goPreviou{
     [self dismissViewControllerAnimated:YES completion:^{
@@ -181,7 +191,8 @@
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
-        
+        //先清除信息
+        [StringUitl clearUserInfo];
         //存储用户信息
         [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
         [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
@@ -195,6 +206,7 @@
         [self dismissViewControllerAnimated:YES completion:^{
             //
         }];
+        
         
     }
     

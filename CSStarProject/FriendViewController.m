@@ -23,4 +23,10 @@
     [self.view addSubview:[self setNavBarWithTitle:@"朋友圈" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
+    [tabBarController showDIYTaBar];
+}
 @end

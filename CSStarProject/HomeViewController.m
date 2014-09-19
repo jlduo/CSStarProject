@@ -34,9 +34,11 @@
     }
     
     [self setTableData];
-    self.homeTableView.backgroundColor = [UIColor lightGrayColor];
+    //self.homeTableView.backgroundColor = [UIColor lightGrayColor];
+    _homeTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     
-    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 69, 320, 180) views:sourceArray];
+    
+    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 69, SCREEN_WIDTH, 180) views:sourceArray];
     _homeTableView.tableHeaderView = scrollView;
     _homeTableView.rowHeight = 70;
     _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -44,36 +46,7 @@
     //集成刷新控件
     [self setHeaderRereshing];
     [self setFooterRereshing];
-    
-    
-//    self.navigationController.navigationBarHidden = YES;
-//    //处理导航开始
-//    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
-//    [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
-//    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
-//    //处理标题
-//    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
-//    [titleLabel setText:@"长沙星"];
-//    [titleLabel setTextColor:[UIColor whiteColor]];
-//    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-//    [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-//    
-//    //设置左边箭头
-//    UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
-//    [rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
-//    [rbtn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
-//    
-//    navItem.titleView = titleLabel;
-//    navItem.rightBarButtonItem = rightBtnItem;
-//    [navgationBar pushNavigationItem:navItem animated:YES];
-//    
-//    
-//    [self.view addSubview:navgationBar];
-    
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -111,20 +84,6 @@
     }
 }
 
-
-
--(void) refreshTableView
-{
-    if (self.refreshControl.refreshing) {
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:REFRESH_LOADING];
-        self.refreshControl.backgroundColor = [UIColor lightTextColor];
-        self.refreshControl.alpha = 0.5f;
-        //添加新的模拟数据
-        NSDate *date = [[NSDate alloc] init];
-        //模拟请求完成之后，回调方法callBackMethod
-        [self performSelector:@selector(callBackMethod:) withObject:date afterDelay:DELAY_TIME];
-    }
-}
 
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
@@ -237,7 +196,7 @@
     
     CGRect headFrame = CGRectMake(0, 0, 320, 22);
     UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
-    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tbarbg.png"]];
+    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
     //设置每组的头部图片
     NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imgName]];
@@ -245,7 +204,7 @@
     //设置每组的标题
     UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 22)];
     headtitle.text = [_headTitleArray objectAtIndex:section];
-    headtitle.font = [UIFont fontWithName:@"Arial" size:14.0f];
+    headtitle.font = [UIFont fontWithName:@"Arial" size:18.0f];
     
     [sectionHeadView addSubview:imageView];
     [sectionHeadView addSubview:headtitle];
@@ -354,8 +313,13 @@
         NSLog(@"imgurl==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-            [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+//            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
+//            [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+            
+            //改写异步加载图片
+            AsynImageView *imaeView = [[AsynImageView alloc]init];
+            imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
+            videoCell.videoPic.image = imaeView.image;
         }
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         
@@ -384,8 +348,12 @@
         NSLog(@"imgurl==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-            [picCell.picView setBackgroundImage:videImg forState:UIControlStateNormal];
+//            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
+//            [picCell.picView setBackgroundImage:videImg forState:UIControlStateNormal];
+            //改写异步加载图片
+            AsynImageView *imaeView = [[AsynImageView alloc]init];
+            imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
+            picCell.picView.image = imaeView.image;
         }
         
         picCell.titleView.text = [cellDic valueForKey:@"_title"];

@@ -15,6 +15,9 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "ConvertJSONData.h"
+#import "AsynImageView.h"
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
 
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,UITextViewDelegate> {
     

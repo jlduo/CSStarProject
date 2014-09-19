@@ -135,6 +135,13 @@
     [self.view addSubview:[super setNavBarWithTitle:@"美女私房" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
+    [tabBarController showDIYTaBar];
+}
+
 -(void)setTableData{
     
     NSBundle *manBund = [NSBundle mainBundle];
@@ -196,8 +203,12 @@
         PicTableViewCell *picCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
         picCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UIImage *picImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
-        [picCell.picView setBackgroundImage:picImg forState:UIControlStateNormal];
+        //UIImage *picImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
+        //[picCell.picView setBackgroundImage:picImg forState:UIControlStateNormal];
+        //picCell.picView.imageURL = [cellDic valueForKey:@"pic"];
+        AsynImageView *imageView = [[AsynImageView alloc]init];
+        imageView.imageURL = [NSString stringWithFormat:@"%@", [cellDic valueForKey:@"pic"]];
+        picCell.picView.image = imageView.image;
         
         picCell.titleView.text = [cellDic valueForKey:@"title"];
         [picCell.descView alignTop];
@@ -214,10 +225,15 @@
         
         VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
         videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
-        UIImage *videImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
-        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
-        videoCell.videoTitle.text = [cellDic valueForKey:@"title"];
+//        UIImage *videImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
+//        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
+        //videoCell.videoPic.imageURL =[cellDic valueForKey:@"pic"];
         
+        AsynImageView *imageView = [[AsynImageView alloc]init];
+        imageView.imageURL = [NSString stringWithFormat:@"%@", [cellDic valueForKey:@"pic"]];
+        videoCell.videoPic.image = imageView.image;
+        
+        videoCell.videoTitle.text = [cellDic valueForKey:@"title"];
         [videoCell.videoDesc alignTop];
         videoCell.videoDesc.text = [cellDic valueForKey:@"desc"];
         videoCell.clickNum.text = [cellDic valueForKey:@"clicknum"];
@@ -239,6 +255,10 @@
            //加载图片
            UIImageView *imageView;
            for(int i=0;i<photoArray.count;i++){
+               
+               //imageView = [[AsynImageView alloc]initWithFrame:CGRectMake((100+15)*i, 0, 100, 80)];
+               //imageView.imageURL = [NSString stringWithFormat:@"%@", [photoArray objectAtIndex:i]];
+               
                imageView= [[UIImageView alloc]initWithFrame:CGRectMake((100+15)*i, 0, 100, 80)];
                NSLog(@"pic==%@",[photoArray objectAtIndex:i]);
                [imageView setImage:[UIImage imageNamed:[photoArray objectAtIndex:i]]];

@@ -22,7 +22,12 @@
     UIView *bgView;
     UIView *sheetView;
     
+    BOOL isHeaderSeted;
+    BOOL isFooterSeted;
+    
     UserBigTableViewCell *bigCell;
+    UserSmallTableViewCell *smallCell1;
+    
 }
 
 
@@ -34,7 +39,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self setUserDicData];
+    
      //加入导航
     //[self setNavgationBar];
     
@@ -97,7 +102,6 @@
     [sheetView addSubview:tpBtn];
     [sheetView addSubview:ceBtn];
     
-    
     //[self.view addSubview:sheetView];
     
 
@@ -114,6 +118,7 @@
     return self;
 }
 
+
 -(void)viewWillAppear:(BOOL)animated{
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
@@ -121,22 +126,21 @@
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
     [stableView setFrame:temFrame];
     
-}
-
-
-
--(void)setUserDicData{
+//    if(smArray==nil||smArray.count==0){
+//        smArray = [[NSMutableArray alloc]init];
+//    }
+//    if(smArray !=nil && smArray.count>0){
+//        UserSmallTableViewCell *scell =  (UserSmallTableViewCell *)[smArray objectAtIndex:0];
+//        scell.smallCellValue.text = [StringUitl getSessionVal:USER_NICK_NAME];
+//
+////        UserSmallTableViewCell *ccell =  (UserSmallTableViewCell *)[smArray objectAtIndex:1];
+////        ccell.smallCellValue.text = [_userInfo valueForKey:LOGIN_USER_PSWD];
+//    }
     
-    _userDictionay = [[NSMutableDictionary alloc]init];
-    [_userDictionay setValue:@"4.png" forKey:@"user_pic"];
-    [_userDictionay setValue:@"独孤求败" forKey:@"nick_name"];
-    [_userDictionay setValue:@"13787047370" forKey:@"mobile_num"];
-    [_userDictionay setValue:@"湖南 长沙" forKey:@"country"];
-    [_userDictionay setValue:@"男" forKey:@"sex"];
-    NSLog(@"userDic==%@",_userDictionay);
     
+    
+    [stableView reloadData];
 }
-
 
 -(void)setNavgationBar{
     //处理导航开始
@@ -174,6 +178,7 @@
 }
 
 -(void)loadView{
+    
     [super loadView];
     [self.view addSubview:[self setNavBarWithTitle:@"个人信息" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
     
@@ -240,11 +245,11 @@
                 
                 break;
             case 1:
-               
+                [self goEditNickName];
                 
                 break;
             case 2:
-
+                [self goEditPasswd];
                 
                 break;
                 
@@ -254,10 +259,10 @@
     }else{
         switch (indexPath.row) {
             case 0:
-                
+                [self goEditSex];
                 break;
             case 1:
-                
+                [self goEditCity];
                 break;
                 
             default:
@@ -265,6 +270,43 @@
         }
 
     }
+}
+
+
+-(void)goEditNickName{
+    
+    EditNickNameController *editNickName = [[EditNickNameController alloc]init];
+    [self presentViewController:editNickName animated:YES completion:^{
+        //
+    }];
+    
+}
+
+-(void)goEditPasswd{
+    
+    EditPasswordController *editPassword = [[EditPasswordController alloc]init];
+    [self presentViewController:editPassword animated:YES completion:^{
+        //
+    }];
+    
+}
+
+-(void)goEditSex{
+    
+    EditSexViewController *editSex = [[EditSexViewController alloc]init];
+    [self presentViewController:editSex animated:YES completion:^{
+        //
+    }];
+    
+}
+
+-(void)goEditCity{
+    
+    EditCityViewController *editCity = [[EditCityViewController alloc]init];
+    [self presentViewController:editCity animated:YES completion:^{
+        //
+    }];
+    
 }
 
 - (void)showSheet{
@@ -364,8 +406,8 @@
     if(success) {
         success = [fileManager removeItemAtPath:imageFilePath error:&error];
     }
-    //UIImage *smallImage=[self scaleFromImage:image toSize:CGSizeMake(80.0f, 80.0f)];//将图片尺寸改为80*80
-    UIImage *smallImage = [self thumbnailWithImageWithoutScale:image size:CGSizeMake(93, 93)];
+    UIImage *smallImage=[self scaleFromImage:image toSize:CGSizeMake(180.0f, 180.0f)];//将图片尺寸改为80*80
+    //UIImage *smallImage = [self thumbnailWithImageWithoutScale:image size:CGSizeMake(120, 129)];
     [UIImageJPEGRepresentation(smallImage, 1.0f) writeToFile:imageFilePath atomically:YES];//写入文件
     UIImage *selfPhoto = [UIImage imageWithContentsOfFile:imageFilePath];//读取图片文件
     //[userPhotoButton setImage:selfPhoto forState:UIControlStateNormal];
@@ -385,8 +427,9 @@
     }
     
     NSLog(@"imageUrl->>%@",imageUrl);
+    NSLog(@"imageExt->>%@",[self getFileExtName:imageUrl]);
     
-    NSURL *uploadImgUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,UPLOAD_IMG_URL]];
+    NSURL *uploadImgUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_ADMIN_URL,UPLOAD_IMG_URL]];
     NSLog(@"uploadImgUrl->>%@",uploadImgUrl);
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadImgUrl];
     [ASIHTTPRequest setSessionCookies:nil];
@@ -401,10 +444,9 @@
         return FALSE;
     }
     NSString *base64Str = [imageData base64Encoding];
-    NSLog(@"base64Str->>%@",base64Str);
-    [request setPostValue:@"jpg" forKey:@"fileExt"];
+    [request setPostValue:[self getFileExtName:imageUrl] forKey:@"fileExt"];
     [request setPostValue:base64Str forKey:@"base64"];
-    [request setPostValue:@"username" forKey:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:@"username"];
     [request buildPostBody];
     [request startAsynchronous];
     
@@ -413,6 +455,15 @@
     
 
     return YES;
+}
+
+-(NSString *)getFileExtName:(NSString *)fileName{
+    
+    NSArray * rslt = [fileName componentsSeparatedByString:@"."];
+    if ([rslt count]!=2) {
+        return nil;
+    }
+    return  [rslt objectAtIndex:1];
 }
 
 - (void)uploadFinished:(ASIHTTPRequest *)req
@@ -427,7 +478,19 @@
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
         
         //存储头像信息
-        [self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+        NSString *filePath =[jsonDic valueForKey:@"msg"];
+        
+        if([StringUitl isNotEmpty:filePath]){
+            NSMutableString *tempStr = [NSMutableString stringWithString:filePath];
+            NSRange range = [tempStr rangeOfString:@"small_"];
+            [tempStr replaceCharactersInRange:range withString:@""];
+            
+            [StringUitl setSessionVal:tempStr withKey:USER_LOGO];
+            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:tempStr]];
+            bigCell.bigCellPic.image = [UIImage imageWithData:imgData];
+        }
+
+        [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
         
     }
     
@@ -522,15 +585,6 @@
 }
 
 
--(void)showAlert:(NSString *)msg {
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Action Sheet选择项"
-                          message:msg
-                          delegate:self
-                          cancelButtonTitle:@"确定"
-                          otherButtonTitles: nil];
-    [alert show];
-}
 
 
 #pragma mark 加载数据
@@ -564,7 +618,7 @@
             
             UINib *nibCell = [UINib nibWithNibName:@"UserSmallTableViewCell" bundle:nil];
             [stableView registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
-            UserSmallTableViewCell *smallCell1= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
+            smallCell1= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
             smallCell1.selectionStyle = UITableViewCellSelectionStyleNone;
             
             switch (indexPath.row) {
@@ -573,8 +627,8 @@
                     smallCell1.smallCellTitle.text =@"我的昵称";
                     break;
                 case 2:
-                    smallCell1.smallCellValue.text =[StringUitl getSessionVal:LOGIN_USER_NAME];
-                    smallCell1.smallCellTitle.text =@"手机号码";
+                    smallCell1.smallCellValue.text =@"******";
+                    smallCell1.smallCellTitle.text =@"登录密码";
                     break;
                 default:
                     break;

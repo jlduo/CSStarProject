@@ -16,7 +16,7 @@
 #define SCREEN_WIDTH 320//屏幕宽度
 #define BTN_WIDTH SCREEN_WIDTH/5//按钮宽度
 #define BTN_HEIGHT TABBAR_HEIGHT//按钮高度
-#define SLIDER_HEIGHT 2 //滑块的高度
+#define SLIDER_HEIGHT 4 //滑块的高度
 #define NAV_TITLE_WIDTH 100//导航标题宽度
 #define NAV_TITLE_HEIGHT 44//导航标题高度
 #define NAV_TITLE_INDEX SCREEN_WIDTH/2//导航标题位置
@@ -30,6 +30,7 @@
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(15)//主字体
 
+#define CONTENT_BACKGROUND @"place@2x.png"
 #define NAVBAR_BG_ICON @"navline.png"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
@@ -48,11 +49,16 @@
 #define GET_CITY_URL @"/AndroidApi/UsersService/GetCity"//获取城市
 #define GET_PASSWORD_URL @"/AndroidApi/UsersService/FindPassWord"//找回密码
 #define EDIT_PASSWORD_URL @"/AndroidApi/UsersService/EditPassWord"//修改密码
+#define COMMENT_LIST_URL @"/Comment/GetCommentTotal"//获取评论信息
+#define ADD_COMMENT_URL @"/Comment/AddComment"//提交评论信息
 
 #define LOGIN_USER_ID @"login_user_id"
 #define LOGIN_USER_NAME @"login_user_name"
 #define LOGIN_USER_PSWD @"login_user_pswd"
 #define USER_IS_LOGINED @"user_is_logined"
+#define USER_ID @"userid"
+#define USER_NAME @"username"
+#define USER_PASS @"password"
 #define USER_NICK_NAME @"nickname"
 #define USER_ADDRESS @"address"
 #define PROVINCE_ID @"provinceid"
