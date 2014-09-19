@@ -199,8 +199,8 @@
     [request setRequestMethod:@"POST"];
     [request setStringEncoding:NSUTF8StringEncoding];
     [request setPostValue:user_name forKey:@"username"];
-    [request setPostValue:pass_word forKey:@"password"];
-    [request setPostValue:pass_word forKey:@"verifycode"];
+    [request setPostValue:[StringUitl md5:pass_word] forKey:@"password"];
+    [request setPostValue:checkNum forKey:@"verifycode"];
     [request buildPostBody];
 
     [request startAsynchronous];
@@ -229,6 +229,17 @@
 
 }
 
+//关闭键盘
+-(void)dismissKeyBoard{
+    [self.phoneNum resignFirstResponder];
+    [self.passwordVal resignFirstResponder];
+    [self.checkNum resignFirstResponder];
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self dismissKeyBoard];
+}
+
 //int i=60;
 //-(void)changeBtnText:(NSTimer *) dt{
 //    //禁止点击
@@ -242,6 +253,54 @@
 //    i--;
 //}
 
+//获取用户信息
+-(void)loadUserInfo:(NSString *)userName{
+    if([StringUitl isNotEmpty:userName]){
+        
+        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
+        [ASIHTTPRequest setSessionCookies:nil];
+        
+        [request setUseCookiePersistence:YES];
+        [request setDelegate:self];
+        [request setRequestMethod:@"GET"];
+        [request setStringEncoding:NSUTF8StringEncoding];
+        [request startAsynchronous];
+        
+        [request setDidFailSelector:@selector(requestRegFailed:)];
+        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
+        
+    }
+}
+
+- (void)getUserInfoFinished:(ASIHTTPRequest *)req
+{
+    
+    NSLog(@"getUserInfo->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+        
+        //存储用户信息
+        [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
+        [StringUitl setSessionVal:_phoneNum.text withKey:LOGIN_USER_NAME];
+        [StringUitl setSessionVal:_passwordVal.text withKey:LOGIN_USER_PSWD];
+        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
+        
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        
+    }
+    
+}
+
 - (void)requestRegFinished:(ASIHTTPRequest *)req
 {
     NSLog(@"register info->%@",[req responseString]);
@@ -250,20 +309,21 @@
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//注册失败
         
         [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        
-        
-    }else{
-        
-        
     }
+    
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
+        
+        [self loadUserInfo:_phoneNum.text];
+    }
+
 }
+
+
 
 - (void)requestRegFailed:(ASIHTTPRequest *)req
 {
     
-//请求出错处理
-    
-    
+    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
 
 @end

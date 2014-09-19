@@ -7,6 +7,7 @@
 //
 
 #import "CommonViewController.h"
+#import "InitTabBarViewController.h"
 
 @interface PeopleViewController : CommonViewController
 

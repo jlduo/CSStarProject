@@ -13,6 +13,7 @@
 #import "CustomTableCell.h"
 #import "VideoTableViewCell.h"
 #import "UILabel+VerticalAlign.h"
+#import "AsynImageView.h"
 
 @interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>
 

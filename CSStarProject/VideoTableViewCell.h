@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AsynImageView.h"
 
 @interface VideoTableViewCell : UITableViewCell
 
 #pragma mark 视频截图
-@property (weak, nonatomic) IBOutlet UIButton *videoPic;
+@property (weak, nonatomic) IBOutlet AsynImageView *videoPic;
+
 #pragma mark 视频按钮
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 #pragma mark 视频底部

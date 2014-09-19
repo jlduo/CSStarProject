@@ -13,6 +13,7 @@
 #import "VideoTableViewCell.h"
 #import "UILabel+VerticalAlign.h"
 #import "ViewPassValueDelegate.h"
+#import "AsynImageView.h"
 
 @interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
     // 声明一个参数传递代理

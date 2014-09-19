@@ -27,8 +27,6 @@
 		7E2848A319B5BA0300669756 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489B19B5BA0300669756 /* grayArrow@2x.png */; };
 		7E2848A419B5BA0300669756 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489C19B5BA0300669756 /* whiteArrow.png */; };
 		7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E28489D19B5BA0300669756 /* whiteArrow@2x.png */; };
-		7E2944B419C7D24100037D95 /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2944B219C7D24100037D95 /* UserCenterViewController.m */; };
-		7E2944B519C7D24100037D95 /* UserCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B319C7D24100037D95 /* UserCenterViewController.xib */; };
 		7E2944BC19C7D51600037D95 /* myzone-discuss.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B619C7D51600037D95 /* myzone-discuss.png */; };
 		7E2944BD19C7D51600037D95 /* myzone-location.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B719C7D51600037D95 /* myzone-location.png */; };
 		7E2944BE19C7D51600037D95 /* myzone-message.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944B819C7D51600037D95 /* myzone-message.png */; };
@@ -36,6 +34,7 @@
 		7E2944C019C7D51600037D95 /* myzone-zhongchou.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944BA19C7D51600037D95 /* myzone-zhongchou.png */; };
 		7E2944C119C7D51600037D95 /* myzonebg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944BB19C7D51600037D95 /* myzonebg.png */; };
 		7E2944C319C7D56300037D95 /* myzone-rightarrow-b.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */; };
+		7E2944C519C7DEA700037D95 /* avatar_lisa.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E2944C419C7DEA700037D95 /* avatar_lisa.png */; };
 		7E64F6D019BED97A00C8C62C /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64F6CF19BED97A00C8C62C /* ImageIO.framework */; };
 		7E73E65E19B4598400EB6024 /* StoryTableViewSmallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E73E65C19B4598400EB6024 /* StoryTableViewSmallCell.m */; };
 		7E73E65F19B4598400EB6024 /* StoryTableViewSmallCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E65D19B4598400EB6024 /* StoryTableViewSmallCell.xib */; };
@@ -66,6 +65,20 @@
 		7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E971F3519ADC8B600858D44 /* Images.xcassets */; };
 		7E971F4219ADC8B600858D44 /* CSStarProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */; };
 		7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */; };
+		7E99058419CA73F90024F74B /* EditSexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99058219CA73F90024F74B /* EditSexViewController.m */; };
+		7E99058519CA73F90024F74B /* EditSexViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E99058319CA73F90024F74B /* EditSexViewController.xib */; };
+		7E99058919CA85410024F74B /* EditCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99058719CA85410024F74B /* EditCityViewController.m */; };
+		7E99058A19CA85410024F74B /* EditCityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E99058819CA85410024F74B /* EditCityViewController.xib */; };
+		7E99340A19C947FA0077ED7C /* EditNickNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99340819C947FA0077ED7C /* EditNickNameController.m */; };
+		7E99340B19C947FA0077ED7C /* EditNickNameController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E99340919C947FA0077ED7C /* EditNickNameController.xib */; };
+		7E99341419C987270077ED7C /* EditPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99341219C987270077ED7C /* EditPasswordController.m */; };
+		7E99341519C987270077ED7C /* EditPasswordController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E99341319C987270077ED7C /* EditPasswordController.xib */; };
+		7E9A583B19CBB02B00628F43 /* AsynImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9A583A19CBB02B00628F43 /* AsynImageView.m */; };
+		7E9A583E19CBB13100628F43 /* place.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A583C19CBB13100628F43 /* place.png */; };
+		7E9A583F19CBB13100628F43 /* place@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A583D19CBB13100628F43 /* place@2x.png */; };
+		7E9A584119CBCF4000628F43 /* playbig@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A584019CBCF4000628F43 /* playbig@2x.png */; };
+		7E9A584419CBD50900628F43 /* discussicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A584219CBD50900628F43 /* discussicon@2x.png */; };
+		7E9A584519CBD50900628F43 /* discussimg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A584319CBD50900628F43 /* discussimg@2x.png */; };
 		7E9B680B19BE8DAE0053B50E /* UILabel+ContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B680A19BE8DAE0053B50E /* UILabel+ContentSize.m */; };
 		7E9B680E19BE98840053B50E /* CustomMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B680D19BE98840053B50E /* CustomMoviePlayerViewController.m */; };
 		7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B681019BE9DD00053B50E /* CJSONDeserializer.m */; };
@@ -211,9 +224,6 @@
 		7E28489B19B5BA0300669756 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		7E28489C19B5BA0300669756 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		7E28489D19B5BA0300669756 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
-		7E2944B119C7D24100037D95 /* UserCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterViewController.h; sourceTree = "<group>"; };
-		7E2944B219C7D24100037D95 /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
-		7E2944B319C7D24100037D95 /* UserCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCenterViewController.xib; sourceTree = "<group>"; };
 		7E2944B619C7D51600037D95 /* myzone-discuss.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-discuss.png"; sourceTree = "<group>"; };
 		7E2944B719C7D51600037D95 /* myzone-location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-location.png"; sourceTree = "<group>"; };
 		7E2944B819C7D51600037D95 /* myzone-message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-message.png"; sourceTree = "<group>"; };
@@ -221,6 +231,7 @@
 		7E2944BA19C7D51600037D95 /* myzone-zhongchou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-zhongchou.png"; sourceTree = "<group>"; };
 		7E2944BB19C7D51600037D95 /* myzonebg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myzonebg.png; sourceTree = "<group>"; };
 		7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myzone-rightarrow-b.png"; sourceTree = "<group>"; };
+		7E2944C419C7DEA700037D95 /* avatar_lisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_lisa.png; sourceTree = "<group>"; };
 		7E64F63619BEBA2F00C8C62C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		7E64F6CF19BED97A00C8C62C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7E73E65B19B4598400EB6024 /* StoryTableViewSmallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewSmallCell.h; sourceTree = "<group>"; };
@@ -261,7 +272,26 @@
 		7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSStarProjectTests.m; sourceTree = "<group>"; };
 		7E971F5119ADCEE100858D44 /* InitTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitTabBarViewController.h; sourceTree = "<group>"; };
 		7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitTabBarViewController.m; sourceTree = "<group>"; };
+		7E99058119CA73F90024F74B /* EditSexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditSexViewController.h; sourceTree = "<group>"; };
+		7E99058219CA73F90024F74B /* EditSexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditSexViewController.m; sourceTree = "<group>"; };
+		7E99058319CA73F90024F74B /* EditSexViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditSexViewController.xib; sourceTree = "<group>"; };
+		7E99058619CA85410024F74B /* EditCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCityViewController.h; sourceTree = "<group>"; };
+		7E99058719CA85410024F74B /* EditCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditCityViewController.m; sourceTree = "<group>"; };
+		7E99058819CA85410024F74B /* EditCityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditCityViewController.xib; sourceTree = "<group>"; };
 		7E99296D19BFE6A900481A48 /* ViewPassValueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewPassValueDelegate.h; sourceTree = "<group>"; };
+		7E99340719C947FA0077ED7C /* EditNickNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditNickNameController.h; sourceTree = "<group>"; };
+		7E99340819C947FA0077ED7C /* EditNickNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditNickNameController.m; sourceTree = "<group>"; };
+		7E99340919C947FA0077ED7C /* EditNickNameController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditNickNameController.xib; sourceTree = "<group>"; };
+		7E99341119C987270077ED7C /* EditPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPasswordController.h; sourceTree = "<group>"; };
+		7E99341219C987270077ED7C /* EditPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPasswordController.m; sourceTree = "<group>"; };
+		7E99341319C987270077ED7C /* EditPasswordController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditPasswordController.xib; sourceTree = "<group>"; };
+		7E9A583919CBB02B00628F43 /* AsynImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsynImageView.h; sourceTree = "<group>"; };
+		7E9A583A19CBB02B00628F43 /* AsynImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsynImageView.m; sourceTree = "<group>"; };
+		7E9A583C19CBB13100628F43 /* place.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = place.png; sourceTree = "<group>"; };
+		7E9A583D19CBB13100628F43 /* place@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "place@2x.png"; sourceTree = "<group>"; };
+		7E9A584019CBCF4000628F43 /* playbig@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playbig@2x.png"; sourceTree = "<group>"; };
+		7E9A584219CBD50900628F43 /* discussicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discussicon@2x.png"; sourceTree = "<group>"; };
+		7E9A584319CBD50900628F43 /* discussimg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discussimg@2x.png"; sourceTree = "<group>"; };
 		7E9B680919BE8DAE0053B50E /* UILabel+ContentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+ContentSize.h"; sourceTree = "<group>"; };
 		7E9B680A19BE8DAE0053B50E /* UILabel+ContentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+ContentSize.m"; sourceTree = "<group>"; };
 		7E9B680C19BE98840053B50E /* CustomMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMoviePlayerViewController.h; sourceTree = "<group>"; };
@@ -524,6 +554,8 @@
 		7E73E67019B46AB500EB6024 /* newDesigner */ = {
 			isa = PBXGroup;
 			children = (
+				7E9A584219CBD50900628F43 /* discussicon@2x.png */,
+				7E9A584319CBD50900628F43 /* discussimg@2x.png */,
 				7E28488819B5822D00669756 /* tabbar0@2x.png */,
 				7E28488919B5822D00669756 /* tabbar1@2x.png */,
 				7E28488A19B5822D00669756 /* tabbar2@2x.png */,
@@ -658,6 +690,7 @@
 		7E971F4F19ADC93A00858D44 /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
+				7E9A583819CBB01A00628F43 /* AsynImage */,
 				7E9D342B19B6B3E5005498D0 /* PullView */,
 				7EA616C019B15C0100FD319B /* picScroll */,
 			);
@@ -690,11 +723,29 @@
 				7EA32F5119AEB56D007FE086 /* UserViewController.m */,
 				7E9C547C19B81DD500851CAB /* UserInfoViewController.h */,
 				7E9C547D19B81DD500851CAB /* UserInfoViewController.m */,
-				7E2944B119C7D24100037D95 /* UserCenterViewController.h */,
-				7E2944B219C7D24100037D95 /* UserCenterViewController.m */,
-				7E2944B319C7D24100037D95 /* UserCenterViewController.xib */,
+				7E99340719C947FA0077ED7C /* EditNickNameController.h */,
+				7E99340819C947FA0077ED7C /* EditNickNameController.m */,
+				7E99340919C947FA0077ED7C /* EditNickNameController.xib */,
+				7E99341119C987270077ED7C /* EditPasswordController.h */,
+				7E99341219C987270077ED7C /* EditPasswordController.m */,
+				7E99341319C987270077ED7C /* EditPasswordController.xib */,
+				7E99058119CA73F90024F74B /* EditSexViewController.h */,
+				7E99058219CA73F90024F74B /* EditSexViewController.m */,
+				7E99058319CA73F90024F74B /* EditSexViewController.xib */,
+				7E99058619CA85410024F74B /* EditCityViewController.h */,
+				7E99058719CA85410024F74B /* EditCityViewController.m */,
+				7E99058819CA85410024F74B /* EditCityViewController.xib */,
 			);
 			name = user;
+			sourceTree = "<group>";
+		};
+		7E9A583819CBB01A00628F43 /* AsynImage */ = {
+			isa = PBXGroup;
+			children = (
+				7E9A583919CBB02B00628F43 /* AsynImageView.h */,
+				7E9A583A19CBB02B00628F43 /* AsynImageView.m */,
+			);
+			name = AsynImage;
 			sourceTree = "<group>";
 		};
 		7E9D342B19B6B3E5005498D0 /* PullView */ = {
@@ -820,6 +871,9 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7E9A583C19CBB13100628F43 /* place.png */,
+				7E9A583D19CBB13100628F43 /* place@2x.png */,
+				7E2944C419C7DEA700037D95 /* avatar_lisa.png */,
 				7E2944C219C7D56300037D95 /* myzone-rightarrow-b.png */,
 				7E2944B619C7D51600037D95 /* myzone-discuss.png */,
 				7E2944B719C7D51600037D95 /* myzone-location.png */,
@@ -864,6 +918,7 @@
 				7E9D343419B71928005498D0 /* avatar.png */,
 				7E9D343519B71928005498D0 /* avatarbig.png */,
 				7E9D341B19B69894005498D0 /* arrow.png */,
+				7E9A584019CBCF4000628F43 /* playbig@2x.png */,
 				7E9D341C19B69894005498D0 /* arrow@2x.png */,
 				7E28489619B5BA0300669756 /* blackArrow.png */,
 				7E28489719B5BA0300669756 /* blackArrow@2x.png */,
@@ -1027,6 +1082,7 @@
 				7E73E66F19B45DCA00EB6024 /* StoryTableViewBigDescCell.xib in Resources */,
 				7E9EEC0819C278C800C0514C /* AppIcon60x60@2x.png in Resources */,
 				7E28489F19B5BA0300669756 /* blackArrow@2x.png in Resources */,
+				7E99340B19C947FA0077ED7C /* EditNickNameController.xib in Resources */,
 				7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */,
 				7E28488D19B5822D00669756 /* tabbar0@2x.png in Resources */,
 				7E9EEC0419C278C800C0514C /* AppIcon50x50@2x.png in Resources */,
@@ -1061,6 +1117,7 @@
 				7E9EEC2719C2DE5C00C0514C /* RegisterViewController.xib in Resources */,
 				7E73E68919B46C3C00EB6024 /* header_2@2x.png in Resources */,
 				7E9C547019B7F2C800851CAB /* LLCelIArrow@2x.png in Resources */,
+				7E99341519C987270077ED7C /* EditPasswordController.xib in Resources */,
 				7E2944BE19C7D51600037D95 /* myzone-message.png in Resources */,
 				7EA3318019AF2A89007FE086 /* PicTableViewCell.xib in Resources */,
 				7E73E68A19B46C3C00EB6024 /* iconi.png in Resources */,
@@ -1068,9 +1125,12 @@
 				7E2848A219B5BA0300669756 /* grayArrow.png in Resources */,
 				7E9EEC2D19C2E3B700C0514C /* iconchecked.png in Resources */,
 				7E2944C119C7D51600037D95 /* myzonebg.png in Resources */,
+				7E2944C519C7DEA700037D95 /* avatar_lisa.png in Resources */,
 				7E9EEC0919C278C800C0514C /* AppIcon72x72.png in Resources */,
+				7E9A584519CBD50900628F43 /* discussimg@2x.png in Resources */,
 				7E9C548919B85A0D00851CAB /* UserBigTableViewCell.xib in Resources */,
 				7E73E66419B45ABC00EB6024 /* StoryTableViewBigCell.xib in Resources */,
+				7E9A583F19CBB13100628F43 /* place@2x.png in Resources */,
 				7E2848A119B5BA0300669756 /* blueArrow@2x.png in Resources */,
 				7EF08DE119C67EF5001F2CCE /* 2.jpeg in Resources */,
 				7E28487919B5456400669756 /* storyDataList.plist in Resources */,
@@ -1088,6 +1148,7 @@
 				7E73E69819B4714700EB6024 /* playtimes.png in Resources */,
 				7E73E68319B46C3C00EB6024 /* homeactivity.png in Resources */,
 				7E9C546C19B7F0F500851CAB /* nav_back@2x.png in Resources */,
+				7E99058A19CA85410024F74B /* EditCityViewController.xib in Resources */,
 				7E73E68719B46C3C00EB6024 /* header_0@2x.png in Resources */,
 				7EF08DE619C67EF5001F2CCE /* 7.jpeg in Resources */,
 				7EF08DE519C67EF5001F2CCE /* 6.jpeg in Resources */,
@@ -1101,22 +1162,25 @@
 				7E73E68419B46C3C00EB6024 /* homegirls.png in Resources */,
 				7E9EEC0C19C278C800C0514C /* AppIcon76x76@2x.png in Resources */,
 				7E73E68519B46C3C00EB6024 /* homeplaynumbg.png in Resources */,
+				7E9A584419CBD50900628F43 /* discussicon@2x.png in Resources */,
 				7E9EEBF019C277CF00C0514C /* Default@22x.png in Resources */,
 				7E9EEC0719C278C800C0514C /* AppIcon60x60.png in Resources */,
 				7E9EEC1C19C2A84000C0514C /* LoginViewController.xib in Resources */,
+				7E99058519CA73F90024F74B /* EditSexViewController.xib in Resources */,
 				7E9EEC2A19C2E14A00C0514C /* iconfinger.png in Resources */,
 				7E2944C319C7D56300037D95 /* myzone-rightarrow-b.png in Resources */,
 				7E9C546719B7ECFF00851CAB /* tb_back.png in Resources */,
 				7E73E69019B46C3C00EB6024 /* navline.png in Resources */,
 				7E9C546B19B7F0F500851CAB /* nav_back.png in Resources */,
+				7E9A584119CBCF4000628F43 /* playbig@2x.png in Resources */,
 				7E9EEC0519C278C800C0514C /* AppIcon57x57.png in Resources */,
+				7E9A583E19CBB13100628F43 /* place.png in Resources */,
 				7E73E69319B46C3C00EB6024 /* switchon.png in Resources */,
 				7E9EEC0319C278C800C0514C /* AppIcon50x50.png in Resources */,
 				7E9EEC0019C278C800C0514C /* AppIcon29x29@2x.png in Resources */,
 				7E9EEC0119C278C800C0514C /* AppIcon40x40.png in Resources */,
 				7EA3317B19AF14F5007FE086 /* student.xml in Resources */,
 				7E73E68B19B46C3C00EB6024 /* icontip.png in Resources */,
-				7E2944B519C7D24100037D95 /* UserCenterViewController.xib in Resources */,
 				7E73E68619B46C3C00EB6024 /* homestory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1142,7 +1206,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export\nCODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" ==\"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\"]; then\n/Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
+			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then\n/Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1176,9 +1240,9 @@
 				7E73E66E19B45DCA00EB6024 /* StoryTableViewBigDescCell.m in Sources */,
 				7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
-				7E2944B419C7D24100037D95 /* UserCenterViewController.m in Sources */,
 				7EA32F5519AEC3EE007FE086 /* CommonViewController.m in Sources */,
 				7E9B680B19BE8DAE0053B50E /* UILabel+ContentSize.m in Sources */,
+				7E99341419C987270077ED7C /* EditPasswordController.m in Sources */,
 				7E9EEC1019C27D2600C0514C /* CommentTableListCell.m in Sources */,
 				7E9D5DE019B9632B004D32C1 /* GirlsVideoViewController.m in Sources */,
 				7E971F2B19ADC8B600858D44 /* AppDelegate.m in Sources */,
@@ -1186,18 +1250,22 @@
 				7E73E66319B45ABC00EB6024 /* StoryTableViewBigCell.m in Sources */,
 				7E9C0ACA19B437EB005D01A3 /* CustomTableCell.m in Sources */,
 				7E28487C19B54AF300669756 /* DateUtil.m in Sources */,
+				7E99340A19C947FA0077ED7C /* EditNickNameController.m in Sources */,
 				7EA3317919AF106A007FE086 /* ConvertXMLData.m in Sources */,
 				7E9EEC4B19C2F02D00C0514C /* ASIDataCompressor.m in Sources */,
 				7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */,
 				7E9EEC5019C2F02D00C0514C /* ASIInputStream.m in Sources */,
 				7EA32F6119AEC4E3007FE086 /* StoryViewController.m in Sources */,
 				7E9B681819BE9DD00053B50E /* NSDictionary_JSONExtensions.m in Sources */,
+				7E9A583B19CBB02B00628F43 /* AsynImageView.m in Sources */,
 				7E9EEC4F19C2F02D00C0514C /* ASIHTTPRequest.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
 				7E04A73819C7DB340026E8BB /* StoryCommentViewController.m in Sources */,
 				7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */,
+				7E99058419CA73F90024F74B /* EditSexViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
 				7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */,
+				7E99058919CA85410024F74B /* EditCityViewController.m in Sources */,
 				7E9EEC4E19C2F02D00C0514C /* ASIFormDataRequest.m in Sources */,
 				7E9D342E19B6ED71005498D0 /* InitNavBarViewController.m in Sources */,
 				7E9EEC5419C2F04000C0514C /* Reachability.m in Sources */,
@@ -1321,7 +1389,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
 				INFOPLIST_FILE = CSStarProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1334,7 +1402,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
 				INFOPLIST_FILE = CSStarProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

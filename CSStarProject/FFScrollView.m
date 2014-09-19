@@ -48,22 +48,25 @@
     
     NSString *imgUrl;
     for (int i = 0; i < sourceArr.count; i++) {
-        UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
+        AsynImageView *imageview = [[AsynImageView alloc] initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
+        //UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
         imgUrl = [sourceArr objectAtIndex:i];
         NSRange range = [imgUrl rangeOfString:@"http"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            imageview.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]]];
+            imageview.imageURL = [sourceArr objectAtIndex:i];
         }else{
             imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
         }
+        
         [self.scrollView addSubview:imageview];
     }
     
-    UIImageView *lastImageView = [[UIImageView alloc]initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
+    //UIImageView *lastImageView = [[UIImageView alloc]initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
+    AsynImageView *lastImageView = [[AsynImageView alloc] initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
     imgUrl = [sourceArr objectAtIndex:0];
     NSRange range = [imgUrl rangeOfString:@"http"];
     if(range.location!=NSNotFound){//判断加载远程图像
-        lastImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:0]]]];
+        lastImageView.imageURL = [sourceArr objectAtIndex:0];
 
     }else{
         lastImageView.image = [UIImage imageNamed:[sourceArr objectAtIndex:0]];

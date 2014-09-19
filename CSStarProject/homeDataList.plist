@@ -105,11 +105,11 @@
 			<string>photo</string>
 			<key>pics</key>
 			<array>
-				<string>5.png</string>
-				<string>4.png</string>
-				<string>3.png</string>
-				<string>2.png</string>
-				<string>1.png</string>
+				<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
+				<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
+				<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
+				<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
+				<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
 			</array>
 			<key>title</key>
 			<string>这是一场说走就走的旅行！</string>
@@ -128,7 +128,7 @@
 			<key>clicknum</key>
 			<string>5546</string>
 			<key>pic</key>
-			<string>activity01_orderlist.png</string>
+			<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
 		</dict>
 		<dict>
 			<key>pics</key>
@@ -144,7 +144,7 @@
 			<key>title</key>
 			<string>爱一个能够给你正能量的人</string>
 			<key>pic</key>
-			<string>activity01_orderlist.png</string>
+			<string>http://192.168.1.210:888/upload/201409/18/201409181725080063.jpg</string>
 		</dict>
 	</array>
 	<key>星城故事</key>

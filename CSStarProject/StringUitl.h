@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
 #import "common.h"
 
 @interface StringUitl : NSObject
@@ -27,6 +29,10 @@
 
 //检查登录
 +(BOOL)checkLogin;
++(void)clearUserInfo;
+//获取用户信息
++(void)loadUserInfo:(NSString *)userName;
++(NSMutableDictionary *)getUserData;
 
 @end
 

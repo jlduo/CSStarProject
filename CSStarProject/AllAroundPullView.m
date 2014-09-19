@@ -35,8 +35,8 @@
   AllAroundPullViewPosition _position;
 }
 
-static const CGFloat kViewHeight = 60.0;
-static const CGFloat kSidePullViewWidth = 60.0;
+static const CGFloat kViewHeight = 80.0;
+static const CGFloat kSidePullViewWidth = 80.0;
 
 // dynamic ON/OFF set.
 - (void)hideAllAroundPullViewIfNeed:(BOOL)disable
@@ -136,6 +136,14 @@ static const CGFloat kSidePullViewWidth = 60.0;
         self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.activityView.autoresizingMask = self.isSideView ? (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin) : (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
         self.activityView.frame = arrowAndActivityFrame;
+        self.activityView.color = [UIColor grayColor];
+        //加入提示标题
+        UILabel *loadTitle = [[UILabel alloc]init];
+        [loadTitle setFrame:CGRectMake(-32, 45, 100, 25)];
+        [loadTitle setText:@"玩命加载中..."];
+        [loadTitle setTextColor:[UIColor grayColor]];
+        
+        [self.activityView addSubview:loadTitle];
         [self addSubview:self.activityView];
 
         self.state = AllAroundPullViewStateNormal;
@@ -319,7 +327,7 @@ static const CGFloat kSidePullViewWidth = 60.0;
 
 - (void)dismissView
 {
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         [self setState:AllAroundPullViewStateNormal];
         [self hide];
     }];

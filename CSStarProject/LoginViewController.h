@@ -30,4 +30,6 @@
 
 - (IBAction)clickForgetBtn:(UIButton *)sender;
 
+@property (nonatomic, weak) id delegate;
+
 @end
