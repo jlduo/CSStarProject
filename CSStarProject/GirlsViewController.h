@@ -12,15 +12,20 @@
 #import "PicTableViewCell.h"
 #import "CustomTableCell.h"
 #import "VideoTableViewCell.h"
-#import "UILabel+VerticalAlign.h"
 #import "AsynImageView.h"
+#import "GirlsPhotoViewController.h"
 
-@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>
+@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
+    
+    NSMutableDictionary *bannerData;//导航初始数据
+    
+}
 
 #pragma mark 美女私房表格视图
 @property (weak, nonatomic) IBOutlet UITableView *girlsTableView;
 
 #pragma mark 美女私房数据
 @property(nonatomic,retain)NSMutableArray *girlsDataList;
+
 
 @end

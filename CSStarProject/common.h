@@ -9,6 +9,7 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
+#define PAGESIZE @"2"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度
 #define NAV_BAR_ICON_WIDTH 32//导航栏图标宽度
 #define NAV_BAR_ICON_HEIGHT 32//导航栏图标高度

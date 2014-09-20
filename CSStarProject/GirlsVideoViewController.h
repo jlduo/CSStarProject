@@ -18,6 +18,7 @@
 #import "AsynImageView.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "DirectionMPMoviePlayerViewController.h"
 
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,UITextViewDelegate> {
     

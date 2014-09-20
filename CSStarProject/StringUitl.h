@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "common.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
-#import "common.h"
+#import "ConvertJSONData.h"
+
 
 @interface StringUitl : NSObject
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
@@ -33,6 +35,8 @@
 //获取用户信息
 +(void)loadUserInfo:(NSString *)userName;
 +(NSMutableDictionary *)getUserData;
+
++(NSString *)getFileExtName:(NSString *)fileName;
 
 @end
 

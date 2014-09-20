@@ -377,8 +377,9 @@
 -(void)setVideoView:(BOOL)isRemote{
     
     if(isRemote){
-        NSString *remoteUrl = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-        moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
+         //NSString *remoteUrl = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
+         NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
+         moviePlayer = [[DirectionMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
     }else{
         NSString *moviePath = [[NSBundle mainBundle] pathForResource:@"testVideo" ofType:@"MOV"];
         if(moviePath){
@@ -403,7 +404,7 @@
     NSString *s = [bannerData valueForKey:@"_zhaiyao"];
     descLabel.text = [NSString stringWithFormat:@"    %@",s];
     //4.获取所要使用的字体实例
-    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
     descLabel.font = font;
     //5.UILabel字符显示的最大大小
     CGSize size = CGSizeMake(SCREEN_WIDTH,80);
@@ -553,10 +554,30 @@
 }
 
 -(void)playVideo{
+    
+    //NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
+    NSString *remoteUrl =  moviePlayer.contentURL.absoluteString;
+    if([StringUitl isEmpty:remoteUrl]){
+        [StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"播放失败"];
+        return;
+    }
+    
+    //NSLog(@"dddddd=%@",[StringUitl getFileExtName:remoteUrl]);
+    NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
+    if(![fileExt isEqualToString:@"mp4"]){
+        [StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"播放失败"];
+        return;
+    }
+    
     [playBtn removeFromSuperview];
     [videoPic removeFromSuperview];
     [moviePlayer play];
+    
+    //[moviePlayer setFullscreen:YES animated:YES];
+    //[moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    //moviePlayer.scalingMode = MPMovieScalingModeAspectFit;//全屏播放（全屏播放不可缺）
 }
+
 
 -(void)stopPlay{
     
@@ -575,11 +596,13 @@
     [self stopPlay];
 }
 
+
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:@"btnshare.png"]];
+    [self.view addSubview:[self setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
     
 }
+
 
 //加载头部刷新
 -(void)setHeaderRereshing{
@@ -635,9 +658,26 @@
     return 25;
 }
 
-#pragma mark 设置组标题
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return @"私房推荐";
+#pragma mark 设置组视图
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    CGRect headFrame = CGRectMake(0, 0, 320, 22);
+    UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
+    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    //设置每组的头部图片
+    NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imgName]];
+    [imageView setFrame:CGRectMake(10, 4, 3, 15)];
+    //设置每组的标题
+    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 22)];
+    headtitle.text = @"私房推荐";
+    headtitle.font = [UIFont fontWithName:@"Arial" size:18.0f];
+    
+    [sectionHeadView addSubview:imageView];
+    [sectionHeadView addSubview:headtitle];
+    
+    
+    return sectionHeadView;
 }
 
 
@@ -669,12 +709,13 @@
     NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
     NSLog(@"newDataId=%@",newId);
     
-    CommentListViewController *commentController = [[CommentListViewController alloc]init];
-    passValelegate = commentController;
+    GirlsVideoViewController *girlVideoController = [[GirlsVideoViewController alloc]init];
+    passValelegate = girlVideoController;
     [passValelegate passValue:newId];
     
-    [self presentViewController:commentController animated:YES completion:^{
+    [self presentViewController:girlVideoController animated:YES completion:^{
         //code
+        [moviePlayer stop];
     }];
     
 }

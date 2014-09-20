@@ -33,6 +33,7 @@
     stableView = [[UITableView alloc] initWithFrame:tframe];
     stableView.delegate = self;
     stableView.dataSource = self;
+    [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
     
     //处理头部信息
     [self setHeaderView];
@@ -50,8 +51,7 @@
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+{                                                                                                                                                                                                                                                                                           self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         
         self.tabBarController.hidesBottomBarWhenPushed = YES;
@@ -66,6 +66,8 @@
     [customTabar hiddenDIYTaBar];
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
     [stableView setFrame:temFrame];
+    
+    [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
     
     //处理数据回填
     [self setImgBtnImage];
@@ -161,6 +163,7 @@
 
 -(void)goPreviou{
     NSLog(@"back");
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

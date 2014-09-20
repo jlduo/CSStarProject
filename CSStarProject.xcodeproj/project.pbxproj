@@ -58,6 +58,8 @@
 		7E73E69719B4714700EB6024 /* playsmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E69519B4714700EB6024 /* playsmall.png */; };
 		7E73E69819B4714700EB6024 /* playtimes.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E73E69619B4714700EB6024 /* playtimes.png */; };
 		7E8B0F7B19C693680086589F /* heartgray.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8B0F7A19C693680086589F /* heartgray.png */; };
+		7E9695F919CD1115008C3688 /* GirlsPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9695F719CD1115008C3688 /* GirlsPhotoViewController.m */; };
+		7E9695FA19CD1115008C3688 /* GirlsPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9695F819CD1115008C3688 /* GirlsPhotoViewController.xib */; };
 		7E971F2819ADC8B600858D44 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2719ADC8B600858D44 /* main.m */; };
 		7E971F2B19ADC8B600858D44 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2A19ADC8B600858D44 /* AppDelegate.m */; };
 		7E971F2E19ADC8B600858D44 /* CSStarProject.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F2C19ADC8B600858D44 /* CSStarProject.xcdatamodeld */; };
@@ -177,6 +179,8 @@
 		7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA616FC19B1BF6500FD319B /* UserTableViewCell.m */; };
 		7EA616FF19B1BF6500FD319B /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA616FD19B1BF6500FD319B /* UserTableViewCell.xib */; };
 		7ECE643319B06354005EDE82 /* FFScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE643219B06354005EDE82 /* FFScrollView.m */; };
+		7EDB75FF19CC0724000539DA /* DirectionMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDB75FE19CC0724000539DA /* DirectionMPMoviePlayerViewController.m */; };
+		7EDB760119CC1018000539DA /* btnshare@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EDB760019CC1018000539DA /* btnshare@2x.png */; };
 		7EF08DE019C67EF5001F2CCE /* 1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DD819C67EF5001F2CCE /* 1.jpeg */; };
 		7EF08DE119C67EF5001F2CCE /* 2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DD919C67EF5001F2CCE /* 2.jpeg */; };
 		7EF08DE219C67EF5001F2CCE /* 3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DDA19C67EF5001F2CCE /* 3.jpeg */; };
@@ -259,6 +263,9 @@
 		7E73E69519B4714700EB6024 /* playsmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playsmall.png; sourceTree = "<group>"; };
 		7E73E69619B4714700EB6024 /* playtimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playtimes.png; sourceTree = "<group>"; };
 		7E8B0F7A19C693680086589F /* heartgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heartgray.png; sourceTree = "<group>"; };
+		7E9695F619CD1115008C3688 /* GirlsPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GirlsPhotoViewController.h; sourceTree = "<group>"; };
+		7E9695F719CD1115008C3688 /* GirlsPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GirlsPhotoViewController.m; sourceTree = "<group>"; };
+		7E9695F819CD1115008C3688 /* GirlsPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GirlsPhotoViewController.xib; sourceTree = "<group>"; };
 		7E971F2219ADC8B600858D44 /* CSStarProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CSStarProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E971F2619ADC8B600858D44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E971F2719ADC8B600858D44 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -440,6 +447,9 @@
 		7ECE63FA19B02AE0005EDE82 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		7ECE643119B06354005EDE82 /* FFScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFScrollView.h; sourceTree = "<group>"; };
 		7ECE643219B06354005EDE82 /* FFScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFScrollView.m; sourceTree = "<group>"; };
+		7EDB75FD19CC0724000539DA /* DirectionMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionMPMoviePlayerViewController.h; sourceTree = "<group>"; };
+		7EDB75FE19CC0724000539DA /* DirectionMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionMPMoviePlayerViewController.m; sourceTree = "<group>"; };
+		7EDB760019CC1018000539DA /* btnshare@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btnshare@2x.png"; sourceTree = "<group>"; };
 		7EF08DD819C67EF5001F2CCE /* 1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpeg; sourceTree = "<group>"; };
 		7EF08DD919C67EF5001F2CCE /* 2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpeg; sourceTree = "<group>"; };
 		7EF08DDA19C67EF5001F2CCE /* 3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpeg; sourceTree = "<group>"; };
@@ -668,6 +678,8 @@
 				7E9B680C19BE98840053B50E /* CustomMoviePlayerViewController.h */,
 				7E9B680D19BE98840053B50E /* CustomMoviePlayerViewController.m */,
 				7E99296D19BFE6A900481A48 /* ViewPassValueDelegate.h */,
+				7EDB75FD19CC0724000539DA /* DirectionMPMoviePlayerViewController.h */,
+				7EDB75FE19CC0724000539DA /* DirectionMPMoviePlayerViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -826,6 +838,9 @@
 				7EA32F5D19AEC4D3007FE086 /* GirlsViewController.m */,
 				7E9D5DDE19B9632B004D32C1 /* GirlsVideoViewController.h */,
 				7E9D5DDF19B9632B004D32C1 /* GirlsVideoViewController.m */,
+				7E9695F619CD1115008C3688 /* GirlsPhotoViewController.h */,
+				7E9695F719CD1115008C3688 /* GirlsPhotoViewController.m */,
+				7E9695F819CD1115008C3688 /* GirlsPhotoViewController.xib */,
 			);
 			name = girls;
 			sourceTree = "<group>";
@@ -871,6 +886,7 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7EDB760019CC1018000539DA /* btnshare@2x.png */,
 				7E9A583C19CBB13100628F43 /* place.png */,
 				7E9A583D19CBB13100628F43 /* place@2x.png */,
 				7E2944C419C7DEA700037D95 /* avatar_lisa.png */,
@@ -1090,6 +1106,7 @@
 				7E9C547619B7F3D700851CAB /* icon_redo@2x.png in Resources */,
 				7E73E69219B46C3C00EB6024 /* switch.png in Resources */,
 				7EA3318519AF2A98007FE086 /* VideoTableViewCell.xib in Resources */,
+				7E9695FA19CD1115008C3688 /* GirlsPhotoViewController.xib in Resources */,
 				7E9EEC1519C28F3400C0514C /* Default-568h@2x.png in Resources */,
 				7E28489019B5822D00669756 /* tabbar3@2x.png in Resources */,
 				7E9EEC0B19C278C800C0514C /* AppIcon76x76.png in Resources */,
@@ -1122,6 +1139,7 @@
 				7EA3318019AF2A89007FE086 /* PicTableViewCell.xib in Resources */,
 				7E73E68A19B46C3C00EB6024 /* iconi.png in Resources */,
 				7E04A73A19C8264B0026E8BB /* StoryCommentTableCell.xib in Resources */,
+				7EDB760119CC1018000539DA /* btnshare@2x.png in Resources */,
 				7E2848A219B5BA0300669756 /* grayArrow.png in Resources */,
 				7E9EEC2D19C2E3B700C0514C /* iconchecked.png in Resources */,
 				7E2944C119C7D51600037D95 /* myzonebg.png in Resources */,
@@ -1262,6 +1280,8 @@
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
 				7E04A73819C7DB340026E8BB /* StoryCommentViewController.m in Sources */,
 				7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */,
+				7E9695F919CD1115008C3688 /* GirlsPhotoViewController.m in Sources */,
+				7EDB75FF19CC0724000539DA /* DirectionMPMoviePlayerViewController.m in Sources */,
 				7E99058419CA73F90024F74B /* EditSexViewController.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,
 				7EA3317F19AF2A89007FE086 /* PicTableViewCell.m in Sources */,

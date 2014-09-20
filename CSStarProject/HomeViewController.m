@@ -254,20 +254,26 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(indexPath.section==0){//跳转到美女私房
-        NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
-        NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
-        NSString *data_Type = [girlCellDic valueForKey:@"_category_call_index"];
-        if([self isNotEmpty:dataId] && [data_Type isEqual:@"video"]){
-             GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
-             passValelegate = videoView;
-            [passValelegate passValue:dataId];
-            [self presentViewController:videoView animated:YES completion:^{
-               //
-            }];
+        
+        if(![StringUitl checkLogin]){
+            LoginViewController *loginView = [[LoginViewController alloc]init];
+            [self presentViewController:loginView animated:YES completion:nil];
         }else{
-            
-            
-            
+            NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
+            NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
+            NSString *data_Type = [girlCellDic valueForKey:@"_category_call_index"];
+            if([self isNotEmpty:dataId] && [data_Type isEqual:@"video"]){
+                 GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+                 passValelegate = videoView;
+                [passValelegate passValue:dataId];
+                [self presentViewController:videoView animated:YES completion:^{
+                   //
+                }];
+            }else{
+                
+                
+                
+            }
         }
         
     }

@@ -23,7 +23,7 @@
         // Initialization code
 
         self.layer.borderColor = [[UIColor whiteColor] CGColor];
-        self.layer.borderWidth = 0.5;
+        self.layer.borderWidth = 0.0;
         self.backgroundColor = [UIColor grayColor];
         
     }

@@ -173,8 +173,32 @@
 }
 
 
-//获取用户信息
+
 +(void)loadUserInfo:(NSString *)userName{
+    
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName];
+    NSMutableDictionary *jsonDic = (NSMutableDictionary *)[convertJson requestData:url];
+    
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+        NSLog(@"userInfo==%@",jsonDic);
+        //存储用户信息
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        
+    }
+    
+    
+}
+//获取用户信息
++(void)loadUserInfo2:(NSString *)userName{
     if([StringUitl isNotEmpty:userName]){
         
         NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
@@ -182,7 +206,7 @@
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
         [ASIHTTPRequest setSessionCookies:nil];
         
-        [request setUseCookiePersistence:YES];
+        [request setUseCookiePersistence:NO];
         [request setDelegate:self];
         [request setRequestMethod:@"GET"];
         [request setStringEncoding:NSUTF8StringEncoding];
@@ -237,6 +261,12 @@
     [dic setValue:[StringUitl getSessionVal:USER_LOGO] forKey:USER_LOGO];
     [dic setValue:[StringUitl getSessionVal:USER_SEX] forKey:USER_SEX];
     return dic;
+}
+
++(NSString *)getFileExtName:(NSString *)fileName{
+    
+    NSArray * rslt = [fileName componentsSeparatedByString:@"."];
+    return  [rslt objectAtIndex:[rslt count]-1];
 }
 
 
