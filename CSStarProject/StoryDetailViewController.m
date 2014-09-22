@@ -213,7 +213,14 @@
         textView.text = textVal;
     }
 }
-
+//取消回车事件 改为关闭键盘
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        return NO;
+    }
+    return YES;
+}
 //关闭键盘
 -(void) dismissKeyBoard{
     [textField resignFirstResponder];
