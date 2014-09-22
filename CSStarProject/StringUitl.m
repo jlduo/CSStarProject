@@ -10,8 +10,6 @@
 
 @implementation StringUitl
 
-
-
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert
 {
     NSString *cString = [[stringToConvert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];

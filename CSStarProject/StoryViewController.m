@@ -240,7 +240,7 @@
         
         NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
         UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        storyBDCell.imageView.image = picImg;
+        storyBDCell.imgView.image = picImg;
         
         
         storyBDCell.titleView.text = [cellDic valueForKey:@"_title"];
@@ -259,7 +259,6 @@
             
             StoryTableViewBigCell *storyBCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StoryBCell"];
             storyBCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
             
             NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];

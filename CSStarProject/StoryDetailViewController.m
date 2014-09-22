@@ -149,7 +149,7 @@
 -(void)initCommentIcon{
     //在文本域内加入图标
     cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)];
-    cIconView.image = [UIImage imageNamed:@"iconchecked.png"];
+    cIconView.image = [UIImage imageNamed:@"discussicon.png"];
     [textField addSubview:cIconView];
 }
 
@@ -213,7 +213,14 @@
         textView.text = textVal;
     }
 }
-
+//取消回车事件 改为关闭键盘
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        return NO;
+    }
+    return YES;
+}
 //关闭键盘
 -(void) dismissKeyBoard{
     [textField resignFirstResponder];

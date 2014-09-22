@@ -15,10 +15,10 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    NSMutableArray *tableArray;
     UITableView *table;
     NSInteger pageIndex;
     UILabel *lblClickComment;
+    NSMutableArray *tableArray;
 }
 @end
 
@@ -48,6 +48,7 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     self.view.backgroundColor = [UIColor whiteColor];
+    table.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
@@ -108,6 +109,7 @@
 
 -(void)initTable{
     table = [[UITableView alloc] initWithFrame:self.view.frame];
+    table.backgroundColor = [UIColor whiteColor];
     table.delegate = self;
     table.dataSource = self;
     table.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105); 
@@ -118,27 +120,43 @@
     [table registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{ 
     StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"];
-    NSDictionary *dicComment = [tableArray objectAtIndex:indexPath.row];
+    NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     DateUtil *utilDate = [[DateUtil alloc] init];
     NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
     commentCell.commentDateTime.text = addTime;
     NSString *imgUrl = [dicComment valueForKey:@"_avatar"];
     UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
     [commentCell.commentImage setImage:picImg];
-    commentCell.commentTextView.text = [dicComment valueForKey:@"_content"];
+    NSString *commnetContent = [dicComment valueForKey:@"_content"];
+    commentCell.commentTextView.text = commnetContent;
     commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return commentCell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return tableArray.count;
+    return tableArray .count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return  60;
+    NSLog(@"计算高度");
+    StoryCommentTableCell *commentCell = [table dequeueReusableCellWithIdentifier:@"storyCommentCell"];
+    NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
+    NSString *commnetContent = [dicComment valueForKey:@"_content"];
+    
+    //评论内容自适应
+    UIFont *font = [UIFont systemFontOfSize:12];
+    CGSize size = CGSizeMake(commentCell.commentTextView.frame.size.width,2000);
+    CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+    if (labelsize.height > 20) {
+        return  commentCell.frame.size.height + labelsize.height - commentCell.commentTextView.frame.size.height;
+    }
+    else{
+        return 60;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -171,7 +189,7 @@
 -(void)initCommentIcon{
     //在文本域内加入图标
     cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)];
-    cIconView.image = [UIImage imageNamed:@"iconchecked.png"];
+    cIconView.image = [UIImage imageNamed:@"discussicon.png"];
     [textField addSubview:cIconView];
 }
 
@@ -229,6 +247,14 @@
         [plabel removeFromSuperview];
         textView.text = textVal;
     }
+}
+//取消回车事件 改为关闭键盘
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        return NO;
+    }
+    return YES;
 }
 
 //关闭键盘
@@ -323,7 +349,7 @@
         
         [StringUitl alertMsg:@"提交成功" withtitle:nil];
         pageIndex = 1;
-        tableArray = [self getCommentList];
+        tableArray  = [self getCommentList];
         [table reloadData];
         
         NSString *clickNum = [self getCommentNum];
@@ -374,13 +400,12 @@
 -(void)callBackMethod:(id)isTop
 {
     NSMutableArray *nextArray = [self getCommentList];
-    if ([isTop isEqualToString:@"top"]) {
-        tableArray = nextArray;
-    } else {
-        [tableArray addObjectsFromArray:nextArray];
-    }
     if(nextArray!=nil && nextArray.count>0){
-        table.backgroundColor = [UIColor lightGrayColor];
+        if ([isTop isEqualToString:@"top"]) {
+            tableArray  = nextArray;
+        } else {
+            [tableArray  addObjectsFromArray:nextArray];
+        } 
         [table reloadData];
     }else{
         [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"]; 

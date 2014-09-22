@@ -6,13 +6,15 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIKit.h> 
+#import "QuartzCore/QuartzCore.h"
+#import "common.h"
 
 @interface StoryCommentTableCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *commentImage;
 @property (weak, nonatomic) IBOutlet UILabel *commentUsername;
 @property (weak, nonatomic) IBOutlet UILabel *commentDateTime; 
-@property (weak, nonatomic) IBOutlet UITextView *commentTextView;
+@property (weak, nonatomic) IBOutlet UILabel *commentTextView;
 
 @end

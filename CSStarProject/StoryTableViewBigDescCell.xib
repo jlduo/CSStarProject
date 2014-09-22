@@ -7,15 +7,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryBDCell" rowHeight="285" id="KGk-i7-Jjw" customClass="StoryTableViewBigDescCell">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryBDCell" id="KGk-i7-Jjw" customClass="StoryTableViewBigDescCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="249"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="alZ-Xs-H5w">
-                        <rect key="frame" x="10" y="8" width="300" height="172"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Et-M9-j2e">
+                        <rect key="frame" x="10" y="0.0" width="300" height="180"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="标题信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wPF-1C-qgz">
@@ -30,7 +30,7 @@
                         <rect key="frame" x="10" y="184" width="300" height="62"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <inset key="scrollIndicatorInsets" minX="300" minY="10" maxX="69" maxY="180"/>
+                        <inset key="scrollIndicatorInsets" minX="300" minY="10" maxX="70" maxY="180"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
@@ -38,7 +38,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="descView" destination="suF-5d-sfD" id="npV-oV-EfE"/>
-                <outlet property="imgView" destination="alZ-Xs-H5w" id="lYY-pw-Xf8"/>
+                <outlet property="imgView" destination="4Et-M9-j2e" id="qYF-Cj-P7C"/>
                 <outlet property="titleView" destination="wPF-1C-qgz" id="DCo-d3-cpi"/>
             </connections>
         </tableViewCell>
