@@ -15,7 +15,7 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "ConvertJSONData.h"
-#import "AsynImageView.h"
+#import "UIImageView+WebCache.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
 #import "DirectionMPMoviePlayerViewController.h"

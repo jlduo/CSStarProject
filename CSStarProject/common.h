@@ -31,13 +31,16 @@
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(15)//主字体
 
-#define CONTENT_BACKGROUND @"place@2x.png"
-#define NAVBAR_BG_ICON @"navline.png"//导航背景
+#define CONTENT_BACKGROUND @"place@2x.png"//正文背景
+#define TABR_BG_ICON @"titlebar-gray@2x.png"//底部导航图
+#define NAVBAR_BG_ICON @"titlebar-gray@2x.png"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
 #define REFRESH_TITLE @"刷新数据"
 #define REFRESH_LOADING @"玩命加载中..."
+#define NOIMG_ICON @"imgloading@2X.png"//无图片
 #define DELAY_TIME 2
+#define FORWARD_TYPE @"TAB"//登录跳转方式 tab 为点击tabbar
 
 #define REMOTE_URL @"http://192.168.1.210:8888"
 #define REMOTE_ADMIN_URL @"http://192.168.1.210:888"

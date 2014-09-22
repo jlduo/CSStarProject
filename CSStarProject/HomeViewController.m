@@ -34,13 +34,13 @@
     }
     
     [self setTableData];
-    //self.homeTableView.backgroundColor = [UIColor lightGrayColor];
+    self.homeTableView.backgroundColor = [UIColor lightGrayColor];
     _homeTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     
     
     scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 69, SCREEN_WIDTH, 180) views:sourceArray];
     _homeTableView.tableHeaderView = scrollView;
-    _homeTableView.rowHeight = 70;
+    _homeTableView.rowHeight = 85;
     _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //集成刷新控件
@@ -52,9 +52,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
-    [tabBarController changeTabsFrame];
+    //[tabBarController changeTabsFrame];
 }
 
 
@@ -253,12 +254,14 @@
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.section==0){//跳转到美女私房
+    if(![StringUitl checkLogin]){
+        LoginViewController *loginView = [[LoginViewController alloc]init];
+        [self presentViewController:loginView animated:YES completion:nil];
+    }else{
         
-        if(![StringUitl checkLogin]){
-            LoginViewController *loginView = [[LoginViewController alloc]init];
-            [self presentViewController:loginView animated:YES completion:nil];
-        }else{
+    
+        if(indexPath.section==0){//跳转到美女私房
+            
             NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
             NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
             NSString *data_Type = [girlCellDic valueForKey:@"_category_call_index"];
@@ -266,14 +269,25 @@
                  GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
                  passValelegate = videoView;
                 [passValelegate passValue:dataId];
-                [self presentViewController:videoView animated:YES completion:^{
-                   //
-                }];
-            }else{
-                
-                
-                
+                [self.navigationController pushViewController:videoView animated:YES];
             }
+            
+        }
+        
+        if(indexPath.section==1){//跳转到星城故事
+            
+            NSDictionary *storyCellDic = [self.storyDataList objectAtIndex:indexPath.row];
+            NSString *dataId = [[storyCellDic valueForKey:@"_id"] stringValue];
+            StoryDetailViewController *storyDetailView = [[StoryDetailViewController alloc] init];
+            passValelegate = storyDetailView;
+            [passValelegate passValue:dataId];
+            [self.navigationController pushViewController:storyDetailView animated:YES];
+            
+        }
+        
+        if(indexPath.section==2){//跳转到活动众筹
+            
+            
         }
         
     }
@@ -323,18 +337,14 @@
 //            [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
             
             //改写异步加载图片
-            AsynImageView *imaeView = [[AsynImageView alloc]init];
-            imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
-            videoCell.videoPic.image = imaeView.image;
+            [videoCell.videoPic setImageWithURL:[NSURL URLWithString:imgUrl]
+                            placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
         NSNumber * clickNum =[cellDic valueForKey:@"_click"];
         videoCell.clickNum.text = [clickNum stringValue];
-        
-        
-        
         videoCell.videoTime.text = [cellDic valueForKey:@"_call_index"];
         return videoCell;
 
@@ -357,14 +367,18 @@
 //            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
 //            [picCell.picView setBackgroundImage:videImg forState:UIControlStateNormal];
             //改写异步加载图片
-            AsynImageView *imaeView = [[AsynImageView alloc]init];
-            imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
-            picCell.picView.image = imaeView.image;
+            [picCell.picView setImageWithURL:[NSURL URLWithString:imgUrl]
+                               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
+        NSString *labelText = [cellDic valueForKey:@"_zhaiyao"];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         
+        [paragraphStyle setLineSpacing:25.0f];//调整行间距
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
+        picCell.descView.attributedText = attributedString;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
-        [picCell.descView alignTop];
-        picCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
+        picCell.descView.text = labelText;
         return picCell;
         
     }

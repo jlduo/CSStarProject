@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIView *cityBg;
 @property (weak, nonatomic) IBOutlet UITextField *cityText;
 @property (strong, nonatomic) NSString *cityValue;
-- (IBAction)cityClick:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *cityPciker;
 @property (copy,nonatomic) NSMutableArray *cityArray;//城市数据

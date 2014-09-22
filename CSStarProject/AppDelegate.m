@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 #import "common.h"
+#import "StringUitl.h"
 #import "AppDelegate.h"
 //#import "GirlsViewController.h"
 //#import "FriendViewController.h"
@@ -48,6 +49,8 @@
 //    self.window.rootViewController = tabBar;
 //    self.window.backgroundColor = [UIColor whiteColor];
 //    [self.window makeKeyAndVisible];
+    [StringUitl setSessionVal:nil withKey:FORWARD_TYPE];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     return YES;
 }

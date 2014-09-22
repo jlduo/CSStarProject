@@ -44,7 +44,8 @@
     [self setBannerView];
 
     _girlsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _girlsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _girlsTableView.backgroundColor = [UIColor lightGrayColor];
+    //_girlsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     
     
 }
@@ -55,9 +56,8 @@
     UIImageView *bannerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 180)];
     //NSString *imageName = @"http://dc.jldoo.cn/upload/201405/29/small_201405291500453772.jpg";
     NSString *imgUrl =[bannerData valueForKey:@"_img_url"];
-    AsynImageView *imageView = [[AsynImageView alloc]init];
-    imageView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
-    [bannerView setImage:imageView.image];
+    [bannerView setImageWithURL:[NSURL URLWithString:imgUrl]
+                   placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
     
     //设置图片标题
     UILabel *picTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 155, SCREEN_WIDTH, 25)];
@@ -126,6 +126,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
 }
@@ -194,7 +195,22 @@
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    cellDic = [self.girlsDataList objectAtIndex:indexPath.row];
+    dataType = [cellDic valueForKey:@"_category_call_index"];
+    if([dataType isEqualToString:@"albums"]){
+        
+        [self goPhotoView:[[cellDic valueForKey:@"_id"] stringValue]];
+        
+    }else if([dataType isEqualToString:@"video"]){
+        
+        [self goVideoView:[[cellDic valueForKey:@"_id"] stringValue]];
+        
+    }else{
+        
+        [self goArticelView:[[cellDic valueForKey:@"_id"] stringValue]];
+        
+    }
+
     
 }
 
@@ -205,7 +221,7 @@
     if([dataType isEqualToString:@"albums"]){
         return 110.0;
     }else{
-        return 70.0;
+        return 85.0;
     }
 }
 
@@ -228,9 +244,9 @@
         //UIImage *picImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
         //[picCell.picView setBackgroundImage:picImg forState:UIControlStateNormal];
         //picCell.picView.imageURL = [cellDic valueForKey:@"pic"];
-        AsynImageView *imageView = [[AsynImageView alloc]init];
-        imageView.imageURL = [NSString stringWithFormat:@"%@", [cellDic valueForKey:@"_img_url"]];
-        picCell.picView.image = imageView.image;
+        
+        [picCell.picView setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
+                       placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
         picCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
@@ -246,25 +262,28 @@
         
         VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
         videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        videoCell.backgroundColor = [UIColor clearColor];
 //        UIImage *videImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
 //        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
         //videoCell.videoPic.imageURL =[cellDic valueForKey:@"pic"];
         
-        AsynImageView *imageView = [[AsynImageView alloc]init];
-        imageView.imageURL = [NSString stringWithFormat:@"%@", [cellDic valueForKey:@"_img_url"]];
-        videoCell.videoPic.image = imageView.image;
+        
+        [videoCell.videoPic setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
+                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
         videoCell.clickNum.text = [cellDic valueForKey:@"clicknum"];
+        [videoCell.cellBgView.layer setCornerRadius:10.0f];
+        
         return videoCell;
    }else{
        CustomTableCell *photoCell = [[CustomTableCell alloc]init];
        //photoCell.selectionStyle =UITableViewCellSelectionStyleNone;
        //[photoCell setFrame: CGRectMake(0, 0, SCREEN_WIDTH, 80)];
-       
        //通过文章获取相册
-       [self loadGirlPhotoData:[cellDic valueForKey:@"_id"]];
+       NSString *artcleId =[cellDic valueForKey:@"_id"];
+       [self loadGirlPhotoData:artcleId];
        if(photoArray!=nil && photoArray.count>0){
            UIScrollView  *photoScroll = [[UIScrollView alloc]init];
            [photoScroll setFrame:CGRectMake(0, 25,SCREEN_WIDTH, 80)];
@@ -275,24 +294,20 @@
            //加载图片
            //UIImageView *imageView;
            for(int i=0;i<photoArray.count;i++){
-               
-               //imageView = [[AsynImageView alloc]initWithFrame:CGRectMake((100+15)*i, 0, 100, 80)];
-               //imageView.imageURL = [NSString stringWithFormat:@"%@", [photoArray objectAtIndex:i]];
-               
+
                NSMutableDictionary *picDic = (NSMutableDictionary *)[photoArray objectAtIndex:i];
-               AsynImageView *imageView = [[AsynImageView alloc]initWithFrame:CGRectMake((100+10)*i, 0, 100, 80)];
-               imageView.imageURL = [NSString stringWithFormat:@"%@", [picDic valueForKey:@"_thumb_path"]];
-               
-               
-//               imageView= [[UIImageView alloc]initWithFrame:CGRectMake((100+15)*i, 0, 100, 80)];
-//               NSLog(@"pic==%@",[photoArray objectAtIndex:i]);
-//               [imageView setImage:[UIImage imageNamed:[photoArray objectAtIndex:i]]];
-               //添加图片的点击事件
+               UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((100+10)*i, 0, 100, 80)];
                imageView.userInteractionEnabled = YES;
-               UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goPhotoView)];
-               [imageView addGestureRecognizer:singleTap];
+               [imageView setImageWithURL:[NSURL URLWithString:[picDic valueForKey:@"_thumb_path"]]
+                         placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+               
+               UIButton *imgbtn = [[UIButton alloc]initWithFrame:CGRectMake((100+10)*i, 0, 100, 80)];
+               [imgbtn setBackgroundColor:[UIColor clearColor]];
+               imgbtn.tag = [artcleId integerValue];
+               [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
                
                [photoScroll addSubview:imageView];
+               [photoScroll addSubview:imgbtn];
            }
            
            //设置图片标题
@@ -306,7 +321,6 @@
            
            [photoCell addSubview:photoTitle];
            [photoCell addSubview:photoScroll];
-           //[_girlsTableView setFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H-49-40)];
        }
        
        return photoCell;
@@ -314,11 +328,37 @@
     
 }
 
--(void)goPhotoView{
-    GirlsPhotoViewController *girlPhotoView = [[GirlsPhotoViewController alloc]init];
-    [self.navigationController pushViewController:girlPhotoView animated:YES];
-    NSLog(@"dfsdsfsfsdf");
+
+-(void)imgBtnClick:(UIButton *)sender{
+    
+    NSLog(@"@artcleId=%d",sender.tag);
+    [self goPhotoView:[NSString stringWithFormat:@"%d",sender.tag]];
 }
 
+-(void)goPhotoView:(NSString *)articleId{
+    GirlsPhotosViewController *girlPhotoView = [[GirlsPhotosViewController alloc]init];
+    passValelegate = girlPhotoView;
+    [passValelegate passValue:articleId];
+    [self.navigationController pushViewController:girlPhotoView animated:YES];
+    NSLog(@"articleId=%@",articleId);
+}
+
+-(void)goVideoView:(NSString *)articleId{
+    GirlsVideoViewController *girlVideoView = [[GirlsVideoViewController alloc]init];
+    passValelegate = girlVideoView;
+    [passValelegate passValue:articleId];
+    [self.navigationController pushViewController:girlVideoView animated:YES];
+    NSLog(@"articleId=%@",articleId);
+    
+}
+
+-(void)goArticelView:(NSString *)articleId{
+    StoryDetailViewController *articelView = [[StoryDetailViewController alloc]init];
+    passValelegate = articelView;
+    [passValelegate passValue:articleId];
+    [self.navigationController pushViewController:articelView animated:YES];
+    NSLog(@"articleId=%@",articleId);
+    
+}
 
 @end

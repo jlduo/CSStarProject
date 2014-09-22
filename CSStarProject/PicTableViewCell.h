@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AsynImageView.h"
+#import "UIImageView+WebCache.h"
 
 @interface PicTableViewCell : UITableViewCell
 
 #pragma mark 图片区域
-@property (weak, nonatomic) IBOutlet AsynImageView *picView;
+@property (weak, nonatomic) IBOutlet UIImageView *picView;
 
 #pragma mark 标题区域
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

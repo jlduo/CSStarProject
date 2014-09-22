@@ -11,6 +11,7 @@
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
 #import "StringUitl.h"
+#import "UserAgreenViewController.h"
 
 @interface RegisterViewController : UIViewController<UITextFieldDelegate>
 
@@ -30,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *registerBtn;
 
 - (IBAction)clickRegisterBtn:(id)sender;
+
+- (IBAction)clickAgreen:(id)sender;
 
 
 @end

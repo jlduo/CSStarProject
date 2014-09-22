@@ -164,7 +164,7 @@
 -(void)goPreviou{
     NSLog(@"back");
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void)loadView{
@@ -230,7 +230,7 @@
             imgName =@"myzone-order.png";
             break;
         case 4:
-            cellTitle = @"我的收货地址";
+            cellTitle = @"收货地址";
             imgName =@"myzone-location.png";
             break;
             

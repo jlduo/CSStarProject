@@ -11,9 +11,10 @@
 #import "GirlsVideoViewController.h"
 #import "PicTableViewCell.h"
 #import "VideoTableViewCell.h"
+#import "UIImageView+WebCache.h"
 #import "UILabel+VerticalAlign.h"
 #import "ViewPassValueDelegate.h"
-#import "AsynImageView.h"
+#import "StoryDetailViewController.h"
 
 @interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
     // 声明一个参数传递代理

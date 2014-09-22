@@ -109,10 +109,12 @@
         UserViewController *userView = [[UserViewController alloc] init];
         [self.navigationController pushViewController:userView animated:YES];
     }else{
-        LoginViewController *userView = [[LoginViewController alloc] init];
-        [self presentViewController:userView animated:YES completion:^{
-            //
-        }];
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+//        [self presentViewController:userView animated:YES completion:^{
+//            //
+//        }];
     }
     
 }

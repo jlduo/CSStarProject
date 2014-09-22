@@ -21,7 +21,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -46,11 +46,20 @@
 
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
+    [customTabar hiddenDIYTaBar];
+    //CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
+    //[stableView setFrame:temFrame];
+
+}
+
 
 -(void)setNavgationBar{
     //处理导航开始
     self.navigationController.navigationBarHidden = YES;
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
+    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAV_TITLE_HEIGHT+20)];
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     //处理标题
@@ -90,24 +99,50 @@
     
 }
 
-//-(void)viewWillAppear:(BOOL)animated{
-//    NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
-//    if([StringUitl isNotEmpty:[StringUitl getSessionVal:LOGIN_USER_NAME]]){
-//        _userName.text = userName;
-//    }
-//}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    [self.userName resignFirstResponder];
+    [self.passWord resignFirstResponder];
+}
+
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //关闭时候到操作
-    }];
+ 
+    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }
 }
 
 -(void)goRegister{
     RegisterViewController *userRegView = [[RegisterViewController alloc] init];
-    [self presentViewController:userRegView animated:YES completion:^{
-        //
-    }];
+    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+    
+        [self presentViewController:userRegView animated:YES completion:nil];
+        
+    }else{
+        
+        [self.navigationController pushViewController:userRegView animated:YES];
+        
+    }
+}
+
+-(void)getPassword{
+    FogetPasswordViewController *getPassword = [[FogetPasswordViewController alloc] init];
+    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    }else{
+        
+        [self.navigationController pushViewController:getPassword animated:YES];
+        
+    }
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
@@ -118,11 +153,8 @@
 }
 
 
-
-
 - (IBAction)clickForgetBtn:(UIButton *)sender {
-    
-    
+    [self getPassword];
 }
 
 
@@ -201,12 +233,17 @@
         
         //通过用户名获取信息
         [self loadUserInfo:_userName.text];
-
-        [self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-        [self dismissViewControllerAnimated:YES completion:^{
-            //
-        }];
         
+        UserViewController *userView = [[UserViewController alloc]init];
+        if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
+        }else{
+            
+            [self.navigationController pushViewController:userView animated:YES];
+            
+        }
         
     }
     
