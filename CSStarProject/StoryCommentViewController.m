@@ -142,7 +142,6 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"计算高度");
     StoryCommentTableCell *commentCell = [table dequeueReusableCellWithIdentifier:@"storyCommentCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     NSString *commnetContent = [dicComment valueForKey:@"_content"];
@@ -405,7 +404,7 @@
             tableArray  = nextArray;
         } else {
             [tableArray  addObjectsFromArray:nextArray];
-        } 
+        }
         [table reloadData];
     }else{
         [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"]; 
