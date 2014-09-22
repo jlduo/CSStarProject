@@ -589,7 +589,7 @@
 }
 
 -(void)goPreviou{
-    //[super goPreviou];
+    [super goPreviou];
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
     }];
@@ -739,13 +739,12 @@
         
         //videoCell.videoPic.imageURL = imgUrl;
         //改写异步加载图片
-        AsynImageView *imaeView = [[AsynImageView alloc]init];
-        imaeView.imageURL = [NSString stringWithFormat:@"%@", imgUrl];
-        videoCell.videoPic.image = imaeView.image;
+        [videoCell.videoPic setImageWithURL:[NSURL URLWithString:imgUrl]
+                  placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+        
     }
     
     videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
-    
     videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
     NSNumber * clickNum =[cellDic valueForKey:@"_click"];
     videoCell.clickNum.text = [clickNum stringValue];

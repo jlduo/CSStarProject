@@ -7,6 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "common.h"
+#import "StringUitl.h"
+#import "LoginViewController.h"
+#import "GirlsViewController.h"
 
 @interface InitTabBarViewController : UITabBarController
 

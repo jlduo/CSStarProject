@@ -47,7 +47,7 @@
 -(void)setNavgationBar{
     //处理导航开始
     self.navigationController.navigationBarHidden = YES;
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
+    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAV_TITLE_HEIGHT+20)];
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     //处理标题
@@ -75,6 +75,7 @@
 }
 
 -(void)goPreviou{
+    [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
     }];
@@ -86,6 +87,7 @@
         [self.passwordVal setSecureTextEntry:YES];
     }
 }
+
 
 
 
@@ -209,6 +211,13 @@
 
 }
 
+- (IBAction)clickAgreen:(id)sender {
+    
+    UserAgreenViewController *agreenView = [[UserAgreenViewController alloc] init];
+    [self presentViewController:agreenView animated:YES completion:nil];
+    
+}
+
 - (void)requestCodeFinished:(ASIHTTPRequest *)req
 {
     NSLog(@"register info->%@",[req responseString]);
@@ -325,5 +334,6 @@
     
     [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
+
 
 @end

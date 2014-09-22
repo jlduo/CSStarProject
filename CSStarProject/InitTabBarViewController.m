@@ -68,16 +68,16 @@
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(i*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-        btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"con_bg@2x.jpg"]];
+        btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:TABR_BG_ICON]];
         btn.titleLabel.font = Font_Size(10);
         
         [btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateNormal];
         //[btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateHighlighted];
         
-        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         
-        [btn setImageEdgeInsets:UIEdgeInsetsMake(4, (BTN_WIDTH-30)/2, 16, (BTN_HEIGHT-24)/2)];
+        //[btn setImageEdgeInsets:UIEdgeInsetsMake(4, (BTN_WIDTH-30)/2, 16, (BTN_HEIGHT-24)/2)];
         [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -50, 8, 0)];
         
         btn.tag = i+11;
@@ -86,7 +86,7 @@
         switch (i) {
             case 0:
                 ctitle = @"首 页";
-                [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -50, 8, 0)];
+                [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -60, 8, 0)];
                 break;
             case 1:
                 ctitle = @"美女私房";
@@ -116,17 +116,27 @@
 
 #pragma mark 监听按钮点击切换视图
 - (void)changeViewController:(UIButton *)sender {
-    //根据按钮到tag属性来确定点击切换到对应视图
-    self.selectedIndex = (sender.tag-11);
-    sender.enabled = YES;
-    //    if(_previousBtn!=sender){
-    //        sender.enabled = YES;
-    //    }
-    _previousBtn = sender;
-    [self changeTabsFrameWithAnimation:sender];
-    sender.selected = YES;
+    if([StringUitl checkLogin]){
+        //根据按钮到tag属性来确定点击切换到对应视图
+        self.selectedIndex = (sender.tag-11);
+        sender.enabled = YES;
+        //    if(_previousBtn!=sender){
+        //        sender.enabled = YES;
+        //    }
+        _previousBtn = sender;
+        [self changeTabsFrameWithAnimation:sender];
+        sender.selected = YES;
+    }else{
+        
+        LoginViewController *loginView = [[LoginViewController alloc]init];
+        [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+        [self presentViewController:loginView animated:YES completion:nil];
+        
+    }
     
 }
+
+
 
 #pragma mark控制滑动条效果
 -(void)changeTabsFrameWithAnimation:(UIButton *) sender{

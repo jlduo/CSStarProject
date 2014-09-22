@@ -1,6 +1,6 @@
 
 #import <UIKit/UIKit.h>
-#import "AsynImageView.h"
+#import "UIImageView+WebCache.h"
 typedef enum
 {
     FFScrollViewSelecttionTypeTap = 100,  //默认的为可点击模式

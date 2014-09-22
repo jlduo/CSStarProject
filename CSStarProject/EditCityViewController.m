@@ -83,7 +83,7 @@
 -(void)setNavgationBar{
     //处理导航开始
     self.navigationController.navigationBarHidden = YES;
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
+    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAV_TITLE_HEIGHT+20)];
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     //处理标题

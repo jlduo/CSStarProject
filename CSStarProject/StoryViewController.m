@@ -44,6 +44,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
 }
@@ -240,6 +241,7 @@
         NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
         UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
         storyBDCell.imageView.image = picImg;
+        
         
         storyBDCell.titleView.text = [cellDic valueForKey:@"_title"];
         storyBDCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];

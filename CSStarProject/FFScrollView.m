@@ -48,12 +48,12 @@
     
     NSString *imgUrl;
     for (int i = 0; i < sourceArr.count; i++) {
-        AsynImageView *imageview = [[AsynImageView alloc] initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
-        //UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
+        UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
         imgUrl = [sourceArr objectAtIndex:i];
         NSRange range = [imgUrl rangeOfString:@"http"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            imageview.imageURL = [sourceArr objectAtIndex:i];
+            [imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
+                               placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
         }else{
             imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
         }
@@ -61,18 +61,18 @@
         [self.scrollView addSubview:imageview];
     }
     
-    //UIImageView *lastImageView = [[UIImageView alloc]initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
-    AsynImageView *lastImageView = [[AsynImageView alloc] initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
+    UIImageView *lastImageView = [[UIImageView alloc]initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
     imgUrl = [sourceArr objectAtIndex:0];
     NSRange range = [imgUrl rangeOfString:@"http"];
     if(range.location!=NSNotFound){//判断加载远程图像
-        lastImageView.imageURL = [sourceArr objectAtIndex:0];
+        [lastImageView setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:0]]
+                  placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
 
     }else{
         lastImageView.image = [UIImage imageNamed:[sourceArr objectAtIndex:0]];
     }
-    [self.scrollView addSubview:lastImageView];
     
+    [self.scrollView addSubview:lastImageView];
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];
     self.pageControl.backgroundColor = [UIColor blackColor];
     self.pageControl.alpha = 0.4f;
