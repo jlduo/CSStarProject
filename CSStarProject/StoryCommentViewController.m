@@ -49,6 +49,8 @@
     }
     self.view.backgroundColor = [UIColor whiteColor];
     
+    table.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
     lblDetail.font = [UIFont fontWithName:@"Helvetica" size:24];
@@ -118,7 +120,7 @@
     [table registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{ 
     StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"];
     NSDictionary *dicComment = [tableArray objectAtIndex:indexPath.row];
     DateUtil *utilDate = [[DateUtil alloc] init];
@@ -127,9 +129,11 @@
     NSString *imgUrl = [dicComment valueForKey:@"_avatar"];
     UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
     [commentCell.commentImage setImage:picImg];
-    commentCell.commentTextView.text = [dicComment valueForKey:@"_content"];
+    NSString *commnetContent = [dicComment valueForKey:@"_content"];
+    commentCell.commentTextView.text = commnetContent;
     commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return commentCell;
 }
 
@@ -138,7 +142,20 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return  60;
+    StoryCommentTableCell *commentCell = [table dequeueReusableCellWithIdentifier:@"storyCommentCell"];
+    NSDictionary *dicComment = [tableArray objectAtIndex:indexPath.row];
+    NSString *commnetContent = [dicComment valueForKey:@"_content"];
+    
+    //评论内容自适应
+    UIFont *font = [UIFont systemFontOfSize:12];
+    CGSize size = CGSizeMake( commentCell.commentTextView.frame.size.width,2000);
+    CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+    if (labelsize.height > commentCell.commentTextView.frame.size.height) { 
+        return  commentCell.frame.size.height + labelsize.height - commentCell.commentTextView.frame.size.height;
+    }
+    else{
+        return 60;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -171,7 +188,7 @@
 -(void)initCommentIcon{
     //在文本域内加入图标
     cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)];
-    cIconView.image = [UIImage imageNamed:@"iconchecked.png"];
+    cIconView.image = [UIImage imageNamed:@"discussicon.png"];
     [textField addSubview:cIconView];
 }
 
@@ -229,6 +246,14 @@
         [plabel removeFromSuperview];
         textView.text = textVal;
     }
+}
+//取消回车事件 改为关闭键盘
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        return NO;
+    }
+    return YES;
 }
 
 //关闭键盘
@@ -342,7 +367,7 @@
     [self.view addSubview:[super setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
 }
 -(void)goPreviou{
-    //[super goPreviou];
+    [super goPreviou];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

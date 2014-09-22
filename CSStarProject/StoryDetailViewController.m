@@ -149,7 +149,7 @@
 -(void)initCommentIcon{
     //在文本域内加入图标
     cIconView = [[UIImageView alloc]initWithFrame:CGRectMake(4, 4, 24, 22)];
-    cIconView.image = [UIImage imageNamed:@"iconchecked.png"];
+    cIconView.image = [UIImage imageNamed:@"discussicon.png"];
     [textField addSubview:cIconView];
 }
 
