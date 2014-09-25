@@ -245,7 +245,8 @@
         
         storyBDCell.titleView.text = [cellDic valueForKey:@"_title"];
         storyBDCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
-        
+        storyBDCell.titleView.font = main_font(18);
+        storyBDCell.descView.font = main_font(16);
         return storyBDCell;
         
     }else{
@@ -265,7 +266,7 @@
             storyBCell.cellImgView.image = picImg;
             
             storyBCell.imgTitle.text = [cellDic valueForKey:@"_title"];
-            
+            storyBCell.imgTitle.font = main_font(16);
             return storyBCell;
             
         }else{//处理基本列数据
@@ -283,7 +284,7 @@
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
             storySMCell.cellImg.image = picImg;
             storySMCell.cellTitle.text = [cellDic valueForKey:@"_title"];
-            
+            storySMCell.cellTitle.font  = main_font(16);
             return storySMCell;
 
         }

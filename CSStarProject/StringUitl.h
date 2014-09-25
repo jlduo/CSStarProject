@@ -37,6 +37,11 @@
 +(NSMutableDictionary *)getUserData;
 
 +(NSString *)getFileExtName:(NSString *)fileName;
++(void)setCornerRadius:(UIView *)cview withRadius:(CGFloat)radius;
++(void)setViewBorder:(UIView *)bview withColor:(NSString *)color Width:(CGFloat)width;
+
+//打印系统字体
++(void)printSystemFont;
 
 @end
 

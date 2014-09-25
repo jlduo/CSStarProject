@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 #pragma mark 描述区域
 @property (weak, nonatomic) IBOutlet UILabel *descView;
+@property (weak, nonatomic) IBOutlet UIView *cellBgView;
 
 
 

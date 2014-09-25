@@ -8,6 +8,7 @@
 
 #import "common.h"
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 #import "UILabel+ContentSize.h"
 #import "AllAroundPullView.h"
 #import <MediaPlayer/MediaPlayer.h>

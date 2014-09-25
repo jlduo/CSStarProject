@@ -46,7 +46,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setFont:Font_Size(22)];
+    titleLabel.font = main_font(22);
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -61,9 +61,9 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor whiteColor]];
-    [rbtn setFont:Font_Size(18)];
-    
+    [rbtn setTintColor:[UIColor greenColor]];
+    //[rbtn setFont:Font_Size(18)];
+    rbtn.titleLabel.font=main_font(18);
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
     

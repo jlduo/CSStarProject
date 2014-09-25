@@ -1,5 +1,6 @@
 
 #import <UIKit/UIKit.h>
+#import "LASIImageView.h"
 #import "UIImageView+WebCache.h"
 typedef enum
 {

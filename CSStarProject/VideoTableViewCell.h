@@ -28,7 +28,7 @@
 #pragma mark 视频描述
 @property (weak, nonatomic) IBOutlet UILabel *videoDesc;
 
-@property (weak, nonatomic) IBOutlet UILabel *cellBgView;
+@property (weak, nonatomic) IBOutlet UIView *cellBgView;
 
 
 @end

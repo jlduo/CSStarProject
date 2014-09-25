@@ -47,7 +47,7 @@
 
 -(NSString *)fixStringForDate:(NSDate *)date withFormater:(NSString *)formater{
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:kCFDateFormatterFullStyle];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     [dateFormatter setDateFormat:formater];
     NSString *fixString = [dateFormatter stringFromDate:date];
     NSLog(@"修正当前日期:%@",fixString);

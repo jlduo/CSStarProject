@@ -20,6 +20,8 @@
     BOOL isFooterSeted;
     
     int currentPageIndex;
+    
+    NSString *max_id;
 }
 
 @end
@@ -41,23 +43,25 @@
     [self loadGirlData:@"1" withPageSize:PAGESIZE];
     //集成刷新控件
     [self setHeaderRereshing];
+    [self setFooterRereshing];
     [self setBannerView];
 
     _girlsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _girlsTableView.backgroundColor = [UIColor lightGrayColor];
-    //_girlsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    
+    _girlsTableView.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
     
 }
 
 -(void)setBannerView{
-    UIView *bannerBaseView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 180)];
+    UIView *bannerBaseView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     //设置顶部图片
-    UIImageView *bannerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 180)];
-    //NSString *imageName = @"http://dc.jldoo.cn/upload/201405/29/small_201405291500453772.jpg";
+    UIImageView *bannerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     NSString *imgUrl =[bannerData valueForKey:@"_img_url"];
     [bannerView setImageWithURL:[NSURL URLWithString:imgUrl]
-                   placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+                   placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+    
+    bannerView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(UesrClicked:)];
+    [bannerView addGestureRecognizer:singleTap];
     
     //设置图片标题
     UILabel *picTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 155, SCREEN_WIDTH, 25)];
@@ -65,13 +69,26 @@
     picTitle.backgroundColor = [UIColor blackColor];
     picTitle.alpha = 0.4f;
     picTitle.textColor = [UIColor whiteColor];
-    picTitle.textAlignment = NSTextAlignmentCenter;
-    picTitle.font = [UIFont fontWithName:@"Arial" size:14.0f];
+    picTitle.textAlignment = NSTextAlignmentLeft;
+    picTitle.font = main_font(16);
     
     [bannerBaseView addSubview:bannerView];
     [bannerView addSubview:picTitle];
-    _girlsTableView.tableHeaderView = bannerBaseView; 
-    _girlsTableView.backgroundColor = [UIColor whiteColor];
+    _girlsTableView.tableHeaderView = bannerBaseView;
+    
+}
+
+-(void)UesrClicked:(UIImageView *)imgView{
+    
+    NSString *artcleId = [bannerData valueForKey:@"_id"];
+    NSString * data_type = [bannerData valueForKey:@"_category_call_index"];
+    if([data_type isEqualToString:@"video"]){
+        [self goVideoView:artcleId];
+    }else if([data_type isEqualToString:@"albums"]){
+       [self goPhotoView:artcleId];
+    }else{
+       [self goArticelView:artcleId];
+    }
     
 }
 
@@ -79,9 +96,8 @@
 -(void)setHeaderRereshing{
     if(!isHeaderSeted){
         AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:self.girlsTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
-            NSLog(@"up-");
-            [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
-            [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
+            [self performSelector:@selector(callBackMethod:) withObject:@"new" afterDelay:DELAY_TIME];
+            [view performSelector:@selector(finishedLoading) withObject:@"old" afterDelay:1.0f];
         }];
         [self.girlsTableView addSubview:topPullView];
         isHeaderSeted = YES;
@@ -92,7 +108,6 @@
 -(void)setFooterRereshing{
     if(!isFooterSeted){
         AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:self.girlsTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
-            NSLog(@"down-");
             [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
         }];
@@ -106,13 +121,18 @@
 -(void)callBackMethod:(id) obj
 {
     //再次请求数据
-    currentPageIndex++;
-    [self loadGirlData:[NSString stringWithFormat:@"%d",currentPageIndex] withPageSize:PAGESIZE];
-    //根据数据判断是否加载刷新组件
-    if(_girlsDataList!=nil && _girlsDataList.count>2){
-        //集成刷新控件
-        [self setFooterRereshing];//有2条数据后加载底部刷新
+    if([obj isEqualToString:@"new"]){
+        [self loadNewGirlData:max_id];
+    }else{
+        currentPageIndex++;
+        [self loadGirlData:[NSString stringWithFormat:@"%d",currentPageIndex] withPageSize:PAGESIZE];
     }
+    
+    //根据数据判断是否加载刷新组件
+    //if(_girlsDataList!=nil && _girlsDataList.count>1){
+    //    //集成刷新控件
+    //    [self setFooterRereshing];//有2条数据后加载底部刷新
+    //}
     
     [self.girlsTableView reloadData];
 }
@@ -131,46 +151,56 @@
     [tabBarController showDIYTaBar];
 }
 
--(void)setTableData{
-    
-    NSBundle *manBund = [NSBundle mainBundle];
-    NSString *path = [manBund pathForResource:@"homeDataList" ofType:@"plist"];
-    NSDictionary *myData = [NSDictionary dictionaryWithContentsOfFile:path];
-    
-    NSArray *array1 = [myData valueForKey:@"美女私房"];
-    _girlsDataList  = [NSMutableArray arrayWithArray:array1];
-
-    //NSLog(@"_girlsDataList==%@",_girlsDataList);
-}
 
 /*********************************************处理数据方法 开始********************************************/
 
 //初始化头部数据
 -(void)initBannerData{
         ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-        NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms/GetArticles/albums/1/is_top=1"];
+        NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,PHOTO_BANNER_URL];
         NSMutableArray *bannerArr = (NSMutableArray *)[convertJson requestData:url];
         if(bannerArr!=nil&&bannerArr.count>0){
             bannerData = (NSMutableDictionary *)bannerArr[0];
         }
-        NSLog(@"bannerData===%@",bannerData);
+        //NSLog(@"bannerData===%@",bannerData);
 }
 
 -(void)loadGirlData:(NSString *)pageIndex withPageSize:(NSString *)pageSize {
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms/GetArticleList/girl/0/%@/%@",pageSize,pageIndex];
+    NSString *url = [NSString stringWithFormat:@"%@%@/0/%@/%@",REMOTE_URL,GIRLS_LIST,pageSize,pageIndex];
     NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
     [_girlsDataList addObjectsFromArray:newDataArr];
-    NSLog(@"_girlsDataList===%@",_girlsDataList);
+    //获取最大文章ID
+    if([pageIndex isEqualToString:@"1"]){
+        max_id = [[newDataArr objectAtIndex:0] valueForKey:@"_id"];
+        NSLog(@"max_id=%@",max_id);
+        
+    }
+    
+    
+    //NSLog(@"_girlsDataList===%@",_girlsDataList);
+}
+
+-(void)loadNewGirlData:(NSString *)maxid{
+    
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@/%@",REMOTE_URL,LOAD_NEW_DATA,@"girl",max_id];
+    NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
+    
+    [newDataArr addObjectsFromArray:_girlsDataList];
+    _girlsDataList = [[NSMutableArray alloc]init];
+    [_girlsDataList addObjectsFromArray:newDataArr];
+    //NSLog(@"_girlsDataList===%@",_girlsDataList);
+    
 }
 
 -(void)loadGirlPhotoData:(NSString *)articleId {
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms//GetAlbums/%@",articleId];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PHOTO_LIST,articleId];
     NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
     photoArray = [[NSMutableArray alloc]init];
     [photoArray addObjectsFromArray:newDataArr];
-    NSLog(@"photoArray===%@",photoArray);
+    //NSLog(@"photoArray===%@",photoArray);
 }
 
 
@@ -186,6 +216,20 @@
     } else if (sclView.contentOffset.y>=sectionHeaderHeight) {
         //sclView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
     }
+}
+
+#pragma mark 设置组
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+#pragma mark 设置组高度
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10.0;
+}
+
+#pragma mark 设置组标题
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return @"";
 }
 
 #pragma mark 设置每组的行数
@@ -219,9 +263,9 @@
     cellDic = [self.girlsDataList objectAtIndex:indexPath.row];
     dataType = [cellDic valueForKey:@"_category_call_index"];
     if([dataType isEqualToString:@"albums"]){
-        return 110.0;
+        return 120.0;
     }else{
-        return 85.0;
+        return 95.0;
     }
 }
 
@@ -231,25 +275,25 @@
     cellDic = [self.girlsDataList objectAtIndex:indexPath.row];
     dataType = [cellDic valueForKey:@"_category_call_index"];
     if([dataType isEqualToString:@"article"]){//判断是否为图片
-        static BOOL isNibregistered = NO;
-        if(!isNibregistered){
-            UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
-            [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
-            isNibregistered = YES;
-        }
+        UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
+        [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
         
         PicTableViewCell *picCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
         picCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        picCell.backgroundColor = [UIColor clearColor];
         
-        //UIImage *picImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
-        //[picCell.picView setBackgroundImage:picImg forState:UIControlStateNormal];
-        //picCell.picView.imageURL = [cellDic valueForKey:@"pic"];
+        //[StringUitl setCornerRadius:picCell.cellBgView withRadius:5.0f];
+        //[StringUitl setCornerRadius:picCell.picView withRadius:5.0f];
+        //[StringUitl setViewBorder:picCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
         
         [picCell.picView setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        
+        picCell.cellBgView.layer.cornerRadius = 5.0f;
+        picCell.cellBgView.layer.masksToBounds = YES;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
         picCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
+        picCell.titleView.font = main_font(18);
+        picCell.descView.font = main_font(16);
         return picCell;
         
     }else if([dataType isEqualToString:@"video"]){
@@ -263,10 +307,10 @@
         VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
         videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
         videoCell.backgroundColor = [UIColor clearColor];
-//        UIImage *videImg =[UIImage imageNamed:[cellDic valueForKey:@"pic"]];
-//        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
-        //videoCell.videoPic.imageURL =[cellDic valueForKey:@"pic"];
         
+        //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
+        //[StringUitl setCornerRadius:videoCell.cellBgView withRadius:5.0f];
+        //[StringUitl setCornerRadius:videoCell.videoPic withRadius:5.0f];
         
         [videoCell.videoPic setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
                         placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
@@ -274,53 +318,55 @@
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
         videoCell.clickNum.text = [cellDic valueForKey:@"clicknum"];
-        [videoCell.cellBgView.layer setCornerRadius:10.0f];
-        
+        videoCell.videoTitle.font = main_font(18);
+        videoCell.videoDesc.font = main_font(16);
         return videoCell;
    }else{
-       CustomTableCell *photoCell = [[CustomTableCell alloc]init];
-       //photoCell.selectionStyle =UITableViewCellSelectionStyleNone;
-       //[photoCell setFrame: CGRectMake(0, 0, SCREEN_WIDTH, 80)];
+       
+       static BOOL isNibregistered = NO;
+       if(!isNibregistered){
+           UINib *nibCell = [UINib nibWithNibName:@"PhotoScrollViewCell" bundle:nil];
+           [tableView registerNib:nibCell forCellReuseIdentifier:@"photoScroll"];
+           isNibregistered = YES;
+       }
+       
+       PhotoScrollViewCell *photoCell = [tableView dequeueReusableCellWithIdentifier:@"photoScroll"];
+       [photoCell setBackgroundColor:[UIColor clearColor]];
+       photoCell.selectionStyle =UITableViewCellSelectionStyleNone;
        //通过文章获取相册
        NSString *artcleId =[cellDic valueForKey:@"_id"];
        [self loadGirlPhotoData:artcleId];
        if(photoArray!=nil && photoArray.count>0){
-           UIScrollView  *photoScroll = [[UIScrollView alloc]init];
-           [photoScroll setFrame:CGRectMake(0, 25,SCREEN_WIDTH, 80)];
-           [photoScroll setContentSize:CGSizeMake((photoArray.count)*115-10, 80)];
-           [photoScroll setShowsHorizontalScrollIndicator:NO];
+           [photoCell.photoScroll setContentSize:CGSizeMake((photoArray.count)*130-10, 80)];
+           [photoCell.photoScroll setShowsHorizontalScrollIndicator:NO];
+           [photoCell.photoScroll setBackgroundColor:[UIColor whiteColor]];
            //[photoScroll setShowsVerticalScrollIndicator:NO];
            
            //加载图片
-           //UIImageView *imageView;
            for(int i=0;i<photoArray.count;i++){
 
                NSMutableDictionary *picDic = (NSMutableDictionary *)[photoArray objectAtIndex:i];
-               UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((100+10)*i, 0, 100, 80)];
+               UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((100+30)*i, 0, 120, 80)];
                imageView.userInteractionEnabled = YES;
                [imageView setImageWithURL:[NSURL URLWithString:[picDic valueForKey:@"_thumb_path"]]
                          placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+               //[StringUitl setCornerRadius:imageView withRadius:5.0f];
                
-               UIButton *imgbtn = [[UIButton alloc]initWithFrame:CGRectMake((100+10)*i, 0, 100, 80)];
+               UIButton *imgbtn = [[UIButton alloc]initWithFrame:CGRectMake((100+30)*i, 0, 120, 80)];
                [imgbtn setBackgroundColor:[UIColor clearColor]];
                imgbtn.tag = [artcleId integerValue];
                [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
                
-               [photoScroll addSubview:imageView];
-               [photoScroll addSubview:imgbtn];
+               [photoCell.photoScroll addSubview:imageView];
+               [photoCell.photoScroll addSubview:imgbtn];
            }
            
-           //设置图片标题
-           UILabel *photoTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 23)];
-           photoTitle.text = [cellDic valueForKey:@"_title"];
-           photoTitle.backgroundColor = [UIColor lightGrayColor];
-           //photoTitle.alpha = 0.4f;
-           photoTitle.textColor = [UIColor blackColor];
-           photoTitle.textAlignment = NSTextAlignmentLeft;
-           photoTitle.font = [UIFont fontWithName:@"Arial" size:14.0f];
+           //[StringUitl setCornerRadius:photoCell.cellBgView withRadius:5.0f];
+           //[StringUitl setViewBorder:photoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
            
-           [photoCell addSubview:photoTitle];
-           [photoCell addSubview:photoScroll];
+           [photoCell.titleView setText:[cellDic valueForKey:@"_title"]];
+           photoCell.titleView.font = main_font(16);
+           
        }
        
        return photoCell;

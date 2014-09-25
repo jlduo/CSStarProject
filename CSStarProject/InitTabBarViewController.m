@@ -9,13 +9,8 @@
 #import "InitTabBarViewController.h"
 
 @interface InitTabBarViewController (){
-    UIButton * _previousBtn;//记录上次选择的按钮
-    NSMutableArray *btnArray;
-    UIView *_tBarView;
-    NSString *ctitle;
-    UILabel *btnLabel;
-    NSMutableArray *titleArray;
-    UIImageView *imageView;
+    UIImageView *_tabBarBG;
+    UIImageView *_selectView;
 }
 
 @end
@@ -25,129 +20,89 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //首先隐藏自带tabbar
-    self.tabBar.hidden=YES;
-    [self initCoustomBtnTabar];
+    [self initTabarView];
     [self setSelectedIndex:0];
     
 }
 
-
-//隐藏自定义滚动条
--(void)hiddenDIYTaBar{
-    _tBarView.hidden = YES;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.tabBar.hidden = YES;
+    }
+    return self;
 }
+
 
 //显示自定义滚动条
 -(void)showDIYTaBar{
-    _tBarView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        _tabBarBG.frame = CGRectMake(0, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT);
+    }];
+}
+
+//隐藏自定义滚动条
+-(void)hiddenDIYTaBar{
+    [UIView animateWithDuration:0.3 animations:^{
+        _tabBarBG.frame = CGRectMake(-SCREEN_WIDTH, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT);
+    }];
 }
 
 #pragma mark 自定义tabbar
--(void)initCoustomBtnTabar{
-    CGRect viewRect = CGRectMake(0, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT);
-    _tBarView = [[UIView alloc] initWithFrame:viewRect];
-    //设置背景
-    //_tBarView.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"tbarbg.png"]];
+-(void)initTabarView{
+   
+    // 初始化自定义TabBar背景
+    _tabBarBG = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-TABBAR_HEIGHT, SCREEN_WIDTH, TABBAR_HEIGHT)];
+    _tabBarBG.userInteractionEnabled = YES;
+    _tabBarBG.image = [UIImage imageNamed:TABR_BG_ICON];
+    [self.view addSubview:_tabBarBG];
     
-    //初始化滑动条
-    btnLabel = [[UILabel alloc]init];
-    //[btnLabel setBackgroundColor:[UIColor greenColor]];
-    //[btnLabel setFrame:CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT)];
+    // 初始化自定义选中背景
+    _selectView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, BTN_WIDTH, BTN_HEIGHT)];
+    _selectView.image = [UIImage imageNamed:TABR_SBG_ICON];
+    [_tabBarBG addSubview:_selectView];
     
-    imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navline.png"]];
-    [imageView setFrame:CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT)];
-    
-    [_tBarView addSubview:imageView];
-    [self.view addSubview:_tBarView];
-    
-    
-    btnArray = [NSMutableArray array];
-    titleArray = [NSMutableArray array];
-    for (NSInteger i=0; i<5; i++) {
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(i*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-        btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:TABR_BG_ICON]];
-        btn.titleLabel.font = Font_Size(10);
-        
-        [btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateNormal];
-        //[btn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"tabbar%lu@2x.png",(unsigned long)i]] forState:UIControlStateHighlighted];
-        
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-        
-        //[btn setImageEdgeInsets:UIEdgeInsetsMake(4, (BTN_WIDTH-30)/2, 16, (BTN_HEIGHT-24)/2)];
-        [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -50, 8, 0)];
-        
-        btn.tag = i+11;
-        //监听按钮点击切换视图
-        [btn addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventTouchDown];
-        switch (i) {
-            case 0:
-                ctitle = @"首 页";
-                [btn setTitleEdgeInsets:UIEdgeInsetsMake(40, -60, 8, 0)];
-                break;
-            case 1:
-                ctitle = @"美女私房";
-                break;
-            case 2:
-                ctitle = @"星城故事";
-                break;
-            case 3:
-                ctitle = @"活动众筹";
-                break;
-            case 4:
-                ctitle = @"朋友圈";
-                break;
-            default:
-                break;
-        }
-        
-        [btn setTitle:ctitle forState:UIControlStateNormal];
-        [btnArray addObject:btn];
-        [titleArray addObject:ctitle];
-        [_tBarView addSubview:btn];
-        
+    // 初始化自定义TabBarItem -> UIButton
+    float coordinateX = 0;
+    for (int index = 0; index < 5; index++) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button.tag = index;
+        button.frame = CGRectMake(index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+        NSString *imageName = [NSString stringWithFormat:@"tabbar%d@2x.png", index];
+        [button setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        [_tabBarBG addSubview:button];
+        [button addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventTouchDown];
+        coordinateX += 62;
     }
     
 }
-
 
 #pragma mark 监听按钮点击切换视图
-- (void)changeViewController:(UIButton *)sender {
+- (void)changeViewController:(UIButton *)sender
+{
     if([StringUitl checkLogin]){
-        //根据按钮到tag属性来确定点击切换到对应视图
-        self.selectedIndex = (sender.tag-11);
-        sender.enabled = YES;
-        //    if(_previousBtn!=sender){
-        //        sender.enabled = YES;
-        //    }
-        _previousBtn = sender;
-        [self changeTabsFrameWithAnimation:sender];
-        sender.selected = YES;
-    }else{
         
+         self.selectedIndex = sender.tag;
+         [UIView animateWithDuration:0.2 animations:^{
+             _selectView.frame = CGRectMake(sender.tag*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+         }];
+        
+    }else{
         LoginViewController *loginView = [[LoginViewController alloc]init];
         [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+        //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
         [self presentViewController:loginView animated:YES completion:nil];
-        
     }
-    
 }
-
 
 
 #pragma mark控制滑动条效果
 -(void)changeTabsFrameWithAnimation:(UIButton *) sender{
     
     [UIView animateWithDuration:0.35 animations:^{
-        CGRect labelFrame = CGRectMake(self.selectedIndex * BTN_WIDTH, -1, BTN_WIDTH, SLIDER_HEIGHT);
-        [imageView setFrame:labelFrame];
-        
-        
-        //NewNavViewController *selectedController = (NewNavViewController *)self.selectedViewController;
-        //[self selectedController setItemTitleName:[titleArray objectAtIndex:self.selectedIndex]];
+        //CGRect labelFrame = CGRectMake(self.selectedIndex * BTN_WIDTH, -1, BTN_WIDTH, SLIDER_HEIGHT);
+        //[imageView setFrame:labelFrame];
     } completion:^(BOOL finished) {
         
     }];
@@ -157,8 +112,8 @@
 -(void)changeTabsFrame{
     
     [UIView animateWithDuration:0.35 animations:^{
-        CGRect labelFrame = CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT);
-        [imageView setFrame:labelFrame];
+        //CGRect labelFrame = CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT);
+        //[imageView setFrame:labelFrame];
     } completion:^(BOOL finished) {
         
     }];

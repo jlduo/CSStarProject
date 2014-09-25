@@ -49,8 +49,11 @@
 //    self.window.rootViewController = tabBar;
 //    self.window.backgroundColor = [UIColor whiteColor];
 //    [self.window makeKeyAndVisible];
+    
     [StringUitl setSessionVal:nil withKey:FORWARD_TYPE];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    //[StringUitl printSystemFont];
     
     return YES;
 }
@@ -58,7 +61,17 @@
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {
-    return UIInterfaceOrientationMaskPortrait;
+    if(_isFull){
+        
+        return UIInterfaceOrientationMaskAll;
+        
+    }else{
+        
+        return UIInterfaceOrientationMaskPortrait;
+        
+    }
+    
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

@@ -54,15 +54,15 @@
 
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = [UIFont fontWithName:@"Helvetica" size:24];
+    lblDetail.font = main_font(12);
     lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
     [self.view addSubview:lblDetail];
     
     //时间
     UILabel *lblTimeDetail = [[UILabel alloc] init];
-    lblTimeDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblTimeDetail.font = main_font(12);
     lblTimeDetail.textColor = [UIColor grayColor];
-    lblTimeDetail.frame = CGRectMake(5, 104, 65, 30);
+    lblTimeDetail.frame = CGRectMake(5, 104, 75, 30);
     [self.view addSubview:lblTimeDetail];
     
     //分割线
@@ -73,7 +73,7 @@
     
     //栏目名称
     UILabel *lblCategoryDetail = [[UILabel alloc] init];
-    lblCategoryDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblCategoryDetail.font = main_font(12);
     lblCategoryDetail.textColor = [UIColor grayColor];
     lblCategoryDetail.frame = CGRectMake(85, 104, 50, 30);
     lblCategoryDetail.text =@"星城故事";
@@ -93,7 +93,7 @@
     
     //点击量
     UILabel *lblNumberDetail = [[UILabel alloc] init];
-    lblNumberDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblNumberDetail.font = main_font(12);
     lblNumberDetail.textColor = [UIColor grayColor];
     lblNumberDetail.frame = CGRectMake(175, 104, 100, 30);
     [self.view addSubview:lblNumberDetail];
@@ -157,7 +157,7 @@
     //加入评论文字
     plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 2, 40, 26)];
     [plabel setText:@"评论"];
-    [plabel setFont:Font_Size(12)];
+    plabel.font = main_font(12);
     [plabel setTextAlignment:NSTextAlignmentCenter];
     [plabel setTextColor:[UIColor grayColor]];
     
@@ -188,7 +188,7 @@
     NSString *clickNum = [self getCommentNum];
     [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
     [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-    numBtn.titleLabel.font = Font_Size(14);
+    numBtn.titleLabel.font = main_font(14);
     
     //给按钮绑定事件
     [numBtn addTarget:self action:@selector(commentBtnClick) forControlEvents:UIControlEventTouchDown];
@@ -242,7 +242,7 @@
         [toolBar setFrame:CGRectMake(0, MAIN_FRAME_H-50-height, SCREEN_WIDTH,toolBar.frame.size.height+30)];
         [numBtn setFrame:CGRectMake(textField.frame.size.width+12, 34, 45, 30)];
         [numBtn setTitle:@"发 表" forState:UIControlStateNormal];
-        numBtn.titleLabel.font = Font_Size(14);
+        numBtn.titleLabel.font = main_font(14);
         
         [cIconView removeFromSuperview];
         [plabel setFrame:CGRectMake(0, plabel.frame.origin.y, plabel.frame.size.width, plabel.frame.size.height)];
@@ -261,7 +261,7 @@
             NSString *clickNum = [self getCommentNum];
             [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
             [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-            numBtn.titleLabel.font = Font_Size(14);
+            numBtn.titleLabel.font = main_font(14);
             
             [textField addSubview:cIconView];
             [plabel setFrame:CGRectMake(25, 2, 40, 26)];

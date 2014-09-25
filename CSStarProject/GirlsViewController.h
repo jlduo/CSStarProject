@@ -12,6 +12,7 @@
 #import "PicTableViewCell.h"
 #import "CustomTableCell.h"
 #import "VideoTableViewCell.h"
+#import "PhotoScrollViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "GirlsPhotosViewController.h"
 #import "ViewPassValueDelegate.h"

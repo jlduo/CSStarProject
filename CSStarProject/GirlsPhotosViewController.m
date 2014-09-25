@@ -48,23 +48,32 @@
     [self initToolBar];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
+    [customTabar hiddenDIYTaBar];
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
+    [scrollPicView setFrame:temFrame];
+    
+}
+
 -(void)setNavgationBar{
     //处理导航开始
     self.navigationController.navigationBarHidden = YES;
     [self.view setBackgroundColor:[UIColor blackColor]];
     UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAV_TITLE_HEIGHT+20)];
-    [navgationBar setBackgroundImage:[UIImage imageNamed:@"titlebar-gray@2x.png"] forBarMetrics:UIBarMetricsDefault];
+    [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     
     
     
     //处理标题
-    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
+    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
     [titleLabel setText:@"美女私房"];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setFont:Font_Size(20)];
+    [titleLabel setFont:Font_Size(22)];
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -105,7 +114,7 @@
 
 -(void)loadGirlPhotoData:(NSString *)articleId {
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms/GetAlbums/%@",articleId];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PHOTO_LIST,articleId];
     NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
     
     imageArr = [[NSMutableArray alloc]init];
@@ -127,28 +136,54 @@
     scrollPicView.delegate = self;
     scrollPicView.backgroundColor = [UIColor blackColor];
     //加载数据
+    UIImageView *imageView;
     for (int i=0; i<imageArr.count; i++) {
         
         NSString *imgUrl =[imageArr objectAtIndex:i];
         NSLog(@"imgurl==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 0, SCREEN_WIDTH, 240)];
+            if(IPHONE5){
+               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 15, SCREEN_WIDTH, 380)];
+            }else{
+               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 15, SCREEN_WIDTH, 290)];
+            }
             [imageView setImageWithURL:[NSURL URLWithString:imgUrl]
-                      placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+                      placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
             
             imageView.contentMode = UIViewContentModeScaleAspectFit;
             imageView.backgroundColor = [UIColor blackColor];
             
             [imageView setMultipleTouchEnabled:YES];
             [imageView setUserInteractionEnabled:YES];
-            [self addGestureRecognizerToView:imageView];
+            
+            imageView.tag = i;
+            [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)] ];
             [scrollPicView addSubview:imageView];
         }
     }
     [self.view addSubview:scrollPicView];
 }
 
+
+- (void)tapImage:(UITapGestureRecognizer *)tap
+{
+    //显示相册
+    NSInteger count = imageArr.count;
+    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+    
+    for (int i = 0; i<count; i++) {
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        photo.url = [NSURL URLWithString:imageArr[i]]; // 图片路径
+        photo.srcImageView = scrollPicView.subviews[i]; // 来源于哪个UIImageView
+        [photos addObject:photo];
+    }
+    
+    MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+    browser.currentPhotoIndex = tap.view.tag; // 弹出相册时显示的第一张图片
+    browser.photos = photos; // 设置所有的图片
+    [browser show];
+}
 
 -(void)initPhotoTitle{
     
@@ -161,7 +196,7 @@
     NSString *s = [titleArr objectAtIndex:0];
     descLabel.text = [NSString stringWithFormat:@"%d/%d  %@",1,imageArr.count,s];
     //4.获取所要使用的字体实例
-    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+    UIFont *font = main_font(16);
     descLabel.font = font;
     descLabel.textColor = [UIColor whiteColor];
     //5.UILabel字符显示的最大大小
@@ -169,7 +204,7 @@
     //6.计算UILabel字符显示的实际大小
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,325, labelsize.width, labelsize.height)];
+    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-49-labelsize.height, labelsize.width, labelsize.height)];
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [self.view addSubview:descLabel];
     
@@ -182,11 +217,11 @@
     descLabel.text = [NSString stringWithFormat:@"%d/%d  %@",page+1,imageArr.count,s];
     CGSize size = CGSizeMake(SCREEN_WIDTH,80);
     
-    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+    UIFont *font = main_font(16);
     descLabel.font = font;
     descLabel.textColor = [UIColor whiteColor];
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
-    [descLabel setFrame:CGRectMake(0,325, labelsize.width, labelsize.height)];
+    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-49-labelsize.height, labelsize.width, labelsize.height)];
     //NSLog(@"%d", page);
     
 }
@@ -233,7 +268,7 @@
     //加入评论文字
     plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 0, 40, 26)];
     [plabel setText:@"评论"];
-    [plabel setFont:Font_Size(12)];
+    plabel.font = main_font(14);
     [plabel setTextAlignment:NSTextAlignmentCenter];
     [plabel setTextColor:[UIColor grayColor]];
     
@@ -272,7 +307,7 @@
     NSString *clickNum = [self getCommentNum:articelId];
     [numBtn setTitle:clickNum forState:UIControlStateNormal];
     [numBtn setTitle:clickNum forState:UIControlStateHighlighted];
-    numBtn.titleLabel.font = Font_Size(14);
+    numBtn.titleLabel.font = main_font(14);
     
     //给按钮绑定事件
     [numBtn addTarget:self action:@selector(commentBtnClick) forControlEvents:UIControlEventTouchDown];
@@ -284,7 +319,7 @@
 -(NSString *)getCommentNum:(NSString *)articleId{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"%@/Comment/GetCommentTotal/%@",REMOTE_URL,articleId];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,COMMENT_COUNT_URL,articleId];
     NSMutableDictionary *commentDic = (NSMutableDictionary *)[convertJson requestData:url];
     NSString *comments = [commentDic valueForKey:@"result"];
     NSLog(@"评论条数＝＝%@",comments);
@@ -339,7 +374,7 @@
         [numBtn setTitle:@"发 表" forState:UIControlStateNormal];
         [numBtn setTitle:@"发 表" forState:UIControlStateHighlighted];
         //[numBtn setFont:Font_Size(14)];//过时方法
-        numBtn.titleLabel.font = Font_Size(14);
+        numBtn.titleLabel.font = main_font(14);
         
         [cIconView removeFromSuperview];
         [plabel setFrame:CGRectMake(0, plabel.frame.origin.y, plabel.frame.size.width, plabel.frame.size.height)];
@@ -356,7 +391,7 @@
         NSString *clickNum = [self getCommentNum:articelId];
         [numBtn setTitle:clickNum forState:UIControlStateNormal];
         [numBtn setTitle:clickNum forState:UIControlStateHighlighted];
-        numBtn.titleLabel.font = Font_Size(14);
+        numBtn.titleLabel.font = main_font(14);
         
         if([StringUitl isEmpty:textField.text]){
             [textField addSubview:cIconView];
@@ -444,50 +479,9 @@
 }
 
 
-
-// 添加所有的手势
-- (void) addGestureRecognizerToView:(UIView *)view
-{
-    
-    // 缩放手势
-    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchView:)];
-    [view addGestureRecognizer:pinchGestureRecognizer];
-
-}
-
-
-// 处理缩放手势
-- (void) pinchView:(UIPinchGestureRecognizer *)pinchGestureRecognizer
-{
-    UIView *view = pinchGestureRecognizer.view;
-    if (pinchGestureRecognizer.state == UIGestureRecognizerStateBegan || pinchGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        view.transform = CGAffineTransformScale(view.transform, pinchGestureRecognizer.scale, pinchGestureRecognizer.scale);
-        pinchGestureRecognizer.scale = 1;
-    }
-}
-
-
-
 -(void)goPreviou{
     NSLog(@"back");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
--(void)viewWillAppear:(BOOL)animated{
-    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
-    [tabBarController hiddenDIYTaBar];
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-}
-
--(void)viewWillDisappear:(BOOL)animated
-
-{
-    [super viewWillDisappear:animated];
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-}
 @end

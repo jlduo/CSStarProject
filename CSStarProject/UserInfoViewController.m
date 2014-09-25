@@ -62,10 +62,11 @@
     //处理actionSheet
     CGRect frameRect = CGRectMake(MAIN_FRAME_X, MAIN_FRAME_H+20, SCREEN_WIDTH, 200);
     sheetView = [[UIView alloc]initWithFrame:frameRect];
-    sheetView.backgroundColor = [UIColor whiteColor];
+    sheetView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     UIButton *pzBtn = [[UIButton alloc] initWithFrame:CGRectMake(30, 20, SCREEN_WIDTH-60,45)];
     pzBtn.backgroundColor = [UIColor redColor];
+    pzBtn.titleLabel.font = main_font(18);
     [pzBtn setTitle:@"拍 照" forState:UIControlStateNormal];
     [pzBtn setTitle:@"拍 照" forState:UIControlStateHighlighted];
     [pzBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -78,6 +79,7 @@
     
     UIButton *tpBtn = [[UIButton alloc] initWithFrame:CGRectMake(30, 75, SCREEN_WIDTH-60,45)];
     tpBtn.backgroundColor = [UIColor redColor];
+    tpBtn.titleLabel.font = main_font(18);
     [tpBtn setTitle:@"从相册选择照片" forState:UIControlStateNormal];
     [tpBtn setTitle:@"从相册选择照片" forState:UIControlStateHighlighted];
     [tpBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -89,10 +91,11 @@
     
     UIButton *ceBtn = [[UIButton alloc] initWithFrame:CGRectMake(30, 130, SCREEN_WIDTH-60,45)];
     ceBtn.backgroundColor = [UIColor darkGrayColor];
+    ceBtn.titleLabel.font = main_font(18);
     [ceBtn setTitle:@"取 消" forState:UIControlStateNormal];
     [ceBtn setTitle:@"取 消" forState:UIControlStateHighlighted];
     [ceBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [ceBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [ceBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     ceBtn.layer.masksToBounds = YES;
     ceBtn.layer.cornerRadius = 3.5;
     
@@ -328,8 +331,6 @@
     [UIView animateWithDuration:0.35 animations:^{
         
         CGPoint tempCenter = sheetView.center;
-        NSLog(@"y=%f",sheetView.frame.origin.y);
-        NSLog(@"y=%f",MAIN_FRAME_H);
         if (sheetView.frame.origin.y == MAIN_FRAME_H+20) {
             tempCenter.y -= sheetView.bounds.size.height;
         } else {
@@ -426,11 +427,11 @@
         imageUrl = [documentsDirectory stringByAppendingPathComponent:@"selfPhoto.jpg"];
     }
     
-    NSLog(@"imageUrl->>%@",imageUrl);
-    NSLog(@"imageExt->>%@",[self getFileExtName:imageUrl]);
+    //NSLog(@"imageUrl->>%@",imageUrl);
+    //NSLog(@"imageExt->>%@",[self getFileExtName:imageUrl]);
     
     NSURL *uploadImgUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_ADMIN_URL,UPLOAD_IMG_URL]];
-    NSLog(@"uploadImgUrl->>%@",uploadImgUrl);
+    //NSLog(@"uploadImgUrl->>%@",uploadImgUrl);
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadImgUrl];
     [ASIHTTPRequest setSessionCookies:nil];
     
@@ -612,6 +613,7 @@
             bigCell.bigCellPic.layer.masksToBounds =YES;
             bigCell.bigCellPic.layer.cornerRadius =45;
             bigCell.bigCellTitle.text = @"更改头像";
+            bigCell.bigCellTitle.font = main_font(14);
             
             return bigCell;
         }else{
@@ -620,7 +622,8 @@
             [stableView registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
             smallCell1= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
             smallCell1.selectionStyle = UITableViewCellSelectionStyleNone;
-            
+            smallCell1.smallCellValue.font = main_font(14);
+            smallCell1.smallCellTitle.font = main_font(14);
             switch (indexPath.row) {
                 case 1:
                     smallCell1.smallCellValue.text =[StringUitl getSessionVal:USER_NICK_NAME];
@@ -646,7 +649,8 @@
         [stableView registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
         UserSmallTableViewCell *smallCell= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
         smallCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        smallCell.smallCellValue.font = main_font(14);
+        smallCell.smallCellTitle.font = main_font(14);
         switch (indexPath.row) {
             case 0:
                 smallCell.smallCellValue.text =[StringUitl getSessionVal:USER_SEX];
