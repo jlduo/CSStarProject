@@ -14,12 +14,14 @@
     NSString * dataType;
     NSDictionary *cellDic;
     NSArray *sourceArray;
+    NSArray *slideArr;
     FFScrollView *scrollView;
     UIButton *footerBtn;
     CommonViewController *comViewController;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
+    MBProgressHUD *HUD;
 }
 
 @end
@@ -33,8 +35,13 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    [self initLoadData];
+
+}
+
+-(void)initLoadData{
+    
     [self setTableData];
-    //_homeTableView.backgroundColor = [UIColor redColor];
     self.homeTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     //_homeTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _homeTableView.rowHeight = 85;
@@ -45,12 +52,69 @@
     //集成刷新控件
     [self setHeaderRereshing];
     [self setFooterRereshing];
-
+    //[self initLogin];
+    
 }
 
 -(void)initScroll{
     scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 69, SCREEN_WIDTH, 180) views:sourceArray];
+    NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
+    
+    NSArray *varr = [[scrollView scrollView] subviews];
+    for (int i=0; i<varr.count; i++) {
+        
+        UIImageView *imageView = (UIImageView *)varr[i];
+       // NSLog(@"arr=%@",imageView);
+        [imageView setMultipleTouchEnabled:YES];
+        [imageView setUserInteractionEnabled:YES];
+        
+        imageView.tag = i;
+        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
+        
+    }
+    
     _homeTableView.tableHeaderView = scrollView;
+}
+
+- (void)tapImage:(UITapGestureRecognizer *)tap{
+    
+    int tag =  tap.view.tag;
+    NSLog(@"%d==",tag);
+    NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
+    NSString *dataId = [[slideDic valueForKey:@"_id"] stringValue];
+    NSString *data_Type = [slideDic valueForKey:@"_category_call_index"];
+    if([self isNotEmpty:dataId]){
+        if([data_Type isEqual:@"video"]){//视频
+            GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+            passValelegate = videoView;
+            [passValelegate passValue:dataId];
+            [self.navigationController pushViewController:videoView animated:YES];
+        }
+        
+        if([data_Type isEqual:@"albums"]){//相册
+            GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
+            passValelegate = girlPhoto;
+            [passValelegate passValue:dataId];
+            [self.navigationController pushViewController:girlPhoto animated:YES];
+        }
+        
+        
+        if([data_Type isEqual:@"article"]){//文章
+            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+            passValelegate = storyDetail;
+            [passValelegate passValue:dataId];
+            [self.navigationController pushViewController:storyDetail animated:YES];
+        }
+        
+        if([data_Type isEqual:@"slide"]){//默认文章
+            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+            passValelegate = storyDetail;
+            [passValelegate passValue:dataId];
+            [self.navigationController pushViewController:storyDetail animated:YES];
+        }
+        
+        
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,6 +124,10 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
+    [self initLoadData];
+    [_homeTableView reloadData];
+    
+    
 }
 
 
@@ -100,6 +168,8 @@
     
     [self initScroll];
     [self.homeTableView reloadData];
+    
+    [self showCustomAlert:@"数据刷新成功.."];
 }
 
 
@@ -109,6 +179,51 @@
     [self.view addSubview:[super setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:Nil]];
 }
 
+-(void)initLogin{
+    
+     HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:HUD];
+    
+	HUD.labelText = @"登录初始化..";
+    HUD.labelFont = main_font(16);
+	HUD.dimBackground = YES;
+    HUD.delegate = self;
+    [HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
+    
+}
+
+- (void)myTask {
+    sleep(1);
+    BOOL islogin = [StringUitl checkLogin];
+    if(islogin){
+        HUD.labelText = @"初始化完毕..";
+        HUD.dimBackground = YES;
+        
+        [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
+    }else{
+        [StringUitl setSessionVal:@"0" withKey:USER_IS_LOGINED];
+    }
+    
+    sleep(1);
+    HUD.hidden = YES;
+}
+
+
+-(void)showCustomAlert:(NSString *)msg{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:HUD];
+	HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:SUCCESS_LOGO]];
+    HUD.mode = MBProgressHUDModeCustomView;
+	
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [HUD show:YES];
+	[HUD hide:YES afterDelay:1];
+}
 
 
 -(void)setTableData{
@@ -139,12 +254,12 @@
 -(void)loadSliderPic{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"%@%@/3/is_red=1",REMOTE_URL,SLIDE_TOP];
-    NSArray *slideArr = (NSArray *)[convertJson requestData:url];
+    NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,SLIDE_TOP];
+    slideArr = (NSArray *)[convertJson requestData:url];
     if(slideArr!=nil && slideArr.count>0){
         sourceArray = [NSMutableArray arrayWithArray:[slideArr valueForKey:@"_img_url"]];
     }
-    //NSLog(@"sourceArray====%@",sourceArray);
+    NSLog(@"sourceArray====%@",sourceArray);
     
 }
 
@@ -208,7 +323,7 @@
     //设置每组的标题
     UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 30)];
     headtitle.text = [_headTitleArray objectAtIndex:section];
-    headtitle.font = main_font(18);
+    headtitle.font = TITLE_FONT;
     
     [sectionHeadView addSubview:imageView];
     [sectionHeadView addSubview:headtitle];
@@ -364,9 +479,9 @@
                             placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
-        videoCell.videoTitle.font = main_font(18);
+        videoCell.videoTitle.font = TITLE_FONT;
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
-        videoCell.videoDesc.font = main_font(16);
+        videoCell.videoDesc.font = DESC_FONT;
         NSNumber * clickNum =[cellDic valueForKey:@"_click"];
         videoCell.clickNum.text = [clickNum stringValue];
         videoCell.videoTime.text = [cellDic valueForKey:@"_call_index"];
@@ -406,9 +521,9 @@
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
         picCell.descView.attributedText = attributedString;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
-        picCell.titleView.font = main_font(18);
+        picCell.titleView.font = TITLE_FONT;
         picCell.descView.text = labelText;
-        picCell.descView.font = main_font(16);
+        picCell.descView.font = DESC_FONT;
         return picCell;
         
     }

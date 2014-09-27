@@ -11,9 +11,10 @@
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
 #import "StringUitl.h"
+#import "MBProgressHUD.h"
 #import "UserAgreenViewController.h"
 
-@interface RegisterViewController : UIViewController<UITextFieldDelegate>
+@interface RegisterViewController : UIViewController<UITextFieldDelegate,MBProgressHUDDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *registerView;
 @property (weak, nonatomic) IBOutlet UIView *phoneNumView;
@@ -23,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordVal;
 @property (weak, nonatomic) IBOutlet UIView *checkNumView;
 @property (weak, nonatomic) IBOutlet UITextField *checkNum;
+@property (weak, nonatomic) IBOutlet UILabel *randomNum;
 
 @property (weak, nonatomic) IBOutlet UIButton *checkNumBtn;
 

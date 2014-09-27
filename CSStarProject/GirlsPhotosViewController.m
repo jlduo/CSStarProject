@@ -46,6 +46,8 @@
     [self initScrollView];
     [self initPhotoTitle];
     [self initToolBar];
+    
+    [self showCustomTips:@"点击全屏浏览"];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -73,7 +75,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setFont:Font_Size(22)];
+    titleLabel.font = BANNER_FONT;
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -110,6 +112,41 @@
     
     NSLog(@"ssarticleId==%@",val);
     articelId = val;
+}
+
+-(void)showCustomTips:(NSString *)msg{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hand@2x.png"]];
+    //[imgView setFrame:CGRectMake(0, 0, 120, 120)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:2];
+}
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
 }
 
 -(void)loadGirlPhotoData:(NSString *)articleId {
@@ -182,6 +219,7 @@
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
     browser.currentPhotoIndex = tap.view.tag; // 弹出相册时显示的第一张图片
     browser.photos = photos; // 设置所有的图片
+    [self dismissKeyBoard];
     [browser show];
 }
 
@@ -196,15 +234,16 @@
     NSString *s = [titleArr objectAtIndex:0];
     descLabel.text = [NSString stringWithFormat:@"%d/%d  %@",1,imageArr.count,s];
     //4.获取所要使用的字体实例
-    UIFont *font = main_font(16);
+    UIFont *font = main_font(14);
     descLabel.font = font;
     descLabel.textColor = [UIColor whiteColor];
     //5.UILabel字符显示的最大大小
-    CGSize size = CGSizeMake(SCREEN_WIDTH,80);
+    CGSize size = CGSizeMake(SCREEN_WIDTH,150);
     //6.计算UILabel字符显示的实际大小
-    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-49-labelsize.height, labelsize.width, labelsize.height)];
+    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-60-labelsize.height, SCREEN_WIDTH, labelsize.height+20)];
+    descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [self.view addSubview:descLabel];
     
@@ -215,13 +254,14 @@
     int page = scrollView.contentOffset.x / scrollView.frame.size.width;
     NSString *s = [titleArr objectAtIndex:page];
     descLabel.text = [NSString stringWithFormat:@"%d/%d  %@",page+1,imageArr.count,s];
-    CGSize size = CGSizeMake(SCREEN_WIDTH,80);
+    CGSize size = CGSizeMake(SCREEN_WIDTH,150);
     
-    UIFont *font = main_font(16);
+    UIFont *font = main_font(14);
     descLabel.font = font;
     descLabel.textColor = [UIColor whiteColor];
-    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
-    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-49-labelsize.height, labelsize.width, labelsize.height)];
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
+    descLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-60-labelsize.height, SCREEN_WIDTH, labelsize.height+20)];
     //NSLog(@"%d", page);
     
 }
@@ -413,7 +453,8 @@
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([StringUitl isEmpty:textVal]){
-            [StringUitl alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            //[StringUitl alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{
             //提交数据
             [self postCommetnVal:articelId];

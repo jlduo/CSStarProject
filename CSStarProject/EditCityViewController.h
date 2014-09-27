@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIView *cityBg;
 @property (weak, nonatomic) IBOutlet UITextField *cityText;
 @property (strong, nonatomic) NSString *cityValue;
+@property (strong, nonatomic) NSString *provinceValue;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *cityPciker;
 @property (copy,nonatomic) NSMutableArray *cityArray;//城市数据

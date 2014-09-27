@@ -28,6 +28,8 @@
     UserBigTableViewCell *bigCell;
     UserSmallTableViewCell *smallCell1;
     
+    MBProgressHUD *HUD;
+    
 }
 
 
@@ -144,6 +146,24 @@
     
     [stableView reloadData];
 }
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 
 -(void)setNavgationBar{
     //处理导航开始
@@ -474,7 +494,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//上传失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
         
@@ -500,7 +521,8 @@
 - (void)uploadFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 //获取用户信息
@@ -530,7 +552,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
         

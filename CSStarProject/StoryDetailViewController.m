@@ -54,7 +54,7 @@
 
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(12);
+    lblDetail.font = main_font(16);
     lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
     [self.view addSubview:lblDetail];
     
@@ -134,6 +134,24 @@
     [self.view addSubview:toolBar];
     
     
+}
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
 }
 
 -(void)initTextView{
@@ -282,7 +300,8 @@
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
-            [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{ 
             //提交评论
             NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
@@ -292,7 +311,7 @@
                 return;
             }
             NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
-            NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/AddComment/",REMOTE_URL];
+            NSString *url = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
             NSURL *login_url = [NSURL URLWithString:url];
             ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
             [ASIHTTPRequest setSessionCookies:nil];
@@ -341,14 +360,17 @@
         [textField addSubview:plabel];
         isOpen = NO;
         
-        [StringUitl alertMsg:@"提交成功" withtitle:nil];
+        //[StringUitl alertMsg:@"提交成功" withtitle:nil];
+        [self showCustomAlert:@"提交成功" widthType:SUCCESS_LOGO];
     }else{
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 -(void)passValue:(NSString *)val{

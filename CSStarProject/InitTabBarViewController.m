@@ -76,23 +76,27 @@
         coordinateX += 62;
     }
     
+    self.selectedIndex = 0;
+    
 }
 
 #pragma mark 监听按钮点击切换视图
 - (void)changeViewController:(UIButton *)sender
 {
+    
     if([StringUitl checkLogin]){
-        
          self.selectedIndex = sender.tag;
          [UIView animateWithDuration:0.2 animations:^{
              _selectView.frame = CGRectMake(sender.tag*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
          }];
         
     }else{
-        LoginViewController *loginView = [[LoginViewController alloc]init];
-        [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
-        //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
-        [self presentViewController:loginView animated:YES completion:nil];
+        if(sender.tag!=0){
+            LoginViewController *loginView = [[LoginViewController alloc]init];
+            [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+            //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
+            [self presentViewController:loginView animated:YES completion:nil];
+        }
     }
 }
 

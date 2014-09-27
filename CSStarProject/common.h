@@ -34,6 +34,10 @@
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(15)//主字体
 
+#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",24)//标题字体
+#define TITLE_FONT main_font(17)//标题字体
+#define DESC_FONT main_font(15)//描述字体
+
 #define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
 #define CONTENT_BACKGROUND @"background.jpeg"//正文背景
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
@@ -64,7 +68,7 @@
 #define GET_COMMENT_URL @"/Comment/GetArticleComments"//获取文章评论
 
 //首页数据
-#define SLIDE_TOP @"/cms/GetArticles/slide"
+#define SLIDE_TOP @"/cms/GetSlides/5"
 #define CITY_TOP @"/cms/GetArticles/city"
 #define GIRLS_TOP @"/cms/GetArticles/girl"
 
@@ -90,6 +94,10 @@
 #define CITY_ID @"cityid"
 #define USER_SEX @"sex"
 #define USER_LOGO @"logo"
+
+#define SUCCESS_LOGO @"tips_success.png"
+#define ERROR_LOGO @"tips_error.png"
+#define WARNN_LOGO @"tips_warnn.png"
 
 #define DEFAULT_VOID_COLOR [UIColor whiteColor]
 

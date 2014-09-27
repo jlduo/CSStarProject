@@ -7,7 +7,6 @@
 //
 #import "GirlsVideoViewController.h"
 #import "InitTabBarViewController.h"
-#import "CommentListViewController.h"
 #import "StoryCommentViewController.h"
 
 @interface GirlsVideoViewController (){
@@ -39,9 +38,12 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    [self initLoadData];
+}
+
+-(void)initLoadData{
     //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
+    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
     
     videoTableView = [[UITableView alloc] initWithFrame:tframe];
     videoTableView.delegate = self;
@@ -67,7 +69,7 @@
     //集成刷新控件
     [self setHeaderRereshing];
     if(topVideoArray!=nil&&topVideoArray.count>2){
-      [self setFooterRereshing];
+        [self setFooterRereshing];
     }
     
 }
@@ -83,12 +85,34 @@
     return self;
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+    
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     [videoTableView setFrame:temFrame];
+    
+    [self initLoadData];
+    [videoTableView reloadData];
+    [self changeRation:NO];
     
 }
 
@@ -291,7 +315,8 @@
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
-            [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{
             //提交数据
             [self postCommetnVal:dataId];
@@ -339,12 +364,14 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
+        //[StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
+        [self showCustomAlert:@"提交评论信息成功!" widthType:SUCCESS_LOGO];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
         [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"提示信息"];
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:SUCCESS_LOGO];
         
     }
     
@@ -353,7 +380,8 @@
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"提交数据失败" widthType:ERROR_LOGO];
 }
 
 
@@ -409,15 +437,16 @@
     UIFont *font = main_font(16);
     descLabel.font = font;
     //5.UILabel字符显示的最大大小
-    CGSize size = CGSizeMake(SCREEN_WIDTH,80);
+    CGSize size = CGSizeMake(SCREEN_WIDTH,150);
     //6.计算UILabel字符显示的实际大小
-    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,0, labelsize.width-5, labelsize.height)];
+    [descLabel setFrame:CGRectMake(0,0, SCREEN_WIDTH, labelsize.height)];
+    descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     [videoDesc setFrame:CGRectMake(5,185, SCREEN_WIDTH, labelsize.height+10)];
     
     //修改videoTable的frame
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-44));
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-30));
     [videoTableView setFrame:temFrame];
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [videoDesc addSubview:descLabel];
@@ -449,7 +478,7 @@
     
     loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-40)/2, 90, 80, 40)];
     loadingLabel.text = @"加载中...";
-    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    UIFont *font = main_font(12);
     loadingLabel.font = font;
     loadingLabel.textColor = [UIColor whiteColor];
     loadingLabel.backgroundColor = [UIColor clearColor];
@@ -504,7 +533,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMoviePlayStateCallback:)
                                                  name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:moviePlayer];
+    
+    
+    
 }
+
 
 -(void)removeNotice:(NSNotification*)notify{
     //视频播放对象
@@ -533,6 +566,7 @@
     
     MPMoviePlayerController *player = notify.object;
     MPMoviePlaybackState playState = player.playbackState;
+    
     NSLog(@"playState==%d",playState);
     if(playState==MPMoviePlaybackStatePaused){
         [self changeRation:NO];
@@ -578,7 +612,8 @@
          NSRange range2 = [string2 rangeOfString:@"http://"];
         if(range2.location!=NSNotFound){
             [self changeRation:NO];
-            [StringUitl alertMsg:@"视频地址有误,加载失败!" withtitle:@"错误提示"];
+            //[StringUitl alertMsg:@"视频地址有误,加载失败!" withtitle:@"错误提示"];
+            [self showCustomAlert:@"视频地址有误,加载失败" widthType:ERROR_LOGO];
             return;
         }
     }
@@ -586,14 +621,16 @@
     
     if([StringUitl isEmpty:remoteUrl]){
         [self changeRation:NO];
-        [StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"错误提示"];
+        [self showCustomAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
         return;
     }
     
     NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
     if(![fileExt isEqualToString:@"mp4"]){
         [self changeRation:NO];
-        [StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"错误提示"];
+        [self showCustomAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
         return;
     }
     
@@ -601,16 +638,13 @@
     [videoPic removeFromSuperview];
     [moviePlayer play];
     
-    if(moviePlayer.playbackState!=MPMoviePlaybackStateStopped){
+    //if(moviePlayer.playbackState!=MPMoviePlaybackStateStopped){
         
         [moviePlayer setFullscreen:YES animated:YES];
         [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
         [self changeRation:YES];
-        
-    }
     
-
-
+    //}
 }
 
 
@@ -703,7 +737,7 @@
     //设置每组的标题
     UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(12, 8, 100, 22)];
     headtitle.text = @"私房推荐";
-    headtitle.font = main_font(18);
+    headtitle.font = TITLE_FONT;
     
     [sectionHeadView addSubview:imageView];
     [sectionHeadView addSubview:headtitle];
@@ -775,8 +809,8 @@
     videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
     videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
     
-    videoCell.videoTitle.font = main_font(18);
-    videoCell.videoDesc.font = main_font(16);
+    videoCell.videoTitle.font = TITLE_FONT;
+    videoCell.videoDesc.font = DESC_FONT;
     NSNumber * clickNum =[cellDic valueForKey:@"_click"];
     videoCell.clickNum.text = [clickNum stringValue];
     return videoCell;

@@ -35,6 +35,12 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    [self initLoadData];
+    
+}
+
+-(void)initLoadData{
+    
     bannerData = [[NSMutableDictionary alloc]init];
     _girlsDataList = [[NSMutableArray alloc]init];
     
@@ -45,7 +51,7 @@
     [self setHeaderRereshing];
     [self setFooterRereshing];
     [self setBannerView];
-
+    
     _girlsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _girlsTableView.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
     
@@ -67,16 +73,34 @@
     UILabel *picTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 155, SCREEN_WIDTH, 25)];
     picTitle.text = [bannerData valueForKey:@"_title"];
     picTitle.backgroundColor = [UIColor blackColor];
-    picTitle.alpha = 0.4f;
+    picTitle.alpha = 0.7f;
     picTitle.textColor = [UIColor whiteColor];
     picTitle.textAlignment = NSTextAlignmentLeft;
-    picTitle.font = main_font(16);
+    picTitle.font = TITLE_FONT;
     
     [bannerBaseView addSubview:bannerView];
     [bannerView addSubview:picTitle];
     _girlsTableView.tableHeaderView = bannerBaseView;
     
 }
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 
 -(void)UesrClicked:(UIImageView *)imgView{
     
@@ -149,6 +173,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    
+    [self initLoadData];
+    [_girlsTableView reloadData];
 }
 
 
@@ -159,8 +186,10 @@
         ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
         NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,PHOTO_BANNER_URL];
         NSMutableArray *bannerArr = (NSMutableArray *)[convertJson requestData:url];
-        if(bannerArr!=nil&&bannerArr.count>0){
+        if(bannerArr!=nil && bannerArr.count>0){
             bannerData = (NSMutableDictionary *)bannerArr[0];
+        }else{
+            bannerData = [[NSMutableDictionary alloc]init];
         }
         //NSLog(@"bannerData===%@",bannerData);
 }
@@ -169,14 +198,16 @@
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/0/%@/%@",REMOTE_URL,GIRLS_LIST,pageSize,pageIndex];
     NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
-    [_girlsDataList addObjectsFromArray:newDataArr];
-    //获取最大文章ID
-    if([pageIndex isEqualToString:@"1"]){
-        max_id = [[newDataArr objectAtIndex:0] valueForKey:@"_id"];
-        NSLog(@"max_id=%@",max_id);
-        
-    }
-    
+     if (newDataArr!=nil&&newDataArr.count>0) {
+        [_girlsDataList addObjectsFromArray:newDataArr];
+        //获取最大文章ID
+        if([pageIndex isEqualToString:@"1"]){
+            max_id = [[newDataArr objectAtIndex:0] valueForKey:@"_id"];
+        }
+     }else{
+         [self showCustomAlert:@"没有更多数据了" widthType:WARNN_LOGO];
+         return;
+     }
     
     //NSLog(@"_girlsDataList===%@",_girlsDataList);
 }
@@ -186,11 +217,17 @@
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@/%@",REMOTE_URL,LOAD_NEW_DATA,@"girl",max_id];
     NSMutableArray * newDataArr = (NSMutableArray *)[convertJson requestData:url];
+    if (newDataArr!=nil&&newDataArr.count>0) {
+        [newDataArr addObjectsFromArray:_girlsDataList];
+        _girlsDataList = [[NSMutableArray alloc]init];
+        [_girlsDataList addObjectsFromArray:newDataArr];
+        //NSLog(@"_girlsDataList===%@",_girlsDataList);
+    }else{
+        [self showCustomAlert:@"没有新数据了" widthType:WARNN_LOGO];
+        return;
+    }
     
-    [newDataArr addObjectsFromArray:_girlsDataList];
-    _girlsDataList = [[NSMutableArray alloc]init];
-    [_girlsDataList addObjectsFromArray:newDataArr];
-    //NSLog(@"_girlsDataList===%@",_girlsDataList);
+
     
 }
 
@@ -292,8 +329,8 @@
         picCell.cellBgView.layer.masksToBounds = YES;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
         picCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
-        picCell.titleView.font = main_font(18);
-        picCell.descView.font = main_font(16);
+        picCell.titleView.font = TITLE_FONT;
+        picCell.descView.font = DESC_FONT;
         return picCell;
         
     }else if([dataType isEqualToString:@"video"]){
@@ -318,8 +355,8 @@
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
         videoCell.clickNum.text = [cellDic valueForKey:@"clicknum"];
-        videoCell.videoTitle.font = main_font(18);
-        videoCell.videoDesc.font = main_font(16);
+        videoCell.videoTitle.font = TITLE_FONT;
+        videoCell.videoDesc.font = DESC_FONT;
         return videoCell;
    }else{
        
@@ -365,7 +402,7 @@
            //[StringUitl setViewBorder:photoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
            
            [photoCell.titleView setText:[cellDic valueForKey:@"_title"]];
-           photoCell.titleView.font = main_font(16);
+           photoCell.titleView.font = TITLE_FONT;
            
        }
        

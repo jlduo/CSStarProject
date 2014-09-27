@@ -38,6 +38,9 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     [self setTableData];
+    
+    _storyTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    _storyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 
@@ -47,6 +50,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    
+    [self setTableData];
+    [self.storyTableView reloadData];
 }
 
 //加载头部刷新
@@ -101,7 +107,6 @@
        [_storyDataList addObject:addArray];
         //集成刷新控件
         [self setFooterRereshing];//有2条数据后加载底部刷新
-        _storyTableView.backgroundColor = [UIColor lightGrayColor];
         [self.storyTableView reloadData];
     }
 }
@@ -129,15 +134,19 @@
     NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticlesByDate/city/0/0",REMOTE_URL];
     NSMutableArray *array = (NSMutableArray *)[jsonData requestData:url];
  
-    //获取接口数据的日期时间
-    NSDictionary *firstDic = [array objectAtIndex:0];
-    nowUpTime = [[firstDic valueForKey:@"_add_time"] substringToIndex:10];
-    nowDownTime = nowUpTime;
-    
-    _storyDataList = [[NSMutableArray alloc] init];
-    [_storyDataList addObject:array];
-    [self setHeaderRereshing];
-    [self setFooterRereshing];
+     _storyDataList = [[NSMutableArray alloc] init];
+    if(array!=nil&&array.count>0){
+        //获取接口数据的日期时间
+        NSDictionary *firstDic = [array objectAtIndex:0];
+        nowUpTime = [[firstDic valueForKey:@"_add_time"] substringToIndex:10];
+        nowDownTime = nowUpTime;
+        
+        [_storyDataList addObject:array];
+        
+        [self setHeaderRereshing];
+        [self setFooterRereshing];
+    }
+
 }
 
 
@@ -147,14 +156,14 @@
     if(sarray!=nil && sarray.count>0){
         CGRect headFrame = CGRectMake(0, 0, SCREEN_WIDTH, 35);
         sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
-        sectionHeadView.backgroundColor = [UIColor whiteColor];
+        sectionHeadView.backgroundColor = [UIColor clearColor];
         //设置每组的标题
         UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-80)/2, 3, 80, 20)];
         headtitle.backgroundColor = [UIColor lightGrayColor];
         
         NSDictionary *cellData = (NSDictionary *)[sarray objectAtIndex:0];
         headtitle.text = [[cellData valueForKey:@"_add_time"] substringToIndex:10];
-        headtitle.font = [UIFont fontWithName:@"Arial" size:13.0f];
+        headtitle.font = main_font(12);
         headtitle.textColor = [UIColor whiteColor];
         headtitle.textAlignment = NSTextAlignmentCenter;
         
@@ -211,7 +220,7 @@
             cellHeight = 200.0f;
         }
     }else{
-            cellHeight = 50.0f;
+            cellHeight = 75.0f;
     }
     return cellHeight;
 }
@@ -237,16 +246,21 @@
         
         StoryTableViewBigDescCell *storyBDCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StoryBDCell"];
         storyBDCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        storyBDCell.backgroundColor = [UIColor clearColor];
         
         NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
-        UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        storyBDCell.imgView.image = picImg;
-        
+        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]];
+        UIImage *picImg = [UIImage imageWithData:imgData];
+        if(imgData!=nil){
+            storyBDCell.imgView.image = picImg;
+        }else{
+            storyBDCell.imgView.image = [UIImage imageNamed:NOIMG_ICON];
+        }
         
         storyBDCell.titleView.text = [cellDic valueForKey:@"_title"];
         storyBDCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
-        storyBDCell.titleView.font = main_font(18);
-        storyBDCell.descView.font = main_font(16);
+        storyBDCell.titleView.font = TITLE_FONT;
+        storyBDCell.descView.font = DESC_FONT;
         return storyBDCell;
         
     }else{
@@ -260,13 +274,15 @@
             
             StoryTableViewBigCell *storyBCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StoryBCell"];
             storyBCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            storyBCell.backgroundColor = [UIColor clearColor];
             
             NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
             storyBCell.cellImgView.image = picImg;
             
+            
             storyBCell.imgTitle.text = [cellDic valueForKey:@"_title"];
-            storyBCell.imgTitle.font = main_font(16);
+            storyBCell.imgTitle.font = DESC_FONT;
             return storyBCell;
             
         }else{//处理基本列数据
@@ -279,12 +295,13 @@
             
             StoryTableViewSmallCell *storySMCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StorySMCell"];
             storySMCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            storySMCell.backgroundColor = [UIColor clearColor];
             
             NSString *imgUrl = [cellDic valueForKey:@"_img_url"];
             UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
             storySMCell.cellImg.image = picImg;
             storySMCell.cellTitle.text = [cellDic valueForKey:@"_title"];
-            storySMCell.cellTitle.font  = main_font(16);
+            storySMCell.cellTitle.font  = DESC_FONT;
             return storySMCell;
 
         }

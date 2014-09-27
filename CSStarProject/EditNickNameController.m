@@ -8,7 +8,9 @@
 
 #import "EditNickNameController.h"
 
-@interface EditNickNameController ()
+@interface EditNickNameController (){
+    MBProgressHUD *HUD;
+}
 
 @end
 
@@ -78,6 +80,25 @@
     
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self.nickName resignFirstResponder];
+    
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 -(void)goPreviou{
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
@@ -88,11 +109,13 @@
     
     NSString *username = self.nickName.text;
     if([StringUitl isEmpty:username]){
-        [StringUitl alertMsg:@"对不起，请先输入昵称！"withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，请先输入昵称！"withtitle:@"错误提示"];
+        [self showCustomAlert:@"请先输入昵称" widthType:WARNN_LOGO];
         return;
     }
     
     if([[StringUitl getSessionVal:USER_NICK_NAME] isEqual:self.nickName.text]){
+        [self showCustomAlert:@"请先修改昵称" widthType:WARNN_LOGO];
         return;
     }
 
@@ -122,7 +145,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
@@ -140,6 +164,7 @@
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 @end

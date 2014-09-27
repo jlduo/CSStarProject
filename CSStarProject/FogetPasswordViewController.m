@@ -8,7 +8,9 @@
 
 #import "FogetPasswordViewController.h"
 
-@interface FogetPasswordViewController ()
+@interface FogetPasswordViewController (){
+    MBProgressHUD *HUD;
+}
 
 @end
 
@@ -62,6 +64,26 @@
     
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self dismissKeyBoard];
+    
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
+
 -(void)goPreviou{
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -81,7 +103,8 @@
         isNameNull = TRUE;
     }
     if(isNameNull==TRUE){
-        [StringUitl alertMsg:@"对不起，请先输入手机号码！"withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，请先输入手机号码！"withtitle:@"错误提示"];
+        [self showCustomAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
         return;
     }
     
@@ -110,10 +133,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         
     }
     
