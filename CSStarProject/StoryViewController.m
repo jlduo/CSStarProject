@@ -101,7 +101,6 @@
        [_storyDataList addObject:addArray];
         //集成刷新控件
         [self setFooterRereshing];//有2条数据后加载底部刷新
-        _storyTableView.backgroundColor = [UIColor lightGrayColor];
         [self.storyTableView reloadData];
     }
 }
