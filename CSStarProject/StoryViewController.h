@@ -6,12 +6,11 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import "CommonViewController.h"
-#import "StoryTableViewBigDescCell.h"
+#import "CommonViewController.h" 
 #import "StoryTableViewBigCell.h"
 #import "StoryTableViewSmallCell.h"
-#import "DateUtil.h"
 #import "ViewPassValueDelegate.h"
+#import "common.h"
 
 @interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
     // 声明一个参数传递代理

@@ -200,6 +200,7 @@
 		7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA616FC19B1BF6500FD319B /* UserTableViewCell.m */; };
 		7EA616FF19B1BF6500FD319B /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA616FD19B1BF6500FD319B /* UserTableViewCell.xib */; };
 		7ECE643319B06354005EDE82 /* FFScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE643219B06354005EDE82 /* FFScrollView.m */; };
+		7ED7A58719D90722002BCF8A /* heartred.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ED7A58619D90722002BCF8A /* heartred.png */; };
 		7EDB75FF19CC0724000539DA /* DirectionMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDB75FE19CC0724000539DA /* DirectionMPMoviePlayerViewController.m */; };
 		7EDB760119CC1018000539DA /* btnshare@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EDB760019CC1018000539DA /* btnshare@2x.png */; };
 		7EF08DE019C67EF5001F2CCE /* 1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7EF08DD819C67EF5001F2CCE /* 1.jpeg */; };
@@ -506,6 +507,7 @@
 		7ECE63FA19B02AE0005EDE82 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		7ECE643119B06354005EDE82 /* FFScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFScrollView.h; sourceTree = "<group>"; };
 		7ECE643219B06354005EDE82 /* FFScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFScrollView.m; sourceTree = "<group>"; };
+		7ED7A58619D90722002BCF8A /* heartred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heartred.png; sourceTree = "<group>"; };
 		7EDB75FD19CC0724000539DA /* DirectionMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionMPMoviePlayerViewController.h; sourceTree = "<group>"; };
 		7EDB75FE19CC0724000539DA /* DirectionMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionMPMoviePlayerViewController.m; sourceTree = "<group>"; };
 		7EDB760019CC1018000539DA /* btnshare@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btnshare@2x.png"; sourceTree = "<group>"; };
@@ -989,6 +991,7 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7ED7A58619D90722002BCF8A /* heartred.png */,
 				7E96964519CFCD66008C3688 /* imgloading@2X.png */,
 				7E9695FD19CD1EC4008C3688 /* titlebar-gray@2x.png */,
 				7EDB760019CC1018000539DA /* btnshare@2x.png */,
@@ -1248,6 +1251,7 @@
 				7E2944C119C7D51600037D95 /* myzonebg.png in Resources */,
 				7E2944C519C7DEA700037D95 /* avatar_lisa.png in Resources */,
 				7E9EEC0919C278C800C0514C /* AppIcon72x72.png in Resources */,
+				7ED7A58719D90722002BCF8A /* heartred.png in Resources */,
 				7E9A584519CBD50900628F43 /* discussimg@2x.png in Resources */,
 				7E9C548919B85A0D00851CAB /* UserBigTableViewCell.xib in Resources */,
 				7E96964619CFCD66008C3688 /* imgloading@2X.png in Resources */,
