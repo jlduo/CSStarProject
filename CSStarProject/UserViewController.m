@@ -38,7 +38,7 @@
     //处理头部信息
     [self setHeaderView];
     [self.view addSubview:stableView];
-    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
+    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[ [UIView alloc]init];
@@ -90,6 +90,7 @@
 
 
 -(void)setUserTitle{
+    userLabel.font = main_font(16);
     [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
 }
 -(void)setHeaderView{
@@ -186,10 +187,19 @@
     return 1;
 }
 
+#pragma mark 设置组高度
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10.0;
+}
+
+#pragma mark 设置组标题
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return @"";
+}
+
 
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"section==%d",section);
     return 6;
 }
 
@@ -199,7 +209,7 @@
     if(indexPath.row==5){
         return 90;
     }else{
-        return 50;
+        return 51;
     }
 }
 
@@ -212,6 +222,7 @@
     [stableView registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
     
     UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
+    userCell.backgroundColor = [UIColor clearColor];
     switch (indexPath.row) {
         case 0:
             cellTitle = @"我的评论";
@@ -242,15 +253,19 @@
         cellImg = [UIImage imageNamed:imgName];
         [userCell.cellPic setBackgroundImage:cellImg forState:UIControlStateNormal];
         [userCell.dataTitle setText:cellTitle];
-        [userCell.dataNum setText:@"9"];
+        userCell.dataTitle.font = main_font(18);
+        userCell.dataTitle.alpha = 0.8f;
+        [userCell.dataNum setText:@"5"];
         userCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return userCell;
     }else{
         
         UITableViewCell *newUserCell = [[UITableViewCell alloc]init];
+        newUserCell.backgroundColor = [UIColor clearColor];
         newUserCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 25, SCREEN_WIDTH-40, 45)];
+        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(5, 25, SCREEN_WIDTH-10, 45)];
         loginOutBtn.layer.cornerRadius = 5.0;
+        loginOutBtn.titleLabel.font = main_font(20);
         [loginOutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
         [loginOutBtn setTitle:@"退出登录" forState:UIControlStateHighlighted];
         [loginOutBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
@@ -273,7 +288,6 @@
     [StringUitl clearUserInfo];
     //跳转到首页
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
-    self.parentViewController.tabBarController.selectedIndex = 0;
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }

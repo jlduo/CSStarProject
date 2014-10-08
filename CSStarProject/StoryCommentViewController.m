@@ -52,28 +52,28 @@
     
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = [UIFont fontWithName:@"Helvetica" size:24];
+    lblDetail.font = main_font(24);
     lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
     [self.view addSubview:lblDetail];
     
     //时间
     UILabel *lblTimeComment = [[UILabel alloc] init];
-    lblTimeComment.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblTimeComment.font = main_font(12);
     lblTimeComment.textColor = [UIColor grayColor];
-    lblTimeComment.frame = CGRectMake(5, 104, 115, 30);
+    lblTimeComment.frame = CGRectMake(5, 104, 130, 30);
     [self.view addSubview:lblTimeComment];
     
     //评论数图标
     UIImageView *imgComment=[[UIImageView alloc] init];
-    imgComment.frame = CGRectMake(120, 110, 20, 20);
+    imgComment.frame = CGRectMake(125, 110, 20, 20);
     imgComment.image = [UIImage imageNamed:@"myzone-discuss.png"];
     [self.view addSubview:imgComment];
     
     //总评论数
     lblClickComment = [[UILabel alloc] init];
-    lblClickComment.font = [UIFont fontWithName:@"Helvetica" size:12];
+    lblClickComment.font = main_font(12);
     lblClickComment.textColor = [UIColor grayColor];
-    lblClickComment.frame = CGRectMake(140, 104, 100, 30);
+    lblClickComment.frame = CGRectMake(145, 104, 100, 30);
     [self.view addSubview:lblClickComment];
     
     //现实参数
@@ -89,7 +89,7 @@
     
     NSString *clickNum = [self getCommentNum];
     lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
-    
+    lblClickComment.font = main_font(12);
     //评论
     [self initTable];
     [self initToolBar];
@@ -102,10 +102,29 @@
 }
 
 -(NSMutableArray *)getCommentList{
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/GetArticleComments/%@/10/%d",REMOTE_URL,detailId,pageIndex];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@%@/%@/10/%d",REMOTE_URL,GET_COMMENT_URL,detailId,pageIndex];
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     return (NSMutableArray *)[jsonData requestData:url];
 }
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 
 -(void)initTable{
     table = [[UITableView alloc] initWithFrame:self.view.frame];
@@ -131,6 +150,8 @@
     NSString *commnetContent = [dicComment valueForKey:@"_content"];
     commentCell.commentTextView.text = commnetContent;
     commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
+    commentCell.commentUsername.font = main_font(14);
+    commentCell.commentTextView.font = main_font(12);
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return commentCell;
@@ -299,7 +320,8 @@
     NSString *textVal = textField.text;
     //点击发表提交数据
     if([self isEmpty:textVal]){
-        [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+        //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+        [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
@@ -345,7 +367,8 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel]; 
         
-        [StringUitl alertMsg:@"提交成功" withtitle:nil];
+        //[StringUitl alertMsg:@"提交成功" withtitle:nil];
+        [self showCustomAlert:@"评论提交成功" widthType:WARNN_LOGO];
         pageIndex = 1;
         tableArray  = [self getCommentList];
         [table reloadData];
@@ -353,12 +376,14 @@
         NSString *clickNum = [self getCommentNum];
         lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     }else{
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+     //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+     [self showCustomAlert:@"请求数据失败" widthType:WARNN_LOGO];
 }
 
 -(void)loadView{
@@ -406,7 +431,8 @@
         }
         [table reloadData];
     }else{
-        [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"]; 
+        //[StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"];
+        [self showCustomAlert:@"没有数据了" widthType:WARNN_LOGO];
     }
 }
 

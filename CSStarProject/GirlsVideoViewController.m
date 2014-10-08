@@ -7,7 +7,6 @@
 //
 #import "GirlsVideoViewController.h"
 #import "InitTabBarViewController.h"
-#import "CommentListViewController.h"
 #import "StoryCommentViewController.h"
 
 @interface GirlsVideoViewController (){
@@ -39,9 +38,12 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    [self initLoadData];
+}
+
+-(void)initLoadData{
     //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
+    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
     
     videoTableView = [[UITableView alloc] initWithFrame:tframe];
     videoTableView.delegate = self;
@@ -66,7 +68,9 @@
     
     //集成刷新控件
     [self setHeaderRereshing];
-    [self setFooterRereshing];
+    if(topVideoArray!=nil&&topVideoArray.count>2){
+        [self setFooterRereshing];
+    }
     
 }
 
@@ -81,12 +85,34 @@
     return self;
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+    
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     [videoTableView setFrame:temFrame];
+    
+    [self initLoadData];
+    [videoTableView reloadData];
+    [self changeRation:NO];
     
 }
 
@@ -95,7 +121,7 @@
     if([self isNotEmpty:dataId]){
         
         ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-        NSString *url = [NSString stringWithFormat:@"http://192.168.1.210:8888/cms/GetArticle/%@",dataId];
+        NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ARTICLE_URL,dataId];
         bannerData = (NSMutableDictionary *)[convertJson requestData:url];
         //NSLog(@"bannerData===%@",bannerData);
         
@@ -105,7 +131,7 @@
 //初始化底部工具栏
 -(void)initToolBar{
     
-    toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
+    toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-40, SCREEN_WIDTH, 40)];
     [toolBar setBackgroundColor:[UIColor whiteColor]];
     
     [self initTextView];
@@ -144,7 +170,7 @@
     //加入评论文字
     plabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 0, 40, 26)];
     [plabel setText:@"评论"];
-    [plabel setFont:Font_Size(12)];
+    plabel.font = main_font(12);
     [plabel setTextAlignment:NSTextAlignmentCenter];
     [plabel setTextColor:[UIColor grayColor]];
     
@@ -173,7 +199,7 @@
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 1 });
     [numBtn.layer setBorderColor:colorref];
-    [numBtn setBackgroundImage:[UIImage imageNamed:@"con_bg@2x.jpg"] forState:UIControlStateNormal];
+    [numBtn setBackgroundImage:[UIImage imageNamed:CONTENT_BACKGROUND] forState:UIControlStateNormal];
     
     //给按钮默认显示评论数据
     [numBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -195,7 +221,7 @@
 -(NSString *)getCommentNum:(NSString *)articleId{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"%@/Comment/GetCommentTotal/%@",REMOTE_URL,articleId];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,COMMENT_COUNT_URL,articleId];
     NSMutableDictionary *commentDic = (NSMutableDictionary *)[convertJson requestData:url];
     NSString *comments = [commentDic valueForKey:@"result"];
     NSLog(@"评论条数＝＝%@",comments);
@@ -289,7 +315,8 @@
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
-            [self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{
             //提交数据
             [self postCommetnVal:dataId];
@@ -337,12 +364,14 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
+        //[StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
+        [self showCustomAlert:@"提交评论信息成功!" widthType:SUCCESS_LOGO];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
         [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"提示信息"];
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:SUCCESS_LOGO];
         
     }
     
@@ -351,7 +380,8 @@
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"提交数据失败" widthType:ERROR_LOGO];
 }
 
 
@@ -359,7 +389,7 @@
 -(void)loadGirlsData{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = @"http://192.168.1.210:8888/cms/GetArticles/video/3/is_red=1";
+    NSString *url = [NSString stringWithFormat:@"%@%@/3/is_red=1",REMOTE_URL,GIRL_VIDEO_URL];
     NSArray *girlsArr = (NSArray *)[convertJson requestData:url];
     if(girlsArr!=nil && girlsArr.count>0){
         topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
@@ -388,7 +418,7 @@
         }
     }
     //设置播放器高度参数
-    [[moviePlayer view] setFrame:CGRectMake(0,0, MAIN_FRAME_W, 180)];
+    [[moviePlayer view] setFrame:CGRectMake(0,0, SCREEN_WIDTH, 180)];
     //[self.view addSubview:moviePlayer.view];
     
     //定义描述信息
@@ -404,23 +434,25 @@
     NSString *s = [bannerData valueForKey:@"_zhaiyao"];
     descLabel.text = [NSString stringWithFormat:@"    %@",s];
     //4.获取所要使用的字体实例
-    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+    UIFont *font = main_font(16);
     descLabel.font = font;
     //5.UILabel字符显示的最大大小
-    CGSize size = CGSizeMake(SCREEN_WIDTH,80);
+    CGSize size = CGSizeMake(SCREEN_WIDTH,150);
     //6.计算UILabel字符显示的实际大小
-    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,0, labelsize.width, labelsize.height)];
-    [videoDesc setFrame:CGRectMake(0,180, SCREEN_WIDTH, labelsize.height)];
+    [descLabel setFrame:CGRectMake(0,0, SCREEN_WIDTH, labelsize.height)];
+    descLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    [videoDesc setFrame:CGRectMake(5,185, SCREEN_WIDTH, labelsize.height+10)];
     
     //修改videoTable的frame
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-44));
+    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-30));
     [videoTableView setFrame:temFrame];
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [videoDesc addSubview:descLabel];
     
-    headView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180+videoDesc.frame.size.height)];
+    headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180+videoDesc.frame.size.height)];
+    headView.backgroundColor = [UIColor whiteColor];
     [headView addSubview:moviePlayer.view];
     [headView addSubview:videoDesc];
     
@@ -446,7 +478,7 @@
     
     loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-40)/2, 90, 80, 40)];
     loadingLabel.text = @"加载中...";
-    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    UIFont *font = main_font(12);
     loadingLabel.font = font;
     loadingLabel.textColor = [UIColor whiteColor];
     loadingLabel.backgroundColor = [UIColor clearColor];
@@ -479,8 +511,8 @@
 
 -(void)addPlayBtn{
     
-    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-24, 70, 48,48)];
-    [playBtn setBackgroundImage:[UIImage imageNamed:@"playbig.png"] forState:UIControlStateNormal];
+    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-32, 70, 64,64)];
+    [playBtn setBackgroundImage:[UIImage imageNamed:@"video_play_black@2x.png"] forState:UIControlStateNormal];
     
     [playBtn addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchDown];
     [headView addSubview:playBtn];
@@ -501,7 +533,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMoviePlayStateCallback:)
                                                  name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:moviePlayer];
+    
+    
+    
 }
+
 
 -(void)removeNotice:(NSNotification*)notify{
     //视频播放对象
@@ -531,13 +567,23 @@
     MPMoviePlayerController *player = notify.object;
     MPMoviePlaybackState playState = player.playbackState;
     
+    NSLog(@"playState==%d",playState);
     if(playState==MPMoviePlaybackStatePaused){
+        [self changeRation:NO];
         [self addLoadTip];
     }
     
     if(playState==MPMoviePlaybackStatePlaying){
+        [self changeRation:YES];
         [self removeLoadTip];
     }
+    
+    if(playState==MPMoviePlaybackStateStopped){
+        [self setVideoView:TRUE];
+        [self changeRation:NO];
+    }
+    
+    
     
 }
 
@@ -545,27 +591,46 @@
 -(void)myMovieFinishedCallback:(NSNotification*)notify
 {
     [self removeNotice:notify];
-    
     [self addNotice];
     [self.view addSubview:moviePlayer.view];
     
     [self.view addSubview:videoPic];
     [self.view addSubview:playBtn];
+    [self changeRation:NO];
 }
 
 -(void)playVideo{
     
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.isFull = YES;
+    
     //NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
     NSString *remoteUrl =  moviePlayer.contentURL.absoluteString;
+    NSRange range = [remoteUrl rangeOfString:@"http://"];
+    if(range.location!=NSNotFound){
+        NSString *string2 = [remoteUrl substringFromIndex:7];
+         NSRange range2 = [string2 rangeOfString:@"http://"];
+        if(range2.location!=NSNotFound){
+            [self changeRation:NO];
+            //[StringUitl alertMsg:@"视频地址有误,加载失败!" withtitle:@"错误提示"];
+            [self showCustomAlert:@"视频地址有误,加载失败" widthType:ERROR_LOGO];
+            return;
+        }
+    }
+    
+    
     if([StringUitl isEmpty:remoteUrl]){
-        [StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"播放失败"];
+        [self changeRation:NO];
+        //[StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"错误提示"];
+        [self showCustomAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
         return;
     }
     
-    //NSLog(@"dddddd=%@",[StringUitl getFileExtName:remoteUrl]);
     NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
     if(![fileExt isEqualToString:@"mp4"]){
-        [StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"播放失败"];
+        [self changeRation:NO];
+        //[StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"错误提示"];
+        [self showCustomAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
         return;
     }
     
@@ -573,9 +638,13 @@
     [videoPic removeFromSuperview];
     [moviePlayer play];
     
-    //[moviePlayer setFullscreen:YES animated:YES];
-    //[moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
-    //moviePlayer.scalingMode = MPMovieScalingModeAspectFit;//全屏播放（全屏播放不可缺）
+    //if(moviePlayer.playbackState!=MPMoviePlaybackStateStopped){
+        
+        [moviePlayer setFullscreen:YES animated:YES];
+        [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
+        [self changeRation:YES];
+    
+    //}
 }
 
 
@@ -586,6 +655,13 @@
     [moviePlayer stop];
     [moviePlayer.view removeFromSuperview];
     
+    [self changeRation:NO];
+    
+}
+
+-(void)changeRation:(BOOL)isRation{
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.isFull = isRation;
 }
 
 -(void)goPreviou{
@@ -633,17 +709,7 @@
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
 {
-//    int randomNumber = arc4random() % 10 ;//[0,100)包括0，不包括100
-//    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-//    NSString* picName = [NSString stringWithFormat:@"%d.png",randomNumber];
-//    [data setValue:picName forKey:@"pic"];
-//    [data setValue:@"测试刷新数据" forKey:@"title"];
-//    [data setValue:@"好像还不错哦！" forKey:@"desc"];
-//    [data setValue:@"video" forKey:@"datatype"];
-//    [data setValue:@"9527" forKey:@"clicknum"];
-//    
-//    [_girlsDataList insertObject:data atIndex:_girlsDataList.count];
-    
+    [self loadGirlsData];
     [videoTableView reloadData];
 }
 
@@ -655,23 +721,23 @@
 
 #pragma mark 设置组高度
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 25;
+    return 35;
 }
 
 #pragma mark 设置组视图
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    CGRect headFrame = CGRectMake(0, 0, 320, 22);
+    CGRect headFrame = CGRectMake(0, 6, 320, 22);
     UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
-    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:CONTENT_BACK_COLOR]];
     //设置每组的头部图片
     NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imgName]];
-    [imageView setFrame:CGRectMake(10, 4, 3, 15)];
+    [imageView setFrame:CGRectMake(5, 10, 3, 20)];
     //设置每组的标题
-    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 22)];
+    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(12, 8, 100, 22)];
     headtitle.text = @"私房推荐";
-    headtitle.font = [UIFont fontWithName:@"Arial" size:18.0f];
+    headtitle.font = TITLE_FONT;
     
     [sectionHeadView addSubview:imageView];
     [sectionHeadView addSubview:headtitle];
@@ -681,16 +747,6 @@
 }
 
 
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//    
-//    CGRect headFrame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
-//    UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
-//    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"con_bg@2x.jpg"]];
-//    
-//    return sectionHeadView;
-//}
-
-
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return topVideoArray.count;
@@ -698,25 +754,30 @@
 
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70;
+    return 95;
     
 }
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
+    NSString *bid = [[bannerData valueForKey:@"_id"] stringValue];
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
     NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
     NSLog(@"newDataId=%@",newId);
+    if([bid isEqual:newId]){
+        [self setVideoView:YES];
+    }else{
+        GirlsVideoViewController *girlVideoController = [[GirlsVideoViewController alloc]init];
+        passValelegate = girlVideoController;
+        [passValelegate passValue:newId];
+        
+        [self presentViewController:girlVideoController animated:YES completion:^{
+            [moviePlayer stop];
+        }];
     
-    GirlsVideoViewController *girlVideoController = [[GirlsVideoViewController alloc]init];
-    passValelegate = girlVideoController;
-    [passValelegate passValue:newId];
-    
-    [self presentViewController:girlVideoController animated:YES completion:^{
-        //code
-        [moviePlayer stop];
-    }];
+    }
     
 }
 
@@ -729,6 +790,7 @@
     
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
     videoCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    videoCell.backgroundColor = [UIColor clearColor];
     
     
     NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
@@ -746,6 +808,9 @@
     
     videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
     videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
+    
+    videoCell.videoTitle.font = TITLE_FONT;
+    videoCell.videoDesc.font = DESC_FONT;
     NSNumber * clickNum =[cellDic valueForKey:@"_click"];
     videoCell.clickNum.text = [clickNum stringValue];
     return videoCell;

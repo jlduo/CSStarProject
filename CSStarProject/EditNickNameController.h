@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ASIHTTPRequest.h"
+#import "MBProgressHUD.h"
 #import "ASIFormDataRequest.h"
 #import "CommonViewController.h"
 #import "UserInfoViewController.h"
 
-@interface EditNickNameController : UIViewController
+@interface EditNickNameController : UIViewController<MBProgressHUDDelegate>
 
 
 @property (weak, nonatomic) IBOutlet UITextField *nickName;

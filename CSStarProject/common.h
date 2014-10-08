@@ -22,24 +22,34 @@
 #define NAV_TITLE_HEIGHT 44//导航标题高度
 #define NAV_TITLE_INDEX SCREEN_WIDTH/2//导航标题位置
 
+#define VIEW_FRAME_H self.view.frame.size.height
 #define MAIN_FRAME [[UIScreen mainScreen] applicationFrame]//屏幕尺寸
 #define MAIN_FRAME_X MAIN_FRAME.origin.x
 #define MAIN_FRAME_Y MAIN_FRAME.origin.y
 #define MAIN_FRAME_W MAIN_FRAME.size.width
 #define MAIN_FRAME_H MAIN_FRAME.size.height
 
+#define main_font(x) DIY_FONT_SIZE(@"Microsoft YaHei",x);
+#define DIY_FONT_SIZE(n,x) [UIFont fontWithName:n size:x]//自定义字体函数
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(15)//主字体
 
-#define CONTENT_BACKGROUND @"place@2x.png"//正文背景
-#define TABR_BG_ICON @"titlebar-gray@2x.png"//底部导航图
-#define NAVBAR_BG_ICON @"titlebar-gray@2x.png"//导航背景
+#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",24)//标题字体
+#define TITLE_FONT main_font(17)//标题字体
+#define DESC_FONT main_font(15)//描述字体
+
+#define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
+#define CONTENT_BACKGROUND @"background.jpeg"//正文背景
+#define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
+#define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
+#define NAVBAR_BG_ICON @"titlebar@2x.png"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
 #define REFRESH_TITLE @"刷新数据"
 #define REFRESH_LOADING @"玩命加载中..."
 #define NOIMG_ICON @"imgloading@2X.png"//无图片
 #define DELAY_TIME 2
+
 #define FORWARD_TYPE @"TAB"//登录跳转方式 tab 为点击tabbar
 
 #define REMOTE_URL @"http://192.168.1.210:8888"
@@ -53,8 +63,23 @@
 #define GET_CITY_URL @"/AndroidApi/UsersService/GetCity"//获取城市
 #define GET_PASSWORD_URL @"/AndroidApi/UsersService/FindPassWord"//找回密码
 #define EDIT_PASSWORD_URL @"/AndroidApi/UsersService/EditPassWord"//修改密码
-#define COMMENT_LIST_URL @"/Comment/GetCommentTotal"//获取评论信息
+#define COMMENT_COUNT_URL @"/Comment/GetCommentTotal"//获取评论信息
 #define ADD_COMMENT_URL @"/Comment/AddComment"//提交评论信息
+#define GET_COMMENT_URL @"/Comment/GetArticleComments"//获取文章评论
+
+//首页数据
+#define SLIDE_TOP @"/cms/GetSlides/5"
+#define CITY_TOP @"/cms/GetArticles/city"
+#define GIRLS_TOP @"/cms/GetArticles/girl"
+
+#define LOAD_NEW_DATA @"/cms/GetArticlesById"
+
+#define PHOTO_BANNER_URL @"/cms/GetArticles/albums/1/is_top=1"
+#define GIRLS_LIST @"/cms/GetArticleList/girl"
+#define GET_PHOTO_LIST @"/cms/GetAlbums"
+
+#define GET_ARTICLE_URL @"/cms/GetArticle"
+#define GIRL_VIDEO_URL @"/cms/GetArticles/video"
 
 #define LOGIN_USER_ID @"login_user_id"
 #define LOGIN_USER_NAME @"login_user_name"
@@ -69,6 +94,10 @@
 #define CITY_ID @"cityid"
 #define USER_SEX @"sex"
 #define USER_LOGO @"logo"
+
+#define SUCCESS_LOGO @"tips_success.png"
+#define ERROR_LOGO @"tips_error.png"
+#define WARNN_LOGO @"tips_warnn.png"
 
 #define DEFAULT_VOID_COLOR [UIColor whiteColor]
 

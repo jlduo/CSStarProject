@@ -8,7 +8,9 @@
 
 #import "EditPasswordController.h"
 
-@interface EditPasswordController ()
+@interface EditPasswordController (){
+    MBProgressHUD *HUD;
+}
 
 @end
 
@@ -49,7 +51,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setFont:Font_Size(22)];
+    titleLabel.font = main_font(22);
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -64,8 +66,9 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor whiteColor]];
-    [rbtn setFont:Font_Size(18)];
+    [rbtn setTintColor:[UIColor greenColor]];
+    //[rbtn setFont:Font_Size(18)];
+    rbtn.titleLabel.font=main_font(18);
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
@@ -81,6 +84,24 @@
     
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	[self.passText resignFirstResponder];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
+
 -(void)goPreviou{
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
@@ -91,12 +112,14 @@
     
     NSString *pwd = self.passText.text;
     if([StringUitl isEmpty:pwd]){
-        [StringUitl alertMsg:@"对不起，请先输入昵称！"withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，请先输入密码！"withtitle:@"错误提示"];
+        [self showCustomAlert:@"请先输入密码" widthType:WARNN_LOGO];
         return;
     }
     
     if([[StringUitl getSessionVal:LOGIN_USER_PSWD] isEqual:pwd]){
-        [StringUitl alertMsg:@"对不起，新密码不能和旧密码相同！"withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，新密码不能和旧密码相同！"withtitle:@"错误提示"];
+        [self showCustomAlert:@"新密码不能和旧密码相同" widthType:WARNN_LOGO];
         return;
     }
     
@@ -126,7 +149,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
@@ -140,10 +164,6 @@
 //           
 //        }];
         
-        
-        
-        
-        
     }
     
 }
@@ -151,7 +171,8 @@
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 @end

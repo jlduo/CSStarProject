@@ -9,11 +9,15 @@
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
 #import "ASIHTTPRequest.h"
+#import "MBProgressHUD.h"
 #import "ASIFormDataRequest.h"
 #import "ViewPassValueDelegate.h"
 #import "LoginViewController.h"
 #import "StoryCommentTableCell.h"
 
-@interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
+UITableViewDataSource,UITableViewDelegate,MBProgressHUDDelegate>{
+    MBProgressHUD *HUD;
+}
 
 @end

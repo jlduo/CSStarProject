@@ -9,7 +9,10 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 
-@interface LoginViewController ()
+@interface LoginViewController (){
+    
+    MBProgressHUD *HUD;
+}
 
 @end
 
@@ -82,8 +85,8 @@
     [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
     [rbtn setTitle:@"注册" forState:UIControlStateNormal];
     [rbtn setTitle:@"注册" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor whiteColor]]; 
-    [rbtn setFont:Font_Size(16)];
+    [rbtn setTintColor:[UIColor whiteColor]];
+    rbtn.titleLabel.font=Font_Size(16);
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(goRegister) forControlEvents:UIControlEventTouchUpInside];
@@ -101,8 +104,14 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
+    [self dismissKeyBoard];
+}
+
+-(void)dismissKeyBoard{
+    
     [self.userName resignFirstResponder];
     [self.passWord resignFirstResponder];
+    
 }
 
 
@@ -157,18 +166,38 @@
     [self getPassword];
 }
 
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	
+    [self dismissKeyBoard];
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
+}
+
+
 
 //用户登录方法
 - (IBAction)clickLognBtn:(id)sender {
     NSLog(@"user login......");
+    [self dismissKeyBoard];
     NSString * user_name = _userName.text;
     NSString *pass_word = _passWord.text;
     
     NSRange name_range = [user_name rangeOfString:@"请输入"];
     NSRange pass_range = [pass_word rangeOfString:@"请输入"];
     
-    BOOL isLoginNameNull = false;
-    BOOL isLoginPaswNull = false;
+    BOOL isLoginNameNull = FALSE;
+    BOOL isLoginPaswNull = FALSE;
     
     if([StringUitl isEmpty:user_name]||name_range.location!=NSNotFound){
         isLoginNameNull = TRUE;
@@ -179,22 +208,24 @@
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == TRUE){
-        [StringUitl alertMsg:@"对不起，请先输入登录信息！" withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，请先输入登录信息！" withtitle:@"错误提示"];
+        [self showCustomAlert:@"登录信息不完整" widthType:WARNN_LOGO];
         return;
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == FALSE){
-        [StringUitl alertMsg:@"对不起，用户名不能为空！" withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，用户名不能为空！" withtitle:@"错误提示"];
+        [self showCustomAlert:@"登录账号不能为空" widthType:WARNN_LOGO];
         return;
     }
     
     if(isLoginNameNull==FALSE && isLoginPaswNull == TRUE){
-        [StringUitl alertMsg:@"对不起，密码不能为空！" withtitle:@"错误提示"];
+        //[StringUitl alertMsg:@"对不起，密码不能为空！" withtitle:@"错误提示"];
+        [self showCustomAlert:@"登录密码不能为空" widthType:WARNN_LOGO];
         return;
     }
     
     //开始处理登录
-    
     NSURL *login_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,LOGIN_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
     [ASIHTTPRequest setSessionCookies:nil];
@@ -219,7 +250,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
@@ -276,7 +308,8 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
         
@@ -295,6 +328,7 @@
 - (void)requestLoginFailed:(ASIHTTPRequest *)req
 {
     
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 @end

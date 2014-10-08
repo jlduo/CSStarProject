@@ -32,6 +32,9 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     [self setTableData];
+    
+    _storyTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    _storyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 
@@ -41,6 +44,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    
+    [self setTableData];
+    [self.storyTableView reloadData];
 }
 
 //加载头部刷新

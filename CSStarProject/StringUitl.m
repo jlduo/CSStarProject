@@ -267,6 +267,32 @@
     return  [rslt objectAtIndex:[rslt count]-1];
 }
 
++(void)setCornerRadius:(UIView *)cview withRadius:(CGFloat)radius{
+    if (cview!=nil) {
+        cview.layer.cornerRadius = radius;
+        cview.layer.masksToBounds = YES;
+    }
+}
+
++(void)setViewBorder:(UIView *)bview withColor:(NSString *)color Width:(CGFloat)width{
+    if (bview!=nil) {
+        bview.layer.borderColor = [StringUitl colorWithHexString:color].CGColor;
+        bview.layer.borderWidth = width;
+    }
+}
+
+//打印系统字体
++(void)printSystemFont{
+    NSArray *familyNames = [UIFont familyNames];
+    for( NSString *familyName in familyNames ){
+        printf( "Family: %s \n", [familyName UTF8String] );
+        NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
+        for( NSString *fontName in fontNames ){
+            printf( "\tFont: %s \n", [fontName UTF8String] );
+        }
+    }
+}
+
 
 @end
 

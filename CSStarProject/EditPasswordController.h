@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "common.h"
 #import "ASIHTTPRequest.h"
+#import "MBProgressHUD.h"
 #import "ASIFormDataRequest.h"
 #import "CommonViewController.h"
 #import "LoginViewController.h"
 
-@interface EditPasswordController : UIViewController
+@interface EditPasswordController : UIViewController<MBProgressHUDDelegate>
 @property (weak, nonatomic) IBOutlet UIView *passBg;
 @property (weak, nonatomic) IBOutlet UITextField *passText;
 

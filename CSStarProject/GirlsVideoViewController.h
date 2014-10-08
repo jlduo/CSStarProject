@@ -8,8 +8,10 @@
 
 #import "common.h"
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 #import "UILabel+ContentSize.h"
 #import "AllAroundPullView.h"
+#import "MBProgressHUD.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "VideoTableViewCell.h"
 #import "CommonViewController.h"
@@ -20,7 +22,8 @@
 #import "ASIFormDataRequest.h"
 #import "DirectionMPMoviePlayerViewController.h"
 
-@interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,UITextViewDelegate> {
+@interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
+ViewPassValueDelegate,UITextViewDelegate,MBProgressHUDDelegate> {
     
     MPMoviePlayerController *moviePlayer;
     UIActivityIndicatorView *loadingAni;    //加载动画
@@ -32,6 +35,7 @@
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
     
+    MBProgressHUD *HUD;
 }
 
 @end

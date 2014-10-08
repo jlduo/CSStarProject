@@ -62,17 +62,29 @@
     NSLog(@"selectedProvinceIndex=%d",selectedProvinceIndex);
     NSLog(@"selectedCityIndex=%d",selectedCityIndex);
     
+    
+    
     NSString *name = [_provinceArray objectAtIndex:selectedProvinceIndex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",name];
     NSArray *result = [_provinceArray1 filteredArrayUsingPredicate:predicate];
     if(result!=nil && result.count>0){
         NSDictionary * ndic = (NSDictionary *)[result objectAtIndex:0];
-        NSString *cityId = [[ndic objectForKey:@"id"] stringValue];
-        if([StringUitl isNotEmpty:cityId]){
-            _cityValue = cityId;
-            [self loadCityData:cityId];
+        NSString *provId = [[ndic objectForKey:@"id"] stringValue];
+        if([StringUitl isNotEmpty:provId]){
+            self.provinceValue = provId;
+            [self loadCityData:provId];
         }
     }
+    
+    NSString *cname = [_cityArray objectAtIndex:selectedCityIndex];
+    predicate = [NSPredicate predicateWithFormat:@"self.name == %@",cname];
+    NSArray *cresult = [_cityArray1 filteredArrayUsingPredicate:predicate];
+    if(cresult!=nil && cresult.count>0){
+        NSDictionary * ndic = (NSDictionary *)[cresult objectAtIndex:0];
+        NSString *cityId = [[ndic objectForKey:@"id"] stringValue];
+        self.cityValue = cityId;
+    }
+    
     [self.cityPciker reloadComponent:1];
     
     [self.cityPciker selectRow:selectedProvinceIndex inComponent:0 animated:YES];
@@ -92,7 +104,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setFont:Font_Size(20)];
+    titleLabel.font = main_font(20);
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -107,8 +119,9 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor whiteColor]];
-    [rbtn setFont:Font_Size(18)];
+    [rbtn setTintColor:[UIColor greenColor]];
+    //[rbtn setFont:Font_Size(18)];
+    rbtn.titleLabel.font=main_font(18);
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
@@ -134,6 +147,7 @@
 -(void)saveUserInfo{
     
     NSString *cityVal = _cityValue;
+    NSString *proVal = _provinceValue;
     if([StringUitl isEmpty:cityVal]){
         [StringUitl alertMsg:@"对不起，请先重新选择地区！"withtitle:@"错误提示"];
         return;
@@ -151,6 +165,7 @@
     [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
     [request setPostValue:_cityText.text forKey:USER_ADDRESS];
     [request setPostValue:cityVal forKey:CITY_ID];
+    [request setPostValue:proVal forKey:PROVINCE_ID];
     [request buildPostBody];
     
     [request startAsynchronous];
@@ -268,6 +283,7 @@
             }
         }
         [self.cityPciker reloadComponent:1];
+        [self.cityPciker selectRow:0 inComponent:1 animated:YES];
         
         //回填信息
         [self setCityValue];
@@ -289,6 +305,16 @@
     
     NSString *pname = [_provinceArray objectAtIndex:proInex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",pname];
+    NSArray *presult = [_provinceArray1 filteredArrayUsingPredicate:predicate];
+    if(presult!=nil && presult.count>0){
+        NSDictionary * ndic = (NSDictionary *)[presult objectAtIndex:0];
+        NSString *provId = [[ndic objectForKey:@"id"] stringValue];
+
+        NSLog(@"pname=%@",pname);
+        NSLog(@"provId=%@",provId);
+        self.provinceValue = provId;
+    }
+    
  
     NSString *cname = [_cityArray objectAtIndex:cityInex];
     predicate = [NSPredicate predicateWithFormat:@"self.name == %@",cname];
@@ -298,8 +324,9 @@
         NSString *cityId = [[ndic objectForKey:@"id"] stringValue];
         
         NSString * cityStr = [[NSString alloc]initWithFormat:@"%@,%@",pname,cname];
-        //NSLog(@"cityStr=%@",cityStr);
-        //NSLog(@"cityId=%@",cityId);
+        
+        NSLog(@"cname=%@",cname);
+        NSLog(@"cityId=%@",cityId);
         self.cityText.text = cityStr;
         self.cityValue = cityId;
     }

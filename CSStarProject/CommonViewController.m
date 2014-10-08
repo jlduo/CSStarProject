@@ -91,7 +91,7 @@
     [titleLabel setText:titleName];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setFont:Font_Size(22)];
+    titleLabel.font = BANNER_FONT;
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     
     return titleLabel;
