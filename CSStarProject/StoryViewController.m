@@ -44,9 +44,6 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
-    
-    //[self setTableData];
-    [self.storyTableView reloadData];
 }
 
 //加载头部刷新
