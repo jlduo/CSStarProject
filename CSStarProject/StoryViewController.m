@@ -45,7 +45,7 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     
-    [self setTableData];
+    //[self setTableData];
     [self.storyTableView reloadData];
 }
 

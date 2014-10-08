@@ -118,7 +118,7 @@
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
     //[self initLoadData];
-    //[_homeTableView reloadData];
+    [_homeTableView reloadData];
     
     
 }

@@ -14,7 +14,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *videoPic;
 
 #pragma mark 视频按钮
-@property (weak, nonatomic) IBOutlet UIButton *videoButton;
+@property (weak, nonatomic) IBOutlet UIImageView *videoBtn;
+
 #pragma mark 视频底部
 @property (weak, nonatomic) IBOutlet UILabel *videoBanner;
 #pragma mark 视频时长

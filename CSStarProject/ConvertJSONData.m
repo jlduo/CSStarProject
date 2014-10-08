@@ -57,22 +57,29 @@
 
 -(NSObject *)requestData:(NSString*)nurl{
     NSObject *jsonObj;
+    NSError *errorMsg;
     NSURL *url = [NSURL URLWithString:nurl];
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20];
-    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&errorMsg];
     //NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
     if(received!=Nil){
-       jsonObj = [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];
+       jsonObj = [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:&errorMsg];
     }else{
        jsonObj = Nil;
     }
+    
+    if(errorMsg!=nil){
+        NSLog(@"请求远程数据失败：%@",errorMsg);
+    }
+
+    
     return jsonObj;
 }
 
 -(id)requestSData:(NSString*)nurl{
     
     NSURL *url = [NSURL URLWithString:nurl];
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20];
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     //NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
     return [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];

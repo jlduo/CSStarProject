@@ -110,7 +110,7 @@
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     [videoTableView setFrame:temFrame];
     
-    [self initLoadData];
+    //[self initLoadData];
     [videoTableView reloadData];
     [self changeRation:NO];
     
@@ -565,34 +565,42 @@
 -(void)myMoviePlayStateCallback:(NSNotification*)notify{
     
     MPMoviePlayerController *player = notify.object;
-    MPMoviePlaybackState playState = player.playbackState;
-    
-    NSLog(@"playState==%d",playState);
-    if(playState==MPMoviePlaybackStatePaused){
-        [self changeRation:NO];
-        [self addLoadTip];
+    NSLog(@"state==%d",player.playbackState);
+    switch (player.playbackState) {
+        case MPMoviePlaybackStateStopped:
+            [moviePlayer setFullscreen:NO animated:YES];
+            [moviePlayer setScalingMode:MPMovieScalingModeNone];
+            [self setVideoView:TRUE];
+            [self changeRation:NO];
+            break;
+        case MPMoviePlaybackStatePlaying:
+            
+            if([moviePlayer isFullscreen]){
+                [self changeRation:YES];
+            }else{
+                [self changeRation:NO];
+            }
+            
+            [self removeLoadTip];
+            break;
+        case MPMoviePlaybackStatePaused:
+            [self changeRation:NO];
+            [self addLoadTip];
+            break;
+        case MPMoviePlaybackStateInterrupted:
+            [self changeRation:NO];
+            break;
+        case MPMoviePlaybackStateSeekingForward:
+            //[self changeRation:YES];
+            NSLog(@"视频快进");
+            break;
+        case MPMoviePlaybackStateSeekingBackward:
+            //[self changeRation:YES];
+            NSLog(@"视频快退");
+            break;
+        default:
+            break;
     }
-    
-    if(playState==MPMoviePlaybackStatePlaying){
-        [self changeRation:YES];
-        [self removeLoadTip];
-    }
-    
-    if(playState==MPMoviePlaybackStateStopped){
-        //[self setVideoView:TRUE];
-        [self changeRation:NO];
-    }
-    
-    if(playState==MPMoviePlaybackStateSeekingForward){
-        NSLog(@"self.moviePlayer Forward");
-        
-    }
-    
-    if(playState==MPMoviePlaybackStateSeekingBackward){
-        NSLog(@"self.moviePlayer Backward");
-    }
-    
-    
     
 }
 
@@ -646,14 +654,15 @@
     [playBtn removeFromSuperview];
     [videoPic removeFromSuperview];
     [moviePlayer play];
+    [self startTime];
     
-    //if(moviePlayer.playbackState!=MPMoviePlaybackStateStopped){
+    if(moviePlayer.playbackState!=0){
         
         [moviePlayer setFullscreen:YES animated:YES];
         [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
         [self changeRation:YES];
     
-    //}
+    }
 }
 
 
@@ -663,14 +672,42 @@
     [videoPic removeFromSuperview];
     [moviePlayer stop];
     [moviePlayer.view removeFromSuperview];
-    
     [self changeRation:NO];
     
 }
 
+-(void)startTime{
+    __block int timeout=30000; //倒计时时间
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
+    dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
+    dispatch_source_set_event_handler(_timer, ^{
+        if(timeout<=0){ //倒计时结束，关闭
+            dispatch_source_cancel(_timer);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //设置界面的按钮显示 根据自己需求设置
+                [self changeRation:NO];
+            });
+        }else{
+            if([moviePlayer isFullscreen]){
+                [self changeRation:YES];
+            }
+            timeout--;
+        }
+    });
+    dispatch_resume(_timer);
+    
+}
+
+
 -(void)changeRation:(BOOL)isRation{
     AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.isFull = isRation;
+}
+
+-(BOOL)isFullRation{
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.isFull;
 }
 
 -(void)goPreviou{

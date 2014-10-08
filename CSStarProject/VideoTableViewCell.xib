@@ -22,12 +22,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="120" height="85"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="34C-Ui-hqY" userLabel="视频点击">
-                                <rect key="frame" x="42" y="19" width="36" height="36"/>
-                                <state key="normal" backgroundImage="video_play_black.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999987" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-BW-DI0" userLabel="底部">
                                 <rect key="frame" x="0.0" y="64" width="120" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,6 +59,10 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="video_play_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="7tZ-NF-hZQ" userLabel="按钮">
+                                <rect key="frame" x="42" y="17" width="36" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -75,7 +73,7 @@
                 <outlet property="clickNum" destination="6XJ-tN-Hol" id="vX6-kE-OFS"/>
                 <outlet property="videoArrow" destination="ByJ-EN-e8S" id="8mJ-H5-eKa"/>
                 <outlet property="videoBanner" destination="MIj-LG-PpF" id="lFG-PO-dnV"/>
-                <outlet property="videoButton" destination="34C-Ui-hqY" id="U9r-XN-91g"/>
+                <outlet property="videoBtn" destination="7tZ-NF-hZQ" id="LGS-TU-NtB"/>
                 <outlet property="videoDesc" destination="Z0Q-9d-PhR" id="Hhm-2G-Wkt"/>
                 <outlet property="videoPic" destination="W5o-G9-IKB" id="VyF-Pp-DrW"/>
                 <outlet property="videoTime" destination="MIj-LG-PpF" id="Wwz-fx-OKy"/>

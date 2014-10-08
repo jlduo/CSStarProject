@@ -167,7 +167,7 @@
 -(void)initScrollView{
     
     scrollPicView = [[UIScrollView alloc]init];
-    [scrollPicView setFrame:CGRectMake(0, 80,SCREEN_WIDTH, MAIN_FRAME_H)];
+    [scrollPicView setFrame:CGRectMake(0, 69,SCREEN_WIDTH, MAIN_FRAME_H)];
     [scrollPicView setContentSize:CGSizeMake((imageArr.count)*320, 80)];
     scrollPicView.pagingEnabled = YES;
     scrollPicView.delegate = self;
@@ -181,9 +181,9 @@
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             if(IPHONE5){
-               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 15, SCREEN_WIDTH, 380)];
+               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 5, SCREEN_WIDTH, 380)];
             }else{
-               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 15, SCREEN_WIDTH, 290)];
+               imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 5, SCREEN_WIDTH, 290)];
             }
             [imageView setImageWithURL:[NSURL URLWithString:imgUrl]
                       placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
@@ -242,7 +242,11 @@
     //6.计算UILabel字符显示的实际大小
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-60-labelsize.height, SCREEN_WIDTH, labelsize.height+20)];
+    if(IPHONE5){
+        [descLabel setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, labelsize.height+20)];
+    }else{
+        [descLabel setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, labelsize.height+20)];
+    }
     descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [self.view addSubview:descLabel];
@@ -261,7 +265,11 @@
     descLabel.textColor = [UIColor whiteColor];
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     descLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    [descLabel setFrame:CGRectMake(0,VIEW_FRAME_H-60-labelsize.height, SCREEN_WIDTH, labelsize.height+20)];
+    if(IPHONE5){
+        [descLabel setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, labelsize.height+20)];
+    }else{
+        [descLabel setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, labelsize.height+20)];
+    }
     //NSLog(@"%d", page);
     
 }
@@ -515,7 +523,6 @@
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
-    
     [StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
 }
 

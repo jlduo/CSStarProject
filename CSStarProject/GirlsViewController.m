@@ -174,7 +174,6 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     
-    [self initLoadData];
     [_girlsTableView reloadData];
 }
 
@@ -325,8 +324,8 @@
         
         [picCell.picView setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        picCell.cellBgView.layer.cornerRadius = 5.0f;
-        picCell.cellBgView.layer.masksToBounds = YES;
+        //picCell.cellBgView.layer.cornerRadius = 5.0f;
+        //picCell.cellBgView.layer.masksToBounds = YES;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
         picCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
         picCell.titleView.font = TITLE_FONT;
@@ -354,9 +353,16 @@
         
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
-        videoCell.clickNum.text = [cellDic valueForKey:@"clicknum"];
+        
+        NSString *clickNum = [cellDic valueForKey:@"clicknum"];
+        if([StringUitl isEmpty:clickNum]){
+            clickNum = @"0";
+        }
+        videoCell.clickNum.text = clickNum;
         videoCell.videoTitle.font = TITLE_FONT;
         videoCell.videoDesc.font = DESC_FONT;
+        
+        [videoCell.videoBtn setUserInteractionEnabled:YES];
         return videoCell;
    }else{
        
