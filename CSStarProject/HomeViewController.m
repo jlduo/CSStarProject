@@ -99,14 +99,7 @@
         }
         
         
-        if([data_Type isEqual:@"article"]){//文章
-            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
-            passValelegate = storyDetail;
-            [passValelegate passValue:dataId];
-            [self.navigationController pushViewController:storyDetail animated:YES];
-        }
-        
-        if([data_Type isEqual:@"slide"]){//默认文章
+        if([data_Type isEqual:@"article"]||[data_Type isEqual:@"slide"]||[data_Type isEqual:@"city"]){//文章
             StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
             passValelegate = storyDetail;
             [passValelegate passValue:dataId];
@@ -124,8 +117,8 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
-    [self initLoadData];
-    [_homeTableView reloadData];
+    //[self initLoadData];
+    //[_homeTableView reloadData];
     
     
 }

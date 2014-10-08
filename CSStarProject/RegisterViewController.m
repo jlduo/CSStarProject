@@ -259,6 +259,8 @@
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
         [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self startTime];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     
     

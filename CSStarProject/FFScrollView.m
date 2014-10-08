@@ -44,12 +44,13 @@
     
     UIImageView *firstImageView = [[UIImageView alloc]initWithFrame:fitRect];
     
-    NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr lastObject]]];
-    if(imgData==nil){
-        firstImageView.image = [UIImage imageNamed:NOIMG_ICON];
-    }else{
-        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
-    }
+//    NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr lastObject]]];
+//    if(imgData==nil){
+//        firstImageView.image = [UIImage imageNamed:NOIMG_ICON];
+//    }else{
+//        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
+//    }
+    firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
     [self.scrollView addSubview:firstImageView];
     
     NSString *imgUrl;
@@ -65,13 +66,12 @@
         if(range.location!=NSNotFound){//判断加载远程图像
             imageview.requestSettings = reqSettings;
             imageview.progressAppearance = progressAppearance;
-            
             imageview.imageUrl = [sourceArr objectAtIndex:i];
             
-            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]];
-            if(imgData==nil){
-                imageview.image = [UIImage imageNamed:NOIMG_ICON];
-            }
+//            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]];
+//            if(imgData==nil){
+//                imageview.image = [UIImage imageNamed:NOIMG_ICON];
+//            }
             
             //[imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
                               // placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
