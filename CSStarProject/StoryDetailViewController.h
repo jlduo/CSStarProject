@@ -15,7 +15,7 @@
 #import "LoginViewController.h"
 #import "StoryCommentViewController.h"
 
-@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,MBProgressHUDDelegate>{
+@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,MBProgressHUDDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *delegate;
     MBProgressHUD *HUD;

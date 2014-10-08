@@ -19,6 +19,7 @@
     UIImageView *imgCategoryDetail;
     UITapGestureRecognizer *singleTap;
     BOOL isOpen;
+    UIWebView *webDetail;
 }
 @end
 
@@ -51,9 +52,16 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     //添加WebView
-    UIWebView *webDetail = [[UIWebView alloc] init];
+    webDetail = [[UIWebView alloc] init];
     webDetail.frame = CGRectMake(0, STATU_BAR_HEIGHT + NAV_TITLE_HEIGHT + 70, SCREEN_WIDTH, MAIN_FRAME_H - 150);
+    webDetail.delegate = self;
     [self.view addSubview:webDetail];
+    
+    //添加手势
+    UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    singleTapWeb.delegate= self;
+    singleTapWeb.cancelsTouchesInView = NO;
+    [webDetail addGestureRecognizer:singleTapWeb];
 
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
@@ -128,6 +136,49 @@
     [self initToolBar];
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
+//点击事件
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    CGPoint point = [sender locationInView:self.view];
+    
+    NSString *js = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).tagName", point.x, point.y];
+    NSString * tagName = [webDetail stringByEvaluatingJavaScriptFromString:js];
+    NSLog(@"%@",tagName);
+    if ([tagName isEqualToString:@"IMG"]) {
+        NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
+        NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL]; 
+        
+        //展示所有图片
+        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        imgArray = [imgArray substringFromIndex:1];
+        NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
+        NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
+        NSInteger _currentPhoteoIndex = 0;
+        for (int i = 0; i<photos.count; i++) {
+            MJPhoto *photo = [[MJPhoto alloc] init];
+            photo.url = [NSURL URLWithString:photos[i]];
+            
+            NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
+            UIImage *img = [UIImage imageWithData:data];
+            photo.srcImageView =[[UIImageView alloc] initWithImage:img];
+            [imgPhotes addObject:photo];
+            
+            imgArray = photos[i];
+            if ([imgUrl isEqualToString:imgArray]) {
+                _currentPhoteoIndex = i;
+            }
+        }
+        
+        MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+        browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
+        browser.photos = imgPhotes; // 设置所有的图片
+        [browser show];
+    }
+}
+
 //点赞按钮事件
 -(void)setClick{
     NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/UpdateClick/%@/1",REMOTE_URL,detailId];
@@ -172,8 +223,6 @@
     [self initNumButton];
     
     [self.view addSubview:toolBar];
-    
-    
 }
 
 -(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
@@ -181,7 +230,6 @@
     HUD = [[MBProgressHUD alloc] initWithView:self.view];
 	[self.view addSubview:HUD];
 	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
     HUD.customView = imgView;
     
     HUD.mode = MBProgressHUDModeCustomView;
@@ -420,4 +468,24 @@
 -(void)goPreviou{
     [super goPreviou];
 }
+
+//- (void)tapImage:(UITapGestureRecognizer *)tap
+//{
+//    //显示相册
+//    NSInteger count = imageArr.count;
+//    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+//    
+//    for (int i = 0; i<count; i++) {
+//        MJPhoto *photo = [[MJPhoto alloc] init];
+//        photo.url = [NSURL URLWithString:imageArr[i]]; // 图片路径
+//        photo.srcImageView = scrollPicView.subviews[i]; // 来源于哪个UIImageView
+//        [photos addObject:photo];
+//    }
+//    
+//    MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+//    browser.currentPhotoIndex = tap.view.tag; // 弹出相册时显示的第一张图片
+//    browser.photos = photos; // 设置所有的图片
+//    [self dismissKeyBoard];
+//    [browser show];
+//}
 @end
