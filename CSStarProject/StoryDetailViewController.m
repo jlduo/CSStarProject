@@ -157,7 +157,7 @@
         [imgCategoryDetail removeGestureRecognizer:singleTap];
         imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
     }else{
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+        [self showCustomAlert:@"result" widthType:WARNN_LOGO];
     }
 }
 
@@ -340,7 +340,6 @@
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
-            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
             [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{ 
             //提交评论
@@ -400,16 +399,13 @@
         [textField addSubview:plabel];
         isOpen = NO;
         
-        //[StringUitl alertMsg:@"提交成功" withtitle:nil];
         [self showCustomAlert:@"提交成功" widthType:SUCCESS_LOGO];
     }else{
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
         [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
     [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
