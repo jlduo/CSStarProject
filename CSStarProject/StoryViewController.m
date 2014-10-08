@@ -44,8 +44,6 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
-    
-    [self setTableData];
     [self.storyTableView reloadData];
 }
 
@@ -84,7 +82,7 @@
         }
         [_storyTableView reloadData];
     }else{
-        [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"];
+        [self showCustomAlert:@"没有数据了！" widthType:WARNN_LOGO];
     }
 }
 
@@ -171,5 +169,22 @@
         return storyBCell;
 
     }
+}
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	 
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
 }
 @end
