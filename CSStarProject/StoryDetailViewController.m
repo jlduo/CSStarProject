@@ -143,39 +143,36 @@
 //点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
     CGPoint point = [sender locationInView:self.view];
-    
-    NSString *js = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).tagName", point.x, point.y];
-    NSString * tagName = [webDetail stringByEvaluatingJavaScriptFromString:js];
-    NSLog(@"%@",tagName);
-    if ([tagName isEqualToString:@"IMG"]) {
-        NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
-        NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL]; 
-        
+    NSString  *imgUrl = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
+    imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:imgUrl];
+    if (imgUrl.length > 0) {
         //展示所有图片
         NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
-        imgArray = [imgArray substringFromIndex:1];
-        NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
-        NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
-        NSInteger _currentPhoteoIndex = 0;
-        for (int i = 0; i<photos.count; i++) {
-            MJPhoto *photo = [[MJPhoto alloc] init];
-            photo.url = [NSURL URLWithString:photos[i]];
-            
-            NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
-            UIImage *img = [UIImage imageWithData:data];
-            photo.srcImageView =[[UIImageView alloc] initWithImage:img];
-            [imgPhotes addObject:photo];
-            
-            imgArray = photos[i];
-            if ([imgUrl isEqualToString:imgArray]) {
-                _currentPhoteoIndex = i;
+        if (imgArray.length > 0) {
+            imgArray = [imgArray substringFromIndex:1];
+            NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
+            NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
+            NSInteger _currentPhoteoIndex = 0;
+            for (int i = 0; i<photos.count; i++) {
+                MJPhoto *photo = [[MJPhoto alloc] init];
+                photo.url = [NSURL URLWithString:photos[i]];
+                
+                NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
+                UIImage *img = [UIImage imageWithData:data];
+                photo.srcImageView =[[UIImageView alloc] initWithImage:img];
+                [imgPhotes addObject:photo];
+                
+                imgArray = photos[i];
+                if ([imgUrl isEqualToString:imgArray]) {
+                    _currentPhoteoIndex = i;
+                }
             }
+            
+            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+            browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
+            browser.photos = imgPhotes; // 设置所有的图片
+            [browser show];
         }
-        
-        MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
-        browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
-        browser.photos = imgPhotes; // 设置所有的图片
-        [browser show];
     }
 }
 
