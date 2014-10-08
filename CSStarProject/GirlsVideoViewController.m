@@ -579,8 +579,17 @@
     }
     
     if(playState==MPMoviePlaybackStateStopped){
-        [self setVideoView:TRUE];
+        //[self setVideoView:TRUE];
         [self changeRation:NO];
+    }
+    
+    if(playState==MPMoviePlaybackStateSeekingForward){
+        NSLog(@"self.moviePlayer Forward");
+        
+    }
+    
+    if(playState==MPMoviePlaybackStateSeekingBackward){
+        NSLog(@"self.moviePlayer Backward");
     }
     
     
