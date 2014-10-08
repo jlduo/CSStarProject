@@ -128,7 +128,6 @@
 
 -(void)initTable{
     table = [[UITableView alloc] initWithFrame:self.view.frame];
-    table.backgroundColor = [UIColor whiteColor];
     table.delegate = self;
     table.dataSource = self;
     table.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105); 
@@ -163,7 +162,6 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"计算高度");
     StoryCommentTableCell *commentCell = [table dequeueReusableCellWithIdentifier:@"storyCommentCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     NSString *commnetContent = [dicComment valueForKey:@"_content"];
@@ -405,8 +403,8 @@
 -(void)setHeaderRereshing{
     AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
-        [self performSelector:@selector(callBackMethod:) withObject:@"top"];
-        [view performSelector:@selector(finishedLoading)];
+        [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
+        [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
     }];
     [table addSubview:topPullView];
 }
@@ -415,8 +413,8 @@
 -(void)setFooterRereshing{
     AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
         pageIndex++;
-        [self performSelector:@selector(callBackMethod:) withObject:@"foot"];
-        [view performSelector:@selector(finishedLoading)];
+        [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
+        [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
     }];
     [table addSubview:bottomPullView];
 }
@@ -430,7 +428,7 @@
             tableArray  = nextArray;
         } else {
             [tableArray  addObjectsFromArray:nextArray];
-        } 
+        }
         [table reloadData];
     }else{
         //[StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"];

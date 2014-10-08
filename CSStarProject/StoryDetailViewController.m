@@ -15,6 +15,9 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
+    UILabel *lblNumberDetail;
+    UIImageView *imgCategoryDetail;
+    UITapGestureRecognizer *singleTap;
     BOOL isOpen;
 }
 @end
@@ -86,14 +89,18 @@
     [self.view addSubview:imgHomeDetailTwo];
     
     //点击图标
-    UIImageView *imgCategoryDetail=[[UIImageView alloc] init];
+    imgCategoryDetail = [[UIImageView alloc] init];
     imgCategoryDetail.frame = CGRectMake(155, 112, 16, 14);
     imgCategoryDetail.image = [UIImage imageNamed:@"heartgray.png"];
     [self.view addSubview:imgCategoryDetail];
     
+    imgCategoryDetail.userInteractionEnabled = YES;
+    singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setClick)];
+    [imgCategoryDetail addGestureRecognizer:singleTap];
+    
     //点击量
-    UILabel *lblNumberDetail = [[UILabel alloc] init];
-    lblNumberDetail.font = main_font(12);
+    lblNumberDetail = [[UILabel alloc] init];
+    lblNumberDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
     lblNumberDetail.textColor = [UIColor grayColor];
     lblNumberDetail.frame = CGRectMake(175, 104, 100, 30);
     [self.view addSubview:lblNumberDetail];
@@ -119,6 +126,39 @@
     
     //评论
     [self initToolBar];
+}
+
+//点赞按钮事件
+-(void)setClick{
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/UpdateClick/%@/1",REMOTE_URL,detailId];
+    NSURL *requestUrl = [NSURL URLWithString:url];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
+    [ASIHTTPRequest setSessionCookies:nil];
+    
+    [request setUseCookiePersistence:YES];
+    [request setDelegate:self];
+    [request setRequestMethod:@"GET"];
+    [request setStringEncoding:NSUTF8StringEncoding];
+    
+    [request buildPostBody];
+    
+    [request startAsynchronous];
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestLoginFinishedClick:)];
+}
+
+//请求完成
+- (void)requestLoginFinishedClick:(ASIHTTPRequest *)req{
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    //处理返回
+    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
+        lblNumberDetail.text = [jsonDic valueForKeyPath:@"value"];
+        [imgCategoryDetail removeGestureRecognizer:singleTap];
+        imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
+    }else{
+        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+    }
 }
 
 //初始化底部工具栏
