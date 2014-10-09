@@ -50,31 +50,34 @@
 //    }else{
 //        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
 //    }
-    firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
+    [firstImageView setImageWithURL:[NSURL URLWithString:[sourceArr lastObject]]
+              placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+    //firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
     [self.scrollView addSubview:firstImageView];
     
     NSString *imgUrl;
     for (int i = 0; i < sourceArr.count; i++) {
-        LASIImageView *imageview = [[LASIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
-        LRequestSettings *reqSettings = [LRequestSettings new];
-        reqSettings.secondsToCache = 20;
-        LProgressAppearance *progressAppearance = [LProgressAppearance new];
-        progressAppearance.schemeColor = [UIColor blueColor];
+          UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
+//        LASIImageView *imageview = [[LASIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
+//        LRequestSettings *reqSettings = [LRequestSettings new];
+//        reqSettings.secondsToCache = 20;
+//        LProgressAppearance *progressAppearance = [LProgressAppearance new];
+//        progressAppearance.schemeColor = [UIColor blueColor];
         
         imgUrl = [sourceArr objectAtIndex:i];
         NSRange range = [imgUrl rangeOfString:@"http"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            imageview.requestSettings = reqSettings;
-            imageview.progressAppearance = progressAppearance;
-            imageview.imageUrl = [sourceArr objectAtIndex:i];
+//            imageview.requestSettings = reqSettings;
+//            imageview.progressAppearance = progressAppearance;
+//            imageview.imageUrl = [sourceArr objectAtIndex:i];
             
 //            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]];
 //            if(imgData==nil){
 //                imageview.image = [UIImage imageNamed:NOIMG_ICON];
 //            }
             
-            //[imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
-                              // placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+            [imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
+                               placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
         }else{
             imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
         }

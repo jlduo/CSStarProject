@@ -461,7 +461,7 @@
     
     //视频监听事件
     [self addNotice];
-    [self addLoadTip];
+    //[self addLoadTip];
     [self addVideoPic];
     [self addPlayBtn];
   
@@ -511,7 +511,7 @@
 
 -(void)addPlayBtn{
     
-    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-32, 70, 64,64)];
+    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-32, 65, 64,64)];
     [playBtn setBackgroundImage:[UIImage imageNamed:@"video_play_black@2x.png"] forState:UIControlStateNormal];
     
     [playBtn addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchDown];
@@ -582,10 +582,12 @@
             }
             
             [self removeLoadTip];
+            [playBtn removeFromSuperview];
             break;
         case MPMoviePlaybackStatePaused:
             [self changeRation:NO];
-            [self addLoadTip];
+            //[self addLoadTip];
+            [self addPlayBtn];
             break;
         case MPMoviePlaybackStateInterrupted:
             [self changeRation:NO];
@@ -658,8 +660,8 @@
     
     if(moviePlayer.playbackState!=0){
         
-        [moviePlayer setFullscreen:YES animated:YES];
-        [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
+        //[moviePlayer setFullscreen:YES animated:YES];
+        //[moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
         [self changeRation:YES];
     
     }

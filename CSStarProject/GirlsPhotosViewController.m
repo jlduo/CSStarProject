@@ -129,7 +129,7 @@
     HUD.dimBackground = YES;
 	
     [HUD show:YES];
-    [HUD hide:YES afterDelay:2];
+    [HUD hide:YES afterDelay:1];
 }
 
 -(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
@@ -206,6 +206,7 @@
 
 - (void)tapImage:(UITapGestureRecognizer *)tap
 {
+    [self dismissKeyBoard];
     //显示相册
     NSInteger count = imageArr.count;
     NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
@@ -220,7 +221,7 @@
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
     browser.currentPhotoIndex = tap.view.tag; // 弹出相册时显示的第一张图片
     browser.photos = photos; // 设置所有的图片
-    [self dismissKeyBoard];
+    
     [browser show];
 }
 
@@ -256,16 +257,24 @@
 
 -(void)initPhotoTitle{
     descView = [[UITextView alloc]init];
+    descView.backgroundColor = [UIColor clearColor];
+    NSString *s = [titleArr objectAtIndex:0];
+    descView.text = [NSString stringWithFormat:@"%d/%d  %@",1,imageArr.count,s];
+    UIFont *font = main_font(14);
+    descView.font = font;
+    descView.textColor = [UIColor whiteColor];
+    descView.editable = NO;
+
     if(IPHONE5){
-        [descView setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, 100)];
+        [descView setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, 80)];
     }else{
-        [descView setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, 100)];
+        [descView setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, 80)];
     }
-    
+    [self.view addSubview:descView];
     
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+-(void)scrollViewDidScroll2:(UIScrollView *)scrollView{
 
     int page = scrollView.contentOffset.x / scrollView.frame.size.width;
     NSString *s = [titleArr objectAtIndex:page];
@@ -278,11 +287,30 @@
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     if(IPHONE5){
-        [descLabel setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, labelsize.height+20)];
+        [descView setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, labelsize.height+20)];
     }else{
-        [descLabel setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, labelsize.height+20)];
+        [descView setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, labelsize.height+20)];
     }
     //NSLog(@"%d", page);
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    int page = scrollView.contentOffset.x / scrollView.frame.size.width;
+    NSString *s = [titleArr objectAtIndex:page];
+    descView.text = [NSString stringWithFormat:@"%d/%d  %@",page+1,imageArr.count,s];
+    descView.editable = NO;
+    UIFont *font = main_font(14);
+    descView.font = font;
+    descView.textColor = [UIColor whiteColor];
+    descView.backgroundColor = [UIColor clearColor];
+    
+    if(IPHONE5){
+        [descView setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, 80)];
+    }else{
+        [descView setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, 80)];
+    }
     
 }
 
