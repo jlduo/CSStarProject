@@ -518,6 +518,19 @@
     [headView addSubview:playBtn];
 }
 
+-(void)showPlayBtn{
+    
+    playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-32, 65, 64,64)];
+    [playBtn setBackgroundImage:[UIImage imageNamed:@"video_play_black@2x.png"] forState:UIControlStateNormal];
+    [playBtn addTarget:self action:@selector(playVideo2) forControlEvents:UIControlEventTouchDown];
+    [headView addSubview:playBtn];
+}
+
+
+-(void)playVideo2{
+    [moviePlayer play];
+}
+
 -(void)addNotice{
     
     // 注册一个播放结束的通知
@@ -587,7 +600,7 @@
         case MPMoviePlaybackStatePaused:
             [self changeRation:NO];
             //[self addLoadTip];
-            [self addPlayBtn];
+            [self showPlayBtn];
             break;
         case MPMoviePlaybackStateInterrupted:
             [self changeRation:NO];
@@ -660,8 +673,8 @@
     
     if(moviePlayer.playbackState!=0){
         
-        //[moviePlayer setFullscreen:YES animated:YES];
-        //[moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
+        [moviePlayer setFullscreen:YES animated:YES];
+        [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
         [self changeRation:YES];
     
     }

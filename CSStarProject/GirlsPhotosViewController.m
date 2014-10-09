@@ -550,12 +550,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
+        [self showCustomAlert:@"提交评论信息成功！" widthType:SUCCESS_LOGO];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"提示信息"];
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
         
     }
     
@@ -563,7 +563,8 @@
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
-    [StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    //[StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
+    [self showCustomAlert:@"提交数据失败！" widthType:ERROR_LOGO];
 }
 
 
