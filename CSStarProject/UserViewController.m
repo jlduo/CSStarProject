@@ -276,11 +276,7 @@
         [newUserCell addSubview:loginOutBtn];
         return newUserCell;
     }
-   
-    
-
 }
-
 
 -(void)userLoginOut{
     //清空用户信息
@@ -289,7 +285,14 @@
     //跳转到首页
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
+}
+
+//行选中事件
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        myCommentViewController *comController = [[myCommentViewController alloc] init];
+        [self.navigationController pushViewController:comController animated:YES];
+    }
 }
 
 

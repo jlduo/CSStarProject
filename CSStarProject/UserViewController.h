@@ -10,6 +10,7 @@
 #import "common.h"
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
+#import "myCommentViewController.h"
 
 
 @interface UserViewController:CommonViewController
