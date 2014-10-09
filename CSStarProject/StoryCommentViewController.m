@@ -112,7 +112,6 @@
     HUD = [[MBProgressHUD alloc] initWithView:self.view];
 	[self.view addSubview:HUD];
 	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
     HUD.customView = imgView;
     
     HUD.mode = MBProgressHUDModeCustomView;
@@ -319,8 +318,7 @@
 -(void)commentBtnClick{
     NSString *textVal = textField.text;
     //点击发表提交数据
-    if([self isEmpty:textVal]){
-        //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
+    if([self isEmpty:textVal]){ 
         [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
         //提交评论
@@ -367,7 +365,6 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel]; 
         
-        //[StringUitl alertMsg:@"提交成功" withtitle:nil];
         [self showCustomAlert:@"评论提交成功" widthType:WARNN_LOGO];
         pageIndex = 1;
         tableArray  = [self getCommentList];
@@ -376,13 +373,11 @@
         NSString *clickNum = [self getCommentNum];
         lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     }else{
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
         [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-     //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
      [self showCustomAlert:@"请求数据失败" widthType:WARNN_LOGO];
 }
 
@@ -430,8 +425,7 @@
             [tableArray  addObjectsFromArray:nextArray];
         }
         [table reloadData];
-    }else{
-        //[StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"];
+    }else{ 
         [self showCustomAlert:@"没有数据了" widthType:WARNN_LOGO];
     }
 }

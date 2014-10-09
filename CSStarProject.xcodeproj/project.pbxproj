@@ -1079,8 +1079,8 @@
 		7EA32F3E19AEACF8007FE086 /* story */ = {
 			isa = PBXGroup;
 			children = (
-				7EBE4BD619E5356900FCF4AF /* StoryViewController.m */,
 				7EA32F5F19AEC4E3007FE086 /* StoryViewController.h */,
+				7EBE4BD619E5356900FCF4AF /* StoryViewController.m */,
 				7E0F1F4F19C185F8008D0CB7 /* StoryDetailViewController.h */,
 				7E0F1F5019C185F8008D0CB7 /* StoryDetailViewController.m */,
 				7E04A73619C7DB340026E8BB /* StoryCommentViewController.h */,
