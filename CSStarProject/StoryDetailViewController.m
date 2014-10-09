@@ -58,9 +58,9 @@
     
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [webDetail addGestureRecognizer:singleTapWeb];
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
-    [webDetail addGestureRecognizer:singleTapWeb];
 
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
@@ -141,7 +141,7 @@
 
 //点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
-    CGPoint point = [sender locationInView:self.view];
+    CGPoint point = [sender locationInView:webDetail];
     NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
     NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
     if (imgUrl.length > 0) {
@@ -165,8 +165,7 @@
                 if ([imgUrl isEqualToString:imgArray]) {
                     _currentPhoteoIndex = i;
                 }
-            }
-            
+            } 
             MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
             browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
             browser.photos = imgPhotes; // 设置所有的图片
