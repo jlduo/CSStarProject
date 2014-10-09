@@ -11,9 +11,10 @@
 #import "StoryTableViewSmallCell.h"
 #import "ViewPassValueDelegate.h"
 #import "common.h"
+#import "MBProgressHUD.h"
 
-@interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
-    // 声明一个参数传递代理
+@interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,MBProgressHUDDelegate>{
+    MBProgressHUD *HUD;
     NSObject<ViewPassValueDelegate> *delegate;
 }
 

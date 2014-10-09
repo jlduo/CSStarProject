@@ -51,7 +51,7 @@
     AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_storyTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
         [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
-        [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
+        [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
     }];
     [_storyTableView addSubview:topPullView];
 }
@@ -60,7 +60,7 @@
 -(void)setFooterRereshing{
     AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_storyTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
         pageIndex++;
-        [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
+        [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
     }];
     [_storyTableView addSubview:bottomPullView];
@@ -70,7 +70,7 @@
 -(void)callBackMethod:(id) isTop
 {
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/10/%d",REMOTE_URL,pageIndex];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/6/%d",REMOTE_URL,pageIndex];
     NSMutableArray *nextArray = (NSMutableArray *)[jsonData requestData:url];
     
     if(nextArray!=nil && nextArray.count>0){
@@ -80,8 +80,8 @@
             [_storyDataList  addObjectsFromArray:nextArray];
         }
         [_storyTableView reloadData];
-    }else{
-        [StringUitl alertMsg:@"没有数据了！" withtitle:@"提示"];
+    }else{ 
+        [self showCustomAlert:@"没有数据了！" widthType:WARNN_LOGO];
     }
 }
 
@@ -92,7 +92,7 @@
 
 -(void)setTableData{
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/10/%d",REMOTE_URL,pageIndex];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/6/%d",REMOTE_URL,pageIndex];
  
     _storyDataList = [[NSMutableArray alloc] init];
     _storyDataList = (NSMutableArray *)[jsonData requestData:url]; 
@@ -118,8 +118,8 @@
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *parray = [_storyDataList objectAtIndex:indexPath.row];
-    NSString * isTop =[[NSString alloc] initWithFormat:@"%@",[parray valueForKey:@"_is_top"]];
-    NSInteger height = 50;
+    NSString * isTop =[[NSString alloc] initWithFormat:@"%@",[parray valueForKey:@"_is_red"]];
+    NSInteger height = 75;
     if ([isTop isEqualToString:@"1"]) {
         height = 190;
     }
@@ -130,7 +130,7 @@
 #pragma mark 加载数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{ 
     NSDictionary *parray = [_storyDataList objectAtIndex:indexPath.row];
-    NSString * isTop =[[NSString alloc] initWithFormat:@"%@",[parray valueForKey:@"_is_top"]];
+    NSString * isTop =[[NSString alloc] initWithFormat:@"%@",[parray valueForKey:@"_is_red"]];
     if ([isTop isEqualToString:@"0"]) {
         static BOOL isNibregistered = NO;
         if(!isNibregistered){
@@ -166,7 +166,22 @@
         storyBCell.imgTitle.text = [parray valueForKey:@"_title"];
         
         return storyBCell;
-
     }
+}
+
+-(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]]; 
+    HUD.customView = imgView;
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.delegate = self;
+    HUD.labelText = msg;
+    HUD.dimBackground = YES;
+	 
+    [HUD show:YES];
+    [HUD hide:YES afterDelay:1];
 }
 @end

@@ -156,8 +156,8 @@
         lblNumberDetail.text = [jsonDic valueForKeyPath:@"value"];
         [imgCategoryDetail removeGestureRecognizer:singleTap];
         imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
-    }else{
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
+    }else{ 
+        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
 
@@ -181,7 +181,6 @@
     HUD = [[MBProgressHUD alloc] initWithView:self.view];
 	[self.view addSubview:HUD];
 	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
     HUD.customView = imgView;
     
     HUD.mode = MBProgressHUDModeCustomView;
@@ -340,7 +339,6 @@
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
-            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
             [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{ 
             //提交评论
@@ -382,7 +380,6 @@
 
 //请求完成
 - (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSLog(@"login info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     //处理返回
@@ -400,16 +397,13 @@
         [textField addSubview:plabel];
         isOpen = NO;
         
-        //[StringUitl alertMsg:@"提交成功" withtitle:nil];
         [self showCustomAlert:@"提交成功" widthType:SUCCESS_LOGO];
     }else{
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"错误提示"];
         [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
     [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
