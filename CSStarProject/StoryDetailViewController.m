@@ -19,6 +19,7 @@
     UIImageView *imgCategoryDetail;
     UITapGestureRecognizer *singleTap;
     BOOL isOpen;
+    UIWebView *webDetail;
 }
 @end
 
@@ -51,9 +52,15 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     //添加WebView
-    UIWebView *webDetail = [[UIWebView alloc] init];
+    webDetail = [[UIWebView alloc] init];
     webDetail.frame = CGRectMake(0, STATU_BAR_HEIGHT + NAV_TITLE_HEIGHT + 70, SCREEN_WIDTH, MAIN_FRAME_H - 150);
     [self.view addSubview:webDetail];
+    
+    //添加手势
+    UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    singleTapWeb.delegate= self;
+    singleTapWeb.cancelsTouchesInView = NO;
+    [webDetail addGestureRecognizer:singleTapWeb];
 
     //标题
     UILabel *lblDetail=[[UILabel alloc] init];
@@ -126,6 +133,46 @@
     
     //评论
     [self initToolBar];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
+//点击事件
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    CGPoint point = [sender locationInView:self.view];
+    NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
+    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
+    if (imgUrl.length > 0) {
+        //展示所有图片
+        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        if (imgArray.length > 0) {
+            imgArray = [imgArray substringFromIndex:1];
+            NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
+            NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
+            NSInteger _currentPhoteoIndex = 0;
+            for (int i = 0; i<photos.count; i++) {
+                MJPhoto *photo = [[MJPhoto alloc] init];
+                photo.url = [NSURL URLWithString:photos[i]];
+                
+                NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
+                UIImage *img = [UIImage imageWithData:data];
+                photo.srcImageView =[[UIImageView alloc] initWithImage:img];
+                [imgPhotes addObject:photo];
+                
+                imgArray = photos[i];
+                if ([imgUrl isEqualToString:imgArray]) {
+                    _currentPhoteoIndex = i;
+                }
+            }
+            
+            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+            browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
+            browser.photos = imgPhotes; // 设置所有的图片
+            [browser show];
+        }
+    }
 }
 
 //点赞按钮事件
