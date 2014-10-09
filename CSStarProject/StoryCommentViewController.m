@@ -138,7 +138,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{ 
-    StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"];
+    StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"]; 
+    
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     DateUtil *utilDate = [[DateUtil alloc] init];
     NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
@@ -152,7 +153,6 @@
     commentCell.commentUsername.font = main_font(14);
     commentCell.commentTextView.font = main_font(12);
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     return commentCell;
 }
 
@@ -170,7 +170,7 @@
     CGSize size = CGSizeMake(commentCell.commentTextView.frame.size.width,2000);
     CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     if (labelsize.height > 20) {
-        return  commentCell.frame.size.height + labelsize.height - commentCell.commentTextView.frame.size.height;
+        return  60 + labelsize.height;
     }
     else{
         return 60;

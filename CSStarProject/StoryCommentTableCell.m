@@ -10,16 +10,9 @@
 
 @implementation StoryCommentTableCell
 
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (void)drawRect:(CGRect)rect
@@ -31,10 +24,11 @@
     //评论内容自适应
     [self.commentTextView setNumberOfLines:0];
     UIFont *font = [UIFont systemFontOfSize:12];
+    [self.commentTextView setLineBreakMode:NSLineBreakByCharWrapping];
     CGSize size = CGSizeMake( self.commentTextView.frame.size.width,2000);
     CGSize labelsize = [labelString sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
-    if (labelsize.height > self.commentTextView.frame.size.height) {
-        self.commentTextView.frame = CGRectMake(self.commentTextView.frame.origin.x,self.commentTextView.frame.origin.y, self.commentTextView.frame.size.width, labelsize.height);
+    if (labelsize.height > 20) {
+        self.commentTextView.frame = CGRectMake(self.commentTextView.frame.origin.x,self.commentTextView.frame.origin.y, self.commentTextView.frame.size.width, labelsize.height + 20);
     }
 }
 @end
