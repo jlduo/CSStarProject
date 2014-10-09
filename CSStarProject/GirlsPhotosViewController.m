@@ -20,6 +20,7 @@
     UIScrollView *scrollPicView;
     
     UILabel *descLabel;
+    UITextView *descView;
     
     UIToolbar *toolBar;
     UIButton *numBtn;
@@ -223,7 +224,7 @@
     [browser show];
 }
 
--(void)initPhotoTitle{
+-(void)initPhotoTitle2{
     
     //1.实例化UILabel，其frame设置为CGRectZero，后面会重新设置该值。
     descLabel = [[UILabel alloc] initWithFrame: CGRectZero];
@@ -250,6 +251,17 @@
     descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [self.view addSubview:descLabel];
+    
+}
+
+-(void)initPhotoTitle{
+    descView = [[UITextView alloc]init];
+    if(IPHONE5){
+        [descView setFrame:CGRectMake(0,380+68, SCREEN_WIDTH, 100)];
+    }else{
+        [descView setFrame:CGRectMake(0,290+68, SCREEN_WIDTH, 100)];
+    }
+    
     
 }
 
