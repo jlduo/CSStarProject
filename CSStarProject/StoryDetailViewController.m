@@ -156,7 +156,7 @@
         lblNumberDetail.text = [jsonDic valueForKeyPath:@"value"];
         [imgCategoryDetail removeGestureRecognizer:singleTap];
         imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
-    }else{ 
+    }else{
         [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
