@@ -292,6 +292,9 @@
     if (indexPath.row == 0) {
         myCommentViewController *comController = [[myCommentViewController alloc] init];
         [self.navigationController pushViewController:comController animated:YES];
+    }else if(indexPath.row == 4){
+        myAddressViewController *addressController = [[myAddressViewController alloc] init];
+        [self.navigationController pushViewController:addressController animated:YES];
     }
 }
 

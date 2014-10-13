@@ -27,6 +27,7 @@
 -(NSString *)dateToString:(NSDate *)date;
 -(NSString *)getLocalDateFormateUTCDate:(NSString *)utcDate;
 -(NSString *)getLocalDateFormateUTCDate1:(NSString *)utcDate;
+-(NSString *)getLocalDateFormateUTCDate2:(NSString *)utcDate;
 -(NSString *)getUTCFormateLocalDate:(NSString *)localDate;
 
 @end

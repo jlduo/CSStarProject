@@ -194,6 +194,16 @@
 		7EA4B9F719D11CAF000FF50E /* PhotoScrollViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4B9F519D11CAF000FF50E /* PhotoScrollViewCell.xib */; };
 		7EA4B9FF19D14CE9000FF50E /* LASIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */; };
 		7EA4BA0319D15858000FF50E /* titlebar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4BA0219D15858000FF50E /* titlebar@2x.png */; };
+		7EA4D84219E771AC004608C7 /* commentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D84019E771AC004608C7 /* commentTableViewCell.m */; };
+		7EA4D84319E771AC004608C7 /* commentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */; };
+		7EA4D84519E7738D004608C7 /* btn_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84419E7738D004608C7 /* btn_close.png */; };
+		7EA4D84719E774C7004608C7 /* btn_close_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84619E774C7004608C7 /* btn_close_black.png */; };
+		7EA4D84B19E7B461004608C7 /* userAddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */; };
+		7EA4D84C19E7B461004608C7 /* userAddressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */; };
+		7EA4D84E19E7B670004608C7 /* dottedline.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84D19E7B670004608C7 /* dottedline.png */; };
+		7EA4D85119E7B73D004608C7 /* btncheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84F19E7B73D004608C7 /* btncheck.png */; };
+		7EA4D85219E7B73D004608C7 /* btnnocheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D85019E7B73D004608C7 /* btnnocheck.png */; };
+		7EA4D85519E7BABC004608C7 /* myAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D85419E7BABC004608C7 /* myAddressViewController.m */; };
 		7EA55E9819D507E500D8AFE2 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA55E9219D507E500D8AFE2 /* checkmark.png */; };
 		7EA55E9919D507E500D8AFE2 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA55E9319D507E500D8AFE2 /* checkmark@2x.png */; };
 		7EA55E9A19D507E500D8AFE2 /* cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA55E9419D507E500D8AFE2 /* cross.png */; };
@@ -543,6 +553,19 @@
 		7EA4B9FD19D14CE9000FF50E /* LASIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LASIImageView.h; sourceTree = "<group>"; };
 		7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LASIImageView.m; sourceTree = "<group>"; };
 		7EA4BA0219D15858000FF50E /* titlebar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "titlebar@2x.png"; sourceTree = "<group>"; };
+		7EA4D83F19E771AC004608C7 /* commentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentTableViewCell.h; sourceTree = "<group>"; };
+		7EA4D84019E771AC004608C7 /* commentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentTableViewCell.m; sourceTree = "<group>"; };
+		7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = commentTableViewCell.xib; sourceTree = "<group>"; };
+		7EA4D84419E7738D004608C7 /* btn_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close.png; sourceTree = "<group>"; };
+		7EA4D84619E774C7004608C7 /* btn_close_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_black.png; sourceTree = "<group>"; };
+		7EA4D84819E7B461004608C7 /* userAddressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userAddressTableViewCell.h; sourceTree = "<group>"; };
+		7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userAddressTableViewCell.m; sourceTree = "<group>"; };
+		7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = userAddressTableViewCell.xib; sourceTree = "<group>"; };
+		7EA4D84D19E7B670004608C7 /* dottedline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dottedline.png; sourceTree = "<group>"; };
+		7EA4D84F19E7B73D004608C7 /* btncheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btncheck.png; sourceTree = "<group>"; };
+		7EA4D85019E7B73D004608C7 /* btnnocheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnnocheck.png; sourceTree = "<group>"; };
+		7EA4D85319E7BABC004608C7 /* myAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myAddressViewController.h; sourceTree = "<group>"; };
+		7EA4D85419E7BABC004608C7 /* myAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myAddressViewController.m; sourceTree = "<group>"; };
 		7EA55E9219D507E500D8AFE2 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
 		7EA55E9319D507E500D8AFE2 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		7EA55E9419D507E500D8AFE2 /* cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross.png; sourceTree = "<group>"; };
@@ -687,6 +710,8 @@
 			children = (
 				7E330A7519E67A9900DE79F0 /* myCommentViewController.h */,
 				7E330A7619E67A9900DE79F0 /* myCommentViewController.m */,
+				7EA4D85319E7BABC004608C7 /* myAddressViewController.h */,
+				7EA4D85419E7BABC004608C7 /* myAddressViewController.m */,
 			);
 			name = userMessage;
 			sourceTree = "<group>";
@@ -941,6 +966,7 @@
 		7E971F4E19ADC93100858D44 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7EA4D83E19E77172004608C7 /* userMessage */,
 				7E73E66A19B45DA000EB6024 /* user */,
 				7E73E66919B45D7A00EB6024 /* friend */,
 				7E73E66819B45D7300EB6024 /* people */,
@@ -1138,6 +1164,11 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7EA4D84F19E7B73D004608C7 /* btncheck.png */,
+				7EA4D85019E7B73D004608C7 /* btnnocheck.png */,
+				7EA4D84D19E7B670004608C7 /* dottedline.png */,
+				7EA4D84619E774C7004608C7 /* btn_close_black.png */,
+				7EA4D84419E7738D004608C7 /* btn_close.png */,
 				7E330A7819E686FD00DE79F0 /* mydiscu_star_on.png */,
 				7E330A7919E686FD00DE79F0 /* mydiscu_star.png */,
 				7E330A7A19E686FD00DE79F0 /* mydiscu_zhongchou_on.png */,
@@ -1275,6 +1306,19 @@
 				7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */,
 			);
 			name = LASIImageView;
+			sourceTree = "<group>";
+		};
+		7EA4D83E19E77172004608C7 /* userMessage */ = {
+			isa = PBXGroup;
+			children = (
+				7EA4D83F19E771AC004608C7 /* commentTableViewCell.h */,
+				7EA4D84019E771AC004608C7 /* commentTableViewCell.m */,
+				7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */,
+				7EA4D84819E7B461004608C7 /* userAddressTableViewCell.h */,
+				7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */,
+				7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */,
+			);
+			name = userMessage;
 			sourceTree = "<group>";
 		};
 		7EA616C019B15C0100FD319B /* picScroll */ = {
@@ -1446,11 +1490,13 @@
 				7E99340B19C947FA0077ED7C /* EditNickNameController.xib in Resources */,
 				7E96960D19CD7488008C3688 /* FogetPasswordViewController.xib in Resources */,
 				7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */,
+				7EA4D85219E7B73D004608C7 /* btnnocheck.png in Resources */,
 				7E9EEC0419C278C800C0514C /* AppIcon50x50@2x.png in Resources */,
 				7E2944BD19C7D51600037D95 /* myzone-location.png in Resources */,
 				7E9C547619B7F3D700851CAB /* icon_redo@2x.png in Resources */,
 				7EA55EAB19D551B800D8AFE2 /* suc1@2x.png in Resources */,
 				7E73E69219B46C3C00EB6024 /* switch.png in Resources */,
+				7EA4D84E19E7B670004608C7 /* dottedline.png in Resources */,
 				7EA3318519AF2A98007FE086 /* VideoTableViewCell.xib in Resources */,
 				7EBAFBB119D249E20087ED69 /* tabBar_selected_7@2x.png in Resources */,
 				7E330A7E19E686FD00DE79F0 /* mydiscu_zhongchou_on.png in Resources */,
@@ -1489,6 +1535,7 @@
 				7E9EEC1119C27D2600C0514C /* CommentTableListCell.xib in Resources */,
 				7E9EEC2719C2DE5C00C0514C /* RegisterViewController.xib in Resources */,
 				7E73E68919B46C3C00EB6024 /* header_2@2x.png in Resources */,
+				7EA4D84519E7738D004608C7 /* btn_close.png in Resources */,
 				7EA4B9E919D0F886000FF50E /* tabbar2.png in Resources */,
 				7E9C547019B7F2C800851CAB /* LLCelIArrow@2x.png in Resources */,
 				7E99341519C987270077ED7C /* EditPasswordController.xib in Resources */,
@@ -1541,6 +1588,7 @@
 				7EBAFC3219D2A9610087ED69 /* usercenter_hd_cover_0@2x.png in Resources */,
 				7EBAFBAF19D2499F0087ED69 /* tabBar_selected@2x.png in Resources */,
 				7E9D343619B71928005498D0 /* avatar.png in Resources */,
+				7EA4D84319E771AC004608C7 /* commentTableViewCell.xib in Resources */,
 				7EA4B9E819D0F886000FF50E /* tabbar1@2x.png in Resources */,
 				7EA55EBA19D55C7E00D8AFE2 /* tips_success.png in Resources */,
 				7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */,
@@ -1580,6 +1628,7 @@
 				7E99058519CA73F90024F74B /* EditSexViewController.xib in Resources */,
 				7EA55EB519D55BFD00D8AFE2 /* hand@2x.png in Resources */,
 				7E9EEC2A19C2E14A00C0514C /* iconfinger.png in Resources */,
+				7EA4D84C19E7B461004608C7 /* userAddressTableViewCell.xib in Resources */,
 				7EBAFBE019D299350087ED69 /* MJPhotoBrowser.bundle in Resources */,
 				7E2944C319C7D56300037D95 /* myzone-rightarrow-b.png in Resources */,
 				7E9C546719B7ECFF00851CAB /* tb_back.png in Resources */,
@@ -1593,8 +1642,10 @@
 				7E9EEC0319C278C800C0514C /* AppIcon50x50.png in Resources */,
 				7E9EEC0019C278C800C0514C /* AppIcon29x29@2x.png in Resources */,
 				7EA4B9E719D0F886000FF50E /* tabbar1.png in Resources */,
+				7EA4D85119E7B73D004608C7 /* btncheck.png in Resources */,
 				7E9EEC0119C278C800C0514C /* AppIcon40x40.png in Resources */,
 				7EA3317B19AF14F5007FE086 /* student.xml in Resources */,
+				7EA4D84719E774C7004608C7 /* btn_close_black.png in Resources */,
 				7E73E68B19B46C3C00EB6024 /* icontip.png in Resources */,
 				7E73E68619B46C3C00EB6024 /* homestory.png in Resources */,
 			);
@@ -1635,6 +1686,7 @@
 				7EBAFBEF19D299410087ED69 /* UIImageView+MJWebCache.m in Sources */,
 				7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */,
 				7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */,
+				7EA4D84B19E7B461004608C7 /* userAddressTableViewCell.m in Sources */,
 				7E04A73D19C828730026E8BB /* StoryCommentTableCell.m in Sources */,
 				7EBAFBF419D299410087ED69 /* MJPhotoToolbar.m in Sources */,
 				7EA4B9FF19D14CE9000FF50E /* LASIImageView.m in Sources */,
@@ -1643,6 +1695,7 @@
 				7EA3317619AF0FDE007FE086 /* XMLDictionary.m in Sources */,
 				7E9EEC4C19C2F02D00C0514C /* ASIDataDecompressor.m in Sources */,
 				7EA3318419AF2A98007FE086 /* VideoTableViewCell.m in Sources */,
+				7EA4D85519E7BABC004608C7 /* myAddressViewController.m in Sources */,
 				7EBAFC1B19D29B3A0087ED69 /* SDWebImageDecoder.m in Sources */,
 				7EBAFBF319D299410087ED69 /* MJPhotoProgressView.m in Sources */,
 				7E9C549019B85A3C00851CAB /* UserSmallTableViewCell.m in Sources */,
@@ -1652,6 +1705,7 @@
 				7E9EEC1B19C2A84000C0514C /* LoginViewController.m in Sources */,
 				7EBAFBDC19D299250087ED69 /* MBProgressHUD+Add.m in Sources */,
 				7EBE4BD719E5356900FCF4AF /* StoryViewController.m in Sources */,
+				7EA4D84219E771AC004608C7 /* commentTableViewCell.m in Sources */,
 				7EBAFC1719D29B3A0087ED69 /* MKAnnotationView+WebCache.m in Sources */,
 				7E9C548819B85A0D00851CAB /* UserBigTableViewCell.m in Sources */,
 				7E9C548319B844BC00851CAB /* StringUitl.m in Sources */,

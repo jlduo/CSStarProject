@@ -162,8 +162,20 @@
     return dateString;
 }
 
-
-
-
-
+//将UTC日期字符串转为本地时间字符串
+//输入的UTC日期格式2013-08-03T04:53:51.666
+-(NSString *)getLocalDateFormateUTCDate2:(NSString *)utcDate
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //输入格式
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+    NSTimeZone *localTimeZone = [NSTimeZone localTimeZone];
+    [dateFormatter setTimeZone:localTimeZone];
+    
+    NSDate *dateFormatted = [dateFormatter dateFromString:utcDate];
+    //输出格式
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:dateFormatted];
+    return dateString;
+}
 @end
