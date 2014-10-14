@@ -11,7 +11,7 @@
 #import "HomeViewController.h"
 #import "UserInfoViewController.h"
 
-@interface UserViewController () <UITableViewDataSource,UITableViewDelegate>{
+@interface UserViewController (){
     UIImage *cellImg;
     NSString *imgName;
     NSString *cellTitle;
@@ -172,12 +172,6 @@
     [super loadView];
     //self.navigationController.navigationBarHidden = YES;
     [self.view addSubview:[self setNavBarWithTitle:@"个人中心" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
-    
-}
-
--(void)loadUserData{
-    
-    
     
 }
 

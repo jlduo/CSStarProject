@@ -306,7 +306,7 @@
 
 
 -(void)commentBtnClick{
-    
+    [self pauseVideo];
     NSString *btnText = numBtn.titleLabel.text;
     NSString *textVal = textField.text;
     NSLog(@"textVal=%@",textVal);
@@ -531,6 +531,12 @@
     [moviePlayer play];
 }
 
+-(void)pauseVideo{
+    [moviePlayer pause];
+}
+
+
+
 -(void)addNotice{
     
     // 注册一个播放结束的通知
@@ -623,11 +629,7 @@
 -(void)myMovieFinishedCallback:(NSNotification*)notify
 {
     [self removeNotice:notify];
-    [self addNotice];
-    [self.view addSubview:moviePlayer.view];
-    
-    [self.view addSubview:videoPic];
-    [self.view addSubview:playBtn];
+    [self setVideoView:YES];
     [self changeRation:NO];
 }
 

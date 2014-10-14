@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+@class Reachability;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
     BOOL _isFull; // 是否全屏
+    Reachability  *hostReach;
 }
 
 

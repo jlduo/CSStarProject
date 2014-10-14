@@ -20,7 +20,7 @@
                     <rect key="frame" x="0.0" y="64" width="320" height="431"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <mutableString key="text">                          用户协议
+                    <string key="text">                          用户协议
 
 一、账号注册
 
@@ -95,7 +95,7 @@
 6、用户确认，陌陌币只能用于购买“陌陌”平台上的各类增值服务，任何情况下不得与陌陌科技以外的第三方进行陌陌币交易，亦不得在除“陌陌”平台以外的第三方平台（如淘宝）上进行交易；如违反前述约定，造成用户或第三方任何损失，陌陌科技不负任何责任，且如陌陌科技有理由怀疑用户的陌陌币帐户或使用情况有作弊或异常状况，陌陌科技将拒绝该用户使用陌陌币进行支付，直至按本协议约定采取相关封禁措施。
 7、用户确认，除法律法规明确规定或本协议另有约定外，用户已购买的任何收费服务不能以任何理由退购（即退换成陌陌币或法定货币）或调换成其他服务。
 
-</mutableString>
+</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>

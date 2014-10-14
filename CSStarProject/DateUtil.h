@@ -28,5 +28,6 @@
 -(NSString *)getLocalDateFormateUTCDate:(NSString *)utcDate;
 -(NSString *)getLocalDateFormateUTCDate1:(NSString *)utcDate;
 -(NSString *)getUTCFormateLocalDate:(NSString *)localDate;
++(NSString *) compareCurrentTime:(NSDate*) compareDate;
 
 @end

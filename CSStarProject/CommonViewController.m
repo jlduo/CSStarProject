@@ -89,7 +89,7 @@
     
     UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
     [titleLabel setText:titleName];
-    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     titleLabel.font = BANNER_FONT;
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];

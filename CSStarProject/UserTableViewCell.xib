@@ -31,7 +31,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhs-aL-dHu" userLabel="数字">
-                                <rect key="frame" x="24" y="4" width="20" height="12"/>
+                                <rect key="frame" x="24" y="3" width="20" height="12"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -61,6 +61,8 @@
                 <outlet property="cellView" destination="H2p-sc-9uM" id="8Fv-ag-WiK"/>
                 <outlet property="dataNum" destination="rhs-aL-dHu" id="HZo-Wz-Jfi"/>
                 <outlet property="dataTitle" destination="pG7-ci-s3B" id="bQy-ZW-uGh"/>
+                <outlet property="tagBgView" destination="oof-0G-czK" id="KdL-ej-aMb"/>
+                <outlet property="tagNum" destination="rhs-aL-dHu" id="znT-ub-ktu"/>
             </connections>
         </tableViewCell>
     </objects>

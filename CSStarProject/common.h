@@ -14,11 +14,11 @@
 #define NAV_BAR_ICON_WIDTH 32//导航栏图标宽度
 #define NAV_BAR_ICON_HEIGHT 32//导航栏图标高度
 #define TABBAR_HEIGHT 49//底部导航的高度
-#define SCREEN_WIDTH 320//屏幕宽度
+#define SCREEN_WIDTH MAIN_FRAME_W//屏幕宽度
 #define BTN_WIDTH SCREEN_WIDTH/5//按钮宽度
 #define BTN_HEIGHT TABBAR_HEIGHT//按钮高度
 #define SLIDER_HEIGHT 4 //滑块的高度
-#define NAV_TITLE_WIDTH 100//导航标题宽度
+#define NAV_TITLE_WIDTH 100//导航标题宽度        
 #define NAV_TITLE_HEIGHT 44//导航标题高度
 #define NAV_TITLE_INDEX SCREEN_WIDTH/2//导航标题位置
 
@@ -34,7 +34,7 @@
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(15)//主字体
 
-#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",24)//标题字体
+#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",28)//标题字体
 #define TITLE_FONT main_font(17)//标题字体
 #define DESC_FONT main_font(15)//描述字体
 
@@ -48,6 +48,7 @@
 #define REFRESH_TITLE @"刷新数据"
 #define REFRESH_LOADING @"玩命加载中..."
 #define NOIMG_ICON @"imgloading@2X.png"//无图片
+#define NOIMG_ICON_TX @"avatarbig.png"//无头像图片
 #define DELAY_TIME 2
 
 #define FORWARD_TYPE @"TAB"//登录跳转方式 tab 为点击tabbar
@@ -83,6 +84,25 @@
 #define GET_ARTICLE_URL @"/cms/GetArticle"
 #define GIRL_VIDEO_URL @"/cms/GetArticles/video"
 
+//活动众筹接口
+#define HOME_PEOPLE_URL @"/cf/getTopProject"
+#define SILDER_PEOPLE_URL @"/cf/getTjProjects"
+#define PEOPLE_LIST_URL @"/cf/getTopProjects"
+#define GET_PROJECT_URL @"/cf/getProjectById"
+#define GET_RETURNS_URL @"/cf/getReturnsById"
+#define GET_RETURN_URL @"/cf/getProjectReturnById"
+#define GET_MYPROJECT_NUMS_URL @"/cf/getMyProjectsNums"
+
+#define GET_LOVE_PROJECTS_URL @"/cf/getUserLoveProjects"//喜欢的众筹
+#define GET_ORDER_PROJECTS_URL @"/cf/getUserProjects"//发起的众筹
+#define GET_SUPPORT_PROJECTS_URL @"/cf/getUserOrders"//支持的众筹
+#define GET_PROJECT_TALKS_URL @"/cf/getProjectTalks"//项目评论列表
+
+#define ADD_TALK_URL @"/AndroidApi/CFService/addTalk"//提交评论
+#define ADD_REVIEW_URL @"/AndroidApi/CFService/addReview"//提交回复
+#define ADD_ENJOY_PROJECT_URL @"/AndroidApi/CFService/addEnjoyProject"
+
+
 #define LOGIN_USER_ID @"login_user_id"
 #define LOGIN_USER_NAME @"login_user_name"
 #define LOGIN_USER_PSWD @"login_user_pswd"
@@ -111,6 +131,7 @@
 
 #define IOS_VERSION [[[UIDevice currentDevice] systemVersion] floatValue]
 #define IOS_VERSION_5_OR_ABOVE (([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) ? (YES):(NO))
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 
 #define IPHONE4S ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : 0)//判断是否为iphone4/4s

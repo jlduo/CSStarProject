@@ -51,7 +51,7 @@
 //        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
 //    }
     [firstImageView setImageWithURL:[NSURL URLWithString:[sourceArr lastObject]]
-              placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+              placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
     //firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
     [self.scrollView addSubview:firstImageView];
     
@@ -77,7 +77,7 @@
 //            }
             
             [imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
-                               placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
+                               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }else{
             imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
         }
@@ -103,7 +103,10 @@
     self.pageControl.alpha = 0.4f;
     self.pageControl.numberOfPages = sourceArr.count;
     self.pageControl.currentPage = 0;
+    self.pageControl.currentPageIndicatorTintColor = [UIColor blueColor];
     self.pageControl.enabled = YES;
+    [self.pageControl addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventValueChanged];
+    
     [self addSubview:self.pageControl];
     
     [self.scrollView scrollRectToVisible:CGRectMake(width, 0, width, height) animated:NO];

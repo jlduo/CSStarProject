@@ -73,7 +73,7 @@
     //处理标题
     UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
     [titleLabel setText:@"美女私房"];
-    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     titleLabel.font = BANNER_FONT;
