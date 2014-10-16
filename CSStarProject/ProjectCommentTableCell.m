@@ -32,7 +32,14 @@
     [self.contentTextView setLineBreakMode:NSLineBreakByCharWrapping];
     CGSize size = CGSizeMake( self.contentTextView.frame.size.width,2000);
     CGSize labelsize = [labelString sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByCharWrapping];
+    //NSLog(@"labelsize=%ld",labelsize.height);
     if (labelsize.height > 20) {
+        
+//        CGRect tempFrame2 = CGRectMake(self.contentBackView.frame.origin.x,
+//                                      self.contentBackView.frame.origin.y,
+//                                      self.contentBackView.frame.size.width,
+//                                      self.contentBackView.frame.size.height+labelsize.height);
+//        [self.contentBackView setFrame:tempFrame2];
         
         self.contentTextView.frame = CGRectMake(self.contentTextView.frame.origin.x,
                                                 self.contentTextView.frame.origin.y,
@@ -40,7 +47,7 @@
                                                 labelsize.height);
         
         CGRect tempFrame = CGRectMake(self.commentDate.frame.origin.x,
-                                      self.commentDate.frame.origin.y+labelsize.height,
+                                      self.commentDate.frame.origin.y+labelsize.height-20,
                                       self.commentDate.frame.size.width,
                                       self.commentDate.frame.size.height);
         [self.commentDate setFrame:tempFrame];

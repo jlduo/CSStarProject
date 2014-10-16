@@ -9,9 +9,13 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "PeopleReturnCell.h"
+#import "OrderInfoViewController.h"
 #import "InitTabBarViewController.h"
 
-@interface ReturnsViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>
+@interface ReturnsViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
+    // 声明一个参数传递代理
+    NSObject<ViewPassValueDelegate> *passValelegate;
+}
 
 #pragma mark 回填数据
 @property(nonatomic,retain)NSMutableArray *peopleReturnList;

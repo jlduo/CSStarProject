@@ -97,6 +97,8 @@
 #define GET_ORDER_PROJECTS_URL @"/cf/getUserProjects"//发起的众筹
 #define GET_SUPPORT_PROJECTS_URL @"/cf/getUserOrders"//支持的众筹
 #define GET_PROJECT_TALKS_URL @"/cf/getProjectTalks"//项目评论列表
+#define GET_ADDRESS_LIST_URL @"/cf/getDeliverys"//收货人地址
+#define GET_ADDRESS_BID_URL @"/cf/getdeliveryById"//收货地址详情
 
 #define ADD_TALK_URL @"/AndroidApi/CFService/addTalk"//提交评论
 #define ADD_REVIEW_URL @"/AndroidApi/CFService/addReview"//提交回复

@@ -156,6 +156,18 @@
 		7E9EEC5119C2F02D00C0514C /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EEC4819C2F02D00C0514C /* ASINetworkQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7E9EEC5419C2F04000C0514C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EEC5319C2F04000C0514C /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7EA036DC19EB5FC000EF10A9 /* ContentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA036DB19EB5FC000EF10A9 /* ContentDetailViewController.m */; };
+		7EA1E62719EE0EA20055158C /* OrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */; };
+		7EA1E62919EE19340055158C /* iconnochecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E62819EE19340055158C /* iconnochecked.png */; };
+		7EA1E62F19EE28EC0055158C /* OrderMoneyTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62D19EE28EC0055158C /* OrderMoneyTableCell.m */; };
+		7EA1E63019EE28EC0055158C /* OrderMoneyTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E62E19EE28EC0055158C /* OrderMoneyTableCell.xib */; };
+		7EA1E63419EE46410055158C /* ChangeNumTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E63219EE46410055158C /* ChangeNumTableCell.m */; };
+		7EA1E63519EE46410055158C /* ChangeNumTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63319EE46410055158C /* ChangeNumTableCell.xib */; };
+		7EA1E63919EE50740055158C /* ReturnTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E63719EE50740055158C /* ReturnTableViewCell.m */; };
+		7EA1E63A19EE50740055158C /* ReturnTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63819EE50740055158C /* ReturnTableViewCell.xib */; };
+		7EA1E63C19EE5A750055158C /* dotaline.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63B19EE5A750055158C /* dotaline.png */; };
+		7EA1E64019EE66490055158C /* ReciverTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E63E19EE66490055158C /* ReciverTableViewCell.m */; };
+		7EA1E64119EE66490055158C /* ReciverTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63F19EE66490055158C /* ReciverTableViewCell.xib */; };
+		7EA1E64419EE6AA60055158C /* ReciverAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */; };
 		7EA1E73B19E6390700DB685E /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73019E6390700DB685E /* NSDate+Category.m */; };
 		7EA1E73C19E6390700DB685E /* NSDateFormatter+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73219E6390700DB685E /* NSDateFormatter+Category.m */; };
 		7EA1E73D19E6390700DB685E /* UIResponder+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73419E6390700DB685E /* UIResponder+Router.m */; };
@@ -532,6 +544,24 @@
 		7E9EEC5319C2F04000C0514C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		7EA036DA19EB5FC000EF10A9 /* ContentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentDetailViewController.h; sourceTree = "<group>"; };
 		7EA036DB19EB5FC000EF10A9 /* ContentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentDetailViewController.m; sourceTree = "<group>"; };
+		7EA1E62519EE0EA20055158C /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
+		7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInfoViewController.m; sourceTree = "<group>"; };
+		7EA1E62819EE19340055158C /* iconnochecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconnochecked.png; sourceTree = "<group>"; };
+		7EA1E62C19EE28EC0055158C /* OrderMoneyTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderMoneyTableCell.h; sourceTree = "<group>"; };
+		7EA1E62D19EE28EC0055158C /* OrderMoneyTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderMoneyTableCell.m; sourceTree = "<group>"; };
+		7EA1E62E19EE28EC0055158C /* OrderMoneyTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderMoneyTableCell.xib; sourceTree = "<group>"; };
+		7EA1E63119EE46410055158C /* ChangeNumTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeNumTableCell.h; sourceTree = "<group>"; };
+		7EA1E63219EE46410055158C /* ChangeNumTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeNumTableCell.m; sourceTree = "<group>"; };
+		7EA1E63319EE46410055158C /* ChangeNumTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeNumTableCell.xib; sourceTree = "<group>"; };
+		7EA1E63619EE50740055158C /* ReturnTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReturnTableViewCell.h; sourceTree = "<group>"; };
+		7EA1E63719EE50740055158C /* ReturnTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReturnTableViewCell.m; sourceTree = "<group>"; };
+		7EA1E63819EE50740055158C /* ReturnTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReturnTableViewCell.xib; sourceTree = "<group>"; };
+		7EA1E63B19EE5A750055158C /* dotaline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dotaline.png; sourceTree = "<group>"; };
+		7EA1E63D19EE66490055158C /* ReciverTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReciverTableViewCell.h; sourceTree = "<group>"; };
+		7EA1E63E19EE66490055158C /* ReciverTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReciverTableViewCell.m; sourceTree = "<group>"; };
+		7EA1E63F19EE66490055158C /* ReciverTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReciverTableViewCell.xib; sourceTree = "<group>"; };
+		7EA1E64219EE6AA60055158C /* ReciverAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReciverAddressViewController.h; sourceTree = "<group>"; };
+		7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReciverAddressViewController.m; sourceTree = "<group>"; };
 		7EA1E72F19E6390700DB685E /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
 		7EA1E73019E6390700DB685E /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		7EA1E73119E6390700DB685E /* NSDateFormatter+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+Category.h"; sourceTree = "<group>"; };
@@ -853,6 +883,18 @@
 				7EA48F4D19ECC3A40091B956 /* ProjectCommentTableCell.h */,
 				7EA48F4E19ECC3A40091B956 /* ProjectCommentTableCell.m */,
 				7EA48F4F19ECC3A40091B956 /* ProjectCommentTableCell.xib */,
+				7EA1E62C19EE28EC0055158C /* OrderMoneyTableCell.h */,
+				7EA1E62D19EE28EC0055158C /* OrderMoneyTableCell.m */,
+				7EA1E62E19EE28EC0055158C /* OrderMoneyTableCell.xib */,
+				7EA1E63119EE46410055158C /* ChangeNumTableCell.h */,
+				7EA1E63219EE46410055158C /* ChangeNumTableCell.m */,
+				7EA1E63319EE46410055158C /* ChangeNumTableCell.xib */,
+				7EA1E63619EE50740055158C /* ReturnTableViewCell.h */,
+				7EA1E63719EE50740055158C /* ReturnTableViewCell.m */,
+				7EA1E63819EE50740055158C /* ReturnTableViewCell.xib */,
+				7EA1E63D19EE66490055158C /* ReciverTableViewCell.h */,
+				7EA1E63E19EE66490055158C /* ReciverTableViewCell.m */,
+				7EA1E63F19EE66490055158C /* ReciverTableViewCell.xib */,
 			);
 			name = people;
 			sourceTree = "<group>";
@@ -1270,6 +1312,10 @@
 				7EA58CA719EBC3FF003F4D45 /* PeopleProListViewController.m */,
 				7EA48F5219ECC7330091B956 /* ProjectCommentViewController.h */,
 				7EA48F5319ECC7330091B956 /* ProjectCommentViewController.m */,
+				7EA1E62519EE0EA20055158C /* OrderInfoViewController.h */,
+				7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */,
+				7EA1E64219EE6AA60055158C /* ReciverAddressViewController.h */,
+				7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */,
 			);
 			name = people;
 			sourceTree = "<group>";
@@ -1293,6 +1339,8 @@
 		7EA3302519AEFFBC007FE086 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7EA1E63B19EE5A750055158C /* dotaline.png */,
+				7EA1E62819EE19340055158C /* iconnochecked.png */,
 				7EA1E75819E66B3000DB685E /* progressbar-nosuccess.png */,
 				7EA1E75919E66B3000DB685E /* progressbar-success.png */,
 				7EA1E74619E6634700DB685E /* label_fundraising_s.png */,
@@ -1607,6 +1655,7 @@
 				7EA2A65419E7BB4900A33ACC /* PeopleCommentCell.xib in Resources */,
 				7E9EEC0819C278C800C0514C /* AppIcon60x60@2x.png in Resources */,
 				7E28489F19B5BA0300669756 /* blackArrow@2x.png in Resources */,
+				7EA1E63519EE46410055158C /* ChangeNumTableCell.xib in Resources */,
 				7E99340B19C947FA0077ED7C /* EditNickNameController.xib in Resources */,
 				7E96960D19CD7488008C3688 /* FogetPasswordViewController.xib in Resources */,
 				7E2848A519B5BA0300669756 /* whiteArrow@2x.png in Resources */,
@@ -1656,10 +1705,12 @@
 				7EA55EA719D5516900D8AFE2 /* suc@2x.png in Resources */,
 				7E9EEC2019C2D04600C0514C /* iconuser.png in Resources */,
 				7EA58C9819EB9F94003F4D45 /* herzone_sponsor.png in Resources */,
+				7EA1E63A19EE50740055158C /* ReturnTableViewCell.xib in Resources */,
 				7EA55EBB19D55C7E00D8AFE2 /* tips_warnn.png in Resources */,
 				7E9EEC1119C27D2600C0514C /* CommentTableListCell.xib in Resources */,
 				7E9EEC2719C2DE5C00C0514C /* RegisterViewController.xib in Resources */,
 				7E73E68919B46C3C00EB6024 /* header_2@2x.png in Resources */,
+				7EA1E63019EE28EC0055158C /* OrderMoneyTableCell.xib in Resources */,
 				7EA4B9E919D0F886000FF50E /* tabbar2.png in Resources */,
 				7E9C547019B7F2C800851CAB /* LLCelIArrow@2x.png in Resources */,
 				7E99341519C987270077ED7C /* EditPasswordController.xib in Resources */,
@@ -1721,6 +1772,7 @@
 				7EA55EBA19D55C7E00D8AFE2 /* tips_success.png in Resources */,
 				7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */,
 				7EA58CA519EBBCE7003F4D45 /* ProjectTableViewCell.xib in Resources */,
+				7EA1E64119EE66490055158C /* ReciverTableViewCell.xib in Resources */,
 				7E73E69419B46C3C00EB6024 /* titlebar.png in Resources */,
 				7E73E69819B4714700EB6024 /* playtimes.png in Resources */,
 				7E73E68319B46C3C00EB6024 /* homeactivity.png in Resources */,
@@ -1737,6 +1789,7 @@
 				7EBAFC2C19D2A52E0087ED69 /* video_play_gray@2x.png in Resources */,
 				7E9C547519B7F3D700851CAB /* icon_redo.png in Resources */,
 				7EA1E75A19E66B3000DB685E /* progressbar-nosuccess.png in Resources */,
+				7EA1E62919EE19340055158C /* iconnochecked.png in Resources */,
 				7E9EEC0619C278C800C0514C /* AppIcon57x57@2x.png in Resources */,
 				7EF08DE019C67EF5001F2CCE /* 1.jpeg in Resources */,
 				7E9EEBFF19C278C800C0514C /* AppIcon29x29.png in Resources */,
@@ -1751,6 +1804,7 @@
 				7E9EEBF019C277CF00C0514C /* Default@22x.png in Resources */,
 				7EA1E74F19E6634700DB685E /* label_fundraising_s.png in Resources */,
 				7EA4B9F119D1171C000FF50E /* tabbarbgon.png in Resources */,
+				7EA1E63C19EE5A750055158C /* dotaline.png in Resources */,
 				7EA1E75B19E66B3000DB685E /* progressbar-success.png in Resources */,
 				7E6E8FD019D2C4D60044787E /* msyhbd.ttf in Resources */,
 				7E9EEC0719C278C800C0514C /* AppIcon60x60.png in Resources */,
@@ -1836,12 +1890,16 @@
 				7E9C549019B85A3C00851CAB /* UserSmallTableViewCell.m in Sources */,
 				7EA3317219AF0CD6007FE086 /* ConvertJSONData.m in Sources */,
 				7E9EEC5119C2F02D00C0514C /* ASINetworkQueue.m in Sources */,
+				7EA1E64419EE6AA60055158C /* ReciverAddressViewController.m in Sources */,
 				7EBAFC1F19D29B3A0087ED69 /* SDWebImageManager.m in Sources */,
+				7EA1E63419EE46410055158C /* ChangeNumTableCell.m in Sources */,
 				7EA2A65319E7BB4900A33ACC /* PeopleCommentCell.m in Sources */,
+				7EA1E63919EE50740055158C /* ReturnTableViewCell.m in Sources */,
 				7E9EEC1B19C2A84000C0514C /* LoginViewController.m in Sources */,
 				7EA1E74419E6414900DB685E /* PeopleTableViewCell.m in Sources */,
 				7EBAFBDC19D299250087ED69 /* MBProgressHUD+Add.m in Sources */,
 				7EBE4BD719E5356900FCF4AF /* StoryViewController.m in Sources */,
+				7EA1E64019EE66490055158C /* ReciverTableViewCell.m in Sources */,
 				7EBAFC1719D29B3A0087ED69 /* MKAnnotationView+WebCache.m in Sources */,
 				7E9C548819B85A0D00851CAB /* UserBigTableViewCell.m in Sources */,
 				7E9C548319B844BC00851CAB /* StringUitl.m in Sources */,
@@ -1860,6 +1918,7 @@
 				7E9EEC4D19C2F02D00C0514C /* ASIDownloadCache.m in Sources */,
 				7EA48F5019ECC3A40091B956 /* ProjectCommentTableCell.m in Sources */,
 				7E73E66E19B45DCA00EB6024 /* StoryTableViewBigDescCell.m in Sources */,
+				7EA1E62F19EE28EC0055158C /* OrderMoneyTableCell.m in Sources */,
 				7EA2A64E19E7BA3300A33ACC /* PeopleCenterCell.m in Sources */,
 				7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
@@ -1903,6 +1962,7 @@
 				7E04A73819C7DB340026E8BB /* StoryCommentViewController.m in Sources */,
 				7E0F1F5119C185F8008D0CB7 /* StoryDetailViewController.m in Sources */,
 				7EDB75FF19CC0724000539DA /* DirectionMPMoviePlayerViewController.m in Sources */,
+				7EA1E62719EE0EA20055158C /* OrderInfoViewController.m in Sources */,
 				7E99058419CA73F90024F74B /* EditSexViewController.m in Sources */,
 				7EA1E73C19E6390700DB685E /* NSDateFormatter+Category.m in Sources */,
 				7EA32F6419AEC4F5007FE086 /* PeopleViewController.m in Sources */,

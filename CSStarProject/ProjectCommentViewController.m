@@ -108,7 +108,7 @@
     commentListTableView.rowHeight = 72;
     
     commentListTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    commentListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //commentListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[[UIView alloc]init];
     view.backgroundColor = [UIColor clearColor];
@@ -271,10 +271,21 @@
     NSString *contentId;
     NSString *textVal = textField.text;
     NSLog(@"content=%@",textVal);
+    
     //点击发表提交数据
     if([self isEmpty:textVal]){
         [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
+        
+        NSString *hf = [textVal substringToIndex:2];
+        if([hf isEqualToString:@"回复"]){
+            NSArray *charArr = [textVal componentsSeparatedByString:@"："];
+            if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
+                [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+                return;
+            }
+        }
+        
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
         if ([self isEmpty:userId]) {
@@ -326,13 +337,13 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
         
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:WARNN_LOGO];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self loadTableList];
         [commentListTableView reloadData];
         
-        lblClickComment.text = [[NSString alloc] initWithFormat:@"%d评论",_proCommentList.count];
+        lblClickComment.text = [[NSString alloc] initWithFormat:@"%ld评论",_proCommentList.count];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:WARNN_LOGO];
+        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
     }
 }
 
@@ -419,12 +430,7 @@
     CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     
     if (labelsize.height > 20) {
-        CGRect tempFrame2 = CGRectMake(commentCell.contentBackView.frame.origin.x,
-                                       commentCell.contentBackView.frame.origin.y,
-                                       commentCell.contentBackView.frame.size.width,
-                                       commentCell.contentBackView.frame.size.height+labelsize.height);
-        [commentCell.contentBackView setFrame:tempFrame2];
-        return  80 + labelsize.height;
+        return  60 + labelsize.height;
     }else{
         return 80;
     }
@@ -449,7 +455,7 @@
         }
         
         projectCommCell.selectionStyle =UITableViewCellSelectionStyleNone;
-        projectCommCell.backgroundColor = [UIColor clearColor];
+        projectCommCell.backgroundColor = [UIColor whiteColor];
 
         NSString *cUserId = [[cellDic valueForKey:@"userId"] stringValue];
         NSString *creatName = [cellDic valueForKey:@"creatName"];

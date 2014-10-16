@@ -18,8 +18,31 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
 
-    // Configure the view for the selected state
+- (void)drawRect:(CGRect)rect{
+    
+    NSString *labelString = self.descText.text;
+    [self.descText setNumberOfLines:0];
+    UIFont *font = [UIFont systemFontOfSize:12];
+    [self.descText setLineBreakMode:NSLineBreakByCharWrapping];
+    CGSize size = CGSizeMake( self.descText.frame.size.width,2000);
+    CGSize labelsize = [labelString sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByCharWrapping];
+    if (labelsize.height > 20) {
+
+        
+        self.descText.frame = CGRectMake(self.descText.frame.origin.x,
+                                                self.descText.frame.origin.y,
+                                                self.descText.frame.size.width,
+                                                labelsize.height);
+        
+        CGRect tempFrame = CGRectMake(self.saveBtn.frame.origin.x,
+                                      self.saveBtn.frame.origin.y+labelsize.height-60,
+                                      self.saveBtn.frame.size.width,
+                                      self.saveBtn.frame.size.height);
+        [self.saveBtn setFrame:tempFrame];
+        
+    }
 }
 
 @end
