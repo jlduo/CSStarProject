@@ -29,6 +29,6 @@
     CGSize labelsize = [labelString sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
     if (labelsize.height > 20) {
         self.commentTextView.frame = CGRectMake(self.commentTextView.frame.origin.x,self.commentTextView.frame.origin.y, self.commentTextView.frame.size.width, labelsize.height + 20);
-    }
+    }  
 }
 @end

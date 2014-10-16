@@ -165,7 +165,7 @@
                 if ([imgUrl isEqualToString:imgArray]) {
                     _currentPhoteoIndex = i;
                 }
-            } 
+            }
             MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
             browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
             browser.photos = imgPhotes; // 设置所有的图片

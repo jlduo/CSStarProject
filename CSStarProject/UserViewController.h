@@ -10,7 +10,8 @@
 #import "common.h"
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
-
+#import "myCommentViewController.h"
+#import "myAddressViewController.h"
 
 @interface UserViewController:CommonViewController<UITableViewDataSource,UITableViewDelegate>
 
