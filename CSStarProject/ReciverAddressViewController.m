@@ -119,7 +119,7 @@
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    //NSLog(@"dataId====%@",dataId);
+    NSLog(@"dataId====%@",dataId);
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
@@ -140,10 +140,11 @@
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    passValelegate = (OrderInfoViewController *)[params valueForKey:@"controller"];
-    [passValelegate passDicValue:[self.orderAddressList objectAtIndex:indexPath.row]];
-    [self.navigationController popViewControllerAnimated:YES];
+    if([StringUitl isEmpty:dataId]){
+        passValelegate = (OrderInfoViewController *)[params valueForKey:@"controller"];
+        [passValelegate passDicValue:[self.orderAddressList objectAtIndex:indexPath.row]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     
 }
 

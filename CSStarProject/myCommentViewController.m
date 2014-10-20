@@ -70,10 +70,6 @@
     commentTable.frame = CGRectMake(0, NAV_TITLE_HEIGHT + 69, SCREEN_WIDTH, MAIN_FRAME_H -  NAV_TITLE_HEIGHT -49); 
     [self.view addSubview:commentTable];
     
-    //注册单元格
-    UINib *nibCell = [UINib nibWithNibName:@"commentTableViewCell" bundle:nil];
-    [commentTable registerNib:nibCell forCellReuseIdentifier:@"commentCell"];
-    
     //默认类型 0、长沙星 1、众筹
     typeComment = 0;
     
@@ -225,7 +221,15 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    commentTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    
+    static NSString *CustomCellIdentifier = @"commentCell";
+    commentTableViewCell *commentCell=  (commentTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+    
+    if (commentCell == nil) {
+        NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"commentTableViewCell" owner:self options:nil] ;
+        commentCell = [nib objectAtIndex:0];
+    }
+    
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     NSString *commnetContent = @"内容";
     if (typeComment == 0) {

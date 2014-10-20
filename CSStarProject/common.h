@@ -92,6 +92,8 @@
 #define GET_RETURNS_URL @"/cf/getReturnsById"
 #define GET_RETURN_URL @"/cf/getProjectReturnById"
 #define GET_MYPROJECT_NUMS_URL @"/cf/getMyProjectsNums"
+#define GET_USERCENTER_NUMS_URL @"/cf/getUsercenterNums"
+
 
 #define GET_LOVE_PROJECTS_URL @"/cf/getUserLoveProjects"//喜欢的众筹
 #define GET_ORDER_PROJECTS_URL @"/cf/getUserProjects"//发起的众筹
