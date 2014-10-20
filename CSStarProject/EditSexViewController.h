@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "common.h"
+#import "UIViewController+HUD.h"
 #import "CommonViewController.h"
 
 @interface EditSexViewController : UIViewController

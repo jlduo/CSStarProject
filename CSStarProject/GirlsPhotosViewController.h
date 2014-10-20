@@ -10,7 +10,7 @@
 #import "common.h"
 #import "UIImageView+WebCache.h"
 #import "StringUitl.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
@@ -20,10 +20,9 @@
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 
-@interface GirlsPhotosViewController : UIViewController<UIScrollViewDelegate,ViewPassValueDelegate,UITextViewDelegate,MBProgressHUDDelegate>{
+@interface GirlsPhotosViewController : UIViewController<UIScrollViewDelegate,ViewPassValueDelegate,UITextViewDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
-    MBProgressHUD *HUD;
 }
 
 @end

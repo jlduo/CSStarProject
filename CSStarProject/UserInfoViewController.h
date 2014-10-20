@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "common.h"
 #import "ASIHTTPRequest.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "ASIFormDataRequest.h"
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"

@@ -18,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.tabBarController.hidesBottomBarWhenPushed = true;
     }
     return self;
 }
@@ -115,16 +115,14 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //关闭时候到操作
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)saveUserInfo{
     
     NSString *pwd = _sexValue;
     if([StringUitl isEmpty:pwd]){
-        [StringUitl alertMsg:@"对不起，请先选择性别！"withtitle:@"错误提示"];
+        [self showCAlert:@"对不起，请先选择性别！" widthType:ERROR_LOGO];
         return;
     }
     
@@ -154,12 +152,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
         [StringUitl setSessionVal:_sexValue withKey:USER_SEX];
-        
         [self dismissViewControllerAnimated:YES completion:nil];
         
     }
@@ -168,8 +164,7 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
 }
 
 

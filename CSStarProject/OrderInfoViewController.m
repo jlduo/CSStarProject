@@ -12,6 +12,8 @@
     UITableView *orderTableView;
     NSDictionary *cellDic;
     NSString *dataId;
+    NSString *orderId;
+    UIButton *checkBox;
     
     int sectionNum;
     int selectedNum;
@@ -22,6 +24,11 @@
     
     UITextField *numTextField;
     UITextField *remarkTextField;
+    
+    NSMutableDictionary *defaultAddress;
+    
+    NSDictionary *rebackAddress;
+    NSString *remarkText;
 }
 
 @end
@@ -52,8 +59,8 @@
     [self initLoadData];
     [self setHeadView];
     [self setFooterView];
-    
     [self initNotice];
+    [self loadDefaultAddress];
     
 }
 
@@ -112,6 +119,7 @@
     orderCell.payMoney.text = [NSString  stringWithFormat:@"￥%.2f",pay_money * sl_num];
     orderCell.sendMoney.text = [NSString  stringWithFormat:@"￥%.2f",send_money];
     orderCell.totalMoney.text = [NSString  stringWithFormat:@"￥%.2f",total_money];
+    remarkText = remarkTextField.text;
 }
 
 #pragma mark 控制滚动头部一起滚动
@@ -126,21 +134,48 @@
     }
 }
 
+-(void)loadDefaultAddress{
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_DEFAULT_ADDRESS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
+    defaultAddress = (NSMutableDictionary *)[convertJson requestData:url];
+    [self.orderInfoData setValue:defaultAddress forKey:@"defaultAdd"];
+    //NSLog(@"defaultAddress====%@",defaultAddress);
+    //NSLog(@"orderInfoData====%@",self.orderInfoData);
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [orderTableView reloadData];
+    
+}
+
+-(void)reloadOrder{
+    
+    
+}
+
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    NSLog(@"dataId====%@",dataId);
+    //NSLog(@"dataId====%@",dataId);
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
-    self.orderInfoData = vals;
-    NSLog(@"orderInfo====%@",vals);
+    if([StringUitl isEmpty:[[vals valueForKey:@"projectId"]stringValue]]){
+        defaultAddress =[[NSMutableDictionary alloc] initWithDictionary:vals];
+        [self.orderInfoData setValue:defaultAddress forKey:@"defaultAdd"];
+    }else{
+        self.orderInfoData = vals;
+        //NSLog(@"orderInfo====%@",vals);
+    }
+    
+    //NSLog(@"orderInfoData====%@",self.orderInfoData);
 }
 
 -(void)setHeadView{
     sectionNum = 5;
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
-    UIButton *checkBox = [[UIButton alloc]initWithFrame:CGRectMake(0, 8, 32, 32)];
+    checkBox = [[UIButton alloc]initWithFrame:CGRectMake(0, 8, 32, 32)];
     [checkBox setBackgroundImage:[UIImage imageNamed:@"iconnochecked.png"] forState:UIControlStateNormal];
     [checkBox setBackgroundImage:[UIImage imageNamed:@"iconnochecked.png"] forState:UIControlStateSelected];
     [checkBox setTag:99];
@@ -179,7 +214,7 @@
         [sender setTag:99];
     }
     [orderTableView reloadData];
-    NSLog(@"sectionNum=%d",sectionNum);
+    //NSLog(@"sectionNum=%d",sectionNum);
 }
 
 -(void)setFooterView{
@@ -196,6 +231,8 @@
     submitBox.titleLabel.font = main_font(18);
     [submitBox.layer setCornerRadius:5.0];
     [submitBox.layer setMasksToBounds:YES];
+    
+    [submitBox addTarget:self action:@selector(saveOrderInfo) forControlEvents:UIControlEventTouchDown];
 
     [footerView addSubview:descLabel];
     [footerView addSubview:submitBox];
@@ -219,6 +256,85 @@
     return sectionHeadView;
 }
 
+
+-(void)saveOrderInfo{
+    
+    NSString *addressId;
+    NSString *ismianfei;//是否无私奉献
+    if(checkBox.tag==99){
+       ismianfei = @"0";
+    }else{
+       ismianfei = @"1";
+    }
+    
+    addressId =[[defaultAddress valueForKey:@"id"] stringValue];
+    NSString *beizhu = remarkTextField.text;
+    NSString *snum = numTextField.text;
+    NSString *returnId = [[_orderInfoData valueForKey:@"id"] stringValue];
+    
+    if([StringUitl isEmpty:addressId] && checkBox.tag==11){
+        [self showCAlert:@"收货地址不能为空" widthType:WARNN_LOGO];
+        return;
+    }
+    
+    if([StringUitl isEmpty:snum]){
+        [self showCAlert:@"数量不能为空" widthType:WARNN_LOGO];
+        return;
+    }
+    
+    //开始处理
+    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,SUB_ORDER_URL]];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
+    [ASIHTTPRequest setSessionCookies:nil];
+    
+    [request setUseCookiePersistence:YES];
+    [request setDelegate:self];
+    [request setRequestMethod:@"POST"];
+    [request setStringEncoding:NSUTF8StringEncoding];
+    
+    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
+    [request setPostValue:returnId forKey:@"returnId"];
+    [request setPostValue:ismianfei forKey:@"ismianfei"];
+    [request setPostValue:beizhu forKey:@"beizhu"];
+    [request setPostValue:addressId forKey:@"deliveryId"];
+    [request setPostValue:snum forKey:@"qty"];
+    
+    [request buildPostBody];
+    [request startAsynchronous];
+    [request setDidFailSelector:@selector(addInfoFailed:)];
+    [request setDidFinishSelector:@selector(addFinished:)];
+    
+    
+}
+
+- (void)addFinished:(ASIHTTPRequest *)req
+{
+    //NSLog(@"info->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        orderId = [jsonDic valueForKey:@"orderid"];
+        [self performSelector:@selector(goPayPage) withObject:nil afterDelay:1];
+    }
+    
+}
+
+-(void)goPayPage{
+    PayOrderViewController *payController = [[PayOrderViewController alloc]init];
+    passValelegate = payController;
+    [passValelegate passValue:orderId];
+    [self.navigationController pushViewController:payController animated:YES];
+}
+
+- (void)addInfoFailed:(ASIHTTPRequest *)req
+{
+    [self showCAlert:@"处理数据失败！" widthType:ERROR_LOGO];
+}
+
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return sectionNum;
@@ -227,8 +343,6 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     return titleArr[section];
 }
-
-
 
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -239,6 +353,10 @@
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self dismissKeyBoard];
+    if(indexPath.section==0 && sectionNum==5){
+        //NSLog(@"asdasdad");
+        [self addReciver:nil];
+    }
     
 }
 
@@ -310,6 +428,7 @@
         remarkTextField.layer.masksToBounds = YES;
         remarkTextField.delegate = self;
         remarkTextField.borderStyle = UITextBorderStyleRoundedRect;
+        remarkTextField.text = remarkText;
         [remarkCell addSubview:remarkTextField];
         return remarkCell;
         
@@ -361,38 +480,69 @@
         
     }else{
         
-        UITableViewCell *reciverCell = [[UITableViewCell alloc]init];
-        reciverCell.selectionStyle =UITableViewCellSelectionStyleNone;
-        UIView *reciverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
-        UIButton *addRecBtn = [[UIButton alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-80, 40)];
-        [addRecBtn setBackgroundColor:[UIColor clearColor]];
-        [addRecBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [addRecBtn setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+        if(defaultAddress==nil||defaultAddress.count==0){
         
-        [addRecBtn setBackgroundImage:[UIImage imageNamed:@"dotaline.png"] forState:UIControlStateNormal];
-        [addRecBtn setBackgroundImage:[UIImage imageNamed:@"dotaline.png"] forState:UIControlStateSelected];
-        
-        [addRecBtn setTitle:@"+ 添加收货人信息" forState:UIControlStateNormal];
-        [addRecBtn setTitle:@"+ 添加收货人信息" forState:UIControlStateSelected];
-        [addRecBtn addTarget:self action:@selector(addReciver:) forControlEvents:UIControlEventTouchDown];
-        
-        addRecBtn.titleLabel.font = main_font(14);
-        [addRecBtn.layer setCornerRadius:5.0];
-        [addRecBtn.layer setMasksToBounds:YES];
-        
-        [reciverView addSubview:addRecBtn];
+            UITableViewCell *reciverCell = [[UITableViewCell alloc]init];
+            reciverCell.selectionStyle =UITableViewCellSelectionStyleNone;
+            UIView *reciverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
+            UIButton *addRecBtn = [[UIButton alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-80, 40)];
+            [addRecBtn setBackgroundColor:[UIColor clearColor]];
+            [addRecBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [addRecBtn setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+            
+            [addRecBtn setBackgroundImage:[UIImage imageNamed:@"dotaline.png"] forState:UIControlStateNormal];
+            [addRecBtn setBackgroundImage:[UIImage imageNamed:@"dotaline.png"] forState:UIControlStateSelected];
+            
+            [addRecBtn setTitle:@"+ 添加收货人信息" forState:UIControlStateNormal];
+            [addRecBtn setTitle:@"+ 添加收货人信息" forState:UIControlStateSelected];
+            [addRecBtn addTarget:self action:@selector(addReciver:) forControlEvents:UIControlEventTouchDown];
+            
+            addRecBtn.titleLabel.font = main_font(14);
+            [addRecBtn.layer setCornerRadius:5.0];
+            [addRecBtn.layer setMasksToBounds:YES];
+            
+            [reciverView addSubview:addRecBtn];
 
-        [reciverCell addSubview:reciverView];
-        return reciverCell;
+            [reciverCell addSubview:reciverView];
+            return reciverCell;
+            
+        }else{
+            static NSString *CustomCellIdentifier = @"AddressCell";
+            AddressTableViewCell *addressCell =  (AddressTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+            
+            if (addressCell == nil) {
+                NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"AddressTableViewCell" owner:self options:nil] ;
+                addressCell = [nib objectAtIndex:0];
+            }
+            
+            addressCell.selectionStyle =UITableViewCellSelectionStyleNone;
+            addressCell.backgroundColor = [UIColor whiteColor];
+            
+            addressCell.reciverText.font = main_font(12);
+            addressCell.reciverText.text = [defaultAddress valueForKey:@"userName"];
+            
+            addressCell.phoneText.font = main_font(12);
+            addressCell.phoneText.text = [defaultAddress valueForKey:@"phone"];
+            
+            addressCell.addressText.font = main_font(12);
+            addressCell.addressText.text = [defaultAddress valueForKey:@"address"];
+            
+            return addressCell;
+
+        }
     }
 }
 
 
 -(void)addReciver:(UIButton *)sender{
-    NSLog(@"add reciver!");
+    //NSLog(@"add reciver!");
     ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc]init];
     passValelegate = addressController;
+    
     [passValelegate passValue:dataId];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setObject:self forKey:@"controller"];
+    [passValelegate passDicValue:params];
     [self.navigationController pushViewController:addressController animated:YES];
 }
 

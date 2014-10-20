@@ -11,7 +11,7 @@
 #import "PeopleTableDetailCell.h"
 #import "PeopleCenterCell.h"
 #import "PeopleCommentCell.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "OtherUserViewController.h"
 #import "ReturnsViewController.h"
 #import "InitTabBarViewController.h"
@@ -21,7 +21,7 @@
 
 
 @interface PeopleDetailViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
-ViewPassValueDelegate,MBProgressHUDDelegate>{
+ViewPassValueDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
 }

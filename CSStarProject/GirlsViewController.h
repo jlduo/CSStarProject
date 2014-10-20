@@ -8,7 +8,7 @@
 
 #import "CommonViewController.h"
 #import "FFScrollView.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "UserViewController.h"
 #import "PicTableViewCell.h"
 #import "CustomTableCell.h"
@@ -18,13 +18,11 @@
 #import "GirlsPhotosViewController.h"
 #import "ViewPassValueDelegate.h"
 
-@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MBProgressHUDDelegate>{
+@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
     
     NSMutableDictionary *bannerData;//导航初始数据
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
-    
-    MBProgressHUD *HUD;
     
 }
 

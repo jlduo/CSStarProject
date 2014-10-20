@@ -49,7 +49,11 @@
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    NSLog(@"NewdataId====%@",dataId);
+    //NSLog(@"NewdataId====%@",dataId);
+}
+
+-(void)passDicValue:(NSDictionary *)vals{
+    
 }
 
 
@@ -64,7 +68,7 @@
     //填充webview
     NSURL *contentUrl = [[NSURL alloc]initWithString:[_contentData valueForKey:@"details"]];
     [webDetail loadRequest:[NSURLRequest requestWithURL:contentUrl]];
-    NSLog(@"_contentData===%@",_contentData);
+    //NSLog(@"_contentData===%@",_contentData);
     
 }
 
@@ -75,7 +79,7 @@
 }
 
 -(void)goPreviou{
-    NSLog(@"back");
+    //NSLog(@"back");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

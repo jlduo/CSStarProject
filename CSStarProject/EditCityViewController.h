@@ -8,9 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "common.h"
+#import "UIViewController+HUD.h"
+#import "ViewPassValueDelegate.h"
 #import "CommonViewController.h"
+#import "AddAddressViewController.h"
 
-@interface EditCityViewController : UIViewController
+@interface EditCityViewController : UIViewController<ViewPassValueDelegate>{
+    // 声明一个参数传递代理
+    NSObject<ViewPassValueDelegate> *passValelegate;
+}
 @property (weak, nonatomic) IBOutlet UIView *cityBg;
 @property (weak, nonatomic) IBOutlet UITextField *cityText;
 @property (strong, nonatomic) NSString *cityValue;

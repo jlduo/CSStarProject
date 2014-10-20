@@ -8,9 +8,7 @@
 
 #import "RegisterViewController.h"
 
-@interface RegisterViewController (){
-    MBProgressHUD *HUD;
-}
+@interface RegisterViewController ()
 
 @end
 
@@ -20,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.tabBarController.hidesBottomBarWhenPushed = TRUE;
     }
     return self;
 }
@@ -91,28 +89,6 @@
 }
 
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-    
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-	
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-    
-	[self dismissKeyBoard];
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
-
 //发送验证码
 - (IBAction)clickCheckBtn:(id)sender {
     NSLog(@"get verifycode......");
@@ -126,8 +102,7 @@
     }
     
     if(isRegiNameNull==TRUE){
-        //[StringUitl alertMsg:@"请输入接收验证码的手机号！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"请输入接收验证码的手机号" widthType:WARNN_LOGO];
+        [self showCAlert:@"请输入接收验证码的手机号" widthType:WARNN_LOGO];
         return;
     }
     
@@ -180,41 +155,35 @@
     }
     
     if(isRegiNameNull==TRUE){
-        //[StringUitl alertMsg:@"对不起，请先输入手机号码！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
+        [self showCAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
         return;
     }
     
     if(isRegiPaswNull==TRUE){
-        //[StringUitl alertMsg:@"对不起，请设置您的密码！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"请设置您的密码" widthType:WARNN_LOGO];
+        [self showCAlert:@"请设置您的密码" widthType:WARNN_LOGO];
         return;
     }
     
     if(isCheckNumNull==TRUE){
-        //[StringUitl alertMsg:@"对不起，请先输入接收的验证码！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"请先输入接收的验证码" widthType:WARNN_LOGO];
+        [self showCAlert:@"请先输入接收的验证码" widthType:WARNN_LOGO];
         return;
     }
     
     //验证手机号码
     if(![StringUitl validateMobile:user_name]){
-        //[StringUitl alertMsg:@"对不起，您输入的手机号码有误！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"您输入的手机号码有误" widthType:WARNN_LOGO];
+        [self showCAlert:@"您输入的手机号码有误" widthType:WARNN_LOGO];
         return;
     }
     
     //验证码密码
     if(pass_word.length<6||pass_word.length>14){
-        //[StringUitl alertMsg:@"对不起，密码长度只能设置6-14位字符！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"密码长度只能设置6-14位字符" widthType:WARNN_LOGO];
+        [self showCAlert:@"密码长度只能设置6-14位字符" widthType:WARNN_LOGO];
         return;
     }
     
     //检查验证码
     if(checkNum.length!=4){
-        //[StringUitl alertMsg:@"对不起，验证码只能为4位！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"验证码只能为4位" widthType:WARNN_LOGO];
+        [self showCAlert:@"验证码只能为4位" widthType:WARNN_LOGO];
         return;
     }
     
@@ -252,12 +221,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self startTime];
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -300,7 +267,7 @@
             NSString *strTime = [NSString stringWithFormat:@"%.2d", seconds];
             dispatch_async(dispatch_get_main_queue(), ^{
                 //设置界面的按钮显示 根据自己需求设置
-                NSLog(@"____%@",strTime);
+                //NSLog(@"____%@",strTime);
                 _randomNum.text = [NSString stringWithFormat:@"%@",strTime];
                 [_checkNumBtn setTitle:@"秒后重发" forState:UIControlStateNormal];
                 _checkNumBtn.userInteractionEnabled = NO;
@@ -368,9 +335,7 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//注册失败
-        
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
@@ -384,9 +349,7 @@
 
 - (void)requestRegFailed:(ASIHTTPRequest *)req
 {
-    
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
 }
 
 

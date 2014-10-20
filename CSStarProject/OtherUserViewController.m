@@ -20,8 +20,6 @@
     UITableView *stableView;
     UIButton *imgBtn;
     UILabel *userLabel;
-    
-    MBProgressHUD *HUD;
 }
 
 @end
@@ -85,6 +83,10 @@
     params = [NSMutableDictionary dictionaryWithDictionary:vals];
     dataId = [params valueForKey:@"userName"];
     NSLog(@"vals====%@",vals);
+}
+
+-(void)passValue:(NSString *)val{
+    
 }
 
 -(void)initLoadUserData{
@@ -165,26 +167,6 @@
     
     stableView.tableHeaderView = headView;
     
-}
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-    
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-	
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-    
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 

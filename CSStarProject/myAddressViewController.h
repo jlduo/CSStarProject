@@ -10,10 +10,8 @@
 #import "common.h"
 #import "InitTabBarViewController.h"
 #import "userAddressTableViewCell.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 
-@interface myAddressViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,MBProgressHUDDelegate>{
-    MBProgressHUD *HUD;
-}
+@interface myAddressViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>
 
 @end

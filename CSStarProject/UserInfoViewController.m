@@ -28,8 +28,6 @@
     UserBigTableViewCell *bigCell;
     UserSmallTableViewCell *smallCell1;
     
-    MBProgressHUD *HUD;
-    
 }
 
 
@@ -51,7 +49,7 @@
     stableView.delegate = self;
     stableView.dataSource = self;
     
-    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"con_bg@2x.jpg"]]];
+    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //隐藏多余的行
     UIView *view =[ [UIView alloc]init];
@@ -145,23 +143,6 @@
     
     
     [stableView reloadData];
-}
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 
@@ -259,7 +240,6 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"2232342342");
     if(indexPath.section==0){
         switch (indexPath.row) {
             case 0:
@@ -299,36 +279,28 @@
 -(void)goEditNickName{
     
     EditNickNameController *editNickName = [[EditNickNameController alloc]init];
-    [self presentViewController:editNickName animated:YES completion:^{
-        //
-    }];
+    [self presentViewController:editNickName animated:YES completion:nil];
     
 }
 
 -(void)goEditPasswd{
     
     EditPasswordController *editPassword = [[EditPasswordController alloc]init];
-    [self presentViewController:editPassword animated:YES completion:^{
-        //
-    }];
+    [self presentViewController:editPassword animated:YES completion:nil];
     
 }
 
 -(void)goEditSex{
     
     EditSexViewController *editSex = [[EditSexViewController alloc]init];
-    [self presentViewController:editSex animated:YES completion:^{
-        //
-    }];
+    [self presentViewController:editSex animated:YES completion:nil];
     
 }
 
 -(void)goEditCity{
     
     EditCityViewController *editCity = [[EditCityViewController alloc]init];
-    [self presentViewController:editCity animated:YES completion:^{
-        //
-    }];
+    [self presentViewController:editCity animated:YES completion:nil];
     
 }
 
@@ -413,7 +385,7 @@
 }
 
 - (void)saveImage:(UIImage *)image {
-        NSLog(@"保存头像！");
+    NSLog(@"保存头像！");
     //[userPhotoButton setImage:image forState:UIControlStateNormal];
     BOOL success;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -495,7 +467,7 @@
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//上传失败
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
         
@@ -520,9 +492,7 @@
 
 - (void)uploadFailed:(ASIHTTPRequest *)req
 {
-    
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 //获取用户信息
@@ -552,14 +522,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
-        
-        //存储用户信息
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
-        
     }
     
 }

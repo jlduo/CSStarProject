@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "common.h"
 #import "StringUitl.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "CommonViewController.h"
 
-@interface FogetPasswordViewController : UIViewController<MBProgressHUDDelegate>
+@interface FogetPasswordViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIView *fogetView;
 @property (weak, nonatomic) IBOutlet UITextField *forgetText;
 @property (weak, nonatomic) IBOutlet UIButton *forgetBtnView;

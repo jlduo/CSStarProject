@@ -85,24 +85,6 @@
     return self;
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-    
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
@@ -309,14 +291,13 @@
     [self pauseVideo];
     NSString *btnText = numBtn.titleLabel.text;
     NSString *textVal = textField.text;
-    NSLog(@"textVal=%@",textVal);
-     NSLog(@"btnText=%@",btnText);
+    //NSLog(@"textVal=%@",textVal);
+    //NSLog(@"btnText=%@",btnText);
     
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
-            //[self alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
-            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+            [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{
             //提交数据
             [self postCommetnVal:dataId];
@@ -324,14 +305,12 @@
         
     }else{//点击数字进入评论列表
         NSLog(@"进入评论列表....");
-        NSLog(@"newDataId=%@",dataId);
+        //NSLog(@"newDataId=%@",dataId);
         StoryCommentViewController *commentController = [[StoryCommentViewController alloc]init];
         passValelegate = commentController;
         [passValelegate passValue:dataId];
         
-        [self presentViewController:commentController animated:YES completion:^{
-            //code
-        }];
+        [self presentViewController:commentController animated:YES completion:nil];
     }
 }
 
@@ -364,14 +343,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        //[StringUitl alertMsg:@"提交评论信息成功!" withtitle:@"提示信息"];
-        [self showCustomAlert:@"提交评论信息成功!" widthType:SUCCESS_LOGO];
+        [self showCAlert:@"提交评论信息成功!" widthType:SUCCESS_LOGO];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
-        [StringUitl alertMsg:[jsonDic valueForKey:@"result"] withtitle:@"提示信息"];
-        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:SUCCESS_LOGO];
         
     }
     
@@ -379,9 +356,7 @@
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
-    
-    //[StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"提交数据失败" widthType:ERROR_LOGO];
+    [self showCAlert:@"提交数据失败" widthType:ERROR_LOGO];
 }
 
 
@@ -402,6 +377,9 @@
 -(void)passValue:(NSString *)val{
     dataId = val;
     NSLog(@"dataId====%@",dataId);
+}
+-(void)passDicValue:(NSDictionary *)vals{
+    
 }
 
 -(void)setVideoView:(BOOL)isRemote{
@@ -584,7 +562,7 @@
 -(void)myMoviePlayStateCallback:(NSNotification*)notify{
     
     MPMoviePlayerController *player = notify.object;
-    NSLog(@"state==%d",player.playbackState);
+    //NSLog(@"state==%d",player.playbackState);
     switch (player.playbackState) {
         case MPMoviePlaybackStateStopped:
             [moviePlayer setFullscreen:NO animated:YES];
@@ -646,8 +624,7 @@
          NSRange range2 = [string2 rangeOfString:@"http://"];
         if(range2.location!=NSNotFound){
             [self changeRation:NO];
-            //[StringUitl alertMsg:@"视频地址有误,加载失败!" withtitle:@"错误提示"];
-            [self showCustomAlert:@"视频地址有误,加载失败" widthType:ERROR_LOGO];
+            [self showCAlert:@"视频地址有误,加载失败" widthType:ERROR_LOGO];
             return;
         }
     }
@@ -655,16 +632,14 @@
     
     if([StringUitl isEmpty:remoteUrl]){
         [self changeRation:NO];
-        //[StringUitl alertMsg:@"视频地址为空,加载失败!" withtitle:@"错误提示"];
-        [self showCustomAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
+        [self showCAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
         return;
     }
     
     NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
     if(![fileExt isEqualToString:@"mp4"]){
         [self changeRation:NO];
-        //[StringUitl alertMsg:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] withtitle:@"错误提示"];
-        [self showCustomAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
+        [self showCAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
         return;
     }
     
@@ -828,7 +803,7 @@
     NSString *bid = [[bannerData valueForKey:@"_id"] stringValue];
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
     NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
-    NSLog(@"newDataId=%@",newId);
+    //NSLog(@"newDataId=%@",newId);
     if([bid isEqual:newId]){
         [self setVideoView:YES];
     }else{
@@ -878,8 +853,5 @@
     videoCell.clickNum.text = [clickNum stringValue];
     return videoCell;
 }
-
-
-
 
 @end

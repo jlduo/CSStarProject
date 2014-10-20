@@ -8,9 +8,7 @@
 
 #import "FogetPasswordViewController.h"
 
-@interface FogetPasswordViewController (){
-    MBProgressHUD *HUD;
-}
+@interface FogetPasswordViewController ()
 
 @end
 
@@ -20,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.tabBarController.hidesBottomBarWhenPushed = TRUE;
     }
     return self;
 }
@@ -64,25 +62,6 @@
     
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
 
 -(void)goPreviou{
     
@@ -103,8 +82,7 @@
         isNameNull = TRUE;
     }
     if(isNameNull==TRUE){
-        //[StringUitl alertMsg:@"对不起，请先输入手机号码！"withtitle:@"错误提示"];
-        [self showCustomAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
+        [self showCAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
         return;
     }
     
@@ -133,12 +111,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         
     }
     
@@ -146,8 +122,7 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
 }
 
 //关闭键盘

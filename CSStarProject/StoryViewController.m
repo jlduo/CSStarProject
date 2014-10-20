@@ -81,7 +81,7 @@
         }
         [_storyTableView reloadData];
     }else{ 
-        [self showCustomAlert:@"没有数据了！" widthType:WARNN_LOGO];
+        [self showCAlert:@"没有数据了！" widthType:WARNN_LOGO];
     }
 }
 
@@ -167,21 +167,5 @@
         
         return storyBCell;
     }
-}
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]]; 
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	 
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 @end

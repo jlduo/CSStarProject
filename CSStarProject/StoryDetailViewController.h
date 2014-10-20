@@ -10,14 +10,13 @@
 #import "InitTabBarViewController.h"
 #import "StoryViewController.h"
 #import "ASIHTTPRequest.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "ASIFormDataRequest.h"
 #import "LoginViewController.h"
 #import "StoryCommentViewController.h"
 
-@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,MBProgressHUDDelegate,UIGestureRecognizerDelegate>{
+@interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,UIGestureRecognizerDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *delegate;
-    MBProgressHUD *HUD;
 }
 @end

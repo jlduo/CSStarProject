@@ -148,7 +148,7 @@
 }
 
 -(void)deleteComment:(UIButton *)sender{
-    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"系统提示"message:@"确定删除？" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"系统提示" message:@"确定删除？" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
     currentIndex = sender.tag;
     [alert show];
 }
@@ -203,7 +203,7 @@
             [tableArray removeObjectAtIndex:currentIndex];
             [commentTable reloadData];
         }else{
-            [self showCustomAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
         }
     }else{
         //处理返回
@@ -211,13 +211,13 @@
             [tableArray removeObjectAtIndex:currentIndex];
             [commentTable reloadData];
         }else{
-            [self showCustomAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
         }
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCustomAlert:@"删除失败！" widthType:WARNN_LOGO];
+    [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -255,22 +255,6 @@
     delegate = detailController;
     [delegate passValue:rowId];
     [self.navigationController pushViewController:detailController animated:YES];
-}
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 -(void)loadView{

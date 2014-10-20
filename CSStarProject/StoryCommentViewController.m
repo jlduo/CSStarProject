@@ -27,6 +27,11 @@
 -(void)passValue:(NSString *)val{
     detailId = val;
 }
+
+-(void)passDicValue:(NSDictionary *)vals{
+    
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -106,24 +111,6 @@
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     return (NSMutableArray *)[jsonData requestData:url];
 }
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
 
 -(void)initTable{
     table = [[UITableView alloc] initWithFrame:self.view.frame];
@@ -319,7 +306,7 @@
     NSString *textVal = textField.text;
     //点击发表提交数据
     if([self isEmpty:textVal]){ 
-        [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+        [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
@@ -365,7 +352,7 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel]; 
         
-        [self showCustomAlert:@"评论提交成功" widthType:WARNN_LOGO];
+        [self showCAlert:@"评论提交成功" widthType:WARNN_LOGO];
         pageIndex = 1;
         tableArray  = [self getCommentList];
         [table reloadData];
@@ -373,12 +360,12 @@
         NSString *clickNum = [self getCommentNum];
         lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-     [self showCustomAlert:@"请求数据失败" widthType:WARNN_LOGO];
+     [self showCAlert:@"请求数据失败" widthType:WARNN_LOGO];
 }
 
 -(void)loadView{
@@ -426,7 +413,7 @@
         }
         [table reloadData];
     }else{ 
-        [self showCustomAlert:@"没有数据了" widthType:WARNN_LOGO];
+        [self showCAlert:@"没有数据了" widthType:WARNN_LOGO];
     }
 }
 

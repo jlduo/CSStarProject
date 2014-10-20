@@ -68,8 +68,37 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     [hud hide:YES afterDelay:2];
 }
 
+-(void)showCAlert:(NSString *)msg widthType:(NSString *)tp{
+    
+    UIView *view = [[UIApplication sharedApplication].delegate window];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
+    [imgView setFrame:CGRectMake(0, 0, 48, 48)];
+    hud.customView = imgView;
+    
+    hud.mode = MBProgressHUDModeCustomView;
+    hud.labelText = msg;
+    hud.dimBackground = YES;
+	
+    [hud show:YES];
+    [hud hide:YES afterDelay:1];
+    
+}
+
 - (void)hideHud{
     [[self HUD] hide:YES];
+}
+
+- (UIViewController *)findViewController:(UIViewController *)sourceView
+{
+    id target=sourceView;
+    while (target) {
+        target = ((UIResponder *)target).nextResponder;
+        if ([target isKindOfClass:[UIViewController class]]) {
+            break;
+        }
+    }
+    return target;
 }
 
 @end
