@@ -18,13 +18,6 @@
                         <rect key="frame" x="10" y="5" width="300" height="140"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iVC-hp-4hv">
-                                <rect key="frame" x="0.0" y="0.0" width="46" height="136"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="iconchecked.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="收件人" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWT-ey-Xux">
                                 <rect key="frame" x="54" y="10" width="54" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -85,6 +78,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="btnnocheck.png" translatesAutoresizingMaskIntoConstraints="NO" id="Sof-p0-SM8">
+                                <rect key="frame" x="4" y="40" width="35" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -92,6 +89,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="contentBgView" destination="F9y-oQ-k0N" id="x9A-Q2-2IX"/>
+                <outlet property="defaultBtn" destination="Sof-p0-SM8" id="NcI-Mu-gGL"/>
                 <outlet property="editBtn" destination="mkc-3v-LgU" id="W5s-5a-wvi"/>
                 <outlet property="phoneNum" destination="WmK-RS-Nw4" id="nM1-nF-Ptm"/>
                 <outlet property="reciverAddress" destination="Ze3-c7-fv1" id="Aoh-63-RKL"/>
@@ -100,6 +98,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="iconchecked.png" width="47" height="47"/>
+        <image name="btnnocheck.png" width="48" height="48"/>
     </resources>
 </document>

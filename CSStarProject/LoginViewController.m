@@ -9,10 +9,7 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 
-@interface LoginViewController (){
-    
-    MBProgressHUD *HUD;
-}
+@interface LoginViewController ()
 
 @end
 
@@ -166,26 +163,6 @@
     [self getPassword];
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
-
-
 //用户登录方法
 - (IBAction)clickLognBtn:(id)sender {
     NSLog(@"user login......");
@@ -208,20 +185,17 @@
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == TRUE){
-        //[StringUitl alertMsg:@"对不起，请先输入登录信息！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"登录信息不完整" widthType:WARNN_LOGO];
+        [self showCAlert:@"登录信息不完整" widthType:WARNN_LOGO];
         return;
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == FALSE){
-        //[StringUitl alertMsg:@"对不起，用户名不能为空！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"登录账号不能为空" widthType:WARNN_LOGO];
+        [self showCAlert:@"登录账号不能为空" widthType:WARNN_LOGO];
         return;
     }
     
     if(isLoginNameNull==FALSE && isLoginPaswNull == TRUE){
-        //[StringUitl alertMsg:@"对不起，密码不能为空！" withtitle:@"错误提示"];
-        [self showCustomAlert:@"登录密码不能为空" widthType:WARNN_LOGO];
+        [self showCAlert:@"登录密码不能为空" widthType:WARNN_LOGO];
         return;
     }
     
@@ -246,15 +220,13 @@
 
 - (void)requestLoginFinished:(ASIHTTPRequest *)req
 {
-    NSLog(@"login info->%@",[req responseString]);
+    //NSLog(@"login info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
         //先清除信息
         [StringUitl clearUserInfo];
         //存储用户信息
@@ -304,12 +276,11 @@
 - (void)getUserInfoFinished:(ASIHTTPRequest *)req
 {
     
-    NSLog(@"getUserInfo->%@",[req responseString]);
+    //NSLog(@"getUserInfo->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
         
@@ -328,7 +299,6 @@
 - (void)requestLoginFailed:(ASIHTTPRequest *)req
 {
     
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 @end

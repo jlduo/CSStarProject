@@ -50,7 +50,7 @@
 -(void)passDicValue:(NSDictionary *)vals{
     params = vals;
     dataId = [params valueForKey:@"userId"];
-    NSLog(@"vals====%@",vals);
+    //NSLog(@"vals====%@",vals);
     cellIndex =[[params valueForKey:@"titleName"] intValue];
     switch (cellIndex) {
         case 1:
@@ -115,7 +115,7 @@
     if(returnArr!=nil && returnArr.count>0){
         _peopleProList = [NSMutableArray arrayWithArray:returnArr];
     }
-    NSLog(@"_peopleProList====%@",_peopleProList);
+   // NSLog(@"_peopleProList====%@",_peopleProList);
     
 }
 

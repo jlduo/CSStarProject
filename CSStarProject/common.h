@@ -99,11 +99,22 @@
 #define GET_PROJECT_TALKS_URL @"/cf/getProjectTalks"//项目评论列表
 #define GET_ADDRESS_LIST_URL @"/cf/getDeliverys"//收货人地址
 #define GET_ADDRESS_BID_URL @"/cf/getdeliveryById"//收货地址详情
+#define GET_ORDER_BID_URL @"/cf/getOrderDetail"//获取订单
+#define GET_DEFAULT_ADDRESS_URL @"/cf/getDefaultDelivery"//默认收货地址详情addDelivery
 
+#define ADD_ADDRESS_URL @"/AndroidApi/CFService/addDelivery"//增加收货地址
+#define EDIT_ADDRESS_URL @"/AndroidApi/CFService/updateDelivery"//修改收货地址
+#define DEL_ADDRESS_URL @"/AndroidApi/CFService/deleteDelivery"//删除收货地址
 #define ADD_TALK_URL @"/AndroidApi/CFService/addTalk"//提交评论
 #define ADD_REVIEW_URL @"/AndroidApi/CFService/addReview"//提交回复
+#define SUB_ORDER_URL @"/AndroidApi/CFService/SubmitOrder"//提交订单
+#define DEL_ORDER_URL @"/AndroidApi/CFService/cancelOrder"//取消订单
+
 #define ADD_ENJOY_PROJECT_URL @"/AndroidApi/CFService/addEnjoyProject"
 
+#define ADDRESS_INFO @"address_info"
+#define ADDRESS_CITY_ID @"address_city_id"
+#define ADDRESS_PROVINCE_ID @"address_province_id"
 
 #define LOGIN_USER_ID @"login_user_id"
 #define LOGIN_USER_NAME @"login_user_name"
@@ -114,6 +125,8 @@
 #define USER_PASS @"password"
 #define USER_NICK_NAME @"nickname"
 #define USER_ADDRESS @"address"
+#define USER_PHONE @"phone"
+#define USER_ZIPCODE @"zipcode"
 #define PROVINCE_ID @"provinceid"
 #define CITY_ID @"cityid"
 #define USER_SEX @"sex"
@@ -122,6 +135,7 @@
 #define SUCCESS_LOGO @"tips_success.png"
 #define ERROR_LOGO @"tips_error.png"
 #define WARNN_LOGO @"tips_warnn.png"
+#define HAND_LOGO @"hand@2x.png"
 
 #define DEFAULT_VOID_COLOR [UIColor whiteColor]
 

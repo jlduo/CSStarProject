@@ -43,8 +43,8 @@
 -(void)getAddressList{
     NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    //NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/%@",REMOTE_URL,userId];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/45",REMOTE_URL];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/%@",REMOTE_URL,userId];
+    //NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/45",REMOTE_URL];
     tableArray = (NSMutableArray *)[jsonData requestData:url];
 }
 
@@ -92,9 +92,9 @@
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self getAddressList];
             [addressTable reloadData];
-            [self showCustomAlert:@"设置成功！" widthType:WARNN_LOGO];
+            [self showCAlert:@"设置成功！" widthType:WARNN_LOGO];
         }else{
-            [self showCustomAlert:@"设置失败！" widthType:WARNN_LOGO];
+            [self showCAlert:@"设置失败！" widthType:WARNN_LOGO];
         }
     }
 }
@@ -128,19 +128,4 @@
     [super goPreviou];
 }
 
-//提示框
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	 
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
 @end

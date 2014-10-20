@@ -84,24 +84,6 @@
     
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
-
 -(void)UesrClicked:(UIImageView *)imgView{
     
     NSString *artcleId = [bannerData valueForKey:@"_id"];
@@ -159,6 +141,9 @@
     //}
     
     [self.girlsTableView reloadData];
+    CGPoint position = CGPointMake(0, 2*80);
+    [self.girlsTableView setContentOffset:position animated:YES];
+    
 }
 
 
@@ -204,7 +189,7 @@
             max_id = [[newDataArr objectAtIndex:0] valueForKey:@"_id"];
         }
      }else{
-         [self showCustomAlert:@"没有更多数据了" widthType:WARNN_LOGO];
+         [self showCAlert:@"没有更多数据了" widthType:WARNN_LOGO];
          return;
      }
     
@@ -220,9 +205,8 @@
         [newDataArr addObjectsFromArray:_girlsDataList];
         _girlsDataList = [[NSMutableArray alloc]init];
         [_girlsDataList addObjectsFromArray:newDataArr];
-        //NSLog(@"_girlsDataList===%@",_girlsDataList);
     }else{
-        [self showCustomAlert:@"没有新数据了" widthType:WARNN_LOGO];
+        [self showCAlert:@"没有新数据了" widthType:WARNN_LOGO];
         return;
     }
     
@@ -420,7 +404,7 @@
 
 -(void)imgBtnClick:(UIButton *)sender{
     
-    NSLog(@"@artcleId=%d",sender.tag);
+    //NSLog(@"@artcleId=%d",sender.tag);
     [self goPhotoView:[NSString stringWithFormat:@"%d",sender.tag]];
 }
 
@@ -429,7 +413,7 @@
     passValelegate = girlPhotoView;
     [passValelegate passValue:articleId];
     [self.navigationController pushViewController:girlPhotoView animated:YES];
-    NSLog(@"articleId=%@",articleId);
+    //NSLog(@"articleId=%@",articleId);
 }
 
 -(void)goVideoView:(NSString *)articleId{
@@ -437,7 +421,7 @@
     passValelegate = girlVideoView;
     [passValelegate passValue:articleId];
     [self.navigationController pushViewController:girlVideoView animated:YES];
-    NSLog(@"articleId=%@",articleId);
+    //NSLog(@"articleId=%@",articleId);
     
 }
 
@@ -446,7 +430,7 @@
     passValelegate = articelView;
     [passValelegate passValue:articleId];
     [self.navigationController pushViewController:articelView animated:YES];
-    NSLog(@"articleId=%@",articleId);
+    //NSLog(@"articleId=%@",articleId);
     
 }
 

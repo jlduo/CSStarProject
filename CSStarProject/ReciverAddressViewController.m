@@ -12,6 +12,8 @@
     UITableView *addressTableView;
     NSDictionary *cellDic;
     NSString *dataId;
+    
+    NSMutableDictionary *params;
 }
 
 @end
@@ -36,7 +38,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self initLoadData];
-    [self loadTableList];
+    [self setFooterView];
+    //[self loadTableList];
 }
 
 -(void)initLoadData{
@@ -63,6 +66,46 @@
     
 }
 
+-(void)setFooterView{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
+
+    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(15, 16, SCREEN_WIDTH-30, 40)];
+    [submitBox setBackgroundColor:[UIColor redColor]];
+    [submitBox setTitle:@"添加收货地址" forState:UIControlStateNormal];
+    [submitBox setTitle:@"添加收货地址" forState:UIControlStateSelected];
+    submitBox.titleLabel.font = main_font(16);
+    [submitBox.layer setCornerRadius:5.0];
+    [submitBox.layer setMasksToBounds:YES];
+    submitBox.tag = -1;
+    [submitBox addTarget:self action:@selector(addAddress:) forControlEvents:UIControlEventTouchDown];
+    
+    [footerView addSubview:submitBox];
+    [addressTableView setTableFooterView:footerView];
+    
+}
+
+-(void)addAddress:(UIButton *)sender{
+    
+    //NSLog(@"add address!");
+    NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+    if(sender.tag!=-1){
+        param = [self.orderAddressList objectAtIndex:sender.tag];
+        [param setObject:@"edit" forKey:@"oType"];
+    }else{
+        [param setObject:@"add" forKey:@"oType"];
+    }
+    AddAddressViewController *addAddressController = [[AddAddressViewController alloc]init];
+    passValelegate = addAddressController;
+    [passValelegate passDicValue:param];
+    [self presentViewController:addAddressController animated:YES completion:nil];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self loadTableList];
+    [addressTableView reloadData];
+}
+
 -(void)loadTableList{
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ADDRESS_LIST_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
@@ -76,11 +119,12 @@
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    NSLog(@"dataId====%@",dataId);
+    //NSLog(@"dataId====%@",dataId);
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
-    NSLog(@"vals====%@",vals);
+    params = [[NSMutableDictionary alloc] initWithDictionary:vals];
+    //NSLog(@"values====%@",vals);
 }
 
 #pragma mark 设置组
@@ -96,7 +140,11 @@
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-   
+    
+    passValelegate = (OrderInfoViewController *)[params valueForKey:@"controller"];
+    [passValelegate passDicValue:[self.orderAddressList objectAtIndex:indexPath.row]];
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 #pragma mark 设置行高
@@ -125,6 +173,14 @@
         reciverCell.selectionStyle =UITableViewCellSelectionStyleNone;
         reciverCell.backgroundColor = [UIColor clearColor];
         
+        NSString *isDefault =[[cellDic valueForKey:@"isDefault"] stringValue];
+        //NSLog(@"isDefault=%@",isDefault);
+        if([isDefault isEqualToString:@"1"]){
+            [reciverCell.defaultBtn setImage:[UIImage imageNamed:@"btncheck.png"]];
+        }else{
+            [reciverCell.defaultBtn setImage:[UIImage imageNamed:@"btnnocheck.png"]];
+        }
+        
         reciverCell.reciverAddress.editable = NO;
         reciverCell.reciverText.text = [cellDic valueForKey:@"userName"];
         reciverCell.reciverAddress.text = [cellDic valueForKey:@"address"];
@@ -132,11 +188,18 @@
         
         reciverCell.editBtn.layer.masksToBounds = YES;
         reciverCell.editBtn.layer.cornerRadius = 5.0;
+        reciverCell.editBtn.tag = indexPath.row;
+        [reciverCell.editBtn addTarget:self action:@selector(addAddress:) forControlEvents:UIControlEventTouchDown];
         
         reciverCell.contentBgView.layer.masksToBounds = YES;
         reciverCell.contentBgView.layer.cornerRadius = 5.0;
     }
     return reciverCell;
+}
+
+-(void)goEditInfo{
+    
+    
 }
 
 

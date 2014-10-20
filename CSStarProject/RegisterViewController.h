@@ -11,10 +11,10 @@
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
 #import "StringUitl.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "UserAgreenViewController.h"
 
-@interface RegisterViewController : UIViewController<UITextFieldDelegate,MBProgressHUDDelegate>
+@interface RegisterViewController : UIViewController<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *registerView;
 @property (weak, nonatomic) IBOutlet UIView *phoneNumView;

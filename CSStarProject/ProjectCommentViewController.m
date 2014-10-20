@@ -21,8 +21,6 @@
     NSDictionary *params;
     UILabel *lblClickComment;
     
-    MBProgressHUD *HUD;
-    
     NSString *commentId;
 }
 
@@ -115,24 +113,6 @@
     [commentListTableView setTableFooterView:view];
     commentListTableView.showsVerticalScrollIndicator = YES;
     [self.view addSubview:commentListTableView];
-}
-
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 //初始化底部工具栏
@@ -274,14 +254,14 @@
     
     //点击发表提交数据
     if([self isEmpty:textVal]){
-        [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+        [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
         
         NSString *hf = [textVal substringToIndex:2];
         if([hf isEqualToString:@"回复"]){
             NSArray *charArr = [textVal componentsSeparatedByString:@"："];
             if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
-                [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+                [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
                 return;
             }
         }
@@ -337,18 +317,18 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
         
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self loadTableList];
         [commentListTableView reloadData];
         
-        lblClickComment.text = [[NSString alloc] initWithFormat:@"%ld评论",_proCommentList.count];
+        lblClickComment.text = [[NSString alloc] initWithFormat:@"%d评论",_proCommentList.count];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
     }
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)req{
-    [self showCustomAlert:@"请求数据失败" widthType:WARNN_LOGO];
+    [self showCAlert:@"请求数据失败" widthType:WARNN_LOGO];
 }
 
 
@@ -374,7 +354,7 @@
     if(returnArr!=nil && returnArr.count>0){
         _proCommentList = [NSMutableArray arrayWithArray:returnArr];
     }
-    NSLog(@"_proCommentList====%@",_proCommentList);
+    //NSLog(@"_proCommentList====%@",_proCommentList);
     
 }
 

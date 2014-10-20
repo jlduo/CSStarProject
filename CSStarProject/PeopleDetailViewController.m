@@ -16,8 +16,6 @@
     UIButton *supportBtn;
     UIButton *rebackBtn;
     NSDictionary *cellDic;
-    
-    MBProgressHUD *HUD;
 }
 
 @end
@@ -131,7 +129,7 @@
         ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
          _peopleData= (NSDictionary *)[convertJson requestData:url];
-        NSLog(@"_peopleData===%@",_peopleData);
+        //NSLog(@"_peopleData===%@",_peopleData);
         
     }
 }
@@ -139,27 +137,10 @@
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    NSLog(@"dataId====%@",dataId);
+    //NSLog(@"dataId====%@",dataId);
 }
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
+-(void)passDicValue:(NSDictionary *)vals{
     
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-    
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-	
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-    
-    
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 
@@ -215,7 +196,7 @@
         
         
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
-        NSLog(@"imgurl==%@",imgUrl);
+        //NSLog(@"imgurl==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片
@@ -351,7 +332,7 @@
 }
 
 -(void)goDetail{
-    NSLog(@"ssss");
+    //NSLog(@"ssss");
     ContentDetailViewController *deatilController = [[ContentDetailViewController alloc]init];
     passValelegate = deatilController;
     [passValelegate passValue:dataId];
@@ -360,7 +341,7 @@
 
 
 -(void)goCommentList{
-    NSLog(@"comment");
+    //NSLog(@"comment");
     ProjectCommentViewController *commentController = [[ProjectCommentViewController alloc]init];
     passValelegate = commentController;
     [passValelegate passValue:dataId];
@@ -369,7 +350,7 @@
 }
 
 -(void)goTaHomePage{
-    NSLog(@"home");
+    //NSLog(@"home");
     OtherUserViewController *otherUserController = [[OtherUserViewController alloc]init];
     passValelegate = otherUserController;
     
@@ -409,22 +390,22 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
     }
     
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)req
 {
-    [self showCustomAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
 }
 
 
 -(void)clickSupBtn{
     
-    NSLog(@"dddd");
+    //NSLog(@"dddd");
     ReturnsViewController *returnsController = [[ReturnsViewController alloc]init];
     passValelegate = returnsController;
     [passValelegate passValue:dataId];

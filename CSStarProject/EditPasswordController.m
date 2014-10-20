@@ -8,9 +8,7 @@
 
 #import "EditPasswordController.h"
 
-@interface EditPasswordController (){
-    MBProgressHUD *HUD;
-}
+@interface EditPasswordController ()
 
 @end
 
@@ -22,7 +20,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.tabBarController.hidesBottomBarWhenPushed = TRUE;
     }
     return self;
 }
@@ -84,24 +82,6 @@
     
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 42, 42)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	[self.passText resignFirstResponder];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
-
-
 -(void)goPreviou{
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
@@ -112,14 +92,12 @@
     
     NSString *pwd = self.passText.text;
     if([StringUitl isEmpty:pwd]){
-        //[StringUitl alertMsg:@"对不起，请先输入密码！"withtitle:@"错误提示"];
-        [self showCustomAlert:@"请先输入密码" widthType:WARNN_LOGO];
+        [self showCAlert:@"请先输入密码" widthType:WARNN_LOGO];
         return;
     }
     
     if([[StringUitl getSessionVal:LOGIN_USER_PSWD] isEqual:pwd]){
-        //[StringUitl alertMsg:@"对不起，新密码不能和旧密码相同！"withtitle:@"错误提示"];
-        [self showCustomAlert:@"新密码不能和旧密码相同" widthType:WARNN_LOGO];
+        [self showCAlert:@"新密码不能和旧密码相同" widthType:WARNN_LOGO];
         return;
     }
     
@@ -149,20 +127,11 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCustomAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
-        //[StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
         [StringUitl setSessionVal:_passText.text withKey:LOGIN_USER_PSWD];
-        
         [self dismissViewControllerAnimated:YES completion:nil];
-//        LoginViewController *loginView = [[LoginViewController alloc]init];
-//        loginView.delegate = self;
-//        [self presentViewController:loginView animated:YES completion:^{
-//           
-//        }];
         
     }
     
@@ -170,9 +139,7 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    
-    //[StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 @end

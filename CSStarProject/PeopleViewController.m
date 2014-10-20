@@ -100,7 +100,7 @@
     for (int i=0; i<varr.count; i++) {
         
         UIImageView *imageView = (UIImageView *)varr[i];
-        // NSLog(@"arr=%@",imageView);
+         NSLog(@"arr=%@",imageView.image);
         [imageView setMultipleTouchEnabled:YES];
         [imageView setUserInteractionEnabled:YES];
         
@@ -115,7 +115,15 @@
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
     int tag =  tap.view.tag;
-    NSLog(@"%d==",tag);
+    NSLog(@"index==%d",tag);
+    NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
+    if(slideDic!=nil){
+        NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
+        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+        passValelegate = deatilViewController;
+        [passValelegate passValue:projectId];
+        [self.navigationController pushViewController:deatilViewController animated:YES];
+    }
     
 }
 
@@ -132,7 +140,9 @@
     if(slideArr!=nil && slideArr.count>0){
         sourceArray = [NSMutableArray arrayWithArray:[slideArr valueForKey:@"imgUrl"]];
     }
-    NSLog(@"sourceArray====%@",sourceArray);
+    
+    NSLog(@"slideArr2====%@",slideArr);
+    NSLog(@"sourceArray2====%@",sourceArray);
     
 }
 
@@ -300,13 +310,5 @@
     UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
     return newImage;
 }
-
-
-
-
-
-
-
-
 
 @end

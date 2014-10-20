@@ -16,6 +16,8 @@
 @implementation EditCityViewController{
     
     NSString *pID;
+    NSString *saveType;
+    NSString *userAddStr;
     
     int selectedCityIndex;
     int selectedProvinceIndex;
@@ -41,10 +43,21 @@
     _provinceArray1 = [[NSMutableArray alloc]init];
     _cityArray1 = [[NSMutableArray alloc]init];
     
-    self.cityText.text = [StringUitl getSessionVal:USER_ADDRESS];
-    
-    [self loadProvData];
-    [self loadCityData:@"1"];
+    if([StringUitl isNotEmpty:saveType]){
+        userAddStr = [StringUitl getSessionVal:ADDRESS_INFO];
+        self.cityText.text = userAddStr;
+        [self loadProvData];
+        if([StringUitl isEmpty:[StringUitl getSessionVal:ADDRESS_PROVINCE_ID]]){
+           [self loadCityData:@"1"];
+        }else{
+           [self loadCityData:[StringUitl getSessionVal:ADDRESS_PROVINCE_ID]];
+        }
+    }else{
+         userAddStr = [StringUitl getSessionVal:USER_ADDRESS];
+         self.cityText.text = userAddStr;
+        [self loadProvData];
+        [self loadCityData:@"1"];
+    }
     
     self.cityText.delegate = self;
     self.cityPciker.delegate = self;
@@ -58,11 +71,6 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
-    NSLog(@"selectedProvinceIndex=%d",selectedProvinceIndex);
-    NSLog(@"selectedCityIndex=%d",selectedCityIndex);
-    
-    
     
     NSString *name = [_provinceArray objectAtIndex:selectedProvinceIndex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",name];
@@ -86,7 +94,6 @@
     }
     
     [self.cityPciker reloadComponent:1];
-    
     [self.cityPciker selectRow:selectedProvinceIndex inComponent:0 animated:YES];
     [self.cityPciker selectRow:selectedCityIndex inComponent:1 animated:YES];
 }
@@ -119,12 +126,16 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor greenColor]];
+    [rbtn setTintColor:[UIColor whiteColor]];
     //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
-    [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
+    if([StringUitl isNotEmpty:saveType]){
+        [rbtn addTarget:self action:@selector(saveAddressCity) forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
     
@@ -138,10 +149,38 @@
 }
 
 
+//传递过来的参数
+-(void)passValue:(NSString *)val{
+    saveType = val;
+    NSLog(@"saveType====%@",saveType);
+}
+-(void)passDicValue:(NSDictionary *)vals{
+    NSLog(@"vals44====%@",vals);
+}
+
 -(void)goPreviou{
     [self dismissViewControllerAnimated:YES completion:^{
         //关闭时候到操作
     }];
+}
+
+
+-(void)saveAddressCity{
+    
+    //处理收货地址信息
+    [StringUitl setSessionVal:_cityText.text withKey:ADDRESS_INFO];
+    [StringUitl setSessionVal:_provinceValue withKey:ADDRESS_PROVINCE_ID];
+    [StringUitl setSessionVal:_cityValue withKey:ADDRESS_CITY_ID];
+    
+    AddAddressViewController *addressController =(AddAddressViewController *)[self findViewController:self];
+    passValelegate = addressController;
+    NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+    [param setObject:_cityText.text forKey:ADDRESS_INFO];
+    [param setObject:_provinceValue forKey:ADDRESS_PROVINCE_ID];
+    [param setObject:_cityValue forKey:ADDRESS_CITY_ID];
+    
+    [passValelegate passDicValue:param];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)saveUserInfo{
@@ -200,7 +239,7 @@
 
 -(void)loadProvData{
     
-    NSString *userAdd = [StringUitl getSessionVal:USER_ADDRESS];
+    NSString *userAdd = userAddStr;
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,GET_CITY_URL];
     NSMutableArray *cityArr = (NSMutableArray *)[convertJson requestData:url];
@@ -210,7 +249,7 @@
             NSDictionary * dic = [cityArr objectAtIndex:i];
            [_provinceArray addObject:[dic valueForKey:@"name"]];
             NSRange range = [userAdd rangeOfString:[dic valueForKey:@"name"]];
-            NSLog(@"name==%@",[dic valueForKey:@"name"]);
+            //NSLog(@"name==%@",[dic valueForKey:@"name"]);
             if([StringUitl isNotEmpty:userAdd] && range.location!=NSNotFound){
                 selectedProvinceIndex = i;
             }
@@ -222,7 +261,7 @@
 
 -(void)loadCityData:(NSString *)provID{
     
-    NSString *userAdd = [StringUitl getSessionVal:USER_ADDRESS];
+    NSString *userAdd = userAddStr;
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@?id=%@",REMOTE_URL,GET_CITY_URL,provID];
     NSMutableArray *cityArr = (NSMutableArray *)[convertJson requestData:url];
@@ -310,8 +349,8 @@
         NSDictionary * ndic = (NSDictionary *)[presult objectAtIndex:0];
         NSString *provId = [[ndic objectForKey:@"id"] stringValue];
 
-        NSLog(@"pname=%@",pname);
-        NSLog(@"provId=%@",provId);
+        //NSLog(@"pname=%@",pname);
+        //NSLog(@"provId=%@",provId);
         self.provinceValue = provId;
     }
     
@@ -325,8 +364,8 @@
         
         NSString * cityStr = [[NSString alloc]initWithFormat:@"%@,%@",pname,cname];
         
-        NSLog(@"cname=%@",cname);
-        NSLog(@"cityId=%@",cityId);
+        //NSLog(@"cname=%@",cname);
+        //NSLog(@"cityId=%@",cityId);
         self.cityText.text = cityStr;
         self.cityValue = cityId;
     }

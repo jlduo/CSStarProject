@@ -15,4 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIView *contentBgView;
 @property (weak, nonatomic) IBOutlet UITextView *reciverAddress;
 
+@property (weak, nonatomic) IBOutlet UIImageView *defaultBtn;
+
 @end

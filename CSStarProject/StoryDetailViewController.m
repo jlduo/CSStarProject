@@ -203,7 +203,7 @@
         [imgCategoryDetail removeGestureRecognizer:singleTap];
         imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
 }
 
@@ -220,23 +220,6 @@
     [self.view addSubview:toolBar];
     
     
-}
-
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
 -(void)initTextView{
@@ -385,7 +368,7 @@
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
-            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+            [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{ 
             //提交评论
             NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
@@ -443,18 +426,21 @@
         [textField addSubview:plabel];
         isOpen = NO;
         
-        [self showCustomAlert:@"提交成功" widthType:SUCCESS_LOGO];
+        [self showCAlert:@"提交成功" widthType:SUCCESS_LOGO];
     }else{
-        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCustomAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
 }
 
 -(void)passValue:(NSString *)val{
     detailId = val; 
+}
+-(void)passDicValue:(NSDictionary *)vals{
+    
 }
 
 -(void)loadView{

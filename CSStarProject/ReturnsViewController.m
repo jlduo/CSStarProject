@@ -80,6 +80,10 @@
     NSLog(@"dataId====%@",dataId);
 }
 
+-(void)passDicValue:(NSDictionary *)vals{
+    NSLog(@"vals====%@",vals);
+}
+
 -(void)loadTableList{
     
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
@@ -88,7 +92,7 @@
     if(returnArr!=nil && returnArr.count>0){
         _peopleReturnList = [NSMutableArray arrayWithArray:returnArr];
     }
-    NSLog(@"_peopleReturnList====%@",_peopleReturnList);
+    //NSLog(@"_peopleReturnList====%@",_peopleReturnList);
     
 }
 
@@ -109,7 +113,10 @@
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //跳转到详情页面
-    
+    OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
+    passValelegate = orderController;
+    [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController:orderController animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -164,7 +171,7 @@
         peopelCell.descText.text = [cellDic valueForKey:@"description"];
         peopelCell.descText.font = DESC_FONT;
         
-        peopelCell.saveBtn.titleLabel.font = main_font(22);
+        peopelCell.saveBtn.titleLabel.font = main_font(16);
         peopelCell.saveBtn.layer.cornerRadius = 5.0;
         peopelCell.saveBtn.layer.masksToBounds = TRUE;
         
@@ -183,17 +190,12 @@
 
 
 -(void)goOrderInfo:(UIButton *)sender{
-    NSLog(@"go order");
+    //NSLog(@"go order");
     OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
     passValelegate = orderController;
     [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:sender.tag]];
     [self.navigationController pushViewController:orderController animated:YES];
 }
-
-
-
-
-
 
 
 @end

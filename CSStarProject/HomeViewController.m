@@ -21,7 +21,6 @@
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
-    MBProgressHUD *HUD;
 }
 
 @end
@@ -162,7 +161,7 @@
     [self initScroll];
     [self.homeTableView reloadData];
     
-    [self showCustomAlert:@"数据刷新成功.."];
+    [self showCAlert:@"数据刷新成功.." widthType:SUCCESS_LOGO];
 }
 
 
@@ -172,71 +171,10 @@
     [self.view addSubview:[super setNavBarWithTitle:@"长沙星" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:Nil]];
 }
 
--(void)initLogin{
-    
-     HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-	[self.navigationController.view addSubview:HUD];
-    
-	HUD.labelText = @"登录初始化..";
-    HUD.labelFont = main_font(16);
-	HUD.dimBackground = YES;
-    HUD.delegate = self;
-    [HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
-    
-}
-
-- (void)myTask {
-    sleep(1);
-    BOOL islogin = [StringUitl checkLogin];
-    if(islogin){
-        HUD.labelText = @"初始化完毕..";
-        HUD.dimBackground = YES;
-        
-        [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
-        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
-    }else{
-        [StringUitl setSessionVal:@"0" withKey:USER_IS_LOGINED];
-    }
-    
-    sleep(1);
-    HUD.hidden = YES;
-}
-
-
--(void)showCustomAlert:(NSString *)msg{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-	[self.navigationController.view addSubview:HUD];
-	HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:SUCCESS_LOGO]];
-    HUD.mode = MBProgressHUDModeCustomView;
-	
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [HUD show:YES];
-	[HUD hide:YES afterDelay:1];
-}
-
 
 -(void)setTableData{
     
-    //NSBundle *manBund = [NSBundle mainBundle];
-    //NSString *path = [manBund pathForResource:@"homeDataList" ofType:@"plist"];
-    //NSDictionary *myData = [NSDictionary dictionaryWithContentsOfFile:path];
-    //NSArray *titleKeys = [myData allKeys];
-    
-    //NSArray *array1 = [myData valueForKey:@"美女私房"];
-    //NSArray *array2 = [myData valueForKey:@"星城故事"];
-    //NSArray *array3 = [myData valueForKey:@"活动众筹"];
-    //NSArray *array4 = [myData valueForKey:@"朋友圈"];
-    
     _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
-    //_girlsDataList  = [NSMutableArray arrayWithArray:array1];
-    //_peopleDataList = [NSMutableArray arrayWithArray:array2];
-    //_friendDataList = [NSMutableArray arrayWithArray:array4];
-    //_storyDataList  = [NSMutableArray arrayWithArray:array3];
-    //NSLog(@"_girlsDataList==%@",_girlsDataList);
     [self loadSliderPic];
     [self loadGirlsData];
     [self loadStoryData];
@@ -252,7 +190,7 @@
     if(slideArr!=nil && slideArr.count>0){
         sourceArray = [NSMutableArray arrayWithArray:[slideArr valueForKey:@"_img_url"]];
     }
-    NSLog(@"sourceArray====%@",sourceArray);
+    //NSLog(@"sourceArray====%@",sourceArray);
     
 }
 
@@ -287,7 +225,7 @@
     if(peopleArr!=nil && peopleArr.count>0){
         _peopleDataList = [NSMutableArray arrayWithArray:peopleArr];
     }
-    NSLog(@"_peopleDataList====%@",_peopleDataList);
+    //NSLog(@"_peopleDataList====%@",_peopleDataList);
     
 }
 
@@ -413,7 +351,14 @@
         }
         
         if(indexPath.section==2){//跳转到活动众筹
-            
+            NSDictionary *peopleDic = [_peopleDataList objectAtIndex:0];
+            if(peopleDic!=nil){
+                NSString *projectId = [[peopleDic valueForKey:@"id"] stringValue];
+                PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+                passValelegate = deatilViewController;
+                [passValelegate passValue:projectId];
+                [self.navigationController pushViewController:deatilViewController animated:YES];
+            }
             
         }
         
@@ -460,7 +405,7 @@
         //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
         
         NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
-        NSLog(@"imgurl==%@",imgUrl);
+        //NSLog(@"imgurl==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片

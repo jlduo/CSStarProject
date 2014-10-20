@@ -48,7 +48,7 @@
     [self initPhotoTitle];
     [self initToolBar];
     
-    [self showCustomTips:@"点击全屏浏览"];
+    [self showCAlert:@"点击全屏浏览" widthType:HAND_LOGO];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -114,41 +114,10 @@
     NSLog(@"ssarticleId==%@",val);
     articelId = val;
 }
-
--(void)showCustomTips:(NSString *)msg{
+-(void)passDicValue:(NSDictionary *)vals{
     
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hand@2x.png"]];
-    //[imgView setFrame:CGRectMake(0, 0, 120, 120)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
 }
 
--(void)showCustomAlert:(NSString *)msg widthType:(NSString *)tp{
-    
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:tp]];
-    //[imgView setFrame:CGRectMake(0, 0, 48, 48)];
-    HUD.customView = imgView;
-    
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.delegate = self;
-    HUD.labelText = msg;
-    HUD.dimBackground = YES;
-	
-    [self dismissKeyBoard];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
-}
 
 -(void)loadGirlPhotoData:(NSString *)articleId {
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
@@ -501,8 +470,7 @@
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([StringUitl isEmpty:textVal]){
-            //[StringUitl alertMsg:@"对不起,请输入评论信息后提交!" withtitle:@"［错误提示］"];
-            [self showCustomAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+            [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
         }else{
             //提交数据
             [self postCommetnVal:articelId];
@@ -515,9 +483,7 @@
         passValelegate = commentController;
         [passValelegate passValue:articelId];
         
-        [self presentViewController:commentController animated:YES completion:^{
-            //code
-        }];
+        [self presentViewController:commentController animated:YES completion:nil];
     }
 }
 
@@ -550,12 +516,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [self showCustomAlert:@"提交评论信息成功！" widthType:SUCCESS_LOGO];
+        [self showCAlert:@"提交评论信息成功！" widthType:SUCCESS_LOGO];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
-        [self showCustomAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
         
     }
     
@@ -563,13 +529,11 @@
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
-    //[StringUitl alertMsg:@"提交数据失败！" withtitle:@"错误提示"];
-    [self showCustomAlert:@"提交数据失败！" widthType:ERROR_LOGO];
+    [self showCAlert:@"提交数据失败！" widthType:ERROR_LOGO];
 }
 
 
 -(void)goPreviou{
-    NSLog(@"back");
     [self.navigationController popViewControllerAnimated:YES];
 }
 

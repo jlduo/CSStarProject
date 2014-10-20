@@ -10,13 +10,12 @@
 #import "common.h"
 #import "InitTabBarViewController.h"
 #import "ASIHTTPRequest.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "ASIFormDataRequest.h"
 #import "commentTableViewCell.h"
 #import "ViewPassValueDelegate.h"
 
-@interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,MBProgressHUDDelegate>{
-    MBProgressHUD *HUD;
+@interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
     NSObject<ViewPassValueDelegate> *delegate;
 }
 

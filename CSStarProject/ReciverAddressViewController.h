@@ -9,8 +9,13 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "ReciverTableViewCell.h"
+#import "OrderInfoViewController.h"
+#import "AddAddressViewController.h"
 
-@interface ReciverAddressViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,ViewPassValueDelegate>
+@interface ReciverAddressViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,ViewPassValueDelegate>{
+    // 声明一个参数传递代理
+    NSObject<ViewPassValueDelegate> *passValelegate;
+}
 #pragma mark 回填数据
 @property(nonatomic,retain)NSMutableArray *orderAddressList;
 @end

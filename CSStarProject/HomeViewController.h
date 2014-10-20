@@ -15,7 +15,9 @@
 #import "UILabel+VerticalAlign.h"
 #import "ViewPassValueDelegate.h"
 #import "StoryDetailViewController.h"
+#import "PeopleDetailViewController.h"
 #import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 
 @interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MBProgressHUDDelegate>{
     // 声明一个参数传递代理

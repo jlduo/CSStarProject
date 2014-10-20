@@ -8,12 +8,12 @@
 
 #import "CommonViewController.h"
 #import "UserTableViewCell.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "PeopleProListViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
 
-@interface OtherUserViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,MBProgressHUDDelegate>{
+@interface OtherUserViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
 }

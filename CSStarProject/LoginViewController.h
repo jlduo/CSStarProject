@@ -11,11 +11,11 @@
 #import "ASIFormDataRequest.h"
 #import "UserViewController.h"
 #import "HomeViewController.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+HUD.h"
 #import "FogetPasswordViewController.h"
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : UIViewController<UITextFieldDelegate,MBProgressHUDDelegate>
+@interface LoginViewController : UIViewController<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *loginBgView;
 

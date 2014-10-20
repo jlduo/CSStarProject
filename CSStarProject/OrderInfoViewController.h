@@ -11,6 +11,8 @@
 #import "OrderMoneyTableCell.h"
 #import "ChangeNumTableCell.h"
 #import "ReturnTableViewCell.h"
+#import "AddressTableViewCell.h"
+#import "PayOrderViewController.h"
 #import "ReciverAddressViewController.h"
 
 @interface OrderInfoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
