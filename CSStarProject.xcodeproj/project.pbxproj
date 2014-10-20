@@ -247,6 +247,7 @@
 		7E9F659F19EF61AE0041AB5E /* AddressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F659D19EF61AE0041AB5E /* AddressTableViewCell.xib */; };
 		7E9F65A619EF68980041AB5E /* AddAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9F65A419EF68980041AB5E /* AddAddressViewController.m */; };
 		7EA036DC19EB5FC000EF10A9 /* ContentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA036DB19EB5FC000EF10A9 /* ContentDetailViewController.m */; };
+		7EA0B44D19F4BB12002E8BFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EA0B44F19F4BB12002E8BFD /* Main.storyboard */; };
 		7EA1E62719EE0EA20055158C /* OrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */; };
 		7EA1E62F19EE28EC0055158C /* OrderMoneyTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62D19EE28EC0055158C /* OrderMoneyTableCell.m */; };
 		7EA1E63019EE28EC0055158C /* OrderMoneyTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E62E19EE28EC0055158C /* OrderMoneyTableCell.xib */; };
@@ -404,7 +405,6 @@
 		7E971F2919ADC8B600858D44 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7E971F2A19ADC8B600858D44 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7E971F2D19ADC8B600858D44 /* CSStarProject.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CSStarProject.xcdatamodel; sourceTree = "<group>"; };
-		7E971F3319ADC8B600858D44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7E971F3519ADC8B600858D44 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7E971F3B19ADC8B600858D44 /* CSStarProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSStarProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E971F4019ADC8B600858D44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -669,6 +669,8 @@
 		7E9F65A419EF68980041AB5E /* AddAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressViewController.m; sourceTree = "<group>"; };
 		7EA036DA19EB5FC000EF10A9 /* ContentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentDetailViewController.h; sourceTree = "<group>"; };
 		7EA036DB19EB5FC000EF10A9 /* ContentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentDetailViewController.m; sourceTree = "<group>"; };
+		7EA0B44E19F4BB12002E8BFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7EA0B45119F4BB33002E8BFD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7EA1E62519EE0EA20055158C /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
 		7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInfoViewController.m; sourceTree = "<group>"; };
 		7EA1E62C19EE28EC0055158C /* OrderMoneyTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderMoneyTableCell.h; sourceTree = "<group>"; };
@@ -830,7 +832,6 @@
 		7EBAFC3519D2B7390087ED69 /* zhs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = zhs.ttf; sourceTree = "<group>"; };
 		7EBE4BD619E5356900FCF4AF /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
 		7EBE4BD819E5366800FCF4AF /* StoryTableViewBigCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StoryTableViewBigCell.xib; sourceTree = "<group>"; };
-		7ECE63FA19B02AE0005EDE82 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		7ECE643119B06354005EDE82 /* FFScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFScrollView.h; sourceTree = "<group>"; };
 		7ECE643219B06354005EDE82 /* FFScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFScrollView.m; sourceTree = "<group>"; };
 		7EDB75FD19CC0724000539DA /* DirectionMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionMPMoviePlayerViewController.h; sourceTree = "<group>"; };
@@ -1075,7 +1076,7 @@
 				7E971F4D19ADC92000858D44 /* ViewController */,
 				7E971F2919ADC8B600858D44 /* AppDelegate.h */,
 				7E971F2A19ADC8B600858D44 /* AppDelegate.m */,
-				7E971F3219ADC8B600858D44 /* Main.storyboard */,
+				7EA0B44F19F4BB12002E8BFD /* Main.storyboard */,
 				7E971F3519ADC8B600858D44 /* Images.xcassets */,
 				7E971F2C19ADC8B600858D44 /* CSStarProject.xcdatamodeld */,
 			);
@@ -1753,6 +1754,7 @@
 				7E9F659A19EF56070041AB5E /* wrong@2x.png in Resources */,
 				7E9F654119EF56070041AB5E /* icon_redo@2x.png in Resources */,
 				7E9F546F19F103C1009EF83C /* payment_cancel.png in Resources */,
+				7EA0B44D19F4BB12002E8BFD /* Main.storyboard in Resources */,
 				7E9F657119EF56070041AB5E /* progressbar-success.png in Resources */,
 				7E9F651B19EF56070041AB5E /* background.jpeg in Resources */,
 				7E73E65F19B4598400EB6024 /* StoryTableViewSmallCell.xib in Resources */,
@@ -2130,11 +2132,11 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7E971F3219ADC8B600858D44 /* Main.storyboard */ = {
+		7EA0B44F19F4BB12002E8BFD /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7E971F3319ADC8B600858D44 /* Base */,
-				7ECE63FA19B02AE0005EDE82 /* zh-Hans */,
+				7EA0B44E19F4BB12002E8BFD /* Base */,
+				7EA0B45119F4BB33002E8BFD /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

@@ -47,6 +47,7 @@
     
     //处理导航开始
     //[self setNavgationBar];
+    [self getMyProjectsNums];
     
 }
 
@@ -86,6 +87,32 @@
         NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:userLogo]];
         [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
     }
+}
+
+-(void)getMyProjectsNums{
+    _userProjectNums = [[NSMutableDictionary alloc]init];
+    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_USERCENTER_NUMS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
+    NSString *pro_nums = (NSString *)[convertJson requestSData:url];
+    if([StringUitl isNotEmpty:pro_nums]){
+        pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
+        NSArray *num = [pro_nums componentsSeparatedByString:@","];
+        if(num!=nil&&num.count>0){
+            for (int i=0; i<num.count; i++) {
+                NSArray *nums = [num[i] componentsSeparatedByString:@":"];
+                [_userProjectNums setObject:nums[1] forKey:nums[0]];
+            }
+        }
+    }
+    NSLog(@"pro_nums===%@",_userProjectNums);
+}
+
+-(void)passValue:(NSString *)val{
+    
+}
+
+-(void)passDicValue:(NSDictionary *)vals{
+    
 }
 
 
@@ -217,24 +244,30 @@
     
     UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
     userCell.backgroundColor = [UIColor clearColor];
+    NSString *valKey;
     switch (indexPath.row) {
         case 0:
+            valKey = @"talk";
             cellTitle = @"我的评论";
             imgName =@"myzone-discuss.png";
             break;
         case 1:
+            valKey = @"message";
             cellTitle = @"我的消息";
             imgName =@"myzone-message.png";
             break;
         case 2:
+            valKey = @"project";
             cellTitle = @"我的众筹";
             imgName =@"myzone-zhongchou.png";
             break;
         case 3:
+            valKey = @"order";
             cellTitle = @"我的订单";
             imgName =@"myzone-order.png";
             break;
         case 4:
+            valKey = @"delivery";
             cellTitle = @"收货地址";
             imgName =@"myzone-location.png";
             break;
@@ -249,7 +282,13 @@
         [userCell.dataTitle setText:cellTitle];
         userCell.dataTitle.font = main_font(18);
         userCell.dataTitle.alpha = 0.8f;
-        [userCell.dataNum setText:@"5"];
+        userCell.dataNum.font = main_font(9);
+        if(![[_userProjectNums valueForKey:valKey]  isEqualToString:@"0"]){
+           [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
+        }else{
+            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
+        }
         userCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return userCell;
     }else{
@@ -287,7 +326,9 @@
         myCommentViewController *comController = [[myCommentViewController alloc] init];
         [self.navigationController pushViewController:comController animated:YES];
     }else if(indexPath.row == 4){
-        myAddressViewController *addressController = [[myAddressViewController alloc] init];
+        ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc] init];
+        passValelegate = addressController;
+        [passValelegate passValue:@"userAdd"];
         [self.navigationController pushViewController:addressController animated:YES];
     }
 }

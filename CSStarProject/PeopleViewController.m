@@ -157,7 +157,6 @@
     NSLog(@"_peopleDataList====%@",_peopleDataList);
 }
 
-
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
