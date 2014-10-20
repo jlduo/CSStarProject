@@ -109,7 +109,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    commentTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    userMessageCommentNewTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     
     if(typeComment == 0){
@@ -240,7 +240,7 @@
     
     //评论内容自适应
     UIFont *font = [UIFont systemFontOfSize:12];
-    CGSize size = CGSizeMake(commentCell.lblContent.frame.size.width,2000);
+    CGSize size = CGSizeMake(cell.lblContent.frame.size.width,2000);
     CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     if (labelsize.height > 20) {
         return  57 + labelsize.height;
