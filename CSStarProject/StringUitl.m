@@ -160,13 +160,8 @@
 }
 
 //提示信息
-+(void)alertMsg:(NSString *)msg withtitle:(NSString *)title{
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:msg
-                                                   delegate:self
-                                          cancelButtonTitle:@"确 定"
-                                          otherButtonTitles:nil,nil];
++(void)alertMsg:(NSString *)msg withtitle:(NSString *)title{ 
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"确 定" otherButtonTitles:nil,nil];
     [alert show];
 }
 
@@ -190,10 +185,7 @@
         [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
-        
     }
-    
-    
 }
 //获取用户信息
 +(void)loadUserInfo2:(NSString *)userName{
