@@ -11,9 +11,9 @@
 #import "InitTabBarViewController.h"
 #import "ASIHTTPRequest.h"
 #import "UIViewController+HUD.h"
-#import "ASIFormDataRequest.h"
-#import "commentTableViewCell.h"
+#import "ASIFormDataRequest.h" 
 #import "ViewPassValueDelegate.h"
+#import "userMessageCommentNewTableViewCell.h"
 
 @interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
     NSObject<ViewPassValueDelegate> *delegate;

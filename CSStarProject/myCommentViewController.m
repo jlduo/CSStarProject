@@ -71,8 +71,8 @@
     [self.view addSubview:commentTable];
     
     //注册单元格
-    UINib *nibCell = [UINib nibWithNibName:@"commentTableViewCell" bundle:nil];
-    [commentTable registerNib:nibCell forCellReuseIdentifier:@"commentCell"];
+    UINib *nibCell = [UINib nibWithNibName:@"userMessageCommentNewTableViewCell" bundle:nil];
+    [commentTable registerNib:nibCell forCellReuseIdentifier:@"userMessageCommentNewCell"];
     
     //默认类型 0、长沙星 1、众筹
     typeComment = 0;
@@ -113,7 +113,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    commentTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    userMessageCommentNewTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     
     if(typeComment == 0){
@@ -225,7 +225,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    commentTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    userMessageCommentNewTableViewCell *cell = [commentTable dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     NSString *commnetContent = @"内容";
     if (typeComment == 0) {
@@ -236,7 +236,7 @@
     
     //评论内容自适应
     UIFont *font = [UIFont systemFontOfSize:12];
-    CGSize size = CGSizeMake(commentCell.lblContent.frame.size.width,2000);
+    CGSize size = CGSizeMake(cell.lblContent.frame.size.width,2000);
     CGSize labelsize = [commnetContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     if (labelsize.height > 20) {
         return  57 + labelsize.height;

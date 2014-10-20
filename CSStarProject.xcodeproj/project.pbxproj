@@ -14,6 +14,8 @@
 		7E28487919B5456400669756 /* storyDataList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E28487819B5456400669756 /* storyDataList.plist */; };
 		7E28487C19B54AF300669756 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E28487B19B54AF300669756 /* DateUtil.m */; };
 		7E330A7719E67A9900DE79F0 /* myCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E330A7619E67A9900DE79F0 /* myCommentViewController.m */; };
+		7E3A225B19F4D109004D31D4 /* userMessageCommentNewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3A225919F4D109004D31D4 /* userMessageCommentNewTableViewCell.m */; };
+		7E3A225C19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E3A225A19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib */; };
 		7E64F6D019BED97A00C8C62C /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64F6CF19BED97A00C8C62C /* ImageIO.framework */; };
 		7E6E8FCF19D2C4D60044787E /* msyh.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E6E8FCD19D2C4D60044787E /* msyh.ttf */; };
 		7E6E8FD019D2C4D60044787E /* msyhbd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E6E8FCE19D2C4D60044787E /* msyhbd.ttf */; };
@@ -292,7 +294,6 @@
 		7EA4B9F619D11CAF000FF50E /* PhotoScrollViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4B9F419D11CAF000FF50E /* PhotoScrollViewCell.m */; };
 		7EA4B9F719D11CAF000FF50E /* PhotoScrollViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4B9F519D11CAF000FF50E /* PhotoScrollViewCell.xib */; };
 		7EA4B9FF19D14CE9000FF50E /* LASIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */; };
-		7EA4D84319E771AC004608C7 /* commentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */; };
 		7EA4D84B19E7B461004608C7 /* userAddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */; };
 		7EA4D84C19E7B461004608C7 /* userAddressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */; };
 		7EA4D85519E7BABC004608C7 /* myAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D85419E7BABC004608C7 /* myAddressViewController.m */; };
@@ -374,6 +375,9 @@
 		7E28487B19B54AF300669756 /* DateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtil.m; sourceTree = "<group>"; };
 		7E330A7519E67A9900DE79F0 /* myCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myCommentViewController.h; sourceTree = "<group>"; };
 		7E330A7619E67A9900DE79F0 /* myCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myCommentViewController.m; sourceTree = "<group>"; };
+		7E3A225819F4D109004D31D4 /* userMessageCommentNewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userMessageCommentNewTableViewCell.h; sourceTree = "<group>"; };
+		7E3A225919F4D109004D31D4 /* userMessageCommentNewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userMessageCommentNewTableViewCell.m; sourceTree = "<group>"; };
+		7E3A225A19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = userMessageCommentNewTableViewCell.xib; sourceTree = "<group>"; };
 		7E64F63619BEBA2F00C8C62C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		7E64F6CF19BED97A00C8C62C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7E6E8FCD19D2C4D60044787E /* msyh.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = msyh.ttf; sourceTree = "<group>"; };
@@ -746,9 +750,6 @@
 		7EA4B9F519D11CAF000FF50E /* PhotoScrollViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoScrollViewCell.xib; sourceTree = "<group>"; };
 		7EA4B9FD19D14CE9000FF50E /* LASIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LASIImageView.h; sourceTree = "<group>"; };
 		7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LASIImageView.m; sourceTree = "<group>"; };
-		7EA4D83F19E771AC004608C7 /* commentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentTableViewCell.h; sourceTree = "<group>"; };
-		7EA4D84019E771AC004608C7 /* commentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentTableViewCell.m; sourceTree = "<group>"; };
-		7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = commentTableViewCell.xib; sourceTree = "<group>"; };
 		7EA4D84819E7B461004608C7 /* userAddressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userAddressTableViewCell.h; sourceTree = "<group>"; };
 		7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userAddressTableViewCell.m; sourceTree = "<group>"; };
 		7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = userAddressTableViewCell.xib; sourceTree = "<group>"; };
@@ -1580,12 +1581,12 @@
 		7EA4D83E19E77172004608C7 /* userMessage */ = {
 			isa = PBXGroup;
 			children = (
-				7EA4D83F19E771AC004608C7 /* commentTableViewCell.h */,
-				7EA4D84019E771AC004608C7 /* commentTableViewCell.m */,
-				7EA4D84119E771AC004608C7 /* commentTableViewCell.xib */,
 				7EA4D84819E7B461004608C7 /* userAddressTableViewCell.h */,
 				7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */,
 				7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */,
+				7E3A225819F4D109004D31D4 /* userMessageCommentNewTableViewCell.h */,
+				7E3A225919F4D109004D31D4 /* userMessageCommentNewTableViewCell.m */,
+				7E3A225A19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib */,
 			);
 			name = userMessage;
 			sourceTree = "<group>";
@@ -1896,7 +1897,6 @@
 				7E9F654419EF56070041AB5E /* iconi.png in Resources */,
 				7E9C549119B85A3C00851CAB /* UserSmallTableViewCell.xib in Resources */,
 				7E9F651A19EF56070041AB5E /* avatarbig.png in Resources */,
-				7EA4D84319E771AC004608C7 /* commentTableViewCell.xib in Resources */,
 				7E9F656219EF56070041AB5E /* myzone-message.png in Resources */,
 				7E9F655219EF56070041AB5E /* lable_success_s2.png in Resources */,
 				7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */,
@@ -1926,6 +1926,7 @@
 				7EF08DE419C67EF5001F2CCE /* 5.jpeg in Resources */,
 				7EF08DE019C67EF5001F2CCE /* 1.jpeg in Resources */,
 				7E6E8FD019D2C4D60044787E /* msyhbd.ttf in Resources */,
+				7E3A225C19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib in Resources */,
 				7E9F654C19EF56070041AB5E /* label_fundraising_s2.png in Resources */,
 				7E9EEC1C19C2A84000C0514C /* LoginViewController.xib in Resources */,
 				7E9F659119EF56070041AB5E /* video_play_light@2x.png in Resources */,
@@ -1995,6 +1996,7 @@
 				7EA4D84B19E7B461004608C7 /* userAddressTableViewCell.m in Sources */,
 				7E04A73D19C828730026E8BB /* StoryCommentTableCell.m in Sources */,
 				7EBAFBF419D299410087ED69 /* MJPhotoToolbar.m in Sources */,
+				7E3A225B19F4D109004D31D4 /* userMessageCommentNewTableViewCell.m in Sources */,
 				7EA4B9FF19D14CE9000FF50E /* LASIImageView.m in Sources */,
 				7EA58C8B19EB9D25003F4D45 /* OtherUserViewController.m in Sources */,
 				7EBAFC1A19D29B3A0087ED69 /* SDWebImageCompat.m in Sources */,
