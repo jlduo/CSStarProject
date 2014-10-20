@@ -8,6 +8,7 @@
 #import "common.h"
 #import "StringUitl.h"
 #import "AppDelegate.h"
+#import "Reachability.h"
 //#import "GirlsViewController.h"
 //#import "FriendViewController.h"
 //#import "StoryViewController.h"
@@ -55,7 +56,44 @@
     
     //[StringUitl printSystemFont];
     
+    // 监测网络情况
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(reachabilityChanged:)
+//                                                 name: kReachabilityChangedNotification
+//                                               object: nil];
+//    hostReach = [Reachability reachabilityWithHostName:@"http://i.0731zhongchou.com"];
+//    [hostReach startNotifier];
+    
     return YES;
+}
+
+- (void)reachabilityChanged:(NSNotification *)note {
+    Reachability *curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+
+    NSString *msg = @"";
+    switch (status) {
+        case NotReachable:
+            // 没有网络连接
+            msg = @"当前网络不稳定!";
+            break;
+        case ReachableViaWWAN:
+            // 使用3G网络
+            msg = @"正在使用3G/2G移动网络,会消耗流量哦!";
+            break;
+        case ReachableViaWiFi:
+            // 使用WiFi网络
+            msg = @"正在使用WIFI网络,可以放心使用哦!";
+            break;
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示信息"
+                                                    message:msg
+                                                   delegate:nil
+                                          cancelButtonTitle:@"确 定" otherButtonTitles:nil];
+    [alert show];
+    
 }
 
 
@@ -70,7 +108,6 @@
         return UIInterfaceOrientationMaskPortrait;
         
     }
-    
     
 }
 

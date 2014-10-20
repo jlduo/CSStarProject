@@ -12,5 +12,6 @@
 
 //传递参数到方法
 -(void)passValue:(NSString *)val;
+-(void)passDicValue:(NSDictionary *)vals;
 
 @end

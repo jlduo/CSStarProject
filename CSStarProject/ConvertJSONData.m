@@ -81,8 +81,8 @@
     NSURL *url = [NSURL URLWithString:nurl];
     NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    //NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
-    return [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingMutableContainers error:nil];
+    NSString *str = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+    return str;
 }
 
 //提交表单数据

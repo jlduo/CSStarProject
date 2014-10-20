@@ -13,7 +13,7 @@
 #import "myCommentViewController.h"
 #import "myAddressViewController.h"
 
-@interface UserViewController:CommonViewController
+@interface UserViewController:CommonViewController<UITableViewDataSource,UITableViewDelegate>
 
 #pragma mark  用户数据
 @property(nonatomic,retain)NSMutableArray *userDataList;

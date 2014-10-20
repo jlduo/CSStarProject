@@ -57,7 +57,7 @@
 }
 
 -(void)initScroll{
-    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 69, SCREEN_WIDTH, 180) views:sourceArray];
+    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180) views:sourceArray];
     NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
     
     NSArray *varr = [[scrollView scrollView] subviews];
@@ -282,12 +282,12 @@
 -(void)loadPeopleData{
    
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = @"http://192.168.1.210:8888/cms/GetArticles/city/1/is_red=1";
+    NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,HOME_PEOPLE_URL];
     NSArray *peopleArr = (NSArray *)[convertJson requestData:url];
     if(peopleArr!=nil && peopleArr.count>0){
         _peopleDataList = [NSMutableArray arrayWithArray:peopleArr];
     }
-    //NSLog(@"_peopleDataList====%@",_peopleDataList);
+    NSLog(@"_peopleDataList====%@",_peopleDataList);
     
 }
 
@@ -352,9 +352,6 @@
             break;
         case 2:
             return [_peopleDataList count];
-            break;
-        case 3:
-            return [_friendDataList count];
             break;
         default:
             return 0;
@@ -439,12 +436,11 @@
         case 2:
             cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
             break;
-        case 3:
-            cellDic = [self.friendDataList objectAtIndex:indexPath.row];
-            break;
         default:
             break;
     }
+    
+    
     
     dataType = [cellDic valueForKey:@"_category_call_index"];
     if([dataType isEqual:@"video"]){//判断是否为视频
@@ -496,24 +492,29 @@
         //[StringUitl setCornerRadius:picCell.picView withRadius:5.0f];
         //[StringUitl setViewBorder:picCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
         
+        
+        
         NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
-        NSLog(@"imgurl==%@",imgUrl);
+        NSString *labelText = [cellDic valueForKey:@"_zhaiyao"];
+        NSString *ctitle = [cellDic valueForKey:@"_title"];
+        if (indexPath.section==2) {//处理众筹
+            imgUrl = [cellDic valueForKey:@"imgUrl"];
+            labelText = [cellDic valueForKey:@"introduction"];
+            ctitle = [cellDic valueForKey:@"projectName"];
+        }
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-//            UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-//            [picCell.picView setBackgroundImage:videImg forState:UIControlStateNormal];
-            //改写异步加载图片
             [picCell.picView setImageWithURL:[NSURL URLWithString:imgUrl]
                                placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
-        NSString *labelText = [cellDic valueForKey:@"_zhaiyao"];
+        
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         
         [paragraphStyle setLineSpacing:25.0f];//调整行间距
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
         picCell.descView.attributedText = attributedString;
-        picCell.titleView.text = [cellDic valueForKey:@"_title"];
+        picCell.titleView.text = ctitle;
         picCell.titleView.font = TITLE_FONT;
         picCell.descView.text = labelText;
         picCell.descView.font = DESC_FONT;
