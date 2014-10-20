@@ -121,7 +121,7 @@
         NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
         commentCell.lblTime.text = addTime;
         
-        commentCell.lblTitle.text = [dicComment valueForKey:@"_article_title"];
+        commentCell.lblTitle.text = [dicComment valueForKey:@"_article_title"]; 
         commentCell.lblContent.text = [dicComment valueForKey:@"_content"];
         commentCell.btnDelete.tag = indexPath.row;
     }
@@ -134,6 +134,13 @@
         commentCell.lblContent.text = [dicComment valueForKey:@"content"];
         commentCell.btnDelete.tag = indexPath.row;
     }
+    //评论内容自适应
+    UIFont *font = [UIFont systemFontOfSize:12];
+    CGSize size = CGSizeMake( commentCell.lblContent.frame.size.width,2000);
+    CGSize labelsize = [commentCell.lblContent.text sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
+    if (labelsize.height > 20) {
+        commentCell.lblContent.frame = CGRectMake(commentCell.lblContent.frame.origin.x,commentCell.lblContent.frame.origin.y, commentCell.lblContent.frame.size.width, labelsize.height);
+    } 
     [commentCell.btnDelete addTarget:self action:@selector(deleteComment:) forControlEvents:UIControlEventTouchDown];
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
