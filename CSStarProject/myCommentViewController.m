@@ -232,6 +232,7 @@
         commnetContent =  [dicComment valueForKey:@"_content"];
     } else {
         commnetContent =  [dicComment valueForKey:@"content"];
+        
     }
     
     //评论内容自适应
