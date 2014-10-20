@@ -160,7 +160,7 @@
 }
 
 //提示信息
-+(void)alertMsg:(NSString *)msg withtitle:(NSString *)title{ 
++(void)alertMsg:(NSString *)msg withtitle:(NSString *)title{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"确 定" otherButtonTitles:nil,nil];
     [alert show];
 }
