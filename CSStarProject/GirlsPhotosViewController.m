@@ -155,7 +155,7 @@
             }else{
                imageView = [[UIImageView alloc]initWithFrame:CGRectMake(320*i, 5, SCREEN_WIDTH, 290)];
             }
-            [imageView setImageWithURL:[NSURL URLWithString:imgUrl]
+            [imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                       placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
             
             imageView.contentMode = UIViewContentModeScaleAspectFit;

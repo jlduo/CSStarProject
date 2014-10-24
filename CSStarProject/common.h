@@ -32,17 +32,17 @@
 #define main_font(x) DIY_FONT_SIZE(@"Microsoft YaHei",x);
 #define DIY_FONT_SIZE(n,x) [UIFont fontWithName:n size:x]//自定义字体函数
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
-#define Main_Font_Size Font_Size(15)//主字体
+#define Main_Font_Size Font_Size(14)//主字体
 
 #define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",28)//标题字体
-#define TITLE_FONT main_font(17)//标题字体
-#define DESC_FONT main_font(15)//描述字体
+#define TITLE_FONT main_font(16)//标题字体
+#define DESC_FONT main_font(14)//描述字体
 
 #define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
 #define CONTENT_BACKGROUND @"background.jpeg"//正文背景
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
 #define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
-#define NAVBAR_BG_ICON @"titlebar@2x.png"//导航背景
+#define NAVBAR_BG_ICON @"titlebar-gray@2x"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
 #define REFRESH_TITLE @"刷新数据"
@@ -53,10 +53,10 @@
 
 #define FORWARD_TYPE @"TAB"//登录跳转方式 tab 为点击tabbar
 
-#define REMOTE_URL @"http://192.168.1.210:8888"
-#define REMOTE_ADMIN_URL @"http://192.168.1.210:888"
-//#define REMOTE_URL @"http://i.0731zhongchou.com"
-//#define REMOTE_ADMIN_URL @"http://www.0731zhongchou.com"
+//#define REMOTE_URL @"http://192.168.1.210:8888"
+//#define REMOTE_ADMIN_URL @"http://192.168.1.210:888"
+#define REMOTE_URL @"http://i.0731zhongchou.com"
+#define REMOTE_ADMIN_URL @"http://www.0731zhongchou.com"
 #define LOGIN_URL @"/AndroidApi/LoginService/Login"//登录地址
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
 #define CHECK_CODE_URL @"/AndroidApi/SmsService/SendSMS"//验证码请求地址

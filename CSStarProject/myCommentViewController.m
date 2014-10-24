@@ -27,7 +27,7 @@
     if(IOS_VERSION>=7.0){
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
     
     //长沙星
     imgchangshaxing = [[UIImageView alloc] init];
@@ -66,7 +66,8 @@
     //评论列表
     commentTable = [[UITableView alloc] init];
     commentTable.delegate = self;
-    commentTable.dataSource = self; 
+    commentTable.dataSource = self;
+    [commentTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     commentTable.frame = CGRectMake(0, NAV_TITLE_HEIGHT + 69, SCREEN_WIDTH, MAIN_FRAME_H -  NAV_TITLE_HEIGHT -49); 
     [self.view addSubview:commentTable];
     
@@ -251,10 +252,17 @@
     NSDictionary *row = [tableArray objectAtIndex:indexPath.row];
     NSString *rowId = [row valueForKey:@"_article_id"];
     
-    StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
-    delegate = detailController;
-    [delegate passValue:rowId];
-    [self.navigationController pushViewController:detailController animated:YES];
+    if(typeComment==0){
+        StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
+        delegate = detailController;
+        [delegate passValue:rowId];
+        [self.navigationController pushViewController:detailController animated:YES];
+    }else{
+        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+        delegate = deatilViewController;
+        [delegate passValue:[row valueForKey:@"id"]];
+        [self.navigationController pushViewController:deatilViewController animated:YES];
+    }
 }
 
 -(void)loadView{

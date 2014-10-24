@@ -13,6 +13,7 @@
 #import "UIViewController+HUD.h"
 #import "ASIFormDataRequest.h" 
 #import "ViewPassValueDelegate.h"
+#import "PeopleDetailViewController.h"
 #import "userMessageCommentNewTableViewCell.h"
 
 @interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{

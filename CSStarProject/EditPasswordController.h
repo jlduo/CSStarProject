@@ -14,7 +14,7 @@
 #import "CommonViewController.h"
 #import "LoginViewController.h"
 
-@interface EditPasswordController : UIViewController<MBProgressHUDDelegate>
+@interface EditPasswordController : UIViewController
 @property (weak, nonatomic) IBOutlet UIView *passBg;
 @property (weak, nonatomic) IBOutlet UITextField *passText;
 

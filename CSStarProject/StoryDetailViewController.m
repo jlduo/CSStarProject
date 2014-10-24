@@ -98,7 +98,7 @@
     //点击图标
     imgCategoryDetail = [[UIImageView alloc] init];
     imgCategoryDetail.frame = CGRectMake(155, 112, 16, 14);
-    imgCategoryDetail.image = [UIImage imageNamed:@"heartgray.png"];
+    imgCategoryDetail.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
     [self.view addSubview:imgCategoryDetail];
     
     imgCategoryDetail.userInteractionEnabled = YES;
@@ -201,7 +201,13 @@
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
         lblNumberDetail.text = [jsonDic valueForKeyPath:@"value"];
         [imgCategoryDetail removeGestureRecognizer:singleTap];
-        imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
+        //imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
+        imgCategoryDetail.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
+        CAKeyframeAnimation *k = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+        k.values = @[@(0.5),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.0),@(5.5),@(6.0)];
+        k.keyTimes = @[@(0.0),@(0.5),@(0.8),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.5)];
+        k.calculationMode = kCAAnimationLinear;
+        [imgCategoryDetail.layer addAnimation:k forKey:@"SHOW"];
     }else{
         [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }

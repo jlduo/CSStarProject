@@ -5,13 +5,12 @@
 //  Created by jialiduo on 14-8-28.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
-
 #import "CommonViewController.h" 
 #import "StoryTableViewBigCell.h"
 #import "StoryTableViewSmallCell.h"
-#import "ViewPassValueDelegate.h"
-#import "common.h"
 #import "UIViewController+HUD.h"
+#import "XHFriendlyLoadingView.h"
+#import "ViewPassValueDelegate.h"
 
 @interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
     NSObject<ViewPassValueDelegate> *delegate;

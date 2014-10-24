@@ -839,7 +839,7 @@
         
         //videoCell.videoPic.imageURL = imgUrl;
         //改写异步加载图片
-        [videoCell.videoPic setImageWithURL:[NSURL URLWithString:imgUrl]
+        [videoCell.videoPic sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                   placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
         
     }

@@ -144,7 +144,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [self loadDefaultAddress];
     [orderTableView reloadData];
     
 }
@@ -272,7 +272,7 @@
     NSString *snum = numTextField.text;
     NSString *returnId = [[_orderInfoData valueForKey:@"id"] stringValue];
     
-    if([StringUitl isEmpty:addressId] && checkBox.tag==11){
+    if([StringUitl isEmpty:addressId] && checkBox.tag==99){
         [self showCAlert:@"收货地址不能为空" widthType:WARNN_LOGO];
         return;
     }
@@ -296,7 +296,9 @@
     [request setPostValue:returnId forKey:@"returnId"];
     [request setPostValue:ismianfei forKey:@"ismianfei"];
     [request setPostValue:beizhu forKey:@"beizhu"];
-    [request setPostValue:addressId forKey:@"deliveryId"];
+    if([StringUitl isEmpty:addressId] && checkBox.tag==99){
+       [request setPostValue:addressId forKey:@"deliveryId"];
+    }
     [request setPostValue:snum forKey:@"qty"];
     
     [request buildPostBody];
@@ -309,7 +311,7 @@
 
 - (void)addFinished:(ASIHTTPRequest *)req
 {
-    //NSLog(@"info->%@",[req responseString]);
+    NSLog(@"info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败

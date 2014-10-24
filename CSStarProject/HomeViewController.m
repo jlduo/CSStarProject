@@ -15,15 +15,26 @@
     NSDictionary *cellDic;
     NSArray *sourceArray;
     NSArray *slideArr;
+    NSArray *commonArr;
+    NSString * artId;
+    
+    NSMutableArray *imageArr;
+    MWPhoto *photo;
+    
     FFScrollView *scrollView;
     UIButton *footerBtn;
     CommonViewController *comViewController;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
+    
+    NSInteger selectedCount;
+    XHFriendlyLoadingView *friendlyLoadingView;
 }
 
 @end
+
+
 
 @implementation HomeViewController
 
@@ -34,9 +45,57 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    //[self showLoading:@"加载中，请稍后..."];
+    [self initLoading];
     [self initLoadData];
-
 }
+
+-(void)dealloc{
+    
+    dataType = nil;
+    cellDic = nil;
+    sourceArray = nil;
+    slideArr = nil;
+    commonArr = nil;
+    artId = nil;
+    imageArr= nil;
+    photo = nil;
+    scrollView = nil;
+    footerBtn = nil;
+    comViewController = nil;
+    friendlyLoadingView = nil;
+    
+}
+
+-(void)initLoading{
+    if(friendlyLoadingView==nil){
+      friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
+    }
+    __weak typeof(self) weakSelf = self;
+    friendlyLoadingView.reloadButtonClickedCompleted = ^(UIButton *sender) {
+        [weakSelf reloadTData];
+    };
+    
+    [self.view addSubview:friendlyLoadingView];
+    
+    [friendlyLoadingView showFriendlyLoadingViewWithText:@"正在加载..." loadingAnimated:YES];
+}
+
+- (void)showLoading {
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+        selectedCount ++;
+        if (selectedCount == 3) {
+            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
+        } else {
+            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
+        }
+    });
+}
+
+
 
 -(void)initLoadData{
     
@@ -46,16 +105,10 @@
     _homeTableView.rowHeight = 85;
     _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    [self initScroll];
-    
-    //集成刷新控件
-    [self setHeaderRereshing];
-    [self setFooterRereshing];
-    //[self initLogin];
-    
 }
 
 -(void)initScroll{
+
     scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180) views:sourceArray];
     NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
     
@@ -91,10 +144,12 @@
         }
         
         if([data_Type isEqual:@"albums"]){//相册
-            GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
-            passValelegate = girlPhoto;
-            [passValelegate passValue:dataId];
-            [self.navigationController pushViewController:girlPhoto animated:YES];
+//            GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
+//            passValelegate = girlPhoto;
+//            [passValelegate passValue:dataId];
+//            [self.navigationController pushViewController:girlPhoto animated:YES];
+            artId = dataId;
+            [self loadGirlPhotos:dataId];
         }
         
         
@@ -108,6 +163,8 @@
         
     }
 }
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -158,13 +215,19 @@
     [self loadStoryData];
     [self loadPeopleData];
     
-    [self initScroll];
     [self.homeTableView reloadData];
     
-    [self showCAlert:@"数据刷新成功.." widthType:SUCCESS_LOGO];
+    //[self showHint:@"数据刷新成功!"];
 }
 
+-(void)reloadTData{
+    
+    [self loadSliderPic];
+    [self loadGirlsData];
+    [self loadStoryData];
+    [self loadPeopleData];
 
+}
 
 -(void)loadView{
     [super loadView];
@@ -173,8 +236,7 @@
 
 
 -(void)setTableData{
-    
-    _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
+
     [self loadSliderPic];
     [self loadGirlsData];
     [self loadStoryData];
@@ -182,62 +244,198 @@
     
 }
 
--(void)loadSliderPic{
+-(void)loadGirlPhotos:(NSString *)articleId {
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PHOTO_LIST,articleId];
+    [self requestDataByUrl:url withType:5];
+}
+
+
+-(void)loadSliderPic{
+
     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,SLIDE_TOP];
-    slideArr = (NSArray *)[convertJson requestData:url];
-    if(slideArr!=nil && slideArr.count>0){
-        sourceArray = [NSMutableArray arrayWithArray:[slideArr valueForKey:@"_img_url"]];
-    }
-    //NSLog(@"sourceArray====%@",sourceArray);
+    [self requestDataByUrl:url withType:1];
     
 }
 
 -(void)loadGirlsData{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/1/is_red=1",REMOTE_URL,GIRLS_TOP];
-    NSArray *girlsArr = (NSArray *)[convertJson requestData:url];
-    if(girlsArr!=nil && girlsArr.count>0){
-        _girlsDataList = [NSMutableArray arrayWithArray:girlsArr];
-    }
-    //NSLog(@"_girlsDataList====%@",_girlsDataList);
+    [self requestDataByUrl:url withType:2];
     
 }
 
 -(void)loadStoryData{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/1/is_red=1",REMOTE_URL,CITY_TOP];
-    NSArray *storyArr = (NSArray *)[convertJson requestData:url];
-    if(storyArr!=nil && storyArr.count>0){
-        _storyDataList = [NSMutableArray arrayWithArray:storyArr];
-    }
-    //NSLog(@"_storyDataList====%@",_storyDataList);
+    [self requestDataByUrl:url withType:3];
 }
 
 -(void)loadPeopleData{
-   
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,HOME_PEOPLE_URL];
-    NSArray *peopleArr = (NSArray *)[convertJson requestData:url];
-    if(peopleArr!=nil && peopleArr.count>0){
-        _peopleDataList = [NSMutableArray arrayWithArray:peopleArr];
-    }
-    //NSLog(@"_peopleDataList====%@",_peopleDataList);
+    [self requestDataByUrl:url withType:4];
     
 }
 
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    [self hideHud];
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"jsonDic->%@",jsonDic);
+    commonArr = (NSArray *)jsonDic;
+    if(commonArr!=nil && commonArr.count>0){
+    
+        switch (request.tag) {
+            case 1:
+                sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"_img_url"]];
+                slideArr = commonArr;
+                [self initScroll];
+                break;
+            case 2:
+                _girlsDataList = [NSMutableArray arrayWithArray:commonArr];
+                break;
+            case 3:
+                _storyDataList = [NSMutableArray arrayWithArray:commonArr];
+                break;
+            case 4:
+                _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
+                break;
+            case 5:
+                imageArr = [[NSMutableArray alloc]init];
+                for (int i=0; i<commonArr.count; i++) {
+                    NSDictionary * dic = (NSDictionary *)commonArr[i];
+                    photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
+                    photo.caption = [dic valueForKey:@"_remark"];
+                    [imageArr addObject:photo];
+                }
+                [self goPhotoView:imageArr];
+
+                break;
+            default:
+                break;
+        }
+        
+        
+        [self setHeaderRereshing];
+        [self setFooterRereshing];
+        _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
+        [_homeTableView reloadData];
+        //[friendlyLoadingView removeFromSuperview];
+    }
+}
+
+-(void)goPhotoView:(NSMutableArray *)arr{
+
+    //NSLog(@"arr=%@",arr);
+    self.photos = arr;
+    self.thumbs = arr;
+    
+    BOOL displayActionButton = YES;
+    BOOL displaySelectionButtons = NO;
+    BOOL displayNavArrows = YES;
+    BOOL enableGrid = YES;
+    BOOL startOnGrid = NO;
+	
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = displayActionButton;
+    browser.displayNavArrows = displayNavArrows;
+    browser.displaySelectionButtons = displaySelectionButtons;
+    browser.alwaysShowControls = displaySelectionButtons;
+    browser.zoomPhotosToFill = YES;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+    browser.wantsFullScreenLayout = YES;
+#endif
+    browser.enableGrid = enableGrid;
+    browser.startOnGrid = startOnGrid;
+    browser.enableSwipeToDismiss = YES;
+    [browser setCurrentPhotoIndex:0];
+    
+    [self.navigationController pushViewController:browser animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
+    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
+    [tabBarController hiddenDIYTaBar];
+}
+
+
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    [self initLoading];
+    //[self hideHud];
+    //[self showCAlert:@"加载失败,请检查网络连接!" widthType:ERROR_LOGO];
+    [self setHeaderRereshing];
+    [self showLoading];
+    //[self setFooterRereshing];
+    
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < _thumbs.count)
+        return [_thumbs objectAtIndex:index];
+    return nil;
+}
+
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    //提交评论
+    NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
+    if ([self isEmpty:userId]) {
+        LoginViewController *login = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:login animated:YES];
+        return;
+    }else{
+        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
+        passValelegate = storyComment;
+        [passValelegate passValue:artId];
+        [self.navigationController pushViewController:storyComment animated:YES];
+    }
+}
+
+- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
+    return [NSString stringWithFormat:@"%d / %d", index+1,_photos.count];
+}
+
+
+
+
 
 #pragma mark 控制滚动头部一起滚动
-- (void)scrollViewDidScroll:(UIScrollView *)sclView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollViews {
     CGFloat sectionHeaderHeight = 30;
-    //固定section 随着cell滚动而滚动
-    if (sclView.contentOffset.y<=sectionHeaderHeight && sclView.contentOffset.y>=0) {
-        sclView.contentInset = UIEdgeInsetsMake(-sclView.contentOffset.y, 0, 0, 0);
-    } else if (sclView.contentOffset.y>=sectionHeaderHeight) {
-        //sclView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
+    if (scrollViews.contentOffset.y<=sectionHeaderHeight && scrollViews.contentOffset.y>=0) {
+        scrollViews.contentInset = UIEdgeInsetsMake(-scrollViews.contentOffset.y, 0, 0, 0);
+    } else if (scrollViews.contentOffset.y>=sectionHeaderHeight) {
+        //scrollViews.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
     }
 }
 
@@ -261,6 +459,14 @@
 
     
     return sectionHeadView;
+}
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [friendlyLoadingView removeFromSuperview];
+        });
+    }
 }
 
 #pragma mark 设置组
@@ -320,10 +526,12 @@
                 }
                 
                 if([data_Type isEqual:@"albums"]){//相册
-                    GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
-                    passValelegate = girlPhoto;
-                    [passValelegate passValue:dataId];
-                    [self.navigationController pushViewController:girlPhoto animated:YES];
+//                    GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
+//                    passValelegate = girlPhoto;
+//                    [passValelegate passValue:dataId];
+//                    [self.navigationController pushViewController:girlPhoto animated:YES];
+                    artId = dataId;
+                    [self loadGirlPhotos:dataId];
                 }
                 
                 
@@ -409,8 +617,8 @@
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片
-            [videoCell.videoPic setImageWithURL:[NSURL URLWithString:imgUrl]
-                            placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+            [videoCell.videoPic sd_setImageWithURL:[NSURL URLWithString:imgUrl]
+                                  placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoTitle.font = TITLE_FONT;
@@ -449,7 +657,7 @@
         }
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            [picCell.picView setImageWithURL:[NSURL URLWithString:imgUrl]
+            [picCell.picView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                                placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         

@@ -14,6 +14,8 @@
     NSString *dataId;
     
     NSMutableDictionary *params;
+    
+    int current_index;
 }
 
 @end
@@ -106,12 +108,18 @@
     [addressTableView reloadData];
 }
 
+-(void)dealloc{
+    _orderAddressList = nil;
+}
+
 -(void)loadTableList{
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ADDRESS_LIST_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
     NSArray *returnArr = (NSArray *)[convertJson requestData:url];
     if(returnArr!=nil && returnArr.count>0){
         _orderAddressList = [NSMutableArray arrayWithArray:returnArr];
+    }else{
+        _orderAddressList = nil;
     }
     NSLog(@"_orderAddressList====%@",_orderAddressList);
 }
@@ -177,9 +185,11 @@
         NSString *isDefault =[[cellDic valueForKey:@"isDefault"] stringValue];
         //NSLog(@"isDefault=%@",isDefault);
         if([isDefault isEqualToString:@"1"]){
-            [reciverCell.defaultBtn setImage:[UIImage imageNamed:@"btncheck.png"]];
+            [reciverCell.checkBtn setImage:[UIImage imageNamed:@"btncheck.png"] forState:UIControlStateNormal];
+            [reciverCell.checkBtn setImage:[UIImage imageNamed:@"btncheck.png"] forState:UIControlStateSelected];
         }else{
-            [reciverCell.defaultBtn setImage:[UIImage imageNamed:@"btnnocheck.png"]];
+            [reciverCell.checkBtn setImage:[UIImage imageNamed:@"btnnocheck.png"] forState:UIControlStateNormal];
+            [reciverCell.checkBtn setImage:[UIImage imageNamed:@"btnnocheck.png"] forState:UIControlStateSelected];
         }
         
         reciverCell.reciverAddress.editable = NO;
@@ -194,6 +204,9 @@
         
         reciverCell.contentBgView.layer.masksToBounds = YES;
         reciverCell.contentBgView.layer.cornerRadius = 5.0;
+        
+        reciverCell.checkBtn.tag = indexPath.row;
+        [reciverCell.checkBtn addTarget:self action:@selector(checkAddress:) forControlEvents:UIControlEventTouchDown];
     }
     return reciverCell;
 }
@@ -203,5 +216,28 @@
     
 }
 
+
+//设为默认地址
+-(void)checkAddress:(UIButton *)sender{
+    current_index = sender.tag;
+    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"系统提示"message:@"是否设置该地址为默认收货地址？" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0) {
+        NSDictionary *dic = [_orderAddressList objectAtIndex:current_index];
+        ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
+        NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/setDefaultDelivery/%@",REMOTE_URL,[dic valueForKey:@"id"]];
+        dic = (NSDictionary *)[jsonData requestData:url];
+        if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
+            [self loadTableList];
+            [addressTableView reloadData];
+            [self showCAlert:@"设置成功！" widthType:WARNN_LOGO];
+        }else{
+            [self showCAlert:@"设置失败！" widthType:WARNN_LOGO];
+        }
+    }
+}
 
 @end

@@ -8,6 +8,8 @@
 
 #import "CommonViewController.h"
 #import "FFScrollView.h"
+#import "MWPhoto.h"
+#import "MWPhotoBrowser.h"
 #import "UIViewController+HUD.h"
 #import "UserViewController.h"
 #import "PicTableViewCell.h"
@@ -17,8 +19,9 @@
 #import "UIImageView+WebCache.h"
 #import "GirlsPhotosViewController.h"
 #import "ViewPassValueDelegate.h"
+#import "XHFriendlyLoadingView.h"
 
-@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
+@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MWPhotoBrowserDelegate>{
     
     NSMutableDictionary *bannerData;//导航初始数据
     // 声明一个参数传递代理
@@ -31,6 +34,9 @@
 
 #pragma mark 美女私房数据
 @property(nonatomic,retain)NSMutableArray *girlsDataList;
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
 
 
 @end

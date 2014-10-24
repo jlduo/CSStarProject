@@ -78,18 +78,21 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="btnnocheck.png" translatesAutoresizingMaskIntoConstraints="NO" id="Sof-p0-SM8">
-                                <rect key="frame" x="4" y="40" width="35" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iep-CI-OCQ">
+                                <rect key="frame" x="4" y="37" width="42" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                                <state key="normal" image="btnnocheck.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="checkBtn" destination="Iep-CI-OCQ" id="lvP-Bi-7UM"/>
                 <outlet property="contentBgView" destination="F9y-oQ-k0N" id="x9A-Q2-2IX"/>
-                <outlet property="defaultBtn" destination="Sof-p0-SM8" id="NcI-Mu-gGL"/>
                 <outlet property="editBtn" destination="mkc-3v-LgU" id="W5s-5a-wvi"/>
                 <outlet property="phoneNum" destination="WmK-RS-Nw4" id="nM1-nF-Ptm"/>
                 <outlet property="reciverAddress" destination="Ze3-c7-fv1" id="Aoh-63-RKL"/>

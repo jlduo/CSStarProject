@@ -1,6 +1,6 @@
 //
 //  MBProgressHUD.h
-//  Version 0.7
+//  Version 0.8
 //  Created by Matej Bukovinski on 2.4.09.
 //
 
@@ -28,7 +28,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "common.h"
 #import <CoreGraphics/CoreGraphics.h>
 
 @protocol MBProgressHUDDelegate;

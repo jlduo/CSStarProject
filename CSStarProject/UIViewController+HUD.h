@@ -20,7 +20,7 @@
 - (void)hideHud;
 
 - (void)showHint:(NSString *)hint;
-
+-(void)showLoading:(NSString *)msg;
 // 从默认(showHint:)显示的位置再往上(下)yOffset
 - (void)showHint:(NSString *)hint yOffset:(float)yOffset;
 -(void)showCAlert:(NSString *)msg widthType:(NSString *)tp;

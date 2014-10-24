@@ -11,6 +11,7 @@
 #import "InitTabBarViewController.h"
 #import "PeopleDetailViewController.h"
 #import "ViewPassValueDelegate.h"
+#import "XHFriendlyLoadingView.h"
 
 @interface PeopleViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
     // 声明一个参数传递代理

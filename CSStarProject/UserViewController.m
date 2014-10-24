@@ -19,6 +19,7 @@
     UITableView *stableView;
     UIButton *imgBtn;
     UILabel *userLabel;
+    
 }
 
 @end
@@ -29,6 +30,9 @@
     
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self showLoading:@"数据初始化中..."];
+    _userProjectNums = [[NSMutableDictionary alloc]init];
+    
     CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49-44);
     stableView = [[UITableView alloc] initWithFrame:tframe];
     stableView.delegate = self;
@@ -45,11 +49,12 @@
     view.backgroundColor = [UIColor clearColor];
     [stableView setTableFooterView:view];
     
-    //处理导航开始
-    //[self setNavgationBar];
-    [self getMyProjectsNums];
+    //处理数据回填
+    [self setImgBtnImage];
+    [self setUserTitle];
     
 }
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {                                                                                                                                                                                                                                                                                           self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -68,13 +73,23 @@
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
     [stableView setFrame:temFrame];
     
-    [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
-    
-    //处理数据回填
-    [self setImgBtnImage];
-    [self setUserTitle];
+    //[StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
     
     
+}
+
+-(void)viewWillLayoutSubviews{
+    [self getMyProjectsNums];
+}
+
+-(void)dealloc{
+    cellImg = nil;
+    imgBtn = nil;
+    userLabel = nil;
+    cellTitle = nil;
+    stableView = nil;
+    _userProjectNums = nil;
+    _userDataList = nil;
 }
 
 -(void)setImgBtnImage{
@@ -90,10 +105,31 @@
 }
 
 -(void)getMyProjectsNums{
-    _userProjectNums = [[NSMutableDictionary alloc]init];
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_USERCENTER_NUMS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
-    NSString *pro_nums = (NSString *)[convertJson requestSData:url];
+    [self requestDataByUrl:url];
+}
+
+
+-(void)requestDataByUrl:(NSString *)url{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *respData = [request responseData];
+    NSString *pro_nums = [[NSString alloc] initWithData:respData encoding:NSUTF8StringEncoding];
+    NSLog(@"pro_nums->%@",pro_nums);
     if([StringUitl isNotEmpty:pro_nums]){
         pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
         NSArray *num = [pro_nums componentsSeparatedByString:@","];
@@ -104,7 +140,18 @@
             }
         }
     }
-    NSLog(@"pro_nums===%@",_userProjectNums);
+
+    [stableView reloadData];
+    [self hideHud];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"error->%@",error);
+    [self hideHud];
+    [self showCAlert:@"加载失败,请检查网络连接!" widthType:ERROR_LOGO];
+    
 }
 
 -(void)passValue:(NSString *)val{
@@ -283,12 +330,13 @@
         userCell.dataTitle.font = main_font(18);
         userCell.dataTitle.alpha = 0.8f;
         userCell.dataNum.font = main_font(9);
-        if(![[_userProjectNums valueForKey:valKey]  isEqualToString:@"0"]){
-           [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
-        }else{
-            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
-        }
+        [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
+//        if(![[_userProjectNums valueForKey:valKey]  isEqualToString:@"0"]){
+//           [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
+//        }else{
+//            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+//            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
+//        }
         userCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return userCell;
     }else{
@@ -316,21 +364,65 @@
     NSLog(@"清空用户信息成功.....");
     [StringUitl clearUserInfo];
     //跳转到首页
-    [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
+    //[self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 //行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0) {
-        myCommentViewController *comController = [[myCommentViewController alloc] init];
-        [self.navigationController pushViewController:comController animated:YES];
-    }else if(indexPath.row == 4){
-        ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc] init];
-        passValelegate = addressController;
-        [passValelegate passValue:@"userAdd"];
-        [self.navigationController pushViewController:addressController animated:YES];
+    
+    switch (indexPath.row) {
+        case 0:
+            [self goComment];
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            [self goProject];
+            break;
+        case 3:
+            [self goOrder];
+            break;
+        case 4:
+            [self goRecAddress];
+            break;
+        default:
+            break;
     }
+    
+}
+
+-(void)goMessage{
+    
+}
+
+-(void)goOrder{
+    PeopleProListViewController *projectController = [[PeopleProListViewController alloc] init];
+    passValelegate =projectController;
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setObject:@"2" forKey:@"titleName"];
+    [params setObject:@"order" forKey:@"titleValue"];
+    [passValelegate passDicValue:params];
+    [passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
+    [self.navigationController pushViewController:projectController animated:YES];
+}
+
+-(void)goProject{
+    MyProjectListViewController *projectController = [[MyProjectListViewController alloc] init];
+    [self.navigationController pushViewController:projectController animated:YES];
+}
+
+-(void)goComment{
+    myCommentViewController *comController = [[myCommentViewController alloc] init];
+    [self.navigationController pushViewController:comController animated:YES];
+}
+
+-(void)goRecAddress{
+    ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc] init];
+    passValelegate = addressController;
+    [passValelegate passValue:@"userAdd"];
+    [self.navigationController pushViewController:addressController animated:YES];
 }
 
 

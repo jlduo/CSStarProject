@@ -20,6 +20,9 @@
     DateUtil *dateUtil;
     CommonViewController *comViewController;
     NSInteger pageIndex;
+    
+    NSInteger selectedCount;
+    XHFriendlyLoadingView *friendlyLoadingView;
 }
 
 @end
@@ -32,9 +35,51 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     pageIndex = 1;
+    [self initLoading];
     [self setTableData];
     _storyTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     _storyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+-(void)dealloc{
+    
+    dataType = nil;
+    cellDic = nil;
+    nowDownTime = nil;
+    nowUpTime = nil;
+    dateUtil = nil;
+    comViewController = nil;
+    friendlyLoadingView = nil;
+    
+}
+
+
+-(void)initLoading{
+    if(friendlyLoadingView==nil){
+        friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
+    }
+    __weak typeof(self) weakSelf = self;
+    friendlyLoadingView.reloadButtonClickedCompleted = ^(UIButton *sender) {
+        [weakSelf loadTableData:nil];
+    };
+    
+    [self.view addSubview:friendlyLoadingView];
+    
+    [friendlyLoadingView showFriendlyLoadingViewWithText:@"正在加载..." loadingAnimated:YES];
+}
+
+- (void)showLoading {
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+        selectedCount ++;
+        if (selectedCount == 3) {
+            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
+        } else {
+            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
+        }
+    });
 }
 
 
@@ -48,6 +93,7 @@
 
 //加载头部刷新
 -(void)setHeaderRereshing{
+    NSLog(@"up-");
     AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_storyTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
         [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
@@ -69,20 +115,22 @@
 //请求完成之后，回调方法
 -(void)callBackMethod:(id) isTop
 {
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/6/%d",REMOTE_URL,pageIndex];
-    NSMutableArray *nextArray = (NSMutableArray *)[jsonData requestData:url];
+    [self loadTableData:isTop];
+}
+
+-(void)loadTableData:(id)isTop{
     
-    if(nextArray!=nil && nextArray.count>0){
-        if ([isTop isEqualToString:@"top"]) {
-            _storyDataList  = nextArray;
-        } else {
-            [_storyDataList  addObjectsFromArray:nextArray];
-        }
-        [_storyTableView reloadData];
-    }else{ 
-        [self showCAlert:@"没有数据了！" widthType:WARNN_LOGO];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/6/%d",REMOTE_URL,pageIndex];
+    int k = 0;
+    if([isTop isEqualToString:@"top"]){
+        k=1;
+    }else if([isTop isEqualToString:@"foot"]){
+        k=2;
+    }else{
+        k=0;
     }
+    [self requestDataByUrl:url withType:k];
+    
 }
 
 -(void)loadView{
@@ -91,24 +139,93 @@
 } 
 
 -(void)setTableData{
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticleList/city/0/6/%d",REMOTE_URL,pageIndex];
- 
-    _storyDataList = [[NSMutableArray alloc] init];
-    _storyDataList = (NSMutableArray *)[jsonData requestData:url]; 
+    [self loadTableData:nil];
     [self setHeaderRereshing];
     [self setFooterRereshing];
 }
+
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"jsonDic->%@",jsonDic);
+    NSArray *nextArray = (NSArray *)jsonDic;
+    if(nextArray!=nil && nextArray.count>0){
+        if (request.tag==0) {
+            
+            _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
+            
+        }else if(request.tag==1){
+            
+           _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
+            
+        }else{
+            
+            [_storyDataList  addObjectsFromArray:nextArray];
+            
+        }
+    }
+    
+    [_storyTableView reloadData];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    [self initLoading];
+    [self setHeaderRereshing];
+    [self showLoading];
+    //[self setFooterRereshing];
+    
+}
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [friendlyLoadingView removeFromSuperview];
+        });
+    }
+}
+
                                              
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{ 
+    
+    
     NSDictionary *row = [_storyDataList objectAtIndex:indexPath.row];
     NSString *rowId = [row valueForKey:@"_id"];
     
-    StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
-    delegate = detailController;
-    [delegate passValue:rowId];
-    [self.navigationController pushViewController:detailController animated:YES];
+    if(![StringUitl checkLogin]==TRUE){
+        
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+        
+    }else{
+    
+        StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
+        delegate = detailController;
+        [delegate passValue:rowId];
+        [self.navigationController pushViewController:detailController animated:YES];
+        
+    }
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -119,9 +236,9 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *parray = [_storyDataList objectAtIndex:indexPath.row];
     NSString * isTop =[[NSString alloc] initWithFormat:@"%@",[parray valueForKey:@"_is_red"]];
-    NSInteger height = 75;
+    NSInteger height = 80;
     if ([isTop isEqualToString:@"1"]) {
-        height = 190;
+        height = 200;
     }
     return height;
 }
@@ -140,11 +257,13 @@
         }
         
         StoryTableViewSmallCell *storySMCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StorySMCell"];
+        storySMCell.backgroundColor = [UIColor clearColor];
         storySMCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
         UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
         storySMCell.cellImg.image = picImg;
+        storySMCell.cellTitle.font = DESC_FONT;
         storySMCell.cellTitle.text = [parray valueForKey:@"_title"];
         
         return storySMCell;
@@ -157,12 +276,14 @@
             isNibregistered = YES;
         }
         StoryTableViewBigCell *storyBCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StoryBCell"];
+        
+        storyBCell.backgroundColor = [UIColor clearColor];
         storyBCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
         UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
         storyBCell.cellImgView.image = picImg;
-        
+        storyBCell.imgTitle.font = DESC_FONT;
         storyBCell.imgTitle.text = [parray valueForKey:@"_title"];
         
         return storyBCell;

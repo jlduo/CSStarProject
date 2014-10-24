@@ -68,6 +68,10 @@
         default:
             break;
     }
+    
+    if([[params valueForKey:@"titleValue"] isEqualToString:@"order"]){
+        titleName = @"我的订单";
+    }
 
 }
 
@@ -151,27 +155,38 @@
     //跳转到详情页面
     NSLog(@"go detail......!");
     cellDic = [self.peopleProList objectAtIndex:indexPath.row];
-    if(cellDic!=nil){
-        NSString *proId;
-        switch (cellIndex) {
-            case 1:
-                proId = [cellDic valueForKey:@"pid"];
-                break;
-            case 2:
-                proId = [cellDic valueForKey:@"projectId"];
-                break;
-            case 3:
-                proId = [cellDic valueForKey:@"id"];
-                break;
-            default:
-                break;
+    
+    if([[params valueForKey:@"titleValue"] isEqualToString:@"order"]){
+        ShowOrderViewController *showOrderController = [[ShowOrderViewController alloc]init];
+        passValelegate = showOrderController;
+        [passValelegate passValue:[cellDic valueForKey:@"id"]];
+        [self.navigationController pushViewController:showOrderController animated:YES];
+        
+    }else{
+
+        if(cellDic!=nil){
+            NSString *proId;
+            switch (cellIndex) {
+                case 1:
+                    proId = [cellDic valueForKey:@"pid"];
+                    break;
+                case 2:
+                    proId = [cellDic valueForKey:@"projectId"];
+                    break;
+                case 3:
+                    proId = [cellDic valueForKey:@"id"];
+                    break;
+                default:
+                    break;
+            }
+            
+            
+            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            passValelegate = deatilViewController;
+            [passValelegate passValue:proId];
+            [self.navigationController pushViewController:deatilViewController animated:YES];
         }
         
-        
-        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-        passValelegate = deatilViewController;
-        [passValelegate passValue:proId];
-        [self.navigationController pushViewController:deatilViewController animated:YES];
     }
 }
 
@@ -196,7 +211,9 @@
         
         projectCell.cellTitle.font = TITLE_FONT;
         projectCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
-        projectCell.proMoney.text = [[cellDic valueForKey:@"amount"] stringValue];
+        
+        double pay_money = [[cellDic valueForKey:@"amount"] doubleValue];
+        projectCell.proMoney.text = [NSString stringWithFormat:@"￥%.2f",pay_money];
         
         NSString *stateName;
         NSString *tagPicName;
@@ -227,11 +244,14 @@
             NSString *orderStateName;
             UIColor *bgColorStr;
             int orderState = [[cellDic valueForKey:@"projectStatus"] intValue];
+            if(cellIndex==2){
+                orderState = [[cellDic valueForKey:@"orderStatus"] intValue];
+            }
             switch (orderState) {
                 //订单状态 1 提交 2 支付成功 3 自己取消 4 卖家取消（众筹失败）5 已发货 6 已签收
                 case 1:
-                    orderStateName = @"已提交";
-                    bgColorStr = [UIColor greenColor];
+                    orderStateName = @"未支付";
+                    bgColorStr = [UIColor redColor];
                     break;
                 case 2:
                     orderStateName = @"已支付";
@@ -247,14 +267,15 @@
                     break;
                 default:
                     orderStateName = @"已取消";
-                    bgColorStr = [UIColor redColor];
+                    bgColorStr = [UIColor grayColor];
                     break;
             }
             
             [projectCell.orderStateBtn setTitle:orderStateName forState:UIControlStateNormal];
             [projectCell.orderStateBtn setTitle:orderStateName forState:UIControlStateSelected];
-            
             [projectCell.orderStateBtn setBackgroundColor:bgColorStr];
+            [projectCell.subTitleName setText:@"订单编号："];
+            [projectCell.cycDate setText:[cellDic valueForKey:@"orderCode"]];
             
             projectCell.orderStateBtn.layer.masksToBounds = TRUE;
             projectCell.orderStateBtn.layer.cornerRadius = 1.0;
@@ -266,14 +287,11 @@
             
         }
         
-        
-        
-        
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片
-            [projectCell.cellImgView setImageWithURL:[NSURL URLWithString:imgUrl]
+            [projectCell.cellImgView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                                   placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }    
         

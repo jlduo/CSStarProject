@@ -17,7 +17,7 @@
 #import "EditPasswordController.h"
 #import "EditSexViewController.h"
 #import "EditCityViewController.h"
-@interface UserInfoViewController : CommonViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,MBProgressHUDDelegate>
+@interface UserInfoViewController : CommonViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 
 @end

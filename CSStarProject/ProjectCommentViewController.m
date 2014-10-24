@@ -468,13 +468,14 @@
         }
 
         NSString *imgUrl =[cellDic valueForKey:@"avatar"];
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            //改写异步加载图片
-            [projectCommCell.userIconView setImageWithURL:[NSURL URLWithString:imgUrl]
-                                    placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+        if(![imgUrl isEqual:[NSNull null]]){
+            NSRange range = [imgUrl rangeOfString:@"/upload/"];
+            if(range.location!=NSNotFound){//判断加载远程图像
+                //改写异步加载图片
+                [projectCommCell.userIconView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
+                                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+            }
         }
-        
         //给回复按钮添加事件
          projectCommCell.replyBtn.tag = indexPath.row;
         [projectCommCell.replyBtn addTarget:self action:@selector(changeText:) forControlEvents:UIControlEventTouchDown];

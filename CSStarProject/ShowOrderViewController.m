@@ -99,8 +99,8 @@
             tagPicName =@"label_fundraising.png";
             break;
         default:
-            stateName = @"已结束";
-            tagPicName =@"lable_success.png";
+            stateName = @"已失败";
+            tagPicName =@"label_nostart.png";
             break;
     }
     
@@ -163,7 +163,11 @@
 }
 
 -(void)goPayMoney:(UIButton *)sender{
-    [self goPreviou];
+    //[self goPreviou];
+    PayOrderViewController *payViewController = [[PayOrderViewController alloc]init];
+    passValelegate = payViewController;
+    [passValelegate passValue:[_orderInfoData valueForKey:@"id"]];
+    [self.navigationController pushViewController:payViewController animated:YES];
 }
 
 -(UIImageView *)setTagView{

@@ -14,6 +14,7 @@
 #import "ViewPassValueDelegate.h"
 #import "LoginViewController.h"
 #import "StoryCommentTableCell.h"
+#import "XHFriendlyLoadingView.h"
 
 @interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
 UITableViewDataSource,UITableViewDelegate>

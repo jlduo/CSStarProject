@@ -200,7 +200,7 @@
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片
-            [detailCell.cellImageView setImageWithURL:[NSURL URLWithString:imgUrl]
+            [detailCell.cellImageView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                                   placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         
@@ -236,7 +236,7 @@
         
         detailCell.moneyView.layer.masksToBounds = YES;
         detailCell.moneyView.layer.cornerRadius = 5;
-        detailCell.dateView.text = [NSString stringWithFormat:@"目标%@天 剩余%@天",days,[self changeDate:endTime]];
+        detailCell.dateView.text = [NSString stringWithFormat:@"目标%@天 剩余%d天",days,[self changeDate:endTime]];
         detailCell.moneyView.text = [NSString stringWithFormat:@"￥%@ / ￥%@",smoney,money];
         //计算百分比
         float amoney = [money floatValue];
@@ -248,7 +248,7 @@
         }
         
         float percent = bmoney / amoney;
-        float imgWith = percent*616;
+        float imgWith = percent*320-20;
         
         NSString *perceStr = [NSString stringWithFormat:@"已完成%0.1f%@",percent*100,@"%"];
         detailCell.pecentView.text = perceStr;
@@ -302,7 +302,7 @@
         //NSLog(@"touxiang==%@",imgUrl);
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
-            [centerCell.userIcon setImageWithURL:[NSURL URLWithString:imgUrl]
+            [centerCell.userIcon sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                                      placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         
@@ -392,6 +392,8 @@
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }else{
+        [self initProjectData];
+        [detailTableView reloadData];
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
     }
     
@@ -429,15 +431,14 @@
     return timeDiff;
 }
 
--(NSString *)changeDate:(NSString *)endTime{
+-(int)changeDate:(NSString *)endTime{
     
     DateUtil *dateUtil = [[DateUtil alloc]init];
     NSString *comDate = [dateUtil getLocalDateFormateUTCDate1:endTime];
     double times = [self mxGetStringTimeDiff:[dateUtil getCurDateTimeStr] timeE:comDate];
     times = times/(3600*24);
     NSNumber *numStage =  [NSNumber numberWithDouble:times];
-    NSString *numStr = [NSString stringWithFormat:@"%0.0lf",[numStage doubleValue]];
-    return numStr;
+    return [numStage intValue];
     
 }
 

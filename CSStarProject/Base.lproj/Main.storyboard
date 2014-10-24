@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="1qy-3C-6qL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.8" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
     </dependencies>
     <scenes>
-        <!--Friend View Controller - 朋友圈_ViewController-->
+        <!--朋友圈_ViewController-->
         <scene sceneID="8g0-Fc-4ge">
             <objects>
                 <viewController title="朋友圈_ViewController" id="HyK-ek-DHZ" customClass="FriendViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="v6K-th-e3f"/>
+                        <viewControllerLayoutGuide type="bottom" id="m2d-oT-t5T"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KBP-R1-SdR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="vtw-m5-Cmw">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vtw-m5-Cmw">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="vtw-m5-Cmw" secondAttribute="trailing" id="OcX-FK-t06"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="top" secondItem="KBP-R1-SdR" secondAttribute="top" constant="64" id="P1I-j0-XYV"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="leading" secondItem="KBP-R1-SdR" secondAttribute="leading" id="bbh-Do-WRR"/>
+                            <constraint firstAttribute="bottom" secondItem="vtw-m5-Cmw" secondAttribute="bottom" constant="49" id="l1V-rN-DpU"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aN2-SE-umZ"/>
                     <connections>
@@ -28,15 +39,19 @@
             </objects>
             <point key="canvasLocation" x="884" y="1399"/>
         </scene>
-        <!--Home View Controller - 首页_ViewController-->
+        <!--首页_ViewController-->
         <scene sceneID="HRF-6I-O9P">
             <objects>
                 <viewController title="首页_ViewController" id="Dzb-sy-isU" customClass="HomeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8hN-UM-Od0"/>
+                        <viewControllerLayoutGuide type="bottom" id="Nnm-5z-F7o"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ktn-LO-v4o">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="25" sectionFooterHeight="25" id="aIi-zu-UcQ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="25" sectionFooterHeight="25" translatesAutoresizingMaskIntoConstraints="NO" id="aIi-zu-UcQ">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -46,6 +61,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="top" secondItem="Ktn-LO-v4o" secondAttribute="top" constant="64" id="F9D-D7-qxC"/>
+                            <constraint firstAttribute="trailing" secondItem="aIi-zu-UcQ" secondAttribute="trailing" id="FJ7-SU-Fj2"/>
+                            <constraint firstAttribute="bottom" secondItem="aIi-zu-UcQ" secondAttribute="bottom" constant="49" id="UkJ-eZ-lqS"/>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="leading" secondItem="Ktn-LO-v4o" secondAttribute="leading" id="Xm7-Lt-tuJ"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="1bz-lh-4gl"/>
                     <connections>
@@ -56,15 +77,19 @@
             </objects>
             <point key="canvasLocation" x="895" y="-1613"/>
         </scene>
-        <!--Girls View Controller - 美女私房_ViewController-->
+        <!--美女私房_ViewController-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
                 <viewController title="美女私房_ViewController" id="kdO-5D-qrW" customClass="GirlsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="A9G-9K-M76"/>
+                        <viewControllerLayoutGuide type="bottom" id="GmH-VE-iXe"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="qRg-y6-2hW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="gj1-0U-roh">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gj1-0U-roh">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -74,6 +99,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="Ppd-MX-K6R"/>
+                            <constraint firstAttribute="trailing" secondItem="gj1-0U-roh" secondAttribute="trailing" id="j1d-MC-qup"/>
+                            <constraint firstAttribute="bottom" secondItem="gj1-0U-roh" secondAttribute="bottom" constant="49" id="krn-aw-EgX"/>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="w9Z-JB-LhE"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hGs-S2-uNo"/>
                     <connections>
@@ -84,20 +115,30 @@
             </objects>
             <point key="canvasLocation" x="884" y="-917"/>
         </scene>
-        <!--People View Controller - 活动众筹个_ViewController-->
+        <!--活动众筹个_ViewController-->
         <scene sceneID="bp3-Pq-Adq">
             <objects>
                 <viewController title="活动众筹个_ViewController" id="oMW-WD-uXC" customClass="PeopleViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4Ea-W9-qGp"/>
+                        <viewControllerLayoutGuide type="bottom" id="bXd-IB-kzc"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="620-OQ-8TU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rds-N1-qqR">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rds-N1-qqR">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="Pl5-u2-5Rp"/>
+                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="UM2-Yb-pf8"/>
+                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="cDI-W2-0gB"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="wOz-3S-fRB"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rZm-zf-UuU"/>
                     <connections>
@@ -108,15 +149,19 @@
             </objects>
             <point key="canvasLocation" x="884" y="589"/>
         </scene>
-        <!--Story View Controller - 星城故事_ViewController-->
+        <!--星城故事_ViewController-->
         <scene sceneID="9hq-Y2-9rs">
             <objects>
                 <viewController title="星城故事_ViewController" id="aGx-Wv-JVF" customClass="StoryViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UuY-Zd-DRD"/>
+                        <viewControllerLayoutGuide type="bottom" id="eqq-1Y-SXK"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2bN-EP-5VU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="6PY-A5-rCw">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="6PY-A5-rCw">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -126,6 +171,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="top" secondItem="2bN-EP-5VU" secondAttribute="top" constant="64" id="1wz-i1-PHI"/>
+                            <constraint firstAttribute="bottom" secondItem="6PY-A5-rCw" secondAttribute="bottom" constant="49" id="a3u-Nb-3vB"/>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="leading" secondItem="2bN-EP-5VU" secondAttribute="leading" id="d0Z-gn-cuZ"/>
+                            <constraint firstAttribute="trailing" secondItem="6PY-A5-rCw" secondAttribute="trailing" id="jOD-7L-3Tp"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
                     <connections>
@@ -137,10 +188,14 @@
             </objects>
             <point key="canvasLocation" x="884" y="-233"/>
         </scene>
-        <!--Story Detail View Controller - 星城故事详情_ViewController-->
+        <!--星城故事详情_ViewController-->
         <scene sceneID="s72-QE-N4T">
             <objects>
                 <viewController title="星城故事详情_ViewController" id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9oB-eb-klx"/>
+                        <viewControllerLayoutGuide type="bottom" id="OEv-W3-kxK"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Tng-Ry-RTr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -155,10 +210,14 @@
             </objects>
             <point key="canvasLocation" x="1372" y="-233"/>
         </scene>
-        <!--Story Comment View Controller - 星城故事评论_ViewController-->
+        <!--星城故事评论_ViewController-->
         <scene sceneID="8Ww-Gb-4iq">
             <objects>
                 <viewController title="星城故事评论_ViewController" id="lkv-1K-pr1" customClass="StoryCommentViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zad-qR-hhi"/>
+                        <viewControllerLayoutGuide type="bottom" id="h84-Gz-L1x"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7XL-1r-26B">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -192,7 +251,7 @@
             </objects>
             <point key="canvasLocation" x="-377" y="-742"/>
         </scene>
-        <!--Navigation Controller - 首页-->
+        <!--首页-->
         <scene sceneID="Xg4-s9-CB0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hnA-XZ-2fr" sceneMemberID="viewController">
@@ -211,7 +270,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-1613"/>
         </scene>
-        <!--Navigation Controller - 美女私房-->
+        <!--美女私房-->
         <scene sceneID="HIg-rY-bCW">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fM3-lm-kza" sceneMemberID="viewController">
@@ -233,7 +292,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-917"/>
         </scene>
-        <!--Navigation Controller - 星城故事-->
+        <!--星城故事-->
         <scene sceneID="KaJ-Ym-LEP">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qlb-G1-BnD" sceneMemberID="viewController">
@@ -252,7 +311,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-233"/>
         </scene>
-        <!--Navigation Controller - 活动众筹-->
+        <!--活动众筹-->
         <scene sceneID="sOg-34-kTs">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pkK-FE-J3V" sceneMemberID="viewController">
@@ -271,7 +330,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="589"/>
         </scene>
-        <!--Navigation Controller - 朋友圈-->
+        <!--朋友圈-->
         <scene sceneID="O4t-U1-SSn">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Nl-GP-D9l" sceneMemberID="viewController">
@@ -294,6 +353,9 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
 </document>

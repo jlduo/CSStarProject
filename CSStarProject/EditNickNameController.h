@@ -13,7 +13,7 @@
 #import "CommonViewController.h"
 #import "UserInfoViewController.h"
 
-@interface EditNickNameController : UIViewController<MBProgressHUDDelegate>
+@interface EditNickNameController : UIViewController
 
 
 @property (weak, nonatomic) IBOutlet UITextField *nickName;

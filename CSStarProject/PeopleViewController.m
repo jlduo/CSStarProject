@@ -13,10 +13,14 @@
     FFScrollView *scrollView;
     NSArray *sourceArray;
     NSArray *slideArr;
+    NSArray *commonArr;
     NSDictionary *cellDic;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
+    
+    NSInteger selectedCount;
+    XHFriendlyLoadingView *friendlyLoadingView;
     
 }
 
@@ -31,6 +35,7 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    [self initLoading];
     [self setTableData];
     [self initScroll];
     
@@ -42,11 +47,49 @@
     _peopleTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
     //集成刷新控件
-    [self setHeaderRereshing];
-    [self setFooterRereshing];
+//    [self setHeaderRereshing];
+//    [self setFooterRereshing];
     
    
 }
+
+-(void)dealloc{
+    cellDic = nil;
+    sourceArray = nil;
+    slideArr = nil;
+    commonArr = nil;
+    scrollView = nil;
+    friendlyLoadingView = nil;
+}
+
+-(void)initLoading{
+    if(friendlyLoadingView==nil){
+        friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
+    }
+    __weak typeof(self) weakSelf = self;
+    friendlyLoadingView.reloadButtonClickedCompleted = ^(UIButton *sender) {
+        [weakSelf loadTableList];
+    };
+    
+    [self.view addSubview:friendlyLoadingView];
+    
+    [friendlyLoadingView showFriendlyLoadingViewWithText:@"正在加载..." loadingAnimated:YES];
+}
+
+- (void)showLoading {
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+        selectedCount ++;
+        if (selectedCount == 3) {
+            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
+        } else {
+            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
+        }
+    });
+}
+
 
 -(void)loadView{
     [super loadView];
@@ -88,19 +131,17 @@
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
 {
-
+    [self loadTableList];
     [self.peopleTableView reloadData];
 }
 
 -(void)initScroll{
-    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180) views:sourceArray];
-    NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
     
+    scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180) views:sourceArray];
     NSArray *varr = [[scrollView scrollView] subviews];
     for (int i=0; i<varr.count; i++) {
         
         UIImageView *imageView = (UIImageView *)varr[i];
-         NSLog(@"arr=%@",imageView.image);
         [imageView setMultipleTouchEnabled:YES];
         [imageView setUserInteractionEnabled:YES];
         
@@ -115,7 +156,6 @@
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
     int tag =  tap.view.tag;
-    NSLog(@"index==%d",tag);
     NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
     if(slideDic!=nil){
         NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
@@ -134,28 +174,84 @@
 
 -(void)loadSliderPic{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,SILDER_PEOPLE_URL];
-    slideArr = (NSArray *)[convertJson requestData:url];
-    if(slideArr!=nil && slideArr.count>0){
-        sourceArray = [NSMutableArray arrayWithArray:[slideArr valueForKey:@"imgUrl"]];
-    }
-    
-    NSLog(@"slideArr2====%@",slideArr);
-    NSLog(@"sourceArray2====%@",sourceArray);
+    [self requestDataByUrl:url withType:1];
     
 }
 
 -(void)loadTableList{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
-    NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,PEOPLE_LIST_URL];
-    NSArray *peopleArr = (NSArray *)[convertJson requestData:url];
-    if(peopleArr!=nil && peopleArr.count>0){
-        _peopleDataList = [NSMutableArray arrayWithArray:peopleArr];
-    }
-    NSLog(@"_peopleDataList====%@",_peopleDataList);
+     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,PEOPLE_LIST_URL];
+    [self requestDataByUrl:url withType:2];
+    
 }
+
+
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    [self hideHud];
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"jsonDic->%@",jsonDic);
+    commonArr = (NSArray *)jsonDic;
+    if(commonArr!=nil && commonArr.count>0){
+        
+        switch (request.tag) {
+            case 1:
+                sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgUrl"]];
+                slideArr = commonArr;
+                [self initScroll];
+                break;
+            case 2:
+                _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
+                break;
+            default:
+                break;
+        }
+        
+            
+        [self setHeaderRereshing];
+        [self setFooterRereshing];
+        [_peopleTableView reloadData];
+        
+    }
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    [self initLoading];
+    [self setHeaderRereshing];
+    [self showLoading];
+    //[self setFooterRereshing];
+    
+}
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [friendlyLoadingView removeFromSuperview];
+        });
+    }
+}
+
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -172,12 +268,18 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //跳转到详情页面
     NSLog(@"go detail......!");
-    cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
-    if(cellDic!=nil){
-        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-        passValelegate = deatilViewController;
-        [passValelegate passValue:[cellDic valueForKey:@"id"]];
-        [self.navigationController pushViewController:deatilViewController animated:YES];
+    if(![StringUitl checkLogin]==TRUE){
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+    }else{
+        cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
+        if(cellDic!=nil){
+            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            passValelegate = deatilViewController;
+            [passValelegate passValue:[cellDic valueForKey:@"id"]];
+            [self.navigationController pushViewController:deatilViewController animated:YES];
+        }
     }
 }
 
@@ -204,7 +306,7 @@
         NSRange range = [imgUrl rangeOfString:@"/upload/"];
         if(range.location!=NSNotFound){//判断加载远程图像
             //改写异步加载图片
-            [peopelCell.bigCellImg setImageWithURL:[NSURL URLWithString:imgUrl]
+            [peopelCell.bigCellImg sd_setImageWithURL:[NSURL URLWithString:imgUrl]
                                placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }
         
@@ -225,22 +327,23 @@
                 tagPicName =@"lable_success.png";
                 break;
         }
+        
         [peopelCell.tagTitle setText:stateName];
         [peopelCell.tagImgView setImage:[UIImage imageNamed:tagPicName]];
         
-        
-        peopelCell.cellTitle.font = TITLE_FONT;
+        peopelCell.tagTitle.font = main_font(14);
+        peopelCell.cellTitle.font = main_font(14);
         peopelCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
         NSString *days =[cellDic valueForKey:@"days"];
-        NSString *money = [cellDic valueForKey:@"amount"];
-        NSString *smoney = [cellDic valueForKey:@"totalamount"];
+        NSString *money = [NSString stringWithFormat:@"%0.1f",[[cellDic valueForKey:@"amount"] doubleValue]];
+        NSString *smoney = [NSString stringWithFormat:@"%0.1f",[[cellDic valueForKey:@"totalamount"] doubleValue]];
         NSString *endTime = [cellDic valueForKey:@"endTime"];
         endTime = [endTime substringToIndex:19];
         
-        peopelCell.moneyTitle.layer.masksToBounds = YES;
-        peopelCell.moneyTitle.layer.cornerRadius = 5;
-        peopelCell.dateTitle.text = [NSString stringWithFormat:@"目标%@天 剩余%@天",days,[self changeDate:endTime]];
-        peopelCell.moneyTitle.text = [NSString stringWithFormat:@"￥%@ / ￥%@",smoney,money];
+        [StringUitl setCornerRadius:peopelCell.moneyTitle withRadius:5.0];
+        peopelCell.dateTitle.text = [NSString stringWithFormat:@"目标%@天 剩余%d天",days,[self changeDate:endTime]];
+        peopelCell.moneyTitle.text = [NSString stringWithFormat:@"￥%@/￥%@",smoney,money];
+        peopelCell.moneyTitle.font = main_font(11);
         //计算百分比
         float amoney = [money floatValue];
         float bmoney;
@@ -251,7 +354,7 @@
         }
         
         float percent = bmoney / amoney;
-        float imgWith = percent*616;
+        float imgWith = percent*320-20;
         
         NSString *perceStr = [NSString stringWithFormat:@"已完成%0.1f%@",percent*100,@"%"];
         peopelCell.percentView.text = perceStr;
@@ -268,7 +371,9 @@
         
         peopelCell.redProgressView.contentMode = UIViewContentModeLeft;
         peopelCell.blackProgressView.contentMode = UIViewContentModeScaleToFill;
-    
+
+        [StringUitl setCornerRadius:peopelCell.cellContentView withRadius:5.0];
+        [StringUitl setViewBorder:peopelCell.cellContentView withColor:@"#cccccc" Width:0.5f];
         
     }
     return peopelCell;
@@ -290,15 +395,14 @@
     return timeDiff;
 }
 
--(NSString *)changeDate:(NSString *)endTime{
+-(int)changeDate:(NSString *)endTime{
     
     DateUtil *dateUtil = [[DateUtil alloc]init];
     NSString *comDate = [dateUtil getLocalDateFormateUTCDate1:endTime];
     double times = [self mxGetStringTimeDiff:[dateUtil getCurDateTimeStr] timeE:comDate];
     times = times/(3600*24);
     NSNumber *numStage =  [NSNumber numberWithDouble:times];
-    NSString *numStr = [NSString stringWithFormat:@"%0.0lf",[numStage doubleValue]];
-    return numStr;
+    return [numStage intValue];
     
 }
 

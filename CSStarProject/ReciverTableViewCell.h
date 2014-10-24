@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *editBtn;
 @property (weak, nonatomic) IBOutlet UIView *contentBgView;
 @property (weak, nonatomic) IBOutlet UITextView *reciverAddress;
+@property (weak, nonatomic) IBOutlet UIButton *checkBtn;
 
-@property (weak, nonatomic) IBOutlet UIImageView *defaultBtn;
 
 @end

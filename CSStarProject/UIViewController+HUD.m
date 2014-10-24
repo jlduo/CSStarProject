@@ -9,11 +9,10 @@
   * is strictly forbidden unless prior written permission is obtained
   * from EaseMob Technologies.
   */
-
-#import "UIViewController+HUD.h"
-#import "MBProgressHUD.h"
 #import "common.h"
 #import <objc/runtime.h>
+#import "MBProgressHUD.h"
+#import "XHFriendlyLoadingView.h"
 
 static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 
@@ -65,7 +64,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.yOffset = IS_IPHONE_5?200.f:150.f;
     hud.yOffset += yOffset;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:2];
+    [hud hide:YES afterDelay:1.5];
 }
 
 -(void)showCAlert:(NSString *)msg widthType:(NSString *)tp{
@@ -81,13 +80,27 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.dimBackground = YES;
 	
     [hud show:YES];
-    [hud hide:YES afterDelay:1];
+    [hud hide:YES afterDelay:1.5];
     
 }
+
+-(void)showLoading:(NSString *)msg{
+    
+    UIView *view = [[UIApplication sharedApplication].delegate window];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    hud.mode = MBProgressHUDModeIndeterminate;
+    hud.labelText = msg;
+    hud.dimBackground = YES;
+    hud.alpha = 0.5;
+	[self setHUD:hud];
+    [hud show:YES];
+}
+
 
 - (void)hideHud{
     [[self HUD] hide:YES];
 }
+
 
 - (UIViewController *)findViewController:(UIViewController *)sourceView
 {
@@ -100,5 +113,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     }
     return target;
 }
+
+
 
 @end

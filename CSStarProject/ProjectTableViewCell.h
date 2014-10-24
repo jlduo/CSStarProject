@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *cellImgView;
 @property (weak, nonatomic) IBOutlet UIView *cellContentView;
 @property (weak, nonatomic) IBOutlet UIButton *orderStateBtn;
+@property (weak, nonatomic) IBOutlet UILabel *subTitleName;
 
 @end

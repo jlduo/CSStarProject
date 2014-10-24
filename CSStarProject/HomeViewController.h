@@ -16,10 +16,12 @@
 #import "ViewPassValueDelegate.h"
 #import "StoryDetailViewController.h"
 #import "PeopleDetailViewController.h"
-#import "MBProgressHUD.h"
 #import "UIViewController+HUD.h"
+#import "MWPhoto.h"
+#import "MWPhotoBrowser.h"
+#import "XHFriendlyLoadingView.h"
 
-@interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MBProgressHUDDelegate>{
+@interface HomeViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MWPhotoBrowserDelegate>{
     // 声明一个参数传递代理
     NSObject<ViewPassValueDelegate> *passValelegate;
 }
@@ -38,6 +40,9 @@
 @property(nonatomic,retain)NSMutableArray *peopleDataList;
 #pragma mark 朋友圈数据
 @property(nonatomic,retain)NSMutableArray *friendDataList;
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
 
 
 @end

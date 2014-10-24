@@ -50,7 +50,7 @@
 //    }else{
 //        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
 //    }
-    [firstImageView setImageWithURL:[NSURL URLWithString:[sourceArr lastObject]]
+    [firstImageView sd_setImageWithURL:[NSURL URLWithString:[sourceArr lastObject]]
               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
     //firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
     [self.scrollView addSubview:firstImageView];
@@ -76,7 +76,7 @@
 //                imageview.image = [UIImage imageNamed:NOIMG_ICON];
 //            }
             
-            [imageview setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
+            [imageview sd_setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
                                placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
         }else{
             imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
@@ -90,7 +90,7 @@
     NSData *imgDatas = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]];
     NSRange range = [imgUrl rangeOfString:@"http"];
     if(range.location!=NSNotFound && imgDatas!=nil){//判断加载远程图像
-        [lastImageView setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:0]]
+        [lastImageView sd_setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:0]]
                   placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
 
     }else{
@@ -99,11 +99,12 @@
     
     [self.scrollView addSubview:lastImageView];
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];
-    self.pageControl.backgroundColor = [UIColor blackColor];
-    self.pageControl.alpha = 0.4f;
+    self.pageControl.backgroundColor = [UIColor clearColor];
+    self.pageControl.alpha = 0.45;
     self.pageControl.numberOfPages = sourceArr.count;
     self.pageControl.currentPage = 0;
-    self.pageControl.currentPageIndicatorTintColor = [UIColor blueColor];
+    self.pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+    self.pageControl.currentPageIndicatorTintColor = [StringUitl colorWithHexString:@"#0099FF"];
     self.pageControl.enabled = YES;
     [self.pageControl addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventValueChanged];
     

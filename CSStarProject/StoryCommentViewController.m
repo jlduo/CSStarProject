@@ -15,10 +15,20 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    UITableView *table;
+    UITableView *commtable;
     NSInteger pageIndex;
     UILabel *lblClickComment;
+    UILabel *lblTimeComment;
     NSMutableArray *tableArray;
+    UILabel *lblDetail;
+    
+    NSDictionary *params;
+    NSMutableArray *commonArr;
+    DateUtil *utilDate;
+    NSString *plDate;
+    
+    NSInteger selectedCount;
+    XHFriendlyLoadingView *friendlyLoadingView;
 }
 @end
 
@@ -28,8 +38,23 @@
     detailId = val;
 }
 
+
+-(void)dealloc{
+    detailId = nil;
+    toolBar = nil;
+    numBtn = nil;
+    plabel = nil;
+    cIconView = nil;
+    textField = nil;
+    commtable = nil;
+    params = nil;
+    lblClickComment = nil;
+    tableArray = nil;
+    friendlyLoadingView = nil;
+}
+
 -(void)passDicValue:(NSDictionary *)vals{
-    
+    NSLog(@"vals==%@",vals);
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -52,17 +77,25 @@
     if(IOS_VERSION>=7.0){
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
-    self.view.backgroundColor = [UIColor whiteColor];
-    table.separatorStyle = UITableViewCellSeparatorStyleNone;
     
+    [self initloadData];
+    [self initLoading];
+    
+}
+
+-(void)initloadData{
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    commtable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    utilDate = [[DateUtil alloc] init];
     //标题
-    UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(24);
+    lblDetail=[[UILabel alloc] init];
+    lblDetail.font = main_font(16);
     lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
     [self.view addSubview:lblDetail];
     
     //时间
-    UILabel *lblTimeComment = [[UILabel alloc] init];
+    lblTimeComment = [[UILabel alloc] init];
     lblTimeComment.font = main_font(12);
     lblTimeComment.textColor = [UIColor grayColor];
     lblTimeComment.frame = CGRectMake(5, 104, 130, 30);
@@ -81,17 +114,6 @@
     lblClickComment.frame = CGRectMake(145, 104, 100, 30);
     [self.view addSubview:lblClickComment];
     
-    //现实参数
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-    NSDictionary *dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
-    lblDetail.text = [dicContent valueForKey:@"_title"];
-    
-    NSString *addTime = [dicContent valueForKey:@"_add_time"];
-    DateUtil *utilDate = [[DateUtil alloc] init];
-    addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
-    lblTimeComment.text = addTime;
-    
     NSString *clickNum = [self getCommentNum];
     lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
     lblClickComment.font = main_font(12);
@@ -100,35 +122,129 @@
     [self initToolBar];
     //获取评论列表
     pageIndex = 1;
-    tableArray = [self getCommentList];
+    [self loadBanerData];
+    [self getCommentList];
     
-    [self setHeaderRereshing];
-    [self setFooterRereshing];
+    //[self setHeaderRereshing];
+    //[self setFooterRereshing];
+    
 }
 
--(NSMutableArray *)getCommentList{
+-(void)initLoading{
+    if(friendlyLoadingView==nil){
+        friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
+    }
+    __weak typeof(self) weakSelf = self;
+    friendlyLoadingView.reloadButtonClickedCompleted = ^(UIButton *sender) {
+        [weakSelf loadBanerData];
+        [weakSelf getCommentList];
+        [weakSelf initloadData];
+    };
+    
+    [self.view addSubview:friendlyLoadingView];
+    
+    [friendlyLoadingView showFriendlyLoadingViewWithText:@"正在加载..." loadingAnimated:YES];
+}
+
+- (void)showLoading {
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+        selectedCount ++;
+        if (selectedCount == 3) {
+            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
+        } else {
+            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
+        }
+    });
+}
+
+
+
+-(void)loadBanerData{
+    
+    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
+    [self requestDataByUrl:requestUrl withType:1 withIndex:nil];
+    
+}
+
+-(void)getCommentList{
+    
     NSString *url = [[NSString alloc] initWithFormat:@"%@%@/%@/10/%d",REMOTE_URL,GET_COMMENT_URL,detailId,pageIndex];
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    return (NSMutableArray *)[jsonData requestData:url];
+    [self requestDataByUrl:url withType:2 withIndex:nil];
+    
+}
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type withIndex:(NSString *)pageIndex{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"tag->%d",request.tag);
+    commonArr = (NSMutableArray *)jsonDic;
+    if(commonArr!=nil && commonArr.count>0){
+        
+        switch (request.tag) {
+            case 1:
+                lblDetail.text = [jsonDic valueForKey:@"_title"];
+                plDate =[utilDate getLocalDateFormateUTCDate1:[jsonDic valueForKey:@"_add_time"]];
+                lblTimeComment.text = plDate;
+                break;
+            case 2:
+                tableArray = commonArr;
+                break;
+            default:
+                break;
+        }
+        
+        [commtable reloadData];
+        [self setHeaderRereshing];
+        [self setFooterRereshing];
+        [friendlyLoadingView removeFromSuperview];
+        
+    }
+}
+
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    [self initLoading];
+    [self setHeaderRereshing];
+    [self showLoading];
 }
 
 -(void)initTable{
-    table = [[UITableView alloc] initWithFrame:self.view.frame];
-    table.delegate = self;
-    table.dataSource = self;
-    table.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105); 
-    [self.view addSubview:table];
+    commtable = [[UITableView alloc] initWithFrame:self.view.frame];
+    commtable.delegate = self;
+    commtable.dataSource = self;
+    commtable.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105);
+    [self.view addSubview:commtable];
     
     //注册单元格
     UINib *nibCell = [UINib nibWithNibName:@"StoryCommentTableCell" bundle:nil];
-    [table registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
+    [commtable registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{ 
     StoryCommentTableCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"storyCommentCell"]; 
     
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
-    DateUtil *utilDate = [[DateUtil alloc] init];
     NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
     commentCell.commentDateTime.text = addTime;
     NSString *imgUrl = [dicComment valueForKey:@"_avatar"];
@@ -148,7 +264,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    StoryCommentTableCell *commentCell = [table dequeueReusableCellWithIdentifier:@"storyCommentCell"];
+    StoryCommentTableCell *commentCell = [commtable dequeueReusableCellWithIdentifier:@"storyCommentCell"];
     NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     NSString *commnetContent = [dicComment valueForKey:@"_content"];
     
@@ -354,8 +470,8 @@
         
         [self showCAlert:@"评论提交成功" widthType:WARNN_LOGO];
         pageIndex = 1;
-        tableArray  = [self getCommentList];
-        [table reloadData];
+        [self getCommentList];
+        [commtable reloadData];
         
         NSString *clickNum = [self getCommentNum];
         lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
@@ -383,38 +499,30 @@
 
 //加载头部刷新
 -(void)setHeaderRereshing{
-    AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+    AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:commtable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
         [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
     }];
-    [table addSubview:topPullView];
+    [commtable addSubview:topPullView];
 }
 
 //加底部部刷新
 -(void)setFooterRereshing{
-    AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+    AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:commtable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
         pageIndex++;
         [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
     }];
-    [table addSubview:bottomPullView];
+    [commtable addSubview:bottomPullView];
 }
 
 //请求完成之后，回调方法
 -(void)callBackMethod:(id)isTop
 {
-    NSMutableArray *nextArray = [self getCommentList];
-    if(nextArray!=nil && nextArray.count>0){
-        if ([isTop isEqualToString:@"top"]) {
-            tableArray  = nextArray;
-        } else {
-            [tableArray  addObjectsFromArray:nextArray];
-        }
-        [table reloadData];
-    }else{ 
-        [self showCAlert:@"没有数据了" widthType:WARNN_LOGO];
-    }
+    
+    [self getCommentList];
 }
+
 
 @end
