@@ -6,12 +6,14 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 #import "DateUtil.h"
+#import "MarqueeLabel.h"
 #import "CommonViewController.h"
 #import "PeopleTableViewCell.h"
 #import "InitTabBarViewController.h"
 #import "PeopleDetailViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "XHFriendlyLoadingView.h"
+#import "PeopleFilterProjectController.h"
 
 @interface PeopleViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource>{
     // 声明一个参数传递代理

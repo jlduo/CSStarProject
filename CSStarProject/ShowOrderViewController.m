@@ -13,6 +13,7 @@
     NSString *orderId;
     UIButton *rbtn;
     UIImageView *stateView;
+    MarqueeLabel *titleLabel;
 }
 
 @end
@@ -117,8 +118,10 @@
     btnLabel.textColor = [UIColor whiteColor];
     [headView addSubview:btnLabel];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 12, 260, 25)];
+    //滚动显示
+    titleLabel = [[MarqueeLabel alloc] initWithFrame:CGRectMake(75, 12, 220, 25) duration:15.0 andFadeLength:10.0f];
     titleLabel.text = [_orderInfoData valueForKey:@"projectName"];
+    
     titleLabel.textColor = [UIColor blackColor];
     [headView addSubview:titleLabel];
     
@@ -168,7 +171,19 @@
     passValelegate = payViewController;
     [passValelegate passValue:[_orderInfoData valueForKey:@"id"]];
     [self.navigationController pushViewController:payViewController animated:YES];
+    
 }
+
+//-(void)goPreviou{
+//    
+//    int orderState = [[_orderInfoData valueForKey:@"orderStatus"] intValue];
+//    if(orderState!=3 && orderState!=4){
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }else{
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//    }
+//    
+//}
 
 -(UIImageView *)setTagView{
     
@@ -210,12 +225,12 @@
     [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     //处理标题
-    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
-    [titleLabel setText:@"订单详情"];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [titleLabel setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
-    titleLabel.font = BANNER_FONT;
+    UILabel *title_label =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
+    [title_label setText:@"订单详情"];
+    [title_label setTextAlignment:NSTextAlignmentCenter];
+    [title_label setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
+    [title_label setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
+    title_label.font = BANNER_FONT;
     
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -239,7 +254,7 @@
         navItem.rightBarButtonItem = rightBtnItem;
     }
     
-    navItem.titleView = titleLabel;
+    navItem.titleView = title_label;
     navItem.leftBarButtonItem = leftBtnItem;
 
     [navgationBar pushNavigationItem:navItem animated:YES];
@@ -298,6 +313,7 @@
         [rbtn removeTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
         [stateView setImage:[UIImage imageNamed:@"payment_cancel.png"]];
         [orderInfoTableView setTableFooterView:nil];
+        [self loadOrderInfo];
         [self setTagView];
     }
     
@@ -329,28 +345,41 @@
 
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(indexPath.row==3){
-        OrderTableViewCell *orderCell;
-        static NSString *CustomCellIdentifier = @"OrderCell";
-        orderCell=  (OrderTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
-        if (orderCell == nil) {
-            NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"OrderTableViewCell" owner:self options:nil] ;
-            orderCell = [nib objectAtIndex:0];
-        }
-        
-        //内容自适应
-        NSString *returnContent = [_orderInfoData valueForKey:@"returnContent"];
-        UIFont *font = [UIFont systemFontOfSize:12];
-        CGSize size = CGSizeMake(orderCell.titleValue.frame.size.width,2000);
-        CGSize labelsize = [returnContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
-        if(labelsize.height>20){
-           return labelsize.height+10;
-        }else{
-           return 40.5;
-        }
-    }else{
-       return 40.5;
+    float row_height = 0.0;
+    OrderTableViewCell *orderCell;
+    static NSString *CustomCellIdentifier = @"OrderCell";
+    orderCell=  (OrderTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+    if (orderCell == nil) {
+        NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"OrderTableViewCell" owner:self options:nil];
+        orderCell = [nib objectAtIndex:0];
     }
+    
+    NSString *content_val;
+    switch (indexPath.row) {
+        case 3:
+            content_val = [_orderInfoData valueForKey:@"returnContent"];
+            orderCell.titleValue.text = content_val;
+            row_height = [orderCell.titleValue contentSize].height+10;
+            break;
+        case 5:
+            content_val = [_orderInfoData valueForKey:@"deliveryAddress"];
+            orderCell.titleValue.text = content_val;
+            row_height = [orderCell.titleValue contentSize].height+10;
+            break;
+        case 6:
+            content_val = [_orderInfoData valueForKey:@"beizhu"];
+            orderCell.titleValue.text = content_val;
+            row_height = [orderCell.titleValue contentSize].height+30;
+            break;
+            
+        default:
+            row_height = 40.5;
+            break;
+    }
+    
+    NSLog(@"rowHeight=%f",row_height);
+    return row_height;
+
 }
 
 #pragma mark 加载数据
@@ -415,23 +444,21 @@
             break;
     }
     
-    NSString *labelString = titleValue;
-    [orderCell.titleValue setNumberOfLines:0];
-    UIFont *font = [UIFont systemFontOfSize:12];
-    [orderCell.titleValue setLineBreakMode:NSLineBreakByCharWrapping];
-    CGSize size = CGSizeMake( orderCell.titleValue.frame.size.width,2000);
-    CGSize labelsize = [labelString sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByCharWrapping];
-    if (labelsize.height > 20) {
-
-        orderCell.titleValue.frame = CGRectMake(orderCell.titleValue.frame.origin.x,
-                                           orderCell.titleValue.frame.origin.y,
-                                           orderCell.titleValue.frame.size.width,
-                                           labelsize.height);
-       
+    //NSLog(@"titleVlae=%@",titleValue);
+    orderCell.titleValue.text = titleValue;
+    orderCell.cellTitle.text = titleName;
+    if (indexPath.row==3||indexPath.row==5||indexPath.row==6) {
+        
+        CGSize labelsize = [orderCell.titleValue contentSize];
+        CGRect tempFrame = orderCell.titleValue.frame;
+        tempFrame.size.height =labelsize.height;
+        [orderCell.titleValue setFrame:tempFrame];
+        
+        CGRect tempFrame1 = orderCell.cellTitle.frame;
+        tempFrame1.size.height =labelsize.height;
+        [orderCell.cellTitle setFrame:tempFrame1];
     }
     
-    orderCell.cellTitle.text = titleName;
-    orderCell.titleValue.text = titleValue;
     
     return orderCell;
 }

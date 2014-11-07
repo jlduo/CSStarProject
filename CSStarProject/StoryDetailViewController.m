@@ -20,6 +20,7 @@
     UITapGestureRecognizer *singleTap;
     BOOL isOpen;
     UIWebView *webDetail;
+    NSDictionary *dicContent;
 }
 @end
 
@@ -115,7 +116,7 @@
     
     ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-    NSDictionary *dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
+     dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
     lblDetail.text = [dicContent valueForKey:@"_title"];
     lblTimeDetail.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
     NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
@@ -140,7 +141,7 @@
 }
 
 //点击事件
--(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+-(void)handleSingleTap2:(UITapGestureRecognizer *)sender{
     CGPoint point = [sender locationInView:webDetail];
     NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
     NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
@@ -156,9 +157,10 @@
                 MJPhoto *photo = [[MJPhoto alloc] init];
                 photo.url = [NSURL URLWithString:photos[i]];
                 
-                NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
-                UIImage *img = [UIImage imageWithData:data];
-                photo.srcImageView =[[UIImageView alloc] initWithImage:img];
+//                NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
+//                UIImage *img = [UIImage imageWithData:data];
+//                photo.srcImageView =[[UIImageView alloc] initWithImage:img];
+                [photo.srcImageView md_setImageWithURL:photos[i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
                 [imgPhotes addObject:photo];
                 
                 imgArray = photos[i];
@@ -173,6 +175,96 @@
         }
     }
 }
+
+//点击事件
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    CGPoint point = [sender locationInView:webDetail];
+    NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
+    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
+    if (imgUrl.length > 0) {
+        //展示所有图片
+        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        if (imgArray.length > 0) {
+            imgArray = [imgArray substringFromIndex:1];
+            NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
+            NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
+            NSInteger _currentPhoteoIndex = 0;
+            MWPhoto *photo;
+            for (int i = 0; i<photos.count; i++) {
+                photo = [MWPhoto photoWithURL:[NSURL URLWithString:photos[i]]];
+                //photo.caption = @"pic";
+                [imgPhotes addObject:photo];
+                
+                imgArray = photos[i];
+                if ([imgUrl isEqualToString:imgArray]) {
+                    _currentPhoteoIndex = i;
+                }
+                
+            }
+            
+            self.photos = imgPhotes;
+            self.thumbs = imgPhotes;
+            
+            BOOL displayActionButton = NO;
+            BOOL displaySelectionButtons = NO;
+            BOOL displayNavArrows = YES;
+            BOOL enableGrid = YES;
+            BOOL startOnGrid = NO;
+            
+            MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+            browser.displayActionButton = displayActionButton;
+            browser.displayNavArrows = displayNavArrows;
+            browser.displaySelectionButtons = displaySelectionButtons;
+            browser.alwaysShowControls = displaySelectionButtons;
+            browser.zoomPhotosToFill = YES;
+            #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+            browser.wantsFullScreenLayout = YES;
+            #endif
+            browser.enableGrid = enableGrid;
+            browser.startOnGrid = startOnGrid;
+            browser.enableSwipeToDismiss = YES;
+            [browser setCurrentPhotoIndex:_currentPhoteoIndex];
+            
+
+            //[self.navigationController pushViewController:browser animated:YES];
+            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+            nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:nc animated:YES completion:nil];
+            
+        }
+    }
+}
+
+
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < _thumbs.count)
+        return [_thumbs objectAtIndex:index];
+    return nil;
+}
+
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    
+    
+    
+}
+
+- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
+    return [NSString stringWithFormat:@"%d / %d", index+1,_photos.count];
+}
+
 
 //点赞按钮事件
 -(void)setClick{
@@ -451,9 +543,25 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[super setNavBarWithTitle:@"星城故事" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:SHARE_ICON]];
 }
+
 -(void)goPreviou{
     [super goPreviou];
 }
+
+-(void)goForward{
+    
+    NSString *con_url = [NSString stringWithFormat:@"%@ http://192.168.1.210:888/text.aspx?id=%@",[dicContent valueForKey:@"_title"],detailId];
+    NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
+    [showMsg setObject:@"星城故事分享" forKey:@"showTitle"];
+    [showMsg setObject:con_url forKey:@"contentString"];
+    [showMsg setObject:@"" forKey:@"urlString"];
+    [showMsg setObject:@"很无敌啊！" forKey:@"description"];
+    [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
+    
+    [self showShareAlert:showMsg];
+    
+}
+
 @end

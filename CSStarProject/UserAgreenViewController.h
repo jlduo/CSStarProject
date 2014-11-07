@@ -11,6 +11,7 @@
 #import "CommonViewController.h"
 
 @interface UserAgreenViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UITextView *agreenView;
+
+@property (weak, nonatomic) IBOutlet UIWebView *agreenView;
 
 @end

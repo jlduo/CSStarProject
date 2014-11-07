@@ -27,14 +27,8 @@
                         <color key="textColor" red="0.0015783136633281624" green="0.7631138392857143" blue="0.0024487845849228574" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3533头发法师打发士大夫sdfasdasda 3533头发法师打发3533头发法师打发3533头发法师打发" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="0AS-Id-6zX">
-                        <rect key="frame" x="20" y="44" width="280" height="60"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PeQ-83-QEf">
-                        <rect key="frame" x="20" y="113" width="280" height="40"/>
+                        <rect key="frame" x="20" y="114" width="280" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
@@ -43,11 +37,18 @@
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="sdsdasdadasda" translatesAutoresizingMaskIntoConstraints="NO" id="TYx-pD-6OA">
+                        <rect key="frame" x="20" y="46" width="280" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="cellTitle" destination="Vae-Ck-dOw" id="UEf-fd-QgI"/>
-                <outlet property="descText" destination="0AS-Id-6zX" id="eGu-eh-2Vc"/>
+                <outlet property="descText" destination="TYx-pD-6OA" id="0bK-nw-KCg"/>
                 <outlet property="saveBtn" destination="PeQ-83-QEf" id="dKM-iI-Wyo"/>
                 <outlet property="supportNum" destination="FMx-N1-NDp" id="9yW-wZ-Awz"/>
             </connections>

@@ -86,27 +86,152 @@
     
     UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
     
-    //    //设置右侧按钮
-    //    UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //    [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
-    //    [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
-    //    [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    //    [rbtn setTintColor:[UIColor whiteColor]];
-    //    [rbtn setFont:Font_Size(18)];
-    //
-    //    //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
-    //    [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
-    //
-    //    UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
+    //设置右侧按钮
+    UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
+    [rbtn setBackgroundImage:[UIImage imageNamed:SHARE_ICON] forState:UIControlStateNormal];
+    [rbtn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
     
     navItem.titleView = titleLabel;
     navItem.leftBarButtonItem = leftBtnItem;
-    //navItem.rightBarButtonItem = rightBtnItem;
+    navItem.rightBarButtonItem = rightBtnItem;
     [navgationBar pushNavigationItem:navItem animated:YES];
     
     [self.view addSubview:navgationBar];
     
 }
+
+
+-(void)goForward{
+    
+    [self showShareAlert];
+    
+}
+
+//显示分享菜单
+-(void)showShareAlert{
+    
+    id<ISSContainer> container = [ShareSDK container];
+    [container setIPhoneContainerWithViewController:self];
+    
+    NSArray *shareList = [ShareSDK getShareListWithType:
+                          ShareTypeWeixiSession,
+                          ShareTypeWeixiTimeline,
+                          ShareTypeSinaWeibo,
+                          ShareTypeQQSpace,
+                          ShareTypeTencentWeibo,
+                          ShareTypeQQ,
+                          nil];
+    
+    id<ISSContent> publishContent = nil;
+    
+    NSString *contentString = @"看了ShareSDK的例子，原来分享真的很简单！@ShareSDK";
+    NSString *titleString   = @"标题在此，谁敢与某大战三百回合？";
+    NSString *urlString     = @"http://www.ShareSDK.cn";
+    NSString *description   = @"欢迎使用 ShareSDK 为社交分享加速！";
+    
+    publishContent = [ShareSDK content:contentString
+                        defaultContent:@""
+                                 image:nil
+                                 title:titleString
+                                   url:urlString
+                           description:description
+                             mediaType:SSPublishContentMediaTypeText];
+    
+    id<ISSShareOptions> shareOptions = [ShareSDK defaultShareOptionsWithTitle:@"美女私房分享"
+                                                              oneKeyShareList:shareList
+                                                           cameraButtonHidden:YES
+                                                          mentionButtonHidden:NO
+                                                            topicButtonHidden:NO
+                                                               qqButtonHidden:YES
+                                                        wxSessionButtonHidden:YES
+                                                       wxTimelineButtonHidden:YES
+                                                         showKeyboardOnAppear:NO
+                                                            shareViewDelegate:nil
+                                                          friendsViewDelegate:nil
+                                                        picViewerViewDelegate:nil];
+    
+    
+    id<ISSAuthOptions> authOptions = [ShareSDK authOptionsWithAutoAuth:YES
+                                                         allowCallback:NO
+                                                                scopes:nil
+                                                         powerByHidden:YES
+                                                        followAccounts:nil
+                                                         authViewStyle:SSAuthViewStyleFullScreenPopup
+                                                          viewDelegate:nil
+                                               authManagerViewDelegate:nil];
+    
+    [ShareSDK showShareActionSheet:container
+                         shareList:shareList
+                           content:publishContent
+                     statusBarTips:NO
+                       authOptions:authOptions
+                      shareOptions:shareOptions
+                            result:^(ShareType type,
+                                     SSResponseState state,
+                                     id<ISSPlatformShareInfo> statusInfo,
+                                     id<ICMErrorInfo> error, BOOL end)
+     {
+         NSString *name = nil;
+         switch (type)
+         {
+             case ShareTypeQQ:
+                 name = @"QQ";
+                 break;
+             case ShareTypeSinaWeibo:
+                 name = @"新浪微博";
+                 break;
+             case ShareTypeWeixiSession:
+                 name = @"微信好友";
+                 break;
+             case ShareTypeQQSpace:
+                 name = @"QQ空间";
+                 break;
+             case ShareTypeTencentWeibo:
+                 name = @"腾讯微博";
+                 break;
+             case ShareTypeWeixiTimeline:
+                 name = @"微信朋友圈";
+                 break;
+                 
+             default:
+                 name = @"某个平台";
+                 break;
+         }
+         
+         NSString *notice = nil;
+         if (state == SSPublishContentStateSuccess)
+         {
+             notice = [NSString stringWithFormat:@"分享到%@成功！", name];
+             NSLog(@"%@",notice);
+             
+             UIAlertView *view =
+             [[UIAlertView alloc] initWithTitle:@"提示"
+                                        message:notice
+                                       delegate:nil
+                              cancelButtonTitle:@"知道了"
+                              otherButtonTitles: nil];
+             [view show];
+         }
+         else if (state == SSPublishContentStateFail)
+         {
+             notice = [NSString stringWithFormat:@"分享到%@失败,错误码:%d,错误描述:%@", name, [error errorCode], [error errorDescription]];
+             NSLog(@"%@",notice);
+             
+             UIAlertView *view =
+             [[UIAlertView alloc] initWithTitle:@"提示"
+                                        message:notice
+                                       delegate:nil
+                              cancelButtonTitle:@"知道了"
+                              otherButtonTitles: nil];
+             [view show];
+         }
+     }];
+    
+}
+
 
 //传值
 -(void)passValue:(NSString *)val{

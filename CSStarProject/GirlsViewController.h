@@ -21,7 +21,7 @@
 #import "ViewPassValueDelegate.h"
 #import "XHFriendlyLoadingView.h"
 
-@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MWPhotoBrowserDelegate>{
+@interface GirlsViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,MWPhotoBrowserDelegate,UIAlertViewDelegate>{
     
     NSMutableDictionary *bannerData;//导航初始数据
     // 声明一个参数传递代理

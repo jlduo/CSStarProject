@@ -27,6 +27,27 @@
 {
     [super viewDidLoad];
     [self setNavgationBar];
+    [self setWebcontent];
+    
+}
+
+-(void)setWebcontent{
+    
+    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
+    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,USER_AGREEMENT_URL];
+    NSArray *agreenArray = (NSArray *)[jsonData requestData:requestUrl];
+    NSString *detailId;
+    NSDictionary * agreenDic;
+    if (agreenArray!=nil&&agreenArray.count>0) {
+        agreenDic = [agreenArray objectAtIndex:0];
+        detailId = [agreenDic valueForKey:@"_id"];
+        
+        NSString *url = [[NSString alloc] initWithFormat:@"%@/newsConte.aspx?newsid=%@",REMOTE_ADMIN_URL,detailId];
+        NSURL *nsUrl = [[NSURL alloc] initWithString:url];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:nsUrl];
+        [self.agreenView loadRequest:request];
+        
+    }
     
 }
 

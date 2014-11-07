@@ -20,9 +20,9 @@
     DateUtil *dateUtil;
     CommonViewController *comViewController;
     NSInteger pageIndex;
-    
-    NSInteger selectedCount;
     XHFriendlyLoadingView *friendlyLoadingView;
+    
+    int showflag;
 }
 
 @end
@@ -51,6 +51,9 @@
     comViewController = nil;
     friendlyLoadingView = nil;
     
+    _storyTableView = nil;
+    _storyDataList = nil;
+    
 }
 
 
@@ -73,12 +76,9 @@
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        selectedCount ++;
-        if (selectedCount == 3) {
-            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
-        } else {
-            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
-        }
+        
+        [friendlyLoadingView showReloadViewWithText:@"请点击刷新.."];
+    
     });
 }
 
@@ -163,7 +163,7 @@
 {
     NSData *respData = [request responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSLog(@"jsonDic->%@",jsonDic);
+    //NSLog(@"jsonDic->%@",jsonDic);
     NSArray *nextArray = (NSArray *)jsonDic;
     if(nextArray!=nil && nextArray.count>0){
         if (request.tag==0) {
@@ -182,10 +182,15 @@
     }
     
     [_storyTableView reloadData];
+    showflag++;
+    if (showflag==1) {
+        [friendlyLoadingView removeFromSuperview];
+    }
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
+    showflag = 0;
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     [self initLoading];
@@ -195,14 +200,6 @@
     
 }
 
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [friendlyLoadingView removeFromSuperview];
-        });
-    }
-}
 
                                              
 #pragma mark 行选中事件
@@ -261,8 +258,7 @@
         storySMCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
-        UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        storySMCell.cellImg.image = picImg;
+        [storySMCell.cellImg md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         storySMCell.cellTitle.font = DESC_FONT;
         storySMCell.cellTitle.text = [parray valueForKey:@"_title"];
         
@@ -281,8 +277,7 @@
         storyBCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
-        UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-        storyBCell.cellImgView.image = picImg;
+        [storyBCell.cellImgView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         storyBCell.imgTitle.font = DESC_FONT;
         storyBCell.imgTitle.text = [parray valueForKey:@"_title"];
         

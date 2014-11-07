@@ -188,6 +188,9 @@
         }
         _previousButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:arrowPathFormat, @"Left"]] style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
         _nextButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:arrowPathFormat, @"Right"]] style:UIBarButtonItemStylePlain target:self action:@selector(gotoNextPage)];
+        
+        UIImage *saveImg = [UIImage imageNamed:@"save17.png"];
+        _saveButton = [[UIBarButtonItem alloc] initWithImage:saveImg style:UIBarButtonItemStylePlain target:self action:@selector(savePhoto)];
     }
     if (self.displayActionButton) {
         _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonPressed:)];
@@ -253,11 +256,12 @@
     // Toolbar items
     BOOL hasItems = NO;
     UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
-    fixedSpace.width = 32; // To balance action button
+    fixedSpace.width = 24; // To balance action button
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
     NSMutableArray *items = [[NSMutableArray alloc] init];
 
     // Left button - Grid
+    
     if (_enableGrid) {
         hasItems = YES;
         NSString *buttonName = @"UIBarButtonItemGrid";
@@ -272,6 +276,8 @@
         hasItems = YES;
         [items addObject:flexSpace];
         [items addObject:_previousButton];
+        [items addObject:flexSpace];
+        [items addObject:_saveButton];
         [items addObject:flexSpace];
         [items addObject:_nextButton];
         [items addObject:flexSpace];

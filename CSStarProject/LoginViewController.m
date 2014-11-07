@@ -237,18 +237,6 @@
         
         //通过用户名获取信息
         [self loadUserInfo:_userName.text];
-        
-        UserViewController *userView = [[UserViewController alloc]init];
-        if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
-
-            [self dismissViewControllerAnimated:YES completion:nil];
-            
-        }else{
-            
-            [self.navigationController pushViewController:userView animated:YES];
-            
-        }
-        
     }
     
 }
@@ -291,6 +279,14 @@
         [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        
+        UserViewController *userView = [[UserViewController alloc]init];
+        if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }else{
+            [self.navigationController pushViewController:userView animated:YES];
+        }
+        
     
     }
 

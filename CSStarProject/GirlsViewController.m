@@ -25,11 +25,12 @@
     NSMutableArray *imageArr;
     NSMutableArray *titleArr;
     int currentPageIndex;
-    
+    int currentImgIndex;
     MWPhoto *photo;
     NSString *max_id;
-    NSInteger selectedCount;
     NSMutableArray *commonArr;
+    
+    int showflag;
 }
 
 @end
@@ -46,7 +47,7 @@
     [self initLoadData];
     
     [self setHeaderRereshing];
-    [self setFooterRereshing];
+    //[self setFooterRereshing];
     
 }
 
@@ -69,6 +70,23 @@
     
 }
 
+-(void)viewDidUnload{
+    dataType = nil;
+    cellDic = nil;
+    sourceArray = nil;
+    commonArr = nil;
+    artId = nil;
+    imageArr= nil;
+    photo = nil;
+    max_id = nil;
+    imageArr = nil;
+    titleArr = nil;
+    photoArray = nil;
+    scrollView = nil;
+    comViewController = nil;
+    friendlyLoadingView = nil;
+}
+
 
 -(void)initLoadData{
     
@@ -78,9 +96,6 @@
     [self initBannerData];
     currentPageIndex = 1;
     [self loadGirlData:@"1" withPageSize:PAGESIZE];
-    //集成刷新控件
-    [self setHeaderRereshing];
-    [self setFooterRereshing];
     [self setBannerView];
     
     _girlsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -107,12 +122,9 @@
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        selectedCount ++;
-        if (selectedCount == 3) {
-            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
-        } else {
-            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
-        }
+
+       [friendlyLoadingView showReloadViewWithText:@"请点击刷新.."];
+    
     });
 }
 
@@ -122,7 +134,7 @@
     UIImageView *bannerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     NSString *imgUrl =[bannerData valueForKey:@"_img_url"];
     [bannerView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                   placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+                   placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     
     bannerView.userInteractionEnabled = YES;
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(UesrClicked:)];
@@ -145,14 +157,20 @@
 
 -(void)UesrClicked:(UIImageView *)imgView{
     
-    NSString *artcleId = [bannerData valueForKey:@"_id"];
-    NSString * data_type = [bannerData valueForKey:@"_category_call_index"];
-    if([data_type isEqualToString:@"video"]){
-        [self goVideoView:artcleId];
-    }else if([data_type isEqualToString:@"albums"]){
-       [self loadGirlPhotoData:artcleId];
+    if([StringUitl checkLogin]==TRUE){
+        NSString *artcleId = [bannerData valueForKey:@"_id"];
+        NSString * data_type = [bannerData valueForKey:@"_category_call_index"];
+        if([data_type isEqualToString:@"video"]){
+            [self goVideoView:artcleId];
+        }else if([data_type isEqualToString:@"albums"]){
+            [self loadGirlPhotoData:artcleId];
+        }else{
+            [self goArticelView:artcleId];
+        }
     }else{
-       [self goArticelView:artcleId];
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
     }
     
 }
@@ -229,7 +247,13 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     
-    //[_girlsTableView reloadData];
+    [_girlsTableView reloadData];
+    
+}
+
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self setFooterRereshing];
 }
 
 
@@ -285,7 +309,7 @@
 {
     NSData *respData = [request responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSLog(@"tag->%d",request.tag);
+    //NSLog(@"tag->%d",request.tag);
     commonArr = (NSMutableArray *)jsonDic;
     if(commonArr!=nil && commonArr.count>0){
         
@@ -318,6 +342,7 @@
                 break;
             case 4:
                 imageArr = [[NSMutableArray alloc]init];
+                photoArray = imageArr;
                 for (int i=0; i<commonArr.count; i++) {
                     NSDictionary * dic = (NSDictionary *)commonArr[i];
                     photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
@@ -331,17 +356,24 @@
                 break;
         }
         [_girlsTableView reloadData];
+        showflag++;
+        if (showflag==2) {
+            [friendlyLoadingView removeFromSuperview];
+        }
+        
     }
 }
 
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
+    showflag=0;
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     [self initLoading];
     [self setHeaderRereshing];
     [self showLoading];
+    
     //[self setFooterRereshing];
     
 }
@@ -433,16 +465,6 @@
     }
 }
 
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self scrollTableToFoot:YES];
-            [friendlyLoadingView removeFromSuperview];
-        });
-    }
-}
-
 
 #pragma mark 加载数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -456,12 +478,11 @@
         picCell.selectionStyle = UITableViewCellSelectionStyleNone;
         picCell.backgroundColor = [UIColor clearColor];
         
-        //[StringUitl setCornerRadius:picCell.cellBgView withRadius:5.0f];
+        [StringUitl setCornerRadius:picCell.cellBgView withRadius:5.0f];
         //[StringUitl setCornerRadius:picCell.picView withRadius:5.0f];
-        //[StringUitl setViewBorder:picCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
+        [StringUitl setViewBorder:picCell.cellBgView withColor:@"#cccccc" Width:0.5f];
         
-        [picCell.picView sd_setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
-                       placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+        [picCell.picView md_setImageWithURL:[cellDic valueForKey:@"_img_url"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         //picCell.cellBgView.layer.cornerRadius = 5.0f;
         //picCell.cellBgView.layer.masksToBounds = YES;
         picCell.titleView.text = [cellDic valueForKey:@"_title"];
@@ -482,12 +503,13 @@
         videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
         videoCell.backgroundColor = [UIColor clearColor];
         
-        //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
-        //[StringUitl setCornerRadius:videoCell.cellBgView withRadius:5.0f];
+        [StringUitl setViewBorder:videoCell.cellBgView withColor:@"#cccccc" Width:0.5f];
+        [StringUitl setCornerRadius:videoCell.cellBgView withRadius:5.0f];
         //[StringUitl setCornerRadius:videoCell.videoPic withRadius:5.0f];
         
-        [videoCell.videoPic sd_setImageWithURL:[NSURL URLWithString:[cellDic valueForKey:@"_img_url"]]
-                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+        
+        
+        [videoCell.videoPic md_setImageWithURL:[cellDic valueForKey:@"_img_url"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
@@ -524,23 +546,31 @@
            //[photoScroll setShowsVerticalScrollIndicator:NO];
            
            //加载图片
+           UIButton *imgbtn;
+           UIImageView *imageView;
            for(int i=0;i<photoArray.count;i++){
 
                NSMutableDictionary *picDic = (NSMutableDictionary *)[photoArray objectAtIndex:i];
-               UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((100+30)*i, 0, 120, 80)];
+               imageView = CGIMAG((100+30)*i, 0, 120, 80);
                imageView.userInteractionEnabled = YES;
-               [imageView sd_setImageWithURL:[NSURL URLWithString:[picDic valueForKey:@"_thumb_path"]]
-                         placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
+               [imageView md_setImageWithURL:[picDic valueForKey:@"_thumb_path"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
                [StringUitl setCornerRadius:imageView withRadius:5.0f];
                
-               UIButton *imgbtn = [[UIButton alloc]initWithFrame:CGRectMake((100+30)*i, 0, 120, 80)];
+               imgbtn = [[UIButton alloc]initWithFrame:CGRectMake((100+30)*i, 0, 120, 80)];
                [imgbtn setBackgroundColor:[UIColor clearColor]];
                imgbtn.tag = [artcleId integerValue];
+               imgbtn.titleLabel.text = [NSString stringWithFormat:@"%d",i];
                [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
                
                [photoCell.photoScroll addSubview:imageView];
                [photoCell.photoScroll addSubview:imgbtn];
+               
+               imgbtn = nil;
+               imageView = nil;
+               
            }
+           
+           photoArray = nil;
            
            [StringUitl setCornerRadius:photoCell.cellBgView withRadius:5.0f];
            [StringUitl setViewBorder:photoCell.cellBgView withColor:@"#cccccc" Width:0.5f];
@@ -558,9 +588,18 @@
 
 
 -(void)imgBtnClick:(UIButton *)sender{
+
+    if([StringUitl checkLogin]==TRUE){
+        currentImgIndex = [sender.titleLabel.text intValue];
+        NSLog(@"@artcleId=%d",currentImgIndex);
+        [self loadGirlPhotoData:[NSString stringWithFormat:@"%d",sender.tag]];
+    }else{
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
     
-    //NSLog(@"@artcleId=%d",sender.tag);
-    [self loadGirlPhotoData:[NSString stringWithFormat:@"%d",sender.tag]];
+    
 }
 
 -(void)goPhotoView2:(NSString *)articleId{
@@ -596,7 +635,7 @@
     browser.enableGrid = enableGrid;
     browser.startOnGrid = startOnGrid;
     browser.enableSwipeToDismiss = YES;
-    [browser setCurrentPhotoIndex:0];
+    [browser setCurrentPhotoIndex:currentImgIndex];
 
     [self.navigationController pushViewController:browser animated:YES];
 //    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
@@ -606,6 +645,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController hiddenDIYTaBar];
+    
+    photoArray = nil;
+    imageArr = nil;
 }
 
 -(void)goVideoView:(NSString *)articleId{
@@ -646,7 +688,7 @@
 
 
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
-
+    
     NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
     if ([self isEmpty:userId]) {
         LoginViewController *login = [[LoginViewController alloc] init];
@@ -658,6 +700,7 @@
         [passValelegate passValue:artId];
         [self.navigationController pushViewController:storyComment animated:YES];
     }
+
 }
 
 - (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {

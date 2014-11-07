@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "common.h"
+#import "UIImageView+WebCache.h"
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
 #import "myCommentViewController.h"

@@ -11,7 +11,7 @@
 @interface PeopleReturnCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *cellTitle;
 @property (weak, nonatomic) IBOutlet UILabel *supportNum;
-@property (weak, nonatomic) IBOutlet UILabel *descText;
+@property (weak, nonatomic) IBOutlet UITextView *descText;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
 @end

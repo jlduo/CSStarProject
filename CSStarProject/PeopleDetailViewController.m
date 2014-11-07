@@ -16,6 +16,7 @@
     UIButton *supportBtn;
     UIButton *rebackBtn;
     NSDictionary *cellDic;
+    MarqueeLabel *titleLabel;
 }
 
 @end
@@ -52,6 +53,7 @@
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
     [detailTableView setFrame:temFrame];
 
+    [titleLabel removeFromSuperview];
     [self initProjectData];
     [detailTableView reloadData];
     
@@ -194,15 +196,8 @@
         detailCell.selectionStyle =UITableViewCellSelectionStyleNone;
         detailCell.backgroundColor = [UIColor clearColor];
         
-        
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
-        //NSLog(@"imgurl==%@",imgUrl);
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            //改写异步加载图片
-            [detailCell.cellImageView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                                  placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }
+        [detailCell.cellImageView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
         NSString *stateName;
         NSString *tagPicName;
@@ -223,11 +218,15 @@
         }
         [detailCell.tagTitle setText:stateName];
         [detailCell.tagImgView setImage:[UIImage imageNamed:tagPicName]];
+        detailCell.cellTitle.text = @"";
+        titleLabel = [[MarqueeLabel alloc] initWithFrame:detailCell.cellTitle.frame duration:15.0 andFadeLength:10.0f];
+        titleLabel.text = [cellDic valueForKey:@"projectName"];
 
+        [detailCell addSubview:titleLabel];
         
         
-        detailCell.cellTitle.font = TITLE_FONT;
-        detailCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
+        
+        
         NSString *days =[cellDic valueForKey:@"days"];
         NSString *money = [cellDic valueForKey:@"amount"];
         NSString *smoney = [cellDic valueForKey:@"totalamount"];
@@ -286,6 +285,10 @@
         //添加支持动作
         [detailCell.supportBtn addTarget:self action:@selector(clickSupBtn) forControlEvents:UIControlEventTouchDown];
         
+        
+        [StringUitl setCornerRadius:detailCell.cellContentView withRadius:5.0];
+        [StringUitl setViewBorder:detailCell.cellContentView withColor:@"#cccccc" Width:0.5f];
+        
         return detailCell;
         
         
@@ -299,18 +302,16 @@
         centerCell.backgroundColor = [UIColor clearColor];
         
         NSString *imgUrl =[cellDic valueForKey:@"touxiang"];
-        //NSLog(@"touxiang==%@",imgUrl);
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            [centerCell.userIcon sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                                     placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }
+        [centerCell.userIcon md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
         centerCell.userIcon.layer.cornerRadius = 18;
         centerCell.userIcon.layer.masksToBounds = YES;
         
         centerCell.userName.text = [NSString stringWithFormat:@"%@(发起人)",[cellDic valueForKey:@"nickName"]];
         centerCell.userName.font = DESC_FONT;
+        
+        [StringUitl setCornerRadius:centerCell.backgroundView withRadius:5.0];
+        [StringUitl setViewBorder:centerCell.backgroundView withColor:@"#cccccc" Width:0.5f];
         
         return centerCell;
         
@@ -392,6 +393,7 @@
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }else{
+        [titleLabel removeFromSuperview];
         [self initProjectData];
         [detailTableView reloadData];
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
@@ -446,8 +448,7 @@
 - (UIImage *)imageFromImage:(UIImage *)image inRect:(CGRect)rect {
     CGImageRef sourceImageRef = [image CGImage];
     CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
-    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-    return newImage;
+    return [UIImage imageWithCGImage:newImageRef];
 }
 
 

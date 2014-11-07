@@ -11,7 +11,7 @@
 @interface ContentDetailViewController (){
     UIWebView *webDetail;
     NSString *dataId;
-    UILabel *lblDetail;
+    MarqueeLabel *lblDetail;
 }
 
 @end
@@ -70,6 +70,12 @@
     [webDetail loadRequest:[NSURLRequest requestWithURL:contentUrl]];
     //NSLog(@"_contentData===%@",_contentData);
     
+    //添加手势
+    UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [webDetail addGestureRecognizer:singleTapWeb];
+    singleTapWeb.delegate= self;
+    singleTapWeb.cancelsTouchesInView = NO;
+    
 }
 
 
@@ -83,13 +89,50 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
+//点击事件
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    CGPoint point = [sender locationInView:webDetail];
+    NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
+    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
+    if (imgUrl.length > 0) {
+        //展示所有图片
+        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        if (imgArray.length > 0) {
+            imgArray = [imgArray substringFromIndex:1];
+            NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
+            NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
+            NSInteger _currentPhoteoIndex = 0;
+            for (int i = 0; i<photos.count; i++) {
+                MJPhoto *photo = [[MJPhoto alloc] init];
+                photo.url = [NSURL URLWithString:photos[i]];
+                [photo.srcImageView md_setImageWithURL:photos[i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+                [imgPhotes addObject:photo];
+                
+                imgArray = photos[i];
+                if ([imgUrl isEqualToString:imgArray]) {
+                    _currentPhoteoIndex = i;
+                }
+            }
+            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+            browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
+            browser.photos = imgPhotes; // 设置所有的图片
+            [browser show];
+        }
+    }
+}
+
+
+
 #pragma mark 初始化标题
 -(void)initTitle{
-
-    lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(16);
+    
+    lblDetail = [[MarqueeLabel alloc] initWithFrame:CGRectMake(5, 64, SCREEN_WIDTH - 5, 45) duration:15.0 andFadeLength:10.0f];
+    lblDetail.font = TITLE_FONT;
     lblDetail.textAlignment = NSTextAlignmentCenter;
-    lblDetail.frame = CGRectMake(5, 64, SCREEN_WIDTH - 5, 45);
     [self.view addSubview:lblDetail];
     
 }

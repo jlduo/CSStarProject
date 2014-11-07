@@ -226,8 +226,8 @@
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self startTime];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        //[self.navigationController popToRootViewControllerAnimated:YES];
+        //[self dismissViewControllerAnimated:YES completion:nil];
     }
     
     
@@ -248,7 +248,8 @@
 
 
 -(void)startTime{
-    __block int timeout=30; //倒计时时间
+    [self dismissKeyBoard];
+    __block int timeout=60; //倒计时时间
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
     dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
@@ -259,17 +260,25 @@
                 //设置界面的按钮显示 根据自己需求设置
                 _randomNum.text = @"";
                 [_checkNumBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
+                _checkNumBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+                _checkNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
                 _checkNumBtn.userInteractionEnabled = YES;
             });
         }else{
             //int minutes = timeout / 60;
             int seconds = timeout % 60;
             NSString *strTime = [NSString stringWithFormat:@"%.2d", seconds];
+            if (seconds==0) {
+                strTime = @"60";
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 //设置界面的按钮显示 根据自己需求设置
                 //NSLog(@"____%@",strTime);
                 _randomNum.text = [NSString stringWithFormat:@"%@",strTime];
                 [_checkNumBtn setTitle:@"秒后重发" forState:UIControlStateNormal];
+               
+                _checkNumBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
+                _checkNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
                 _checkNumBtn.userInteractionEnabled = NO;
                 
             });

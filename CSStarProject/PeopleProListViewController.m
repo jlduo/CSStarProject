@@ -209,6 +209,9 @@
         projectCell.selectionStyle =UITableViewCellSelectionStyleNone;
         projectCell.backgroundColor = [UIColor clearColor];
         
+        [StringUitl setCornerRadius:projectCell.cellContentView withRadius:5.0];
+        [StringUitl setViewBorder:projectCell.cellContentView withColor:@"#cccccc" Width:0.5];
+        
         projectCell.cellTitle.font = TITLE_FONT;
         projectCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
         
@@ -288,12 +291,8 @@
         }
         
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            //改写异步加载图片
-            [projectCell.cellImgView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                                  placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }    
+        [projectCell.cellImgView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+        
         
         
     }

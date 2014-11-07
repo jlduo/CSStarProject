@@ -17,7 +17,7 @@
     NSString *cellTitle;
     
     UITableView *stableView;
-    UIButton *imgBtn;
+    UIImageView *imgBtn;
     UILabel *userLabel;
     
 }
@@ -30,28 +30,25 @@
     
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self showLoading:@"数据初始化中..."];
+    //[self showLoading:@"数据初始化中..."];
     _userProjectNums = [[NSMutableDictionary alloc]init];
     
     CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49-44);
     stableView = [[UITableView alloc] initWithFrame:tframe];
     stableView.delegate = self;
     stableView.dataSource = self;
-    [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    //[StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
     
     //处理头部信息
     [self setHeaderView];
+    [self setFooterView];
     [self.view addSubview:stableView];
     [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[ [UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [stableView setTableFooterView:view];
     
     //处理数据回填
-    [self setImgBtnImage];
-    [self setUserTitle];
+    //[self setImgBtnImage];
+    //[self setUserTitle];
     
 }
 
@@ -73,7 +70,8 @@
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
     [stableView setFrame:temFrame];
     
-    //[StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    [self setImgBtnImage];
+    [self setUserTitle];
     
     
 }
@@ -95,13 +93,11 @@
 -(void)setImgBtnImage{
     
     NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
-    NSRange range = [userLogo rangeOfString:@"upload"];
-    if(range.location==NSNotFound){
-        [imgBtn setBackgroundImage:[UIImage imageNamed:@"avatarbig.png"] forState:UIControlStateNormal];
-    }else{
-        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:userLogo]];
-        [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
-    }
+    NSMutableString *newString = [[NSMutableString alloc]initWithString:userLogo];
+    NSRange srange = [userLogo rangeOfString:@"small_"];
+    [newString replaceCharactersInRange:srange withString:@""];
+    [imgBtn setImageURLStr:newString placeholder:NO_IMG];
+    
 }
 
 -(void)getMyProjectsNums{
@@ -167,19 +163,19 @@
     userLabel.font = main_font(16);
     [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
 }
+
 -(void)setHeaderView{
     
      UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [headView setBackgroundColor:[UIColor grayColor]];
     
-    imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
+    imgBtn = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
-    
-    [self setImgBtnImage];
 
-
-    [imgBtn addTarget:self action:@selector(imgBtnClick) forControlEvents:UIControlEventTouchDown];
+    [imgBtn setMultipleTouchEnabled:YES];
+    [imgBtn setUserInteractionEnabled:YES];
+    [imgBtn addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgBtnClick)]];
     
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"myzonebg.png"]];
     
@@ -187,7 +183,6 @@
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
     userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 100, 120, 100)];
-    [self setUserTitle];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -199,6 +194,26 @@
     stableView.tableHeaderView = headView;
     
 }
+
+-(void)setFooterView{
+    UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
+    [footView setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACK_COLOR]];
+    
+    UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(5, 15, SCREEN_WIDTH-10, 45)];
+    loginOutBtn.layer.cornerRadius = 5.0;
+    loginOutBtn.titleLabel.font = main_font(20);
+    [loginOutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    [loginOutBtn setTitle:@"退出登录" forState:UIControlStateHighlighted];
+    [loginOutBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+    [loginOutBtn setTitleColor:[UIColor grayColor] forState:(UIControlStateHighlighted)];
+    [loginOutBtn setBackgroundColor:[UIColor redColor]];
+    [loginOutBtn addTarget:self action:@selector(userLoginOut) forControlEvents:UIControlEventTouchUpInside];
+    [footView addSubview:loginOutBtn];
+    stableView.tableFooterView = footView;
+    
+}
+
+
 
 -(void)setNavgationBar{
     //处理导航开始
@@ -252,7 +267,7 @@
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return 2;
 }
 
 #pragma mark 设置组高度
@@ -268,17 +283,17 @@
 
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 6;
+    if(section==0){
+       return 5;
+    }else{
+        return 1;
+    }
 }
 
 #pragma mark 计算行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row==5){
-        return 90;
-    }else{
-        return 51;
-    }
+    return 51;
 }
 
 
@@ -289,41 +304,42 @@
     UINib *nibCell = [UINib nibWithNibName:@"UserTableViewCell" bundle:nil];
     [stableView registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
     
-    UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
-    userCell.backgroundColor = [UIColor clearColor];
-    NSString *valKey;
-    switch (indexPath.row) {
-        case 0:
-            valKey = @"talk";
-            cellTitle = @"我的评论";
-            imgName =@"myzone-discuss.png";
-            break;
-        case 1:
-            valKey = @"message";
-            cellTitle = @"我的消息";
-            imgName =@"myzone-message.png";
-            break;
-        case 2:
-            valKey = @"project";
-            cellTitle = @"我的众筹";
-            imgName =@"myzone-zhongchou.png";
-            break;
-        case 3:
-            valKey = @"order";
-            cellTitle = @"我的订单";
-            imgName =@"myzone-order.png";
-            break;
-        case 4:
-            valKey = @"delivery";
-            cellTitle = @"收货地址";
-            imgName =@"myzone-location.png";
-            break;
-            
-        default:
-            break;
-    }
+    if(indexPath.section==0){
+        
+        UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
+        userCell.backgroundColor = [UIColor clearColor];
+        NSString *valKey;
+        switch (indexPath.row) {
+            case 0:
+                valKey = @"talk";
+                cellTitle = @"我的评论";
+                imgName =@"myzone-discuss.png";
+                break;
+            case 1:
+                valKey = @"message";
+                cellTitle = @"我的消息";
+                imgName =@"myzone-message.png";
+                break;
+            case 2:
+                valKey = @"project";
+                cellTitle = @"我的众筹";
+                imgName =@"myzone-zhongchou.png";
+                break;
+            case 3:
+                valKey = @"order";
+                cellTitle = @"我的订单";
+                imgName =@"myzone-order.png";
+                break;
+            case 4:
+                valKey = @"delivery";
+                cellTitle = @"收货地址";
+                imgName =@"myzone-location.png";
+                break;
+                
+            default:
+                break;
+        }
     
-    if(indexPath.row<5){
         cellImg = [UIImage imageNamed:imgName];
         [userCell.cellPic setBackgroundImage:cellImg forState:UIControlStateNormal];
         [userCell.dataTitle setText:cellTitle];
@@ -331,30 +347,28 @@
         userCell.dataTitle.alpha = 0.8f;
         userCell.dataNum.font = main_font(9);
         [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
-//        if(![[_userProjectNums valueForKey:valKey]  isEqualToString:@"0"]){
-//           [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
-//        }else{
-//            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-//            [userCell.tagBgView setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
-//        }
         userCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return userCell;
+
+        
     }else{
         
-        UITableViewCell *newUserCell = [[UITableViewCell alloc]init];
+        UserTableViewCell *newUserCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
         newUserCell.backgroundColor = [UIColor clearColor];
         newUserCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UIButton *loginOutBtn = [[UIButton alloc]initWithFrame:CGRectMake(5, 25, SCREEN_WIDTH-10, 45)];
-        loginOutBtn.layer.cornerRadius = 5.0;
-        loginOutBtn.titleLabel.font = main_font(20);
-        [loginOutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
-        [loginOutBtn setTitle:@"退出登录" forState:UIControlStateHighlighted];
-        [loginOutBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
-        [loginOutBtn setTitleColor:[UIColor grayColor] forState:(UIControlStateHighlighted)];
-        [loginOutBtn setBackgroundColor:[UIColor redColor]];
-        [loginOutBtn addTarget:self action:@selector(userLoginOut) forControlEvents:UIControlEventTouchUpInside];
         
-        [newUserCell addSubview:loginOutBtn];
+        [newUserCell.cellPic setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
+        [newUserCell.tagBgView setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
+        [newUserCell.arrowPic setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
+        [newUserCell.dataTitle setTextColor:[UIColor darkGrayColor]];
+        [newUserCell.dataTitle setText:@"清空缓存数据"];
+        [newUserCell.dataTitle setTextAlignment:NSTextAlignmentCenter];
+        
+        NSString *clearStr = [self getCacheFileSize];
+        if([StringUitl isNotEmpty:clearStr]){
+          [newUserCell.dataTitle setText:[NSString stringWithFormat:@"清空缓存数据(%@)",clearStr]];
+        }
+        
         return newUserCell;
     }
 }
@@ -371,24 +385,58 @@
 //行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    switch (indexPath.row) {
-        case 0:
-            [self goComment];
-            break;
-        case 1:
-            
-            break;
-        case 2:
-            [self goProject];
-            break;
-        case 3:
-            [self goOrder];
-            break;
-        case 4:
-            [self goRecAddress];
-            break;
-        default:
-            break;
+    if (indexPath.section==0) {
+
+        switch (indexPath.row) {
+            case 0:
+                [self goComment];
+                break;
+            case 1:
+                
+                break;
+            case 2:
+                [self goProject];
+                break;
+            case 3:
+                [self goOrder];
+                break;
+            case 4:
+                [self goRecAddress];
+                break;
+            default:
+                break;
+        }
+        
+    }else{
+        [self clearCacheFile];
+    }
+    
+}
+
+-(NSString *)getCacheFileSize{
+    NSString *clearCacheName;
+    float tmpSize = [[SDImageCache sharedImageCache] checkTmpSize];
+    if(tmpSize!=0.0f){
+        clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"%.2fM",tmpSize] : [NSString stringWithFormat:@"%.2fK",tmpSize * 1024];
+        NSLog(@"clearCacheName=%@",clearCacheName);
+    }
+    return clearCacheName;
+}
+
+-(void)clearCacheFile{
+    NSString *clearCacheName;
+    float tmpSize = [[SDImageCache sharedImageCache] checkTmpSize];
+    NSUInteger tmpCount = [[SDImageCache sharedImageCache] getDiskCount];
+    if(tmpSize==0.0f){
+        [self showHint:@"暂无缓存数据!"];
+    }else{
+        clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"清除%d文件共[%.2fM]",tmpCount,tmpSize] : [NSString stringWithFormat:@"清除%d文件共[%.2fK]",tmpCount,tmpSize * 1024];
+        NSLog(@" clearCacheName=%@",clearCacheName);
+        
+        [[SDImageCache sharedImageCache] clearDisk];
+        [[SDImageCache sharedImageCache] clearMemory];
+        [stableView reloadData];
+        [self showHint:clearCacheName];
     }
     
 }

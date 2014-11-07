@@ -10,6 +10,7 @@
 #import "common.h"
 #import "UIImageView+WebCache.h"
 #import "StringUitl.h"
+#import <ShareSDK/ShareSDK.h>
 #import "UIViewController+HUD.h"
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"

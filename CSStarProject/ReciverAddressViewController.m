@@ -71,7 +71,7 @@
 -(void)setFooterView{
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
 
-    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(15, 16, SCREEN_WIDTH-30, 40)];
+    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(10, 16, SCREEN_WIDTH-20, 40)];
     [submitBox setBackgroundColor:[UIColor redColor]];
     [submitBox setTitle:@"添加收货地址" forState:UIControlStateNormal];
     [submitBox setTitle:@"添加收货地址" forState:UIControlStateSelected];
@@ -197,13 +197,12 @@
         reciverCell.reciverAddress.text = [cellDic valueForKey:@"address"];
         reciverCell.phoneNum.text = [cellDic valueForKey:@"phone"];
         
-        reciverCell.editBtn.layer.masksToBounds = YES;
-        reciverCell.editBtn.layer.cornerRadius = 5.0;
+        [StringUitl setCornerRadius:reciverCell.editBtn withRadius:5.0];
         reciverCell.editBtn.tag = indexPath.row;
         [reciverCell.editBtn addTarget:self action:@selector(addAddress:) forControlEvents:UIControlEventTouchDown];
         
-        reciverCell.contentBgView.layer.masksToBounds = YES;
-        reciverCell.contentBgView.layer.cornerRadius = 5.0;
+        [StringUitl setCornerRadius:reciverCell.contentBgView withRadius:5.0];
+        [StringUitl setViewBorder:reciverCell.contentBgView withColor:@"#cccccc" Width:0.5];
         
         reciverCell.checkBtn.tag = indexPath.row;
         [reciverCell.checkBtn addTarget:self action:@selector(checkAddress:) forControlEvents:UIControlEventTouchDown];

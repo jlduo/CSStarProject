@@ -410,7 +410,7 @@
     [descLabel setAlpha:0.7f];
     //3.具体要自适应处理的字符串实例
     NSString *s = [bannerData valueForKey:@"_zhaiyao"];
-    descLabel.text = [NSString stringWithFormat:@"    %@",s];
+    descLabel.text = [NSString stringWithFormat:@"  %@",s];
     //4.获取所要使用的字体实例
     UIFont *font = main_font(16);
     descLabel.font = font;
@@ -419,7 +419,7 @@
     //6.计算UILabel字符显示的实际大小
     CGSize labelsize = [s sizeWithFont:font constrainedToSize:size];
     //7.重设UILabel实例的frame
-    [descLabel setFrame:CGRectMake(0,0, SCREEN_WIDTH, labelsize.height)];
+    [descLabel setFrame:CGRectMake(5,0, SCREEN_WIDTH-10, labelsize.height)];
     descLabel.lineBreakMode = NSLineBreakByWordWrapping;
     [videoDesc setFrame:CGRectMake(5,185, SCREEN_WIDTH, labelsize.height+10)];
     
@@ -530,11 +530,29 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMoviePlayStateCallback:)
                                                  name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:moviePlayer];
-    
+    //添加一个进入全屏状态都通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoStarted:)
+                                                 name:MPMoviePlayerDidEnterFullscreenNotification
+                                               object:moviePlayer];
+    //添加一个退出全屏状态都通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoFinished:)
+                                                 name:MPMoviePlayerWillExitFullscreenNotification
+                                               object:moviePlayer];
     
     
 }
 
+- (void)videoStarted:(NSNotification *)notification {// 开始播放
+    
+    [self changeRation:YES];
+
+}
+
+- (void)videoFinished:(NSNotification *)notification {//完成播放
+    
+     [self changeRation:NO];
+    
+}
 
 -(void)removeNotice:(NSNotification*)notify{
     //视频播放对象
@@ -562,39 +580,25 @@
 -(void)myMoviePlayStateCallback:(NSNotification*)notify{
     
     MPMoviePlayerController *player = notify.object;
-    //NSLog(@"state==%d",player.playbackState);
+    NSLog(@"state==%d",player.playbackState);
     switch (player.playbackState) {
         case MPMoviePlaybackStateStopped:
-            [moviePlayer setFullscreen:NO animated:YES];
-            [moviePlayer setScalingMode:MPMovieScalingModeNone];
             [self setVideoView:TRUE];
-            [self changeRation:NO];
             break;
         case MPMoviePlaybackStatePlaying:
-            
-            if([moviePlayer isFullscreen]){
-                [self changeRation:YES];
-            }else{
-                [self changeRation:NO];
-            }
-            
             [self removeLoadTip];
             [playBtn removeFromSuperview];
             break;
         case MPMoviePlaybackStatePaused:
-            [self changeRation:NO];
-            //[self addLoadTip];
             [self showPlayBtn];
+            //[self addLoadTip];
             break;
         case MPMoviePlaybackStateInterrupted:
-            [self changeRation:NO];
             break;
         case MPMoviePlaybackStateSeekingForward:
-            //[self changeRation:YES];
             NSLog(@"视频快进");
             break;
         case MPMoviePlaybackStateSeekingBackward:
-            //[self changeRation:YES];
             NSLog(@"视频快退");
             break;
         default:
@@ -608,13 +612,9 @@
 {
     [self removeNotice:notify];
     [self setVideoView:YES];
-    [self changeRation:NO];
 }
 
 -(void)playVideo{
-    
-    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
-    appDelegate.isFull = YES;
     
     //NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
     NSString *remoteUrl =  moviePlayer.contentURL.absoluteString;
@@ -631,14 +631,12 @@
     
     
     if([StringUitl isEmpty:remoteUrl]){
-        [self changeRation:NO];
         [self showCAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
         return;
     }
     
     NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
     if(![fileExt isEqualToString:@"mp4"]){
-        [self changeRation:NO];
         [self showCAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
         return;
     }
@@ -646,15 +644,12 @@
     [playBtn removeFromSuperview];
     [videoPic removeFromSuperview];
     [moviePlayer play];
-    [self startTime];
+    //[self startTime];
     
-    if(moviePlayer.playbackState!=0){
         
-        [moviePlayer setFullscreen:YES animated:YES];
-        [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
-        [self changeRation:YES];
-    
-    }
+    [moviePlayer setFullscreen:YES animated:YES];
+    [moviePlayer setScalingMode:MPMovieScalingModeAspectFit];
+    [self changeRation:YES];
 }
 
 
@@ -664,7 +659,6 @@
     [videoPic removeFromSuperview];
     [moviePlayer stop];
     [moviePlayer.view removeFromSuperview];
-    [self changeRation:NO];
     
 }
 
@@ -713,10 +707,22 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[self setNavBarWithTitle:@"美女私房" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:SHARE_ICON]];
     
 }
 
+-(void)goForward{
+    
+    NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
+    [showMsg setObject:@"美女私房视频" forKey:@"showTitle"];
+    [showMsg setObject:@"美女私房视频分享哦！" forKey:@"contentString"];
+    [showMsg setObject:@"http://baidu.com" forKey:@"urlString"];
+    [showMsg setObject:@"很无敌啊！" forKey:@"description"];
+    [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
+    
+    [self showShareAlert:showMsg];
+    
+}
 
 //加载头部刷新
 -(void)setHeaderRereshing{
@@ -770,7 +776,7 @@
     sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:CONTENT_BACK_COLOR]];
     //设置每组的头部图片
     NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
-    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imgName]];
+    UIImageView *imageView = IMG_WITH_NAME(imgName);
     [imageView setFrame:CGRectMake(5, 10, 3, 20)];
     //设置每组的标题
     UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(12, 8, 100, 22)];
@@ -798,7 +804,6 @@
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     
     NSString *bid = [[bannerData valueForKey:@"_id"] stringValue];
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
@@ -832,17 +837,8 @@
     
     
     NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
-    NSRange range = [imgUrl rangeOfString:@"/upload/"];
-    if(range.location!=NSNotFound){//判断加载远程图像
-//        UIImage *videImg =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-//        [videoCell.videoPic setBackgroundImage:videImg forState:UIControlStateNormal];
-        
-        //videoCell.videoPic.imageURL = imgUrl;
-        //改写异步加载图片
-        [videoCell.videoPic sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                  placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRefreshCached];
-        
-    }
+    //改写异步加载图片
+    [videoCell.videoPic md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     
     videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
     videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];

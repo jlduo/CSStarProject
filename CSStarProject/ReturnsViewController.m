@@ -12,6 +12,8 @@
     UITableView *returnsTableView;
     NSDictionary *cellDic;
     NSString *dataId;
+    
+    int target_id;
 }
 
 @end
@@ -120,24 +122,25 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-     PeopleReturnCell *peopelCell = [tableView dequeueReusableCellWithIdentifier:@"ReturnCell"];
-    if (peopelCell == nil) {
-        NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"PeopleReturnCell" owner:self options:nil] ;
-        peopelCell = [nib objectAtIndex:0];
-    }
-    NSDictionary *dicReturn = [_peopleReturnList  objectAtIndex:indexPath.row];
-    NSString *returnContent = [dicReturn valueForKey:@"description"];
-    
-    //评论内容自适应
-    UIFont *font = [UIFont systemFontOfSize:12];
-    CGSize size = CGSizeMake(peopelCell.descText.frame.size.width,2000);
-    CGSize labelsize = [returnContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
-    
-    if (labelsize.height > 20) {
-        return  100 + labelsize.height;
-    }else{
-        return 170;
-    }
+//     PeopleReturnCell *peopelCell = [tableView dequeueReusableCellWithIdentifier:@"ReturnCell"];
+//    if (peopelCell == nil) {
+//        NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"PeopleReturnCell" owner:self options:nil] ;
+//        peopelCell = [nib objectAtIndex:0];
+//    }
+//    NSDictionary *dicReturn = [_peopleReturnList  objectAtIndex:indexPath.row];
+//    NSString *returnContent = [dicReturn valueForKey:@"description"];
+//    
+//    //评论内容自适应
+//    UIFont *font = [UIFont systemFontOfSize:12];
+//    CGSize size = CGSizeMake(peopelCell.descText.frame.size.width,2000);
+//    CGSize labelsize = [returnContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+//    
+//    if (labelsize.height > 20) {
+//        return  140 + labelsize.height;
+//    }else{
+//        return 170;
+//    }
+    return 170;
     
 }
 
@@ -166,7 +169,7 @@
             persons = @"0";
         }
         
-        peopelCell.supportNum.font = main_font(12);;
+        peopelCell.supportNum.font = main_font(12);
         peopelCell.supportNum.text = [NSString stringWithFormat:@"%@人支持",persons];
         peopelCell.descText.text = [cellDic valueForKey:@"description"];
         peopelCell.descText.font = DESC_FONT;
@@ -178,8 +181,16 @@
         [peopelCell.saveBtn setTag:indexPath.row];
         [peopelCell.saveBtn addTarget:self action:@selector(goOrderInfo:) forControlEvents:UIControlEventTouchDown];
         
+        
+//        UIButton *textBtn = [[UIButton alloc]initWithFrame:peopelCell.descText.frame];
+//        [textBtn setTag:indexPath.row];
+//        textBtn.backgroundColor = [UIColor clearColor];
+//        [textBtn addTarget:self action:@selector(goOrderInfo:) forControlEvents:UIControlEventTouchDown];
+//        [peopelCell addSubview:textBtn];
+        
         if(indexPath.row%2==1){
             peopelCell.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+            peopelCell.descText.backgroundColor = [UIColor clearColor];
         }else{
             peopelCell.backgroundColor = [UIColor whiteColor];
         }
@@ -196,6 +207,17 @@
     [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:sender.tag]];
     [self.navigationController pushViewController:orderController animated:YES];
 }
+         
+         
+-(void)goOrderInfo1:(UITapGestureRecognizer *)gester{
+ NSLog(@"gester.view.tag==%d",gester.view.tag);
+ OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
+ passValelegate = orderController;
+ [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:gester.view.tag]];
+ [self.navigationController pushViewController:orderController animated:YES];
+}
+         
+         
 
 
 @end

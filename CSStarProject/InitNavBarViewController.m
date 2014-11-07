@@ -47,7 +47,7 @@
                            UITextAttributeTextColor : [UIColor darkGrayColor],
                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetZero]
                            };
-    [barItem setTitleTextAttributes:dict forState:UIControlStateNormal];
+    [barItem setTitleTextAttributes:dict forState:UIControlStateNormal]; 
     [barItem setTitleTextAttributes:dict forState:UIControlStateHighlighted];
     
     // 5.设置状态栏样式

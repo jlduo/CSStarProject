@@ -453,10 +453,7 @@
 -(NSString *)getFileExtName:(NSString *)fileName{
     
     NSArray * rslt = [fileName componentsSeparatedByString:@"."];
-    if ([rslt count]!=2) {
-        return nil;
-    }
-    return  [rslt objectAtIndex:1];
+    return  [rslt lastObject];
 }
 
 - (void)uploadFinished:(ASIHTTPRequest *)req
@@ -480,8 +477,9 @@
             [tempStr replaceCharactersInRange:range withString:@""];
             
             [StringUitl setSessionVal:tempStr withKey:USER_LOGO];
-            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:tempStr]];
-            bigCell.bigCellPic.image = [UIImage imageWithData:imgData];
+//            UIImageView *btnImgView = [[UIImageView alloc]init];
+//            [btnImgView md_setImageWithURL:tempStr placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+//            bigCell.bigCellPic.image = btnImgView.image;
         }
 
         [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
@@ -593,8 +591,15 @@
             if(range.location==NSNotFound){
                 cellImg = [UIImage imageNamed:@"avatarbig.png"];
             }else{
-                NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[StringUitl getSessionVal:USER_LOGO]]];
-                cellImg = [UIImage imageWithData:imgData];
+                
+                NSMutableString *newString = [[NSMutableString alloc]initWithString:userLogo];
+                NSRange srange = [userLogo rangeOfString:@"small_"];
+                [newString replaceCharactersInRange:srange withString:@""];
+                
+                UIImageView *btnImgView = [[UIImageView alloc]init];
+                [btnImgView md_setImageWithURL:newString placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+                cellImg = btnImgView.image;
+                
             }
             [bigCell.bigCellPic setImage:cellImg];
             

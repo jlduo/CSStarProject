@@ -44,58 +44,19 @@
     
     UIImageView *firstImageView = [[UIImageView alloc]initWithFrame:fitRect];
     
-//    NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr lastObject]]];
-//    if(imgData==nil){
-//        firstImageView.image = [UIImage imageNamed:NOIMG_ICON];
-//    }else{
-//        firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
-//    }
-    [firstImageView sd_setImageWithURL:[NSURL URLWithString:[sourceArr lastObject]]
-              placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-    //firstImageView.image = [UIImage imageNamed:[sourceArr lastObject]];
+    [firstImageView md_setImageWithURL:[sourceArr lastObject] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     [self.scrollView addSubview:firstImageView];
     
-    NSString *imgUrl;
     for (int i = 0; i < sourceArr.count; i++) {
-          UIImageView *imageview = [[UIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
-//        LASIImageView *imageview = [[LASIImageView alloc]initWithFrame:CGRectMake(width*(i+1), 0, width, height)];
-//        LRequestSettings *reqSettings = [LRequestSettings new];
-//        reqSettings.secondsToCache = 20;
-//        LProgressAppearance *progressAppearance = [LProgressAppearance new];
-//        progressAppearance.schemeColor = [UIColor blueColor];
         
-        imgUrl = [sourceArr objectAtIndex:i];
-        NSRange range = [imgUrl rangeOfString:@"http"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-//            imageview.requestSettings = reqSettings;
-//            imageview.progressAppearance = progressAppearance;
-//            imageview.imageUrl = [sourceArr objectAtIndex:i];
-            
-//            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]];
-//            if(imgData==nil){
-//                imageview.image = [UIImage imageNamed:NOIMG_ICON];
-//            }
-            
-            [imageview sd_setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:i]]
-                               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }else{
-            imageview.image = [UIImage imageNamed:[sourceArr objectAtIndex:i]];
-        }
-        
+        UIImageView *imageview = CGIMAG(width*(i+1), 0, width, height);
+        [imageview md_setImageWithURL:[sourceArr objectAtIndex:i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         [self.scrollView addSubview:imageview];
+        
     }
     
-    UIImageView *lastImageView = [[UIImageView alloc]initWithFrame:CGRectMake(width*(sourceArr.count+1), 0, width, height)];
-    imgUrl = [sourceArr objectAtIndex:0];
-    NSData *imgDatas = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]];
-    NSRange range = [imgUrl rangeOfString:@"http"];
-    if(range.location!=NSNotFound && imgDatas!=nil){//判断加载远程图像
-        [lastImageView sd_setImageWithURL:[NSURL URLWithString:[sourceArr objectAtIndex:0]]
-                  placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-
-    }else{
-        lastImageView.image = [UIImage imageNamed:[sourceArr objectAtIndex:0]];
-    }
+    UIImageView *lastImageView = CGIMAG(width*(sourceArr.count+1), 0, width, height);
+    [lastImageView md_setImageWithURL:[sourceArr objectAtIndex:0] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     
     [self.scrollView addSubview:lastImageView];
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];

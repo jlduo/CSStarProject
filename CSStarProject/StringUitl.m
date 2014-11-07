@@ -108,12 +108,15 @@
 //设置用户信息
 +(void)setSessionVal:(NSString*)val withKey:(NSString *)key{
     [[NSUserDefaults standardUserDefaults]setValue:val forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     NSLog(@"设置【%@=%@】成功",key,val);
 }
 
 //读取用户信息
 +(NSString *)getSessionVal:(NSString*)key{ 
     NSString *val = [[NSString alloc] initWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:key]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     NSLog(@"获取%@的值为:%@",key,val);
     return val;
 }
@@ -130,15 +133,17 @@
 
 +(void)clearUserInfo{
     NSLog(@"清空用户信息成功.....");
-    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_ID];
-    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_NAME];
-    [StringUitl setSessionVal:Nil withKey:LOGIN_USER_PSWD];
-    [StringUitl setSessionVal:Nil withKey:USER_IS_LOGINED];
-    [StringUitl setSessionVal:Nil withKey:PROVINCE_ID];
-    [StringUitl setSessionVal:Nil withKey:CITY_ID];
-    [StringUitl setSessionVal:Nil withKey:USER_LOGO];
-    [StringUitl setSessionVal:Nil withKey:USER_NICK_NAME];
-    [StringUitl setSessionVal:Nil withKey:USER_SEX];
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:LOGIN_USER_ID];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:LOGIN_USER_NAME];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:LOGIN_USER_PSWD];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_IS_LOGINED];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:CITY_ID];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_LOGO];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_NICK_NAME];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_SEX];
+    
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 //判断字符串为空
@@ -256,7 +261,7 @@
 +(NSString *)getFileExtName:(NSString *)fileName{
     
     NSArray * rslt = [fileName componentsSeparatedByString:@"."];
-    return  [rslt objectAtIndex:[rslt count]-1];
+    return  [rslt lastObject];
 }
 
 +(void)setCornerRadius:(UIView *)cview withRadius:(CGFloat)radius{

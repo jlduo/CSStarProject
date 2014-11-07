@@ -12,16 +12,19 @@
     
     FFScrollView *scrollView;
     NSArray *sourceArray;
+    NSArray *projectsArray;
     NSArray *slideArr;
     NSArray *commonArr;
     NSDictionary *cellDic;
+    MarqueeLabel *titleLabel;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
-    
-    NSInteger selectedCount;
+    UIView *filterBgView;
+    UIScrollView *photoScroll;
     XHFriendlyLoadingView *friendlyLoadingView;
     
+    int showflag;
 }
 
 @end
@@ -47,8 +50,8 @@
     _peopleTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
     //集成刷新控件
-//    [self setHeaderRereshing];
-//    [self setFooterRereshing];
+    [self setHeaderRereshing];
+    [self setFooterRereshing];
     
    
 }
@@ -59,6 +62,8 @@
     slideArr = nil;
     commonArr = nil;
     scrollView = nil;
+    filterBgView = nil;
+    photoScroll = nil;
     friendlyLoadingView = nil;
 }
 
@@ -68,7 +73,7 @@
     }
     __weak typeof(self) weakSelf = self;
     friendlyLoadingView.reloadButtonClickedCompleted = ^(UIButton *sender) {
-        [weakSelf loadTableList];
+        [weakSelf setTableData];
     };
     
     [self.view addSubview:friendlyLoadingView];
@@ -81,19 +86,181 @@
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        selectedCount ++;
-        if (selectedCount == 3) {
-            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
-        } else {
-            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
-        }
+        [friendlyLoadingView showReloadViewWithText:@"请点击刷新.."];
     });
+}
+
+//初始化过来条件层
+-(void)initFilterView{
+    
+    UILabel *ptitle;
+    UIButton *imgbtn;
+    UIView *imgBgView;
+    UIImageView *imageView;
+    
+    filterBgView = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH,64, SCREEN_WIDTH, 75)];
+    filterBgView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    [StringUitl setViewBorder:filterBgView withColor:@"#cccccc" Width:0.5];
+    //处理全部按钮
+    imgBgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 75)];
+    [StringUitl setViewBorder:imgBgView withColor:@"#cccccc" Width:0.5];
+    
+    imageView = CGIMAG(20, 10, 40, 40);
+    imageView.userInteractionEnabled = YES;
+    [imageView setImage:CG_IMG(@"category-all.png")];
+    
+    [imgBgView addSubview:imageView];
+    
+    ptitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 35, 80, 40)];
+    ptitle.text = @"所有";
+    ptitle.font = main_font(12);
+    ptitle.textColor = [UIColor grayColor];
+    ptitle.textAlignment = NSTextAlignmentCenter;
+    [imgBgView addSubview:ptitle];
+    
+    [filterBgView addSubview:imgBgView];
+    
+    imgbtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 80, 75)];
+    [imgbtn setBackgroundColor:[UIColor clearColor]];
+    imgbtn.tag = -1;
+    [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [filterBgView addSubview:imgbtn];
+
+    
+    photoScroll = [[UIScrollView alloc]initWithFrame:CGRectMake(80, 0, SCREEN_WIDTH-80, 75)];
+    if(projectsArray!=nil && projectsArray.count>0){
+        
+        [photoScroll setContentSize:CGSizeMake((projectsArray.count)*80, 75)];
+        [photoScroll setShowsHorizontalScrollIndicator:NO];
+        [photoScroll setBackgroundColor:[StringUitl colorWithHexString:@"#FFFFFF"]];
+        [photoScroll setShowsVerticalScrollIndicator:NO];
+        
+        
+        NSMutableDictionary *picDic;
+        int len = projectsArray.count;
+        for(int i=len;i>0;i--){
+            
+            picDic = (NSMutableDictionary *)[projectsArray objectAtIndex:(i-1)];
+            imgBgView = [[UIView alloc]initWithFrame:CGRectMake(-80*(i-len), 0, 80, 75)];
+            [StringUitl setViewBorder:imgBgView withColor:@"#F5F5F5" Width:0.5];
+            imageView = CGIMAG(15, 15, 50, 30);
+            imageView.userInteractionEnabled = YES;
+            [imageView md_setImageWithURL:[picDic valueForKey:@"imageUrl"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+            
+            [imgBgView addSubview:imageView];
+            
+            ptitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 35, 80, 40)];
+            ptitle.text = [picDic valueForKey:@"catName"];
+            ptitle.font = main_font(12);
+            ptitle.textColor = [UIColor grayColor];
+            ptitle.textAlignment = NSTextAlignmentCenter;
+            [imgBgView addSubview:ptitle];
+            
+            [photoScroll addSubview:imgBgView];
+            
+            imgbtn = [[UIButton alloc]initWithFrame:CGRectMake(-80*(i-len), 0, 80, 75)];
+            [imgbtn setBackgroundColor:[UIColor clearColor]];
+            imgbtn.tag = [[picDic valueForKey:@"id"] intValue];
+            [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [photoScroll addSubview:imgbtn];
+            
+        }
+        
+    }
+    
+    [filterBgView addSubview:photoScroll];
+    [self.view addSubview:filterBgView];
+    
+}
+
+-(void)imgBtnClick:(UIButton *)sender{
+    
+    if([StringUitl checkLogin]==TRUE){
+        NSLog(@"tag==%d",sender.tag);
+        PeopleFilterProjectController *peopleFilterController =[[PeopleFilterProjectController alloc]init];
+        passValelegate = peopleFilterController;
+        [passValelegate passValue:[NSString stringWithFormat:@"%d",sender.tag]];
+        [self.navigationController pushViewController:peopleFilterController animated:YES];
+    }else{
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
+    
+    
+
+}
+
+-(void)setNavgationBar{
+    //处理导航开始
+    self.navigationController.navigationBarHidden = YES;
+    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAV_TITLE_HEIGHT+20)];
+    [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
+    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
+    //处理标题
+    UIView *centerView = [[UIView alloc]initWithFrame:CGRectMake(0, 5, 160, 44)];
+    UILabel *titleLabels =[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 44)];
+    [titleLabels setText:@"活动众筹"];
+    titleLabels.font = BANNER_FONT;
+    [titleLabels setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
+    [titleLabels setTextAlignment:NSTextAlignmentCenter];
+    [titleLabels setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
+    [centerView addSubview:titleLabels];
+    
+    UIButton *cbtn = [[UIButton alloc]initWithFrame:CGRectMake(120, 10, 32, 24)];
+    [cbtn setImage:CG_IMG(@"btncategory.png") forState:UIControlStateNormal];
+    [cbtn addTarget:self action:@selector(showFilterView:) forControlEvents:UIControlEventTouchUpInside];
+    [centerView addSubview:cbtn];
+    
+    //设置右侧按钮
+    UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
+    [rbtn setTintColor:[UIColor whiteColor]];
+    [rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
+    [rbtn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
+    
+    navItem.titleView = centerView;
+    navItem.rightBarButtonItem = rightBtnItem;
+    [navgationBar pushNavigationItem:navItem animated:YES];
+    
+    [self.view addSubview:navgationBar];
+    
+}
+
+-(void)goForward{
+    if([StringUitl checkLogin]==TRUE){
+        UserViewController *userView = [[UserViewController alloc] init];
+        [self.navigationController pushViewController:userView animated:YES];
+    }else{
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
+    
+}
+
+-(void)showFilterView:(UIButton *)sender{
+    
+    [UIView animateWithDuration:0.35 animations:^{
+        NSLog(@"y===%f",filterBgView.frame.origin.x);
+        CGPoint tempCenter = filterBgView.center;
+        if (filterBgView.frame.origin.x == SCREEN_WIDTH) {
+            tempCenter.x -= filterBgView.bounds.size.width;
+        } else {
+            tempCenter.x += filterBgView.bounds.size.width;
+        }
+        filterBgView.center = tempCenter;
+        
+    }];
+    
 }
 
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"活动众筹" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:nil]];
+    [self setNavgationBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -158,18 +325,32 @@
     int tag =  tap.view.tag;
     NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
     if(slideDic!=nil){
-        NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
-        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-        passValelegate = deatilViewController;
-        [passValelegate passValue:projectId];
-        [self.navigationController pushViewController:deatilViewController animated:YES];
+        
+        if([StringUitl checkLogin]==TRUE){
+            NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
+            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            passValelegate = deatilViewController;
+            [passValelegate passValue:projectId];
+            [self.navigationController pushViewController:deatilViewController animated:YES];
+        }else{
+            [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+            LoginViewController *loginView = [[LoginViewController alloc] init];
+            [self.navigationController pushViewController:loginView animated:YES];
+        }
+        
     }
     
 }
 
 -(void)setTableData{
+    [self loadProjectCats];
     [self loadSliderPic];
     [self loadTableList];
+}
+
+-(void)loadProjectCats{
+    NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,GET_PROJECT_CATS];
+    [self requestDataByUrl:url withType:0];
 }
 
 -(void)loadSliderPic{
@@ -204,14 +385,18 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
-    [self hideHud];
+
     NSData *respData = [request responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSLog(@"jsonDic->%@",jsonDic);
+    //NSLog(@"jsonDic->%@",jsonDic);
     commonArr = (NSArray *)jsonDic;
     if(commonArr!=nil && commonArr.count>0){
         
         switch (request.tag) {
+            case 0:
+                projectsArray = commonArr;
+                [self initFilterView];
+                break;
             case 1:
                 sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgUrl"]];
                 slideArr = commonArr;
@@ -230,28 +415,23 @@
         [_peopleTableView reloadData];
         
     }
+    
+    showflag++;
+    if (showflag==3) {
+        [friendlyLoadingView removeFromSuperview];
+    }
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
+    showflag=0;
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     [self initLoading];
-    [self setHeaderRereshing];
     [self showLoading];
-    //[self setFooterRereshing];
+    
     
 }
-
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [friendlyLoadingView removeFromSuperview];
-        });
-    }
-}
-
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -302,13 +482,7 @@
         peopelCell.backgroundColor = [UIColor clearColor];
 
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
-        //NSLog(@"imgurl==%@",imgUrl);
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            //改写异步加载图片
-            [peopelCell.bigCellImg sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }
+        [peopelCell.bigCellImg md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
         NSString *stateName;
         NSString *tagPicName;
@@ -333,7 +507,13 @@
         
         peopelCell.tagTitle.font = main_font(14);
         peopelCell.cellTitle.font = main_font(14);
-        peopelCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
+        peopelCell.cellTitle.text = @"";
+        
+        titleLabel = [[MarqueeLabel alloc] initWithFrame:peopelCell.cellTitle.frame duration:10.0 andFadeLength:10.0f];
+        titleLabel.text = [cellDic valueForKey:@"projectName"];
+        titleLabel.textColor = [UIColor blackColor];
+        [peopelCell addSubview:titleLabel];
+        
         NSString *days =[cellDic valueForKey:@"days"];
         NSString *money = [NSString stringWithFormat:@"%0.1f",[[cellDic valueForKey:@"amount"] doubleValue]];
         NSString *smoney = [NSString stringWithFormat:@"%0.1f",[[cellDic valueForKey:@"totalamount"] doubleValue]];
@@ -410,8 +590,7 @@
 - (UIImage *)imageFromImage:(UIImage *)image inRect:(CGRect)rect {
     CGImageRef sourceImageRef = [image CGImage];
     CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
-    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-    return newImage;
+    return [UIImage imageWithCGImage:newImageRef];
 }
 
 @end

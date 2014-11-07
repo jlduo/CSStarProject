@@ -34,14 +34,22 @@
         self.returnText.frame = CGRectMake(self.returnText.frame.origin.x,
                                          self.returnText.frame.origin.y,
                                          self.returnText.frame.size.width,
-                                         labelsize.height);
+                                         labelsize.height+20);
         
         CGRect tempFrame = CGRectMake(self.descText.frame.origin.x,
-                                      self.descText.frame.origin.y+labelsize.height-55,
+                                      self.descText.frame.origin.y+labelsize.height-45,
                                       self.descText.frame.size.width,
                                       self.descText.frame.size.height);
         [self.descText setFrame:tempFrame];
         
+    }else{
+  
+        
+        CGRect tempFrame = CGRectMake(self.descText.frame.origin.x,
+                                      self.descText.frame.origin.y-30,
+                                      self.descText.frame.size.width,
+                                      self.descText.frame.size.height);
+        [self.descText setFrame:tempFrame];
     }
 }
 

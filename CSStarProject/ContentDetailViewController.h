@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MarqueeLabel.h"
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
 
-@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate>
+@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
 
 
 #pragma mark 活动众筹数据

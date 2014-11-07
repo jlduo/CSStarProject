@@ -62,7 +62,7 @@
 
 -(void)initLoadData{
     //计算高度
-    CGRect tframe = CGRectMake(0, 100, SCREEN_WIDTH,MAIN_FRAME_H-44);
+    CGRect tframe = CGRectMake(0, 100, SCREEN_WIDTH,MAIN_FRAME_H-44-49);
     
     proListTableView = [[UITableView alloc] initWithFrame:tframe];
     proListTableView.delegate = self;
@@ -324,6 +324,10 @@
         
         projectCell.selectionStyle =UITableViewCellSelectionStyleNone;
         projectCell.backgroundColor = [UIColor clearColor];
+        
+        
+        [StringUitl setCornerRadius:projectCell.cellContentView withRadius:5.0];
+        [StringUitl setViewBorder:projectCell.cellContentView withColor:@"#cccccc" Width:0.5];
         
         projectCell.cellTitle.font = TITLE_FONT;
         projectCell.cellTitle.text = [cellDic valueForKey:@"projectName"];

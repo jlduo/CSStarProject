@@ -40,7 +40,7 @@
     
     _reloadButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     self.reloadButton.alpha = 0.;
-    [self.reloadButton setBackgroundImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
+    [self.reloadButton setBackgroundImage:[UIImage imageNamed:@"nonetwork@2x.png"] forState:UIControlStateNormal];
     [self.reloadButton addTarget:self action:@selector(reloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     
@@ -183,7 +183,7 @@
     [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.activityIndicatorView.alpha = 0.;
         self.reloadButton.alpha = 1.;
-        self.loadingLabel.alpha = 1.;
+        self.loadingLabel.alpha = 0.6;
     } completion:^(BOOL finished) {
         
     }];

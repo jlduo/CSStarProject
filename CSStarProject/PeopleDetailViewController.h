@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MarqueeLabel.h"
 #import "CommonViewController.h"
 #import "PeopleTableDetailCell.h"
 #import "PeopleCenterCell.h"

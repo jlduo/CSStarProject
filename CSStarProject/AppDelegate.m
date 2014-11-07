@@ -64,8 +64,99 @@
 //    hostReach = [Reachability reachabilityWithHostName:@"http://i.0731zhongchou.com"];
 //    [hostReach startNotifier];
     
+    
+    [ShareSDK registerApp:@"40014af2ac66"];
+    
+    //添加微信应用 注册网址 http://open.weixin.qq.com
+    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+                           wechatCls:[WXApi class]];
+    
+    //添加新浪微博应用 注册网址 http://open.weibo.com
+    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
+                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                             redirectUri:@"http://www.sharesdk.cn"];
+    
+    //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
+    [ShareSDK  connectSinaWeiboWithAppKey:@"568898243"
+                                appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                              redirectUri:@"http://www.sharesdk.cn"
+                              weiboSDKCls:[WeiboSDK class]];
+    
+    //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
+    [ShareSDK connectQZoneWithAppKey:@"100371282"
+                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
+                   qqApiInterfaceCls:[QQApiInterface class]
+                     tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加QQ应用  注册网址  http://open.qq.com/
+    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
+                     qqApiInterfaceCls:[QQApiInterface class]
+                       tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加腾讯微博应用 注册网址 http://dev.t.qq.com
+    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
+                                  appSecret:@"2f4c933e889ff93a61adaa2d5d76ecd8"
+                                redirectUri:@"http://www.sharesdk.cn"];
+    
+    [ShareSDK ssoEnabled:NO];
+    
+    
+    //重新加载本地数据
+    [self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    
     return YES;
 }
+
+//获取用户信息
+-(void)loadUserInfo:(NSString *)userName{
+    if([StringUitl isNotEmpty:userName]){
+        
+        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
+        [ASIHTTPRequest setSessionCookies:nil];
+        
+        [request setUseCookiePersistence:YES];
+        [request setDelegate:self];
+        [request setRequestMethod:@"GET"];
+        [request setStringEncoding:NSUTF8StringEncoding];
+        [request startAsynchronous];
+        
+        [request setDidFailSelector:@selector(requestLoginFailed:)];
+        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
+        
+    }
+}
+
+- (void)getUserInfoFinished:(ASIHTTPRequest *)req
+{
+    
+    //NSLog(@"getUserInfo->%@",[req responseString]);
+    NSData *respData = [req responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+        [StringUitl clearUserInfo];
+    }
+    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+        
+        //存储用户信息
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        
+    }
+    
+}
+
+- (void)requestLoginFailed:(ASIHTTPRequest *)req
+{
+    
+    NSLog(@"初始化用户数据失败.....!");
+}
+
+
 
 - (void)reachabilityChanged:(NSNotification *)note {
     Reachability *curReach = [note object];

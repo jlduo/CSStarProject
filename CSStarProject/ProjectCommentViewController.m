@@ -45,6 +45,7 @@
     if(IOS_VERSION>=7.0){
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
+
     [self initHeadView];
     [self initLoadData];
     [self initToolBar];
@@ -264,6 +265,8 @@
                 [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
                 return;
             }
+        }else{
+            commentId = nil;
         }
         
         //提交评论
@@ -323,7 +326,7 @@
         
         lblClickComment.text = [[NSString alloc] initWithFormat:@"%d评论",_proCommentList.count];
     }else{
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
 }
 
@@ -351,8 +354,10 @@
     ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_TALKS_URL,dataId];
     NSArray *returnArr = (NSArray *)[convertJson requestData:url];
-    if(returnArr!=nil && returnArr.count>0){
-        _proCommentList = [NSMutableArray arrayWithArray:returnArr];
+    if([returnArr isKindOfClass:[NSArray class]]){
+        if(returnArr!=nil && returnArr.count>0){
+            _proCommentList = [[NSMutableArray alloc]initWithArray:returnArr];
+        }
     }
     //NSLog(@"_proCommentList====%@",_proCommentList);
     
@@ -469,12 +474,8 @@
 
         NSString *imgUrl =[cellDic valueForKey:@"avatar"];
         if(![imgUrl isEqual:[NSNull null]]){
-            NSRange range = [imgUrl rangeOfString:@"/upload/"];
-            if(range.location!=NSNotFound){//判断加载远程图像
-                //改写异步加载图片
-                [projectCommCell.userIconView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                                        placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-            }
+            //改写异步加载图片
+            [projectCommCell.userIconView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         }
         //给回复按钮添加事件
          projectCommCell.replyBtn.tag = indexPath.row;

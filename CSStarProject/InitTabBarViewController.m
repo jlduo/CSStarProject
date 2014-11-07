@@ -84,20 +84,32 @@
 - (void)changeViewController:(UIButton *)sender
 {
     
-    if([StringUitl checkLogin]){
-         self.selectedIndex = sender.tag;
-         [UIView animateWithDuration:0.2 animations:^{
-             _selectView.frame = CGRectMake(sender.tag*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-         }];
+    if(sender.tag==0){
+        
+        self.selectedIndex = 0;
+        [UIView animateWithDuration:0.2 animations:^{
+            _selectView.frame = CGRectMake(0, 0, BTN_WIDTH, BTN_HEIGHT);
+        }];
         
     }else{
-        if(sender.tag!=0){
-            LoginViewController *loginView = [[LoginViewController alloc]init];
-            [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
-            //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
-            [self presentViewController:loginView animated:YES completion:nil];
+        
+        if([StringUitl checkLogin]){
+            self.selectedIndex = sender.tag;
+            [UIView animateWithDuration:0.2 animations:^{
+                _selectView.frame = CGRectMake(sender.tag*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+            }];
+            
+        }else{
+            if(sender.tag!=0){
+                LoginViewController *loginView = [[LoginViewController alloc]init];
+                [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+                //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
+                [self presentViewController:loginView animated:YES completion:nil];
+            }
         }
+        
     }
+    
 }
 
 

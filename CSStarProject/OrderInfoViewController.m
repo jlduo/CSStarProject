@@ -296,7 +296,7 @@
     [request setPostValue:returnId forKey:@"returnId"];
     [request setPostValue:ismianfei forKey:@"ismianfei"];
     [request setPostValue:beizhu forKey:@"beizhu"];
-    if([StringUitl isEmpty:addressId] && checkBox.tag==99){
+    if([StringUitl isNotEmpty:addressId] && checkBox.tag==99){
        [request setPostValue:addressId forKey:@"deliveryId"];
     }
     [request setPostValue:snum forKey:@"qty"];
@@ -378,18 +378,17 @@
         }
         
         NSString *returnContent = [self.orderInfoData valueForKey:@"description"];
-        UIFont *font = [UIFont systemFontOfSize:12];
-        CGSize size = CGSizeMake(returnCell.returnText.frame.size.width,2000);
-        CGSize labelsize = [returnContent sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+        returnCell.returnText.text = returnContent;
+        returnCell.returnText.font = main_font(12);
+        CGSize labelsize = [returnCell.returnText contentSize];
         if(labelsize.height>20){
-            return 20 +labelsize.height;
+           return 23 +labelsize.height;
         }else{
-            return 80;
+           return 50;
         }
         
     }else{
-        
-    return 80;
+     return 80;
     }
 }
 
@@ -477,6 +476,15 @@
         
         returnCell.returnText.font = main_font(12);
         returnCell.returnText.text = [cellDic valueForKey:@"description"];
+        
+            
+//        CGSize labelsize = [returnCell.returnText contentSize];
+//        CGRect tempFrame = returnCell.returnText.frame;
+//        CGRect tempFrame1 = returnCell.returnText.frame;
+//        tempFrame.size.height =labelsize.height+20;
+//        tempFrame.origin.y =labelsize.height+tempFrame.origin.y;
+//        [returnCell.returnText setFrame:tempFrame];
+//        [returnCell.descText setFrame:tempFrame1];
         
         return returnCell;
         

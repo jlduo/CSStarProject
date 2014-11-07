@@ -27,9 +27,9 @@
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
-    
-    NSInteger selectedCount;
     XHFriendlyLoadingView *friendlyLoadingView;
+    
+    int showflag;
 }
 
 @end
@@ -48,6 +48,9 @@
     //[self showLoading:@"加载中，请稍后..."];
     [self initLoading];
     [self initLoadData];
+    
+    [self setHeaderRereshing];
+    [self setFooterRereshing];
 }
 
 -(void)dealloc{
@@ -86,12 +89,9 @@
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        selectedCount ++;
-        if (selectedCount == 3) {
-            [friendlyLoadingView showFriendlyLoadingViewWithText:@"重新加载失败，请检查网络。" loadingAnimated:NO];
-        } else {
-            [friendlyLoadingView showReloadViewWithText:@"加载失败，请点击刷新。"];
-        }
+
+       [friendlyLoadingView showReloadViewWithText:@"请点击刷新.."];
+        
     });
 }
 
@@ -110,7 +110,7 @@
 -(void)initScroll{
 
     scrollView = [[FFScrollView alloc]initPageViewWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 180) views:sourceArray];
-    NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
+    //NSLog(@"subviws==%d",[[scrollView scrollView] subviews].count);
     
     NSArray *varr = [[scrollView scrollView] subviews];
     for (int i=0; i<varr.count; i++) {
@@ -297,7 +297,7 @@
     [self hideHud];
     NSData *respData = [request responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSLog(@"jsonDic->%@",jsonDic);
+    //NSLog(@"jsonDic->%@",jsonDic);
     commonArr = (NSArray *)jsonDic;
     if(commonArr!=nil && commonArr.count>0){
     
@@ -323,8 +323,10 @@
                     photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
                     photo.caption = [dic valueForKey:@"_remark"];
                     [imageArr addObject:photo];
+                    photo = nil;
                 }
                 [self goPhotoView:imageArr];
+                imageArr = nil;
 
                 break;
             default:
@@ -332,12 +334,14 @@
         }
         
         
-        [self setHeaderRereshing];
-        [self setFooterRereshing];
         _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
         [_homeTableView reloadData];
-        //[friendlyLoadingView removeFromSuperview];
+        showflag++;
+        if (showflag==4) {
+            [friendlyLoadingView removeFromSuperview];
+        }
     }
+    
 }
 
 -(void)goPhotoView:(NSMutableArray *)arr{
@@ -376,14 +380,11 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
+    showflag = 0;
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     [self initLoading];
-    //[self hideHud];
-    //[self showCAlert:@"加载失败,请检查网络连接!" widthType:ERROR_LOGO];
-    [self setHeaderRereshing];
     [self showLoading];
-    //[self setFooterRereshing];
     
 }
 
@@ -447,7 +448,7 @@
     sectionHeadView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     //设置每组的头部图片
     NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
-    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imgName]];
+    UIImageView *imageView = IMG_WITH_NAME(imgName);
     [imageView setFrame:CGRectMake(5, 6, 3, 20)];
     //设置每组的标题
     UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 30)];
@@ -459,14 +460,6 @@
 
     
     return sectionHeadView;
-}
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [friendlyLoadingView removeFromSuperview];
-        });
-    }
 }
 
 #pragma mark 设置组
@@ -508,7 +501,8 @@
     
     if(![StringUitl checkLogin]){
         LoginViewController *loginView = [[LoginViewController alloc]init];
-        [self presentViewController:loginView animated:YES completion:nil];
+        //[self presentViewController:loginView animated:YES completion:nil];
+        [self.navigationController pushViewController:loginView animated:YES];
     }else{
         
     
@@ -613,13 +607,8 @@
         //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
         
         NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
-        //NSLog(@"imgurl==%@",imgUrl);
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            //改写异步加载图片
-            [videoCell.videoPic sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                                  placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }
+        [videoCell.videoPic md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+        
         videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
         videoCell.videoTitle.font = TITLE_FONT;
         videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
@@ -655,11 +644,8 @@
             labelText = [cellDic valueForKey:@"introduction"];
             ctitle = [cellDic valueForKey:@"projectName"];
         }
-        NSRange range = [imgUrl rangeOfString:@"/upload/"];
-        if(range.location!=NSNotFound){//判断加载远程图像
-            [picCell.picView sd_setImageWithURL:[NSURL URLWithString:imgUrl]
-                               placeholderImage:[UIImage imageNamed:NOIMG_ICON] options:SDWebImageRefreshCached];
-        }
+
+        [picCell.picView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

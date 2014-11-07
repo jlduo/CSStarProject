@@ -9,7 +9,9 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
+#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
 #define PAGESIZE @"2"//列表分页数据
+#define CF_PAGESIZE @"5"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度
 #define NAV_BAR_ICON_WIDTH 32//导航栏图标宽度
 #define NAV_BAR_ICON_HEIGHT 32//导航栏图标高度
@@ -29,7 +31,8 @@
 #define MAIN_FRAME_W MAIN_FRAME.size.width
 #define MAIN_FRAME_H MAIN_FRAME.size.height
 
-#define main_font(x) DIY_FONT_SIZE(@"Microsoft YaHei",x);
+//#define main_font(x) DIY_FONT_SIZE(@"Microsoft YaHei",x);
+#define main_font(x) Font_Size(x);
 #define DIY_FONT_SIZE(n,x) [UIFont fontWithName:n size:x]//自定义字体函数
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(14)//主字体
@@ -43,20 +46,36 @@
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
 #define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
 #define NAVBAR_BG_ICON @"titlebar-gray@2x"//导航背景
-#define NAVBAR_LEFT_ICON @"nav_back.png"//返回按钮图标
+#define NAVBAR_LEFT_ICON @"nav_back2@2x.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
 #define REFRESH_TITLE @"刷新数据"
 #define REFRESH_LOADING @"玩命加载中..."
+#define SHARE_ICON @"btnshare@2x.png"//分享图片
 #define NOIMG_ICON @"imgloading@2X.png"//无图片
 #define NOIMG_ICON_TX @"avatarbig.png"//无头像图片
+#define CG_IMG(x) [UIImage imageNamed:x]//图片
+#define NO_IMG [UIImage imageNamed:NOIMG_ICON]//无图片
+#define CGIMG() [[UIImageView alloc]init]//创建图片
+#define CGIMGF(x)[[UIImageView alloc]initWithFrame:x]//创建图片带位置
+#define CGIMAG(x,y,w,h) [[UIImageView alloc]initWithFrame:CGRectMake(x,y,w,h)]//创建图片带位置
+#define IMG_WITH_NAME(x) [[UIImageView alloc]initWithImage:[UIImage imageNamed:x]];
 #define DELAY_TIME 2
 
 #define FORWARD_TYPE @"TAB"//登录跳转方式 tab 为点击tabbar
 
-//#define REMOTE_URL @"http://192.168.1.210:8888"
-//#define REMOTE_ADMIN_URL @"http://192.168.1.210:888"
+#if CONNECT_MODE==1
+
+#define REMOTE_URL @"http://192.168.1.210:8888"
+#define REMOTE_ADMIN_URL @"http://192.168.1.210:888"
+
+#else
+
 #define REMOTE_URL @"http://i.0731zhongchou.com"
 #define REMOTE_ADMIN_URL @"http://www.0731zhongchou.com"
+
+#endif
+
+#define USER_AGREEMENT_URL @"/cms/GetArticleList/agreement"
 #define LOGIN_URL @"/AndroidApi/LoginService/Login"//登录地址
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
 #define CHECK_CODE_URL @"/AndroidApi/SmsService/SendSMS"//验证码请求地址
@@ -88,11 +107,14 @@
 #define HOME_PEOPLE_URL @"/cf/getTopProject"
 #define SILDER_PEOPLE_URL @"/cf/getTjProjects"
 #define PEOPLE_LIST_URL @"/cf/getTopProjects"
+#define GET_PPLIST_URL @"/cf/getprojectlist/"
+#define GET_MORE_LIST_URL @"/cf/getMoreprojectlist/"
 #define GET_PROJECT_URL @"/cf/getProjectById"
 #define GET_RETURNS_URL @"/cf/getReturnsById"
 #define GET_RETURN_URL @"/cf/getProjectReturnById"
 #define GET_MYPROJECT_NUMS_URL @"/cf/getMyProjectsNums"
 #define GET_USERCENTER_NUMS_URL @"/cf/getUsercenterNums"
+#define GET_PROJECT_CATS @"/cf/getProjectCats"
 
 
 #define GET_LOVE_PROJECTS_URL @"/cf/getUserLoveProjects"//喜欢的众筹

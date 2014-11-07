@@ -260,7 +260,7 @@
     }else{
         PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
         delegate = deatilViewController;
-        [delegate passValue:[row valueForKey:@"id"]];
+        [delegate passValue:[row valueForKey:@"projectId"]];
         [self.navigationController pushViewController:deatilViewController animated:YES];
     }
 }
