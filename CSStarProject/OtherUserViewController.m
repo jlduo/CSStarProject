@@ -90,17 +90,16 @@
 }
 
 -(void)initLoadUserData{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,dataId];
-    _userData = (NSDictionary *)[convertJson requestData:url];
+    _userData = (NSDictionary *)[ConvertJSONData requestData:url];
     NSLog(@"_userData===%@",_userData);
 }
 
 -(void)getMyProjectsNums{
     _userProjectNums = [[NSMutableDictionary alloc]init];
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_MYPROJECT_NUMS_URL,[params valueForKey:@"userId"]];
-    NSString *pro_nums = (NSString *)[convertJson requestSData:url];
+    NSString *pro_nums = (NSString *)[ConvertJSONData requestSData:url];
     if([StringUitl isNotEmpty:pro_nums]){
         pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
         NSArray *num = [pro_nums componentsSeparatedByString:@","];
@@ -155,7 +154,7 @@
     [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
-    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 100, 120, 100)];
+    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-240)/2, 100, 240, 100)];
     [self setUserTitle];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];

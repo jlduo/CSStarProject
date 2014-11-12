@@ -24,6 +24,8 @@
 }
 
 
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -45,6 +47,7 @@
     
     if([StringUitl isNotEmpty:saveType]){
         userAddStr = [StringUitl getSessionVal:ADDRESS_INFO];
+        if([StringUitl isEmpty:userAddStr])userAddStr = nil;
         self.cityText.text = userAddStr;
         [self loadProvData];
         if([StringUitl isEmpty:[StringUitl getSessionVal:ADDRESS_PROVINCE_ID]]){
@@ -54,6 +57,7 @@
         }
     }else{
          userAddStr = [StringUitl getSessionVal:USER_ADDRESS];
+         if([StringUitl isEmpty:userAddStr])userAddStr = nil;
          self.cityText.text = userAddStr;
         [self loadProvData];
         [self loadCityData:@"1"];
@@ -240,9 +244,8 @@
 -(void)loadProvData{
     
     NSString *userAdd = userAddStr;
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,GET_CITY_URL];
-    NSMutableArray *cityArr = (NSMutableArray *)[convertJson requestData:url];
+    NSMutableArray *cityArr = (NSMutableArray *)[ConvertJSONData requestData:url];
     if(cityArr!=nil && cityArr.count>0){
         _provinceArray1 = cityArr;
         for (int i=0; i<cityArr.count; i++) {
@@ -262,9 +265,8 @@
 -(void)loadCityData:(NSString *)provID{
     
     NSString *userAdd = userAddStr;
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@?id=%@",REMOTE_URL,GET_CITY_URL,provID];
-    NSMutableArray *cityArr = (NSMutableArray *)[convertJson requestData:url];
+    NSMutableArray *cityArr = (NSMutableArray *)[ConvertJSONData requestData:url];
     if(cityArr!=nil && cityArr.count>0){
         _cityArray1 = cityArr;
         //先清除内容

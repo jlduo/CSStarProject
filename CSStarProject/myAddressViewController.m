@@ -18,6 +18,20 @@
     NSInteger currentIndex;
 }
 
+-(void)dealloc{
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    addressTable = nil;
+    tableArray = nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -42,10 +56,9 @@
 
 -(void)getAddressList{
     NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/%@",REMOTE_URL,userId];
     //NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getDeliverys/45",REMOTE_URL];
-    tableArray = (NSMutableArray *)[jsonData requestData:url];
+    tableArray = (NSMutableArray *)[ConvertJSONData requestData:url];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -86,9 +99,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {
         NSDictionary *dic = [tableArray objectAtIndex:currentIndex];
-        ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
         NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/setDefaultDelivery/%@",REMOTE_URL,[dic valueForKey:@"id"]];
-        dic = (NSDictionary *)[jsonData requestData:url];
+        dic = (NSDictionary *)[ConvertJSONData requestData:url];
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self getAddressList];
             [addressTable reloadData];

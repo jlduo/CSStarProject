@@ -88,9 +88,8 @@
 
 -(void)loadTableList{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_RETURNS_URL,dataId];
-    NSArray *returnArr = (NSArray *)[convertJson requestData:url];
+    NSArray *returnArr = (NSArray *)[ConvertJSONData requestData:url];
     if(returnArr!=nil && returnArr.count>0){
         _peopleReturnList = [NSMutableArray arrayWithArray:returnArr];
     }

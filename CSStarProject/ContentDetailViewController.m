@@ -59,9 +59,8 @@
 
 -(void)initLoadData{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-    _contentData = (NSDictionary *)[convertJson requestData:url];
+    _contentData = (NSDictionary *)[ConvertJSONData requestData:url];
     //填充标题
     lblDetail.text = [_contentData valueForKey:@"projectName"];
     
@@ -106,24 +105,82 @@
             NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
             NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
             NSInteger _currentPhoteoIndex = 0;
+            MWPhoto *photo;
             for (int i = 0; i<photos.count; i++) {
-                MJPhoto *photo = [[MJPhoto alloc] init];
-                photo.url = [NSURL URLWithString:photos[i]];
-                [photo.srcImageView md_setImageWithURL:photos[i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+                photo = [MWPhoto photoWithURL:[NSURL URLWithString:photos[i]]];
+                //photo.caption = @"pic";
                 [imgPhotes addObject:photo];
                 
                 imgArray = photos[i];
                 if ([imgUrl isEqualToString:imgArray]) {
                     _currentPhoteoIndex = i;
                 }
+                
             }
-            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
-            browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
-            browser.photos = imgPhotes; // 设置所有的图片
-            [browser show];
+            
+            self.photos = imgPhotes;
+            self.thumbs = imgPhotes;
+            
+            BOOL displayActionButton = NO;
+            BOOL displaySelectionButtons = NO;
+            BOOL displayNavArrows = YES;
+            BOOL enableGrid = YES;
+            BOOL startOnGrid = NO;
+            
+            MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+            browser.displayActionButton = displayActionButton;
+            browser.displayNavArrows = displayNavArrows;
+            browser.displaySelectionButtons = displaySelectionButtons;
+            browser.alwaysShowControls = displaySelectionButtons;
+            browser.zoomPhotosToFill = YES;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+            browser.wantsFullScreenLayout = YES;
+#endif
+            browser.enableGrid = enableGrid;
+            browser.startOnGrid = startOnGrid;
+            browser.enableSwipeToDismiss = YES;
+            [browser setCurrentPhotoIndex:_currentPhoteoIndex];
+            
+            
+            //[self.navigationController pushViewController:browser animated:YES];
+            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+            nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:nc animated:YES completion:nil];
+            
         }
     }
 }
+
+
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < _thumbs.count)
+        return [_thumbs objectAtIndex:index];
+    return nil;
+}
+
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    
+    
+    
+}
+
+- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
+    return [NSString stringWithFormat:@"%d / %d", index+1,_photos.count];
+}
+
 
 
 

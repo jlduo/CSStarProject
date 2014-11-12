@@ -27,9 +27,10 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>AlipaySdkJlduo</string>
 				<string>fb107704292745179</string>
 				<string>wb568898243</string>
-				<string>wx4868b35061f87885</string>
+				<string>wx62525cff8e6d3279</string>
 				<string>QQ05FB8B52</string>
 				<string>QQ075BCD15</string>
 				<string>pocketapp1234</string>
@@ -56,7 +57,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarHidden</key>
-	<false/>
+	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>

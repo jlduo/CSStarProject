@@ -52,6 +52,24 @@
     
 }
 
+-(void)dealloc{
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    cellImg = nil;
+    imgName= nil;
+    cellTitle= nil;
+    stableView= nil;
+    imgBtn= nil;
+    userLabel= nil;
+}
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {                                                                                                                                                                                                                                                                                           self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -80,15 +98,6 @@
     [self getMyProjectsNums];
 }
 
--(void)dealloc{
-    cellImg = nil;
-    imgBtn = nil;
-    userLabel = nil;
-    cellTitle = nil;
-    stableView = nil;
-    _userProjectNums = nil;
-    _userDataList = nil;
-}
 
 -(void)setImgBtnImage{
     
@@ -96,7 +105,7 @@
     NSMutableString *newString = [[NSMutableString alloc]initWithString:userLogo];
     NSRange srange = [userLogo rangeOfString:@"small_"];
     [newString replaceCharactersInRange:srange withString:@""];
-    [imgBtn setImageURLStr:newString placeholder:NO_IMG];
+    [imgBtn md_setImageWithURL:newString placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     
 }
 
@@ -182,7 +191,7 @@
     [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
-    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 100, 120, 100)];
+    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-240)/2, 100, 240, 100)];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -284,7 +293,7 @@
 #pragma mark 设置每组的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(section==0){
-       return 5;
+       return 4;
     }else{
         return 1;
     }
@@ -315,22 +324,22 @@
                 cellTitle = @"我的评论";
                 imgName =@"myzone-discuss.png";
                 break;
+//            case 1:
+//                valKey = @"message";
+//                cellTitle = @"我的消息";
+//                imgName =@"myzone-message.png";
+//                break;
             case 1:
-                valKey = @"message";
-                cellTitle = @"我的消息";
-                imgName =@"myzone-message.png";
-                break;
-            case 2:
                 valKey = @"project";
                 cellTitle = @"我的众筹";
                 imgName =@"myzone-zhongchou.png";
                 break;
-            case 3:
+            case 2:
                 valKey = @"order";
                 cellTitle = @"我的订单";
                 imgName =@"myzone-order.png";
                 break;
-            case 4:
+            case 3:
                 valKey = @"delivery";
                 cellTitle = @"收货地址";
                 imgName =@"myzone-location.png";
@@ -392,15 +401,12 @@
                 [self goComment];
                 break;
             case 1:
-                
-                break;
-            case 2:
                 [self goProject];
                 break;
-            case 3:
+            case 2:
                 [self goOrder];
                 break;
-            case 4:
+            case 3:
                 [self goRecAddress];
                 break;
             default:
@@ -432,11 +438,11 @@
     }else{
         clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"清除%d文件共[%.2fM]",tmpCount,tmpSize] : [NSString stringWithFormat:@"清除%d文件共[%.2fK]",tmpCount,tmpSize * 1024];
         NSLog(@" clearCacheName=%@",clearCacheName);
-        
+        [stableView reloadData];
         [[SDImageCache sharedImageCache] clearDisk];
         [[SDImageCache sharedImageCache] clearMemory];
-        [stableView reloadData];
         [self showHint:clearCacheName];
+        
     }
     
 }
@@ -446,14 +452,14 @@
 }
 
 -(void)goOrder{
-    PeopleProListViewController *projectController = [[PeopleProListViewController alloc] init];
-    passValelegate =projectController;
+    PeopleProListViewController *orderController = [[PeopleProListViewController alloc] init];
+    passValelegate =orderController;
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"2" forKey:@"titleName"];
     [params setObject:@"order" forKey:@"titleValue"];
     [passValelegate passDicValue:params];
     [passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
-    [self.navigationController pushViewController:projectController animated:YES];
+    [self.navigationController pushViewController:orderController animated:YES];
 }
 
 -(void)goProject{

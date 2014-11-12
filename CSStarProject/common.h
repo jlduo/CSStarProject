@@ -9,8 +9,8 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
-#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
-#define PAGESIZE @"2"//列表分页数据
+#define CONNECT_MODE 1 //访问模式 1 测试版 2 正式版
+#define PAGESIZE @"5"//列表分页数据
 #define CF_PAGESIZE @"5"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度
 #define NAV_BAR_ICON_WIDTH 32//导航栏图标宽度
@@ -44,7 +44,7 @@
 #define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
 #define CONTENT_BACKGROUND @"background.jpeg"//正文背景
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
-#define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
+#define TABR_SBG_ICON @"tabBar_selected@2x.png"//底部导航选中图
 #define NAVBAR_BG_ICON @"titlebar-gray@2x"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back2@2x.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
@@ -86,7 +86,7 @@
 #define GET_PASSWORD_URL @"/AndroidApi/UsersService/FindPassWord"//找回密码
 #define EDIT_PASSWORD_URL @"/AndroidApi/UsersService/EditPassWord"//修改密码
 #define COMMENT_COUNT_URL @"/Comment/GetCommentTotal"//获取评论信息
-#define ADD_COMMENT_URL @"/Comment/AddComment"//提交评论信息
+#define ADD_COMMENT_URL @"/Comment/AddCommentNew"//提交评论信息
 #define GET_COMMENT_URL @"/Comment/GetArticleComments"//获取文章评论
 
 //首页数据
@@ -119,6 +119,7 @@
 
 #define GET_LOVE_PROJECTS_URL @"/cf/getUserLoveProjects"//喜欢的众筹
 #define GET_ORDER_PROJECTS_URL @"/cf/getUserProjects"//发起的众筹
+#define GET_OTORDER_PROJECTS_URL @"/cf/getOtherUserProjects"//发起的众筹(其他人)
 #define GET_SUPPORT_PROJECTS_URL @"/cf/getUserOrders"//支持的众筹
 #define GET_PROJECT_TALKS_URL @"/cf/getProjectTalks"//项目评论列表
 #define GET_ADDRESS_LIST_URL @"/cf/getDeliverys"//收货人地址

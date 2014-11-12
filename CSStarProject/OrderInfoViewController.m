@@ -135,16 +135,16 @@
 }
 
 -(void)loadDefaultAddress{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_DEFAULT_ADDRESS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
-    defaultAddress = (NSMutableDictionary *)[convertJson requestData:url];
+    defaultAddress = (NSMutableDictionary *)[ConvertJSONData requestData:url];
     [self.orderInfoData setValue:defaultAddress forKey:@"defaultAdd"];
     //NSLog(@"defaultAddress====%@",defaultAddress);
     //NSLog(@"orderInfoData====%@",self.orderInfoData);
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self loadDefaultAddress];
+    //[self loadDefaultAddress];
     [orderTableView reloadData];
     
 }
@@ -169,7 +169,7 @@
         //NSLog(@"orderInfo====%@",vals);
     }
     
-    //NSLog(@"orderInfoData====%@",self.orderInfoData);
+   // NSLog(@"orderInfoData333====%@",self.orderInfoData);
 }
 
 -(void)setHeadView{

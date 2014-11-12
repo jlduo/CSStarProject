@@ -114,15 +114,9 @@
 
 -(void)goPreviou{
  
-    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
-    }else{
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [self.navigationController popViewControllerAnimated:YES];
-        
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 -(void)goRegister{
@@ -282,12 +276,13 @@
         
         UserViewController *userView = [[UserViewController alloc]init];
         if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self dismissViewControllerAnimated:YES completion:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTabar" object:nil];
+                
+            }];
         }else{
             [self.navigationController pushViewController:userView animated:YES];
         }
-        
-    
     }
 
 }

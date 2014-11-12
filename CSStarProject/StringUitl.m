@@ -148,7 +148,7 @@
 
 //判断字符串为空
 +(BOOL)isEmpty:(NSString *)str{
-    if(Nil==str||0==str.length){
+    if(Nil==str||0==str.length||[str isEqualToString:@"(null)"]){
         return true;
     }else{
         return false;
@@ -174,9 +174,8 @@
 
 +(void)loadUserInfo:(NSString *)userName{
     
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName];
-    NSMutableDictionary *jsonDic = (NSMutableDictionary *)[convertJson requestData:url];
+    NSMutableDictionary *jsonDic = (NSMutableDictionary *)[ConvertJSONData requestData:url];
     
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
         [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];

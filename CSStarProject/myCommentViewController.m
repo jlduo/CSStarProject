@@ -21,8 +21,29 @@
 
 @implementation myCommentViewController
 
+
+-(void)dealloc{
+    NSLog(@"go dealloc....");
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"viewWillDisappear....");
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    NSLog(@"releaseDMemery....");
+    imgchangshaxing = nil;
+    imgzhongchou = nil;
+    commentTable = nil;
+    tableArray = nil;
+}
+
 - (void)viewDidLoad
 {
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
     if(IOS_VERSION>=7.0){
         self.automaticallyAdjustsScrollViewInsets = NO;
@@ -84,6 +105,7 @@
 
 //长沙星按钮
 -(void)changshaxing{
+    [self showLoading:@"加载中..."];
     imgchangshaxing.image = [UIImage imageNamed:@"mydiscu_star_on.png"];
     imgzhongchou.image = [UIImage imageNamed:@"mydiscu_zhongchou.png"];
     typeComment = 0;
@@ -93,6 +115,7 @@
 
 //众筹按钮
 -(void)zhongchou{
+    [self showLoading:@"加载中..."];
     imgchangshaxing.image = [UIImage imageNamed:@"mydiscu_star.png"];
     imgzhongchou.image = [UIImage imageNamed:@"mydiscu_zhongchou_on.png"];
     typeComment = 1;
@@ -102,16 +125,58 @@
 
 //获取评论
 -(void)getCommentList{
+    NSString *url;
     NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     if (typeComment == 0) {
-        NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/GetCommentsByUserId/%@",REMOTE_URL,userId];
-        tableArray = (NSMutableArray *)[jsonData requestData:url];
+        url = [[NSString alloc] initWithFormat:@"%@/Comment/GetCommentsByUserId/%@",REMOTE_URL,userId];
     } else{
-        NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/getTalksByUserId/%@",REMOTE_URL,userId];
-        tableArray = (NSMutableArray *)[jsonData requestData:url];
+        url = [[NSString alloc] initWithFormat:@"%@/CF/getTalksByUserId/%@",REMOTE_URL,userId];
     }
+    [self requestDataByUrl:url withType:1];
 }
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSArray *returnArr = (NSArray *)jsonDic;
+    if(returnArr!=nil && returnArr.count>0){
+        tableArray = [NSMutableArray arrayWithArray:returnArr];
+    }else{
+        tableArray = [[NSMutableArray alloc]init];
+    }
+    
+    [commentTable reloadData];
+    [self hideHud];
+    
+}
+
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    
+    [self hideHud];
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    
+}
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     userMessageCommentNewTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];

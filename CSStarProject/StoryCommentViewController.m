@@ -19,6 +19,8 @@
     NSInteger pageIndex;
     UILabel *lblClickComment;
     NSMutableArray *tableArray;
+    
+    NSString *commentId;
 }
 @end
 
@@ -81,9 +83,8 @@
     [self.view addSubview:lblClickComment];
     
     //现实参数
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-    NSDictionary *dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
+    NSDictionary *dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
     lblDetail.text = [dicContent valueForKey:@"_title"];
     
     NSString *addTime = [dicContent valueForKey:@"_add_time"];
@@ -107,8 +108,11 @@
 
 -(NSMutableArray *)getCommentList{
     NSString *url = [[NSString alloc] initWithFormat:@"%@%@/%@/10/%d",REMOTE_URL,GET_COMMENT_URL,detailId,pageIndex];
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
-    return (NSMutableArray *)[jsonData requestData:url];
+    return (NSMutableArray *)[ConvertJSONData requestData:url];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self dismissKeyBoard];
 }
 
 -(void)initTable{
@@ -139,7 +143,36 @@
     commentCell.commentTextView.font = main_font(12);
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    //处理回复按钮
+    NSString *isReply = [[dicComment valueForKey:@"_is_reply"] stringValue];
+    NSLog(@"_is_reply=%@",isReply);
+    
+    if(![isReply isEqualToString:@"0"]){
+        [commentCell.replyBtn setTitle:@"" forState:UIControlStateNormal];
+        [commentCell.replyBtn setTitle:@"" forState:UIControlStateSelected];
+    }else{
+        [commentCell.replyBtn setTitle:@"回复" forState:UIControlStateNormal];
+        [commentCell.replyBtn setTitle:@"回复" forState:UIControlStateSelected];
+    }
+    
+    //给回复按钮添加事件
+    commentCell.replyBtn.tag = indexPath.row;
+    [commentCell.replyBtn addTarget:self action:@selector(changeText:) forControlEvents:UIControlEventTouchDown];
+    
     return commentCell;
+}
+
+-(void)changeText:(UIButton *)sender{
+    [textField becomeFirstResponder];
+    
+    [plabel removeFromSuperview];
+    [cIconView removeFromSuperview];
+    
+    NSDictionary *clickDic = [tableArray objectAtIndex:sender.tag];
+    NSString *changTxt = [NSString stringWithFormat:@"回复 %@ ：",[clickDic valueForKey:@"_nick_name"]];
+    commentId = [clickDic valueForKey:@"_id"];
+    [textField setText:changTxt];
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -164,7 +197,19 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self dismissKeyBoard];
+    [plabel removeFromSuperview];
+    NSDictionary *dicComment = [tableArray objectAtIndex:indexPath.row];
+    NSString *_is_reply = [[dicComment valueForKey:@"_is_reply"] stringValue];
+    if(![_is_reply isEqual:@"1"]){
+        [textField becomeFirstResponder];
+        NSString *changTxt = [NSString stringWithFormat:@"回复 %@ ：",[dicComment valueForKey:@"_nick_name"]];
+        [textField setText:changTxt];
+        commentId = [[dicComment valueForKey:@"_id"] stringValue];
+    }else{
+        commentId = nil;
+        [textField setText:@""];
+        [textField becomeFirstResponder];
+    }
 }
 
 //初始化底部工具栏
@@ -237,9 +282,9 @@
 
 //获取评论条数
 -(NSString *)getCommentNum{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@/Comment/GetCommentTotal/%@",REMOTE_URL,detailId];
-    NSDictionary *commentDic = (NSDictionary *)[convertJson requestData:url];
+    NSDictionary *commentDic = (NSDictionary *)[ConvertJSONData requestData:url];
     NSString *comments = [commentDic valueForKey:@"result"];
     return comments;
 }
@@ -302,11 +347,25 @@
 
 
 -(void)commentBtnClick{
+
+    NSString *contentId;
     NSString *textVal = textField.text;
     //点击发表提交数据
     if([self isEmpty:textVal]){
         [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
     }else{
+        
+        NSString *hf = [textVal substringToIndex:2];
+        if([hf isEqualToString:@"回复"]){
+            NSArray *charArr = [textVal componentsSeparatedByString:@"："];
+            if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
+                [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+                return;
+            }
+        }else{
+            commentId = nil;
+        }
+        
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
         if ([self isEmpty:userId]) {
@@ -315,7 +374,13 @@
             return;
         }
         NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
-        NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/AddComment/",REMOTE_URL];
+        if(commentId!=nil){
+            contentId = commentId;
+        }else{
+            contentId = @"0";
+        }
+        
+        NSString *url = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
         NSURL *login_url = [NSURL URLWithString:url];
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
         [ASIHTTPRequest setSessionCookies:nil];
@@ -329,6 +394,7 @@
         [request setPostValue:textVal forKey:@"txtContent"];
         [request setPostValue:userId forKey:@"userid"];
         [request setPostValue:userName forKey:@"username"];
+        [request setPostValue:contentId forKey:@"id"];
         
         [request buildPostBody];
         

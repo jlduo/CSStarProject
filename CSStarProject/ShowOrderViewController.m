@@ -76,9 +76,9 @@
 }
 
 -(void)loadOrderInfo{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ORDER_BID_URL,orderId];
-    _orderInfoData = (NSMutableDictionary *)[convertJson requestData:url];
+    _orderInfoData = (NSMutableDictionary *)[ConvertJSONData requestData:url];
     //NSLog(@"_orderInfoData====%@",_orderInfoData);
     
 }
@@ -174,16 +174,17 @@
     
 }
 
-//-(void)goPreviou{
-//    
-//    int orderState = [[_orderInfoData valueForKey:@"orderStatus"] intValue];
-//    if(orderState!=3 && orderState!=4){
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }else{
-//        [self.navigationController popToRootViewControllerAnimated:YES];
-//    }
-//    
-//}
+-(void)goPreviou{
+    UIViewController *previousViewController;
+    int viewsCount = self.navigationController.viewControllers.count;
+    if(viewsCount>5){
+       previousViewController = [self.navigationController.viewControllers objectAtIndex:viewsCount-4];
+    }else{
+       previousViewController = [self.navigationController.viewControllers objectAtIndex:viewsCount-2];
+    }
+    [self.navigationController popToViewController:previousViewController animated:YES];
+    
+}
 
 -(UIImageView *)setTagView{
     

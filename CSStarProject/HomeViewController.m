@@ -30,6 +30,9 @@
     XHFriendlyLoadingView *friendlyLoadingView;
     
     int showflag;
+    
+    NSString *dataTP;
+    NSString *dataID;
 }
 
 @end
@@ -51,6 +54,8 @@
     
     [self setHeaderRereshing];
     [self setFooterRereshing];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showContent) name:@"showContent" object:nil];
 }
 
 -(void)dealloc{
@@ -131,37 +136,88 @@
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
     int tag =  tap.view.tag;
-    NSLog(@"%d==",tag);
     NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
     NSString *dataId = [[slideDic valueForKey:@"_id"] stringValue];
     NSString *data_Type = [slideDic valueForKey:@"_category_call_index"];
     if([self isNotEmpty:dataId]){
+        
+        dataID = dataId;
         if([data_Type isEqual:@"video"]){//视频
+            dataTP = @"video";
             GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
             passValelegate = videoView;
             [passValelegate passValue:dataId];
-            [self.navigationController pushViewController:videoView animated:YES];
+            if([self check_login]){
+               [self.navigationController pushViewController:videoView animated:YES];
+            }
         }
         
         if([data_Type isEqual:@"albums"]){//相册
-//            GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
-//            passValelegate = girlPhoto;
-//            [passValelegate passValue:dataId];
-//            [self.navigationController pushViewController:girlPhoto animated:YES];
+            dataTP = @"albums";
             artId = dataId;
-            [self loadGirlPhotos:dataId];
+            if([self check_login]){
+              [self loadGirlPhotos:dataId];
+            }
         }
         
         
         if([data_Type isEqual:@"article"]||[data_Type isEqual:@"slide"]||[data_Type isEqual:@"city"]){//文章
+            dataTP = @"article";
             StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
             passValelegate = storyDetail;
             [passValelegate passValue:dataId];
-            [self.navigationController pushViewController:storyDetail animated:YES];
+            if([self check_login]){
+               [self.navigationController pushViewController:storyDetail animated:YES];
+            }
+        }
+    }
+}
+
+
+-(void)showContent{
+    
+    if([self isNotEmpty:dataID]){
+
+        if([dataTP isEqual:@"video"]){//视频
+            GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+            passValelegate = videoView;
+            [passValelegate passValue:dataID];
+            [self.navigationController pushViewController:videoView animated:YES];
         }
         
+        if([dataTP isEqual:@"albums"]){//相册
+            [self loadGirlPhotos:dataID];
+        }
+        
+        if([dataTP isEqual:@"article"]){//文章
+            
+            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+            passValelegate = storyDetail;
+            [passValelegate passValue:dataID];
+            [self.navigationController pushViewController:storyDetail animated:YES];
+            
+        }
+        
+        if([dataTP isEqual:@"story"]){//跳转到星城故事
+            
+            StoryDetailViewController *storyDetailView = [[StoryDetailViewController alloc] init];
+            passValelegate = storyDetailView;
+            [passValelegate passValue:dataID];
+            [self.navigationController pushViewController:storyDetailView animated:YES];
+            
+        }
+        
+        if([dataTP isEqual:@"people"]){//跳转到活动众筹
+
+            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            passValelegate = deatilViewController;
+            [passValelegate passValue:dataID];
+            [self.navigationController pushViewController:deatilViewController animated:YES];
+            
+        }
         
     }
+    
 }
 
 
@@ -174,7 +230,7 @@
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
     //[self initLoadData];
-    [_homeTableView reloadData];
+    //[_homeTableView reloadData];
     
     
 }
@@ -496,44 +552,61 @@
     }
 }
 
-#pragma mark 行选中事件
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(BOOL)check_login{
     
     if(![StringUitl checkLogin]){
         LoginViewController *loginView = [[LoginViewController alloc]init];
-        //[self presentViewController:loginView animated:YES completion:nil];
-        [self.navigationController pushViewController:loginView animated:YES];
+        [self presentViewController:loginView animated:YES completion:nil];
+        [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+        //[self.navigationController pushViewController:loginView animated:YES];
+        return NO;
     }else{
-        
+      return YES;
+    }
+    
+}
+
+#pragma mark 行选中事件
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
     
         if(indexPath.section==0){//跳转到美女私房
             
             NSDictionary *girlCellDic = [self.girlsDataList objectAtIndex:indexPath.row];
             NSString *dataId = [[girlCellDic valueForKey:@"_id"] stringValue];
             NSString *data_Type = [girlCellDic valueForKey:@"_category_call_index"];
+            
+            
             if([self isNotEmpty:dataId]){
+                
+                dataID = dataId;
                 if([data_Type isEqual:@"video"]){//视频
+                     dataTP = @"video";
                      GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
                      passValelegate = videoView;
                     [passValelegate passValue:dataId];
-                    [self.navigationController pushViewController:videoView animated:YES];
+                    if([self check_login]){
+                      [self.navigationController pushViewController:videoView animated:YES];
+                    }
                 }
                 
                 if([data_Type isEqual:@"albums"]){//相册
-//                    GirlsPhotosViewController *girlPhoto = [[GirlsPhotosViewController alloc] init];
-//                    passValelegate = girlPhoto;
-//                    [passValelegate passValue:dataId];
-//                    [self.navigationController pushViewController:girlPhoto animated:YES];
-                    artId = dataId;
-                    [self loadGirlPhotos:dataId];
+                     artId = dataId;
+                     dataTP = @"albums";
+                    if([self check_login]){
+                      [self loadGirlPhotos:dataId];
+                    }
                 }
                 
                 
                 if([data_Type isEqual:@"article"]){//文章
+                    dataTP = @"article";
                     StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
                     passValelegate = storyDetail;
                     [passValelegate passValue:dataId];
-                    [self.navigationController pushViewController:storyDetail animated:YES];
+                    if([self check_login]){
+                       [self.navigationController pushViewController:storyDetail animated:YES];
+                    }
                 }
                 
                 
@@ -545,10 +618,16 @@
             
             NSDictionary *storyCellDic = [self.storyDataList objectAtIndex:indexPath.row];
             NSString *dataId = [[storyCellDic valueForKey:@"_id"] stringValue];
+            
+            dataID = dataId;
+            dataTP = @"story";
+            
             StoryDetailViewController *storyDetailView = [[StoryDetailViewController alloc] init];
             passValelegate = storyDetailView;
             [passValelegate passValue:dataId];
-            [self.navigationController pushViewController:storyDetailView animated:YES];
+            if([self check_login]){
+               [self.navigationController pushViewController:storyDetailView animated:YES];
+            }
             
         }
         
@@ -556,17 +635,19 @@
             NSDictionary *peopleDic = [_peopleDataList objectAtIndex:0];
             if(peopleDic!=nil){
                 NSString *projectId = [[peopleDic valueForKey:@"id"] stringValue];
+                
+                dataID = projectId;
+                dataTP = @"people";
+                
                 PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
                 passValelegate = deatilViewController;
                 [passValelegate passValue:projectId];
-                [self.navigationController pushViewController:deatilViewController animated:YES];
+                if([self check_login]){
+                   [self.navigationController pushViewController:deatilViewController animated:YES];
+                }
             }
             
         }
-        
-    }
-    
-    
 }
 
 

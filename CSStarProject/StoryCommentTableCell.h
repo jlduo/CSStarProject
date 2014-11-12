@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *commentUsername;
 @property (weak, nonatomic) IBOutlet UILabel *commentDateTime; 
 @property (weak, nonatomic) IBOutlet UILabel *commentTextView;
+@property (weak, nonatomic) IBOutlet UIButton *replyBtn;
 
 @end

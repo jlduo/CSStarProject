@@ -8,14 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "MarqueeLabel.h"
+#import "MWPhoto.h"
+#import "MWPhotoBrowser.h"
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
 
-@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
+@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate,MWPhotoBrowserDelegate>
 
 
 #pragma mark 活动众筹数据
 @property(nonatomic,retain)NSDictionary *contentData;
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
 
 @end

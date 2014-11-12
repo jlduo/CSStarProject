@@ -320,18 +320,27 @@
         NSString *stateName;
         NSString *tagPicName;
         int stateNum = [[cellDic valueForKey:@"projectStatus"] intValue];
+        //项目状态 1 草稿 2 待审核 3 已审核 4 已成功 5 已失败
         switch (stateNum) {
+            case 1:
+                stateName = @"未开始";
+                tagPicName =@"label_nostart_s2";
+                break;
             case 2:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart";
+                tagPicName =@"label_nostart_s2";
                 break;
             case 3:
                 stateName = @"筹款中";
-                tagPicName =@"label_fundraising.png";
+                tagPicName =@"label_fundraising_s2.png";
+                break;
+            case 4:
+                stateName = @"已结束";
+                tagPicName =@"label_fundraising_s2.png";
                 break;
             default:
-                stateName = @"已结束";
-                tagPicName =@"lable_success.png";
+                stateName = @"已失败";
+                tagPicName =@"lable_success_s2.png";
                 break;
         }
         
@@ -367,7 +376,7 @@
         }
         
         float percent = bmoney / amoney;
-        float imgWith = percent*320-20;
+        float imgWith = percent*320;
         
         NSString *perceStr = [NSString stringWithFormat:@"已完成%0.1f%@",percent*100,@"%"];
         peopelCell.percentView.text = perceStr;

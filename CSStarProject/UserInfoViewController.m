@@ -35,6 +35,28 @@
 
 @implementation UserInfoViewController
 
+-(void)dealloc{
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    cellImg = nil;
+    imgName = nil;
+    cellTitle = nil;
+    stableView = nil;
+    stableView = nil;
+    _userDictionay = nil;
+    bgView = nil;
+    sheetView= nil;
+    bigCell= nil;
+    smallCell1= nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

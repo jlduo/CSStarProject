@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *cellBgView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIScrollView *photoScroll;
+@property (weak, nonatomic) IBOutlet UIView *photoView;
+
 
 @end

@@ -21,6 +21,9 @@
     NSDictionary *params;
     UILabel *lblClickComment;
     
+    BOOL isHeaderSeted;
+    BOOL isFooterSeted;
+    
     NSString *commentId;
 }
 
@@ -37,6 +40,29 @@
     return self;
 }
 
+-(void)dealloc{
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    lblClickComment = nil;
+    cellDic = nil;
+    dataId = nil;
+    commentId = nil;
+    params = nil;
+    textField = nil;
+    cIconView = nil;
+    plabel = nil;
+    numBtn = nil;
+    toolBar = nil;
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -49,7 +75,11 @@
     [self initHeadView];
     [self initLoadData];
     [self initToolBar];
+    [self showLoading:@"加载中..."];
     [self loadTableList];
+    
+    //集成刷新控件
+    [self setHeaderRereshing];
     
 }
 
@@ -92,6 +122,7 @@
     lblClickComment.frame = CGRectMake(145, 40, 100, 30);
     lblClickComment.text = [[NSString alloc] initWithFormat:@"%@ 评论",[params valueForKey:@"talksNum"]];
     [headView addSubview:lblClickComment];
+    [StringUitl setViewBorder:headView withColor:@"#cccccc" Width:0.5];
     
     [self.view addSubview:headView];
     
@@ -116,6 +147,36 @@
     [self.view addSubview:commentListTableView];
 }
 
+//加载头部刷新
+-(void)setHeaderRereshing{
+    if(!isHeaderSeted){
+        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:commentListTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+            [self performSelector:@selector(callBackMethod:) withObject:@"new" afterDelay:DELAY_TIME];
+            [view performSelector:@selector(finishedLoading) withObject:@"old" afterDelay:1.0f];
+        }];
+        [commentListTableView addSubview:topPullView];
+        isHeaderSeted = YES;
+    }
+}
+
+//加底部部刷新
+-(void)setFooterRereshing{
+    if(!isFooterSeted){
+        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:commentListTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+            [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
+            [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
+        }];
+        [commentListTableView addSubview:bottomPullView];
+        isFooterSeted = YES;
+    }
+}
+
+//这是一个模拟方法，请求完成之后，回调方法
+-(void)callBackMethod:(id) obj
+{
+    [self loadTableList];
+}
+
 //初始化底部工具栏
 -(void)initToolBar{
     toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, MAIN_FRAME_H-20, SCREEN_WIDTH, 40)];
@@ -127,6 +188,9 @@
     [self initButton];
     
     [self.view addSubview:toolBar];
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self dismissKeyBoard];
 }
 
 -(void)initTextView{
@@ -351,17 +415,37 @@
 
 
 -(void)loadTableList{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_TALKS_URL,dataId];
-    NSArray *returnArr = (NSArray *)[convertJson requestData:url];
-    if([returnArr isKindOfClass:[NSArray class]]){
-        if(returnArr!=nil && returnArr.count>0){
-            _proCommentList = [[NSMutableArray alloc]initWithArray:returnArr];
-        }
-    }
-    //NSLog(@"_proCommentList====%@",_proCommentList);
+    [self requestDataByUrl:url];
     
 }
+
+-(void)requestDataByUrl:(NSString *)url{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    
+}
+
+- (void)requestDataFinished:(ASIHTTPRequest *)request
+{
+    
+    NSData *respData = [request responseData];
+    NSMutableArray *jsonArr = (NSMutableArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    _proCommentList = jsonArr;
+    [self setFooterRereshing];
+    [self hideHud];
+    [commentListTableView reloadData];
+
+}
+
 
 -(void)loadView{
     [super loadView];
@@ -386,17 +470,18 @@
 
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self dismissKeyBoard];
     [plabel removeFromSuperview];
     cellDic = [self.proCommentList objectAtIndex:indexPath.row];
-    NSString *cUserId = [[cellDic valueForKey:@"userId"] stringValue];
-    NSString *nUserId = [StringUitl getSessionVal:LOGIN_USER_ID];
     NSString *huifuName = [cellDic valueForKey:@"huifuName"];
-    if([huifuName isEqual:[NSNull null]] && ![cUserId isEqual:nUserId]){
+    if([huifuName isEqual:[NSNull null]]){
         [textField becomeFirstResponder];
         NSString *changTxt = [NSString stringWithFormat:@"回复 %@ ：",[cellDic valueForKey:@"creatName"]];
         [textField setText:changTxt];
         commentId = [cellDic valueForKey:@"id"];
+    }else{
+        commentId = nil;
+        [textField setText:@""];
+        [textField becomeFirstResponder];
     }
 }
 
@@ -442,7 +527,6 @@
         projectCommCell.selectionStyle =UITableViewCellSelectionStyleNone;
         projectCommCell.backgroundColor = [UIColor whiteColor];
 
-        NSString *cUserId = [[cellDic valueForKey:@"userId"] stringValue];
         NSString *creatName = [cellDic valueForKey:@"creatName"];
         NSString *huifuName = [cellDic valueForKey:@"huifuName"];
         NSString *content = [cellDic valueForKey:@"content"];
@@ -450,6 +534,9 @@
         if(![huifuName isEqual:[NSNull null]]){
             [projectCommCell.replyBtn setTitle:@"" forState:UIControlStateNormal];
             [projectCommCell.replyBtn setTitle:@"" forState:UIControlStateSelected];
+        }else{
+            [projectCommCell.replyBtn setTitle:@"回复" forState:UIControlStateNormal];
+            [projectCommCell.replyBtn setTitle:@"回复" forState:UIControlStateSelected];
         }
         [projectCommCell.contentTextView setText:content];
         
@@ -466,12 +553,6 @@
         projectCommCell.userAddress.text = [cellDic valueForKey:@"userCity"];
         
         [StringUitl setCornerRadius:projectCommCell.userIconView withRadius:24.0];
-        //处理回复按钮
-        if([cUserId isEqual:[StringUitl getSessionVal:LOGIN_USER_ID]]){
-            [projectCommCell.replyBtn setTitle:@"" forState:UIControlStateNormal];
-            [projectCommCell.replyBtn setTitle:@"" forState:UIControlStateSelected];
-        }
-
         NSString *imgUrl =[cellDic valueForKey:@"avatar"];
         if(![imgUrl isEqual:[NSNull null]]){
             //改写异步加载图片

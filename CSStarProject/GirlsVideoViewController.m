@@ -102,9 +102,8 @@
 -(void)initBannerData{
     if([self isNotEmpty:dataId]){
         
-        ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ARTICLE_URL,dataId];
-        bannerData = (NSMutableDictionary *)[convertJson requestData:url];
+        bannerData = (NSMutableDictionary *)[ConvertJSONData requestData:url];
         //NSLog(@"bannerData===%@",bannerData);
         
     }
@@ -201,10 +200,9 @@
 
 //获取评论条数
 -(NSString *)getCommentNum:(NSString *)articleId{
-    
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,COMMENT_COUNT_URL,articleId];
-    NSMutableDictionary *commentDic = (NSMutableDictionary *)[convertJson requestData:url];
+    NSMutableDictionary *commentDic = (NSMutableDictionary *)[ConvertJSONData requestData:url];
     NSString *comments = [commentDic valueForKey:@"result"];
     NSLog(@"评论条数＝＝%@",comments);
     
@@ -314,6 +312,10 @@
     }
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self dismissKeyBoard];
+}
+
 //提价评论信息
 -(void)postCommetnVal:(NSString *)articelId{
     
@@ -327,6 +329,7 @@
     [request setStringEncoding:NSUTF8StringEncoding];
     [request setPostValue:articelId forKey:@"articleId"];
     [request setPostValue:textField.text forKey:@"txtContent"];
+    [request setPostValue:@"0" forKey:@"id"];
     [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
     [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
     [request buildPostBody];
@@ -362,10 +365,9 @@
 
 
 -(void)loadGirlsData{
-    
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@%@/3/is_red=1",REMOTE_URL,GIRL_VIDEO_URL];
-    NSArray *girlsArr = (NSArray *)[convertJson requestData:url];
+    NSArray *girlsArr = (NSArray *)[ConvertJSONData requestData:url];
     if(girlsArr!=nil && girlsArr.count>0){
         topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
     }
@@ -538,8 +540,21 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoFinished:)
                                                  name:MPMoviePlayerWillExitFullscreenNotification
                                                object:moviePlayer];
+    //添加一个退出全屏状态都通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoScalChange:)
+                                                 name:MPMoviePlayerScalingModeDidChangeNotification
+                                               object:moviePlayer];
     
     
+    
+}
+
+-(void)videoScalChange:(NSNotification *)notification {
+    NSLog(@"isfull=%d",moviePlayer.isFullscreen);
+    if(moviePlayer.isFullscreen){
+        [moviePlayer setFullscreen:NO animated:YES];
+        [moviePlayer setScalingMode:MPMovieScalingModeNone];
+    }
 }
 
 - (void)videoStarted:(NSNotification *)notification {// 开始播放
@@ -583,6 +598,8 @@
     NSLog(@"state==%d",player.playbackState);
     switch (player.playbackState) {
         case MPMoviePlaybackStateStopped:
+            [moviePlayer setFullscreen:NO animated:YES];
+            [moviePlayer setScalingMode:MPMovieScalingModeNone];
             [self setVideoView:TRUE];
             break;
         case MPMoviePlaybackStatePlaying:
@@ -654,12 +671,11 @@
 
 
 -(void)stopPlay{
-    
-    [playBtn removeFromSuperview];
-    [videoPic removeFromSuperview];
     [moviePlayer stop];
     [moviePlayer.view removeFromSuperview];
-    
+    [playBtn removeFromSuperview];
+    [videoPic removeFromSuperview];
+
 }
 
 -(void)startTime{
@@ -809,9 +825,7 @@
     cellDic = [topVideoArray objectAtIndex:indexPath.row];
     NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
     //NSLog(@"newDataId=%@",newId);
-    if([bid isEqual:newId]){
-        [self setVideoView:YES];
-    }else{
+    if(![bid isEqual:newId]){
         GirlsVideoViewController *girlVideoController = [[GirlsVideoViewController alloc]init];
         passValelegate = girlVideoController;
         [passValelegate passValue:newId];

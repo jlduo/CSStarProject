@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--朋友圈_ViewController-->
+        <!--Friend View Controller - 朋友圈_ViewController-->
         <scene sceneID="8g0-Fc-4ge">
             <objects>
                 <viewController title="朋友圈_ViewController" id="HyK-ek-DHZ" customClass="FriendViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="v6K-th-e3f"/>
-                        <viewControllerLayoutGuide type="bottom" id="m2d-oT-t5T"/>
+                        <viewControllerLayoutGuide type="top" id="y0Y-al-qBh"/>
+                        <viewControllerLayoutGuide type="bottom" id="eMC-jo-Kqd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KBP-R1-SdR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -24,10 +24,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="vtw-m5-Cmw" secondAttribute="trailing" id="OcX-FK-t06"/>
-                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="top" secondItem="KBP-R1-SdR" secondAttribute="top" constant="64" id="P1I-j0-XYV"/>
-                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="leading" secondItem="KBP-R1-SdR" secondAttribute="leading" id="bbh-Do-WRR"/>
-                            <constraint firstAttribute="bottom" secondItem="vtw-m5-Cmw" secondAttribute="bottom" constant="49" id="l1V-rN-DpU"/>
+                            <constraint firstAttribute="trailing" secondItem="vtw-m5-Cmw" secondAttribute="trailing" id="P70-0G-Qlk"/>
+                            <constraint firstAttribute="bottom" secondItem="vtw-m5-Cmw" secondAttribute="bottom" constant="49" id="Q1z-Io-rcy"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="leading" secondItem="KBP-R1-SdR" secondAttribute="leading" id="uFY-Hd-VLL"/>
+                            <constraint firstItem="vtw-m5-Cmw" firstAttribute="top" secondItem="KBP-R1-SdR" secondAttribute="top" constant="64" id="xDf-M9-6ei"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aN2-SE-umZ"/>
@@ -39,13 +39,13 @@
             </objects>
             <point key="canvasLocation" x="884" y="1399"/>
         </scene>
-        <!--首页_ViewController-->
+        <!--Home View Controller - 首页_ViewController-->
         <scene sceneID="HRF-6I-O9P">
             <objects>
                 <viewController title="首页_ViewController" id="Dzb-sy-isU" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8hN-UM-Od0"/>
-                        <viewControllerLayoutGuide type="bottom" id="Nnm-5z-F7o"/>
+                        <viewControllerLayoutGuide type="top" id="B5C-SA-kna"/>
+                        <viewControllerLayoutGuide type="bottom" id="MOI-9q-qSX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ktn-LO-v4o">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -62,10 +62,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="top" secondItem="Ktn-LO-v4o" secondAttribute="top" constant="64" id="F9D-D7-qxC"/>
-                            <constraint firstAttribute="trailing" secondItem="aIi-zu-UcQ" secondAttribute="trailing" id="FJ7-SU-Fj2"/>
-                            <constraint firstAttribute="bottom" secondItem="aIi-zu-UcQ" secondAttribute="bottom" constant="49" id="UkJ-eZ-lqS"/>
-                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="leading" secondItem="Ktn-LO-v4o" secondAttribute="leading" id="Xm7-Lt-tuJ"/>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="top" secondItem="Ktn-LO-v4o" secondAttribute="top" constant="64" id="K9S-3N-lzX"/>
+                            <constraint firstAttribute="trailing" secondItem="aIi-zu-UcQ" secondAttribute="trailing" id="XJE-bn-osz"/>
+                            <constraint firstAttribute="bottom" secondItem="aIi-zu-UcQ" secondAttribute="bottom" constant="49" id="XQP-k3-U7t"/>
+                            <constraint firstItem="aIi-zu-UcQ" firstAttribute="leading" secondItem="Ktn-LO-v4o" secondAttribute="leading" id="eSq-ce-YPO"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="1bz-lh-4gl"/>
@@ -77,13 +77,13 @@
             </objects>
             <point key="canvasLocation" x="895" y="-1613"/>
         </scene>
-        <!--美女私房_ViewController-->
+        <!--Girls View Controller - 美女私房_ViewController-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
                 <viewController title="美女私房_ViewController" id="kdO-5D-qrW" customClass="GirlsViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="A9G-9K-M76"/>
-                        <viewControllerLayoutGuide type="bottom" id="GmH-VE-iXe"/>
+                        <viewControllerLayoutGuide type="top" id="2VX-Ee-d2V"/>
+                        <viewControllerLayoutGuide type="bottom" id="Uv1-g8-3ip"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="qRg-y6-2hW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -100,10 +100,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gj1-0U-roh" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="Ppd-MX-K6R"/>
-                            <constraint firstAttribute="trailing" secondItem="gj1-0U-roh" secondAttribute="trailing" id="j1d-MC-qup"/>
-                            <constraint firstAttribute="bottom" secondItem="gj1-0U-roh" secondAttribute="bottom" constant="49" id="krn-aw-EgX"/>
-                            <constraint firstItem="gj1-0U-roh" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="w9Z-JB-LhE"/>
+                            <constraint firstAttribute="trailing" secondItem="gj1-0U-roh" secondAttribute="trailing" id="1eq-ZJ-EcS"/>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="CsL-Xf-kMb"/>
+                            <constraint firstItem="gj1-0U-roh" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="Foy-rr-4Qt"/>
+                            <constraint firstAttribute="bottom" secondItem="gj1-0U-roh" secondAttribute="bottom" constant="49" id="VNu-Wg-EoS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hGs-S2-uNo"/>
@@ -115,13 +115,13 @@
             </objects>
             <point key="canvasLocation" x="884" y="-917"/>
         </scene>
-        <!--活动众筹个_ViewController-->
+        <!--People View Controller - 活动众筹个_ViewController-->
         <scene sceneID="bp3-Pq-Adq">
             <objects>
                 <viewController title="活动众筹个_ViewController" id="oMW-WD-uXC" customClass="PeopleViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="4Ea-W9-qGp"/>
-                        <viewControllerLayoutGuide type="bottom" id="bXd-IB-kzc"/>
+                        <viewControllerLayoutGuide type="top" id="RQm-eW-vjD"/>
+                        <viewControllerLayoutGuide type="bottom" id="YFX-DV-uf5"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="620-OQ-8TU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -134,10 +134,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="Pl5-u2-5Rp"/>
-                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="UM2-Yb-pf8"/>
-                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="cDI-W2-0gB"/>
-                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="wOz-3S-fRB"/>
+                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="Pv2-nc-Y0G"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="aJI-ha-Wm5"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="hTF-By-H2j"/>
+                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="rDV-cB-Xgi"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rZm-zf-UuU"/>
@@ -149,13 +149,13 @@
             </objects>
             <point key="canvasLocation" x="884" y="589"/>
         </scene>
-        <!--星城故事_ViewController-->
+        <!--Story View Controller - 星城故事_ViewController-->
         <scene sceneID="9hq-Y2-9rs">
             <objects>
                 <viewController title="星城故事_ViewController" id="aGx-Wv-JVF" customClass="StoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="UuY-Zd-DRD"/>
-                        <viewControllerLayoutGuide type="bottom" id="eqq-1Y-SXK"/>
+                        <viewControllerLayoutGuide type="top" id="3Nt-YM-Jjg"/>
+                        <viewControllerLayoutGuide type="bottom" id="bUC-5V-IZv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2bN-EP-5VU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -172,10 +172,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6PY-A5-rCw" firstAttribute="top" secondItem="2bN-EP-5VU" secondAttribute="top" constant="64" id="1wz-i1-PHI"/>
-                            <constraint firstAttribute="bottom" secondItem="6PY-A5-rCw" secondAttribute="bottom" constant="49" id="a3u-Nb-3vB"/>
-                            <constraint firstItem="6PY-A5-rCw" firstAttribute="leading" secondItem="2bN-EP-5VU" secondAttribute="leading" id="d0Z-gn-cuZ"/>
-                            <constraint firstAttribute="trailing" secondItem="6PY-A5-rCw" secondAttribute="trailing" id="jOD-7L-3Tp"/>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="leading" secondItem="2bN-EP-5VU" secondAttribute="leading" id="4rb-hG-UGj"/>
+                            <constraint firstAttribute="bottom" secondItem="6PY-A5-rCw" secondAttribute="bottom" constant="49" id="ECO-i3-Ure"/>
+                            <constraint firstItem="6PY-A5-rCw" firstAttribute="top" secondItem="2bN-EP-5VU" secondAttribute="top" constant="64" id="Kho-Z7-IcS"/>
+                            <constraint firstAttribute="trailing" secondItem="6PY-A5-rCw" secondAttribute="trailing" id="Ts1-Bj-wVu"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PrA-KP-f3d"/>
@@ -188,13 +188,13 @@
             </objects>
             <point key="canvasLocation" x="884" y="-233"/>
         </scene>
-        <!--星城故事详情_ViewController-->
+        <!--Story Detail View Controller - 星城故事详情_ViewController-->
         <scene sceneID="s72-QE-N4T">
             <objects>
                 <viewController title="星城故事详情_ViewController" id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9oB-eb-klx"/>
-                        <viewControllerLayoutGuide type="bottom" id="OEv-W3-kxK"/>
+                        <viewControllerLayoutGuide type="top" id="qPJ-EK-9xL"/>
+                        <viewControllerLayoutGuide type="bottom" id="rPL-NE-sJR"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Tng-Ry-RTr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -210,13 +210,13 @@
             </objects>
             <point key="canvasLocation" x="1372" y="-233"/>
         </scene>
-        <!--星城故事评论_ViewController-->
+        <!--Story Comment View Controller - 星城故事评论_ViewController-->
         <scene sceneID="8Ww-Gb-4iq">
             <objects>
                 <viewController title="星城故事评论_ViewController" id="lkv-1K-pr1" customClass="StoryCommentViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="zad-qR-hhi"/>
-                        <viewControllerLayoutGuide type="bottom" id="h84-Gz-L1x"/>
+                        <viewControllerLayoutGuide type="top" id="MCI-wC-KVn"/>
+                        <viewControllerLayoutGuide type="bottom" id="O8d-QU-9WU"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7XL-1r-26B">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -232,7 +232,7 @@
         <!--Init Tab Bar View Controller-->
         <scene sceneID="d5d-2v-8yF">
             <objects>
-                <tabBarController id="1qy-3C-6qL" customClass="InitTabBarViewController" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="HomePage" id="1qy-3C-6qL" customClass="InitTabBarViewController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="hfM-Fa-FEZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
@@ -251,7 +251,7 @@
             </objects>
             <point key="canvasLocation" x="-377" y="-742"/>
         </scene>
-        <!--首页-->
+        <!--Navigation Controller - 首页-->
         <scene sceneID="Xg4-s9-CB0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hnA-XZ-2fr" sceneMemberID="viewController">
@@ -270,7 +270,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-1613"/>
         </scene>
-        <!--美女私房-->
+        <!--Navigation Controller - 美女私房-->
         <scene sceneID="HIg-rY-bCW">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fM3-lm-kza" sceneMemberID="viewController">
@@ -292,7 +292,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-917"/>
         </scene>
-        <!--星城故事-->
+        <!--Navigation Controller - 星城故事-->
         <scene sceneID="KaJ-Ym-LEP">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qlb-G1-BnD" sceneMemberID="viewController">
@@ -311,7 +311,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="-233"/>
         </scene>
-        <!--活动众筹-->
+        <!--Navigation Controller - 活动众筹-->
         <scene sceneID="sOg-34-kTs">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pkK-FE-J3V" sceneMemberID="viewController">
@@ -330,7 +330,7 @@
             </objects>
             <point key="canvasLocation" x="352" y="589"/>
         </scene>
-        <!--朋友圈-->
+        <!--Navigation Controller - 朋友圈-->
         <scene sceneID="O4t-U1-SSn">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Nl-GP-D9l" sceneMemberID="viewController">
@@ -353,9 +353,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

@@ -25,9 +25,34 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [self showLoading:@"加载中..."];
         self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
+}
+
+-(void)dealloc{
+    NSLog(@"go dealloc....");
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"viewWillDisappear....");
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    NSLog(@"releaseDMemery....");
+    proListTableView = nil;
+    cellDic = nil;
+    dataId = nil;
+    titleName = nil;
+    params = nil;
+}
+
+-(void)viewDidUnload{
+    [self releaseDMemery];
 }
 
 - (void)viewDidLoad
@@ -96,7 +121,6 @@
 
 -(void)loadTableList{
     NSString *url;
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     cellIndex =[[params valueForKey:@"titleName"] intValue];
     switch (cellIndex) {
         case 1:
@@ -108,20 +132,58 @@
             break;
             
         case 3:
-            url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ORDER_PROJECTS_URL,dataId];
+            url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_OTORDER_PROJECTS_URL,dataId];
             break;
             
         default:
             break;
     }
 
-    NSArray *returnArr = (NSArray *)[convertJson requestData:url];
-    if(returnArr!=nil && returnArr.count>0){
-        _peopleProList = [NSMutableArray arrayWithArray:returnArr];
-    }
-   // NSLog(@"_peopleProList====%@",_peopleProList);
+    [self requestDataByUrl:url withType:cellIndex];
     
 }
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSArray *returnArr = (NSArray *)jsonDic;
+    if(returnArr!=nil && returnArr.count>0){
+        _peopleProList = [NSMutableArray arrayWithArray:returnArr];
+    }else{
+        _peopleProList = [[NSMutableArray alloc]init];
+    }
+    
+    [proListTableView reloadData];
+    [self hideHud];
+    
+}
+
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    
+    [self hideHud];
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    
+}
+
 
 -(void)loadView{
     [super loadView];
@@ -209,8 +271,8 @@
         projectCell.selectionStyle =UITableViewCellSelectionStyleNone;
         projectCell.backgroundColor = [UIColor clearColor];
         
-        [StringUitl setCornerRadius:projectCell.cellContentView withRadius:5.0];
-        [StringUitl setViewBorder:projectCell.cellContentView withColor:@"#cccccc" Width:0.5];
+        //[StringUitl setCornerRadius:projectCell.cellContentView withRadius:5.0];
+        //[StringUitl setViewBorder:projectCell.cellContentView withColor:@"#cccccc" Width:0.5];
         
         projectCell.cellTitle.font = TITLE_FONT;
         projectCell.cellTitle.text = [cellDic valueForKey:@"projectName"];
@@ -221,7 +283,12 @@
         NSString *stateName;
         NSString *tagPicName;
         int stateNum = [[cellDic valueForKey:@"projectStatus"] intValue];
+        //项目状态 1 草稿 2 待审核 3 已审核 4 已成功 5 已失败
         switch (stateNum) {
+            case 1:
+                stateName = @"未开始";
+                tagPicName =@"label_nostart_s2";
+                break;
             case 2:
                 stateName = @"未开始";
                 tagPicName =@"label_nostart_s2";
@@ -230,8 +297,12 @@
                 stateName = @"筹款中";
                 tagPicName =@"label_fundraising_s2.png";
                 break;
-            default:
+            case 4:
                 stateName = @"已结束";
+                tagPicName =@"label_fundraising_s2.png";
+                break;
+            default:
+                stateName = @"已失败";
                 tagPicName =@"lable_success_s2.png";
                 break;
         }
@@ -280,8 +351,8 @@
             [projectCell.subTitleName setText:@"订单编号："];
             [projectCell.cycDate setText:[cellDic valueForKey:@"orderCode"]];
             
-            projectCell.orderStateBtn.layer.masksToBounds = TRUE;
-            projectCell.orderStateBtn.layer.cornerRadius = 1.0;
+            //projectCell.orderStateBtn.layer.masksToBounds = TRUE;
+            //projectCell.orderStateBtn.layer.cornerRadius = 1.0;
             
             
         }else{

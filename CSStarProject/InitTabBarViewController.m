@@ -11,6 +11,8 @@
 @interface InitTabBarViewController (){
     UIImageView *_tabBarBG;
     UIImageView *_selectView;
+    
+    int current_index;
 }
 
 @end
@@ -22,6 +24,8 @@
     
     [self initTabarView];
     [self setSelectedIndex:0];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTabSelect) name:@"changeTabar" object:nil];
     
 }
 
@@ -80,10 +84,19 @@
     
 }
 
+-(void)changeTabSelect{
+    self.selectedIndex = current_index;
+    [UIView animateWithDuration:0.2 animations:^{
+        _selectView.frame = CGRectMake(current_index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showContent" object:nil];
+    }];
+}
+
 #pragma mark 监听按钮点击切换视图
 - (void)changeViewController:(UIButton *)sender
 {
-    
+    current_index = sender.tag;
+    NSLog(@"index=%d",current_index);
     if(sender.tag==0){
         
         self.selectedIndex = 0;

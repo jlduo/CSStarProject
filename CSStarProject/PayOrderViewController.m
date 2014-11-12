@@ -12,6 +12,8 @@
     UITableView *payTypeTableView;
     NSMutableArray *titleArr;
     NSString *orderId;
+    
+    NSDictionary *orderInfo;
 }
 
 @end
@@ -32,9 +34,19 @@
     [super viewDidLoad];
     [self initLoadData];
     [self setHeadView];
-    
+    [self loadOrderInfo];
     titleArr = [[NSMutableArray alloc]initWithArray:@[ @"支付宝支付",@"网上银行支付"]];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPageInfo) name:@"showPageInfo" object:nil];
+    
+    
+}
+
+-(void)showPageInfo{
+    
+    //支付成功跳转到回报列表页面
+    UIViewController *previousViewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-3];
+    [self.navigationController popToViewController:previousViewController animated:YES];
     
 }
 
@@ -66,7 +78,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"选择支付方式" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:@"btn-close.png"]];
+    [self.view addSubview:[self setNavBarWithTitle:@"选择支付方式" hasLeftItem:NO hasRightItem:YES leftIcon:nil rightIcon:@"btn-close.png"]];
     
 }
 
@@ -85,6 +97,14 @@
 
 -(void)passDicValue:(NSDictionary *)vals{
     NSLog(@"vals==%@",vals);
+}
+
+-(void)loadOrderInfo{
+    
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ORDER_BID_URL,orderId];
+    orderInfo = (NSMutableDictionary *)[ConvertJSONData requestData:url];
+    NSLog(@"_orderInfoData====%@",orderInfo);
+    
 }
 
 
@@ -154,11 +174,113 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section==0){
         NSLog(@"支付宝支付！");
+        NSString *appScheme = @"AlipaySdkJlduo";
+        NSString *order = [self getOrderInfo];
+        NSString *signedStr = [self doRsa:order];
+        
+        NSString *orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
+                                 order, signedStr, @"RSA"];
+        NSLog(@"orderString=%@",orderString);
+        [AlixLibService payOrder:orderString AndScheme:appScheme seletor:_result target:self];
+        
     }else{
         NSLog(@"网银支付！");
     }
     
 }
+
+
+-(NSString*)getOrderInfo
+{
+    /*
+     *点击获取prodcut实例并初始化订单信息
+     */
+    AlixPayOrder *order = [[AlixPayOrder alloc] init];
+    order.partner = PartnerID;
+    order.seller = SellerID;
+    
+    order.tradeNO = [orderInfo valueForKey:@"orderCode"]; //订单ID（由商家自行制定）
+    order.productName = [orderInfo valueForKey:@"projectName"]; //商品标题
+    order.productDescription = [orderInfo valueForKey:@"returnContent"]; //商品描述
+    float price = [[orderInfo valueForKey:@"amount"] floatValue];
+    order.amount = [NSString stringWithFormat:@"%.2f",price]; //商品价格
+    order.notifyURL = Notify_Url; //回调URL
+    order.returnUrl = Notify_Url;
+    
+    return [order description];
+}
+
+- (NSString *)generateTradeNO
+{
+    const int N = 15;
+    
+    NSString *sourceString = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *result = [[NSMutableString alloc] init] ;
+    srand(time(0));
+    for (int i = 0; i < N; i++)
+    {
+        unsigned index = rand() % [sourceString length];
+        NSString *s = [sourceString substringWithRange:NSMakeRange(index, 1)];
+        [result appendString:s];
+    }
+    return result;
+}
+
+-(NSString*)doRsa:(NSString*)order
+{
+    id<DataSigner> signer;
+    signer = CreateRSADataSigner(PartnerPrivKey);
+    NSString *signedString = [signer signString:order];
+    return signedString;
+}
+
+-(void)paymentResultDelegate:(NSString *)result
+{
+    NSLog(@"result=%@",result);
+}
+
+//wap回调函数
+-(void)paymentResult:(NSString *)resultd
+{
+    //结果处理
+#if ! __has_feature(objc_arc)
+    AlixPayResult* result = [[[AlixPayResult alloc] initWithString:resultd] autorelease];
+#else
+    AlixPayResult* result = [[AlixPayResult alloc] initWithString:resultd];
+#endif
+    if (result)
+    {
+        
+        if (result.statusCode == 9000)
+        {
+            /*
+             *用公钥验证签名 严格验证请使用result.resultString与result.signString验签
+             */
+            
+            //交易成功
+            NSString* key = AlipayPubKey;//签约帐户后获取到的支付宝公钥
+            id<DataVerifier> verifier;
+            verifier = CreateRSADataVerifier(key);
+            
+            if ([verifier verifyString:result.resultString withSign:result.signString])
+            {
+                //验证签名成功，交易结果无篡改
+            }
+        }
+        else
+        {
+            //交易失败
+        }
+    }
+    else
+    {
+        //失败
+    }
+    
+}
+
+
+
 
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -13,7 +13,7 @@
 #import "CommonViewController.h"
 #import "UserInfoViewController.h"
 
-@interface EditNickNameController : UIViewController
+@interface EditNickNameController : UIViewController<UITextFieldDelegate>
 
 
 @property (weak, nonatomic) IBOutlet UITextField *nickName;

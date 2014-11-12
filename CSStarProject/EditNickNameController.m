@@ -30,6 +30,7 @@
     [self.nickNameBg.layer setBorderWidth:1.0f];
     [self.nickNameBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [self.nickName setText:[StringUitl getSessionVal:USER_NICK_NAME]];
+    self.nickName.delegate = self;
     
     [self setNavgationBar];
 }
@@ -76,6 +77,12 @@
     
     [self.view addSubview:navgationBar];
     
+}
+
+-(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSMutableString *text = [_nickName.text mutableCopy];
+    [text replaceCharactersInRange:range withString:string];
+    return [text length] <= 8;
 }
 
 

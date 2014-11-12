@@ -114,9 +114,8 @@
     [self.view addSubview:lblNumberDetail];
     
     
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-     dicContent = (NSDictionary *)[jsonData requestData:requestUrl];
+     dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
     lblDetail.text = [dicContent valueForKey:@"_title"];
     lblTimeDetail.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
     NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
@@ -141,43 +140,8 @@
 }
 
 //点击事件
--(void)handleSingleTap2:(UITapGestureRecognizer *)sender{
-    CGPoint point = [sender locationInView:webDetail];
-    NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
-    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
-    if (imgUrl.length > 0) {
-        //展示所有图片
-        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
-        if (imgArray.length > 0) {
-            imgArray = [imgArray substringFromIndex:1];
-            NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
-            NSMutableArray *imgPhotes=[[NSMutableArray alloc] init];
-            NSInteger _currentPhoteoIndex = 0;
-            for (int i = 0; i<photos.count; i++) {
-                MJPhoto *photo = [[MJPhoto alloc] init];
-                photo.url = [NSURL URLWithString:photos[i]];
-                
-//                NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photos[i]]];
-//                UIImage *img = [UIImage imageWithData:data];
-//                photo.srcImageView =[[UIImageView alloc] initWithImage:img];
-                [photo.srcImageView md_setImageWithURL:photos[i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
-                [imgPhotes addObject:photo];
-                
-                imgArray = photos[i];
-                if ([imgUrl isEqualToString:imgArray]) {
-                    _currentPhoteoIndex = i;
-                }
-            }
-            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
-            browser.currentPhotoIndex = _currentPhoteoIndex; // 弹出相册时显示的第一张图片
-            browser.photos = imgPhotes; // 设置所有的图片
-            [browser show];
-        }
-    }
-}
-
-//点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    [self dismissKeyBoard];
     CGPoint point = [sender locationInView:webDetail];
     NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
     NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
@@ -382,9 +346,9 @@
 
 //获取评论条数
 -(NSString *)getCommentNum{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+
     NSString *url = [NSString stringWithFormat:@"%@/Comment/GetCommentTotal/%@",REMOTE_URL,detailId];
-    NSDictionary *commentDic = (NSDictionary *)[convertJson requestData:url];
+    NSDictionary *commentDic = (NSDictionary *)[ConvertJSONData requestData:url];
     NSString *comments = [commentDic valueForKey:@"result"];
     return comments;
 }
@@ -490,7 +454,7 @@
             [request setPostValue:textVal forKey:@"txtContent"];
             [request setPostValue:userId forKey:@"userid"];
             [request setPostValue:userName forKey:@"username"];
-            
+            [request setPostValue:@"0" forKey:@"id"];
             [request buildPostBody];
             
             [request startAsynchronous];

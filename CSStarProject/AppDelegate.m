@@ -1,7 +1,6 @@
 //
 //  AppDelegate.m
 //  CSStarProject
-//委屈委屈委屈委屈
 //  Created by jialiduo on 14-8-27.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
@@ -9,50 +8,20 @@
 #import "StringUitl.h"
 #import "AppDelegate.h"
 #import "Reachability.h"
-//#import "GirlsViewController.h"
-//#import "FriendViewController.h"
-//#import "StoryViewController.h"
-//#import "PeopleViewController.h"
-//#import "HomeViewController.h"
-//#import "InitNavBarViewController.h"
-//#import "InitTabBarViewController.h"
+#import "AlixPayResult.h"
+#import "DataVerifier.h"
+#import "InitTabBarViewController.h"
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-            
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions { 
-    //初始化系统整体页面
-//    HomeViewController *view1 = [[HomeViewController alloc]init];//系统首页
-//    GirlsViewController *view2 = [[GirlsViewController alloc]init];//美女私房
-//    StoryViewController *view3 = [[StoryViewController alloc]init];//星城故事
-//    PeopleViewController *view4 = [[PeopleViewController alloc]init];//活动众筹
-//    FriendViewController *view5 = [[FriendViewController alloc]init];//朋友圈
-
-//    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:view1];
-//    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:view2];
-//    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:view3];
-//    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:view4];
-//    UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:view5];
-    
-    //初始化导航
-//    InitNavBarViewController *nav1 = [[InitNavBarViewController alloc]initWithRootViewController:view1];
-//    InitNavBarViewController *nav2 = [[InitNavBarViewController alloc]initWithRootViewController:view2];
-//    InitNavBarViewController *nav3 = [[InitNavBarViewController alloc]initWithRootViewController:view3];
-//    InitNavBarViewController *nav4 = [[InitNavBarViewController alloc]initWithRootViewController:view4];
-//    InitNavBarViewController *nav5 = [[InitNavBarViewController alloc]initWithRootViewController:view5];
-//    
-//    InitTabBarViewController *tabBar = [[InitTabBarViewController alloc] init];
-//    tabBar.viewControllers = @[nav1,nav2,nav3,nav4,nav5];
-//    
-//    self.window.rootViewController = tabBar;
-//    self.window.backgroundColor = [UIColor whiteColor];
-//    [self.window makeKeyAndVisible];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"ssss2");
     
     [StringUitl setSessionVal:nil withKey:FORWARD_TYPE];
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     //[StringUitl printSystemFont];
     
@@ -68,18 +37,18 @@
     [ShareSDK registerApp:@"40014af2ac66"];
     
     //添加微信应用 注册网址 http://open.weixin.qq.com
-    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+    [ShareSDK connectWeChatWithAppId:@"wx62525cff8e6d3279"
                            wechatCls:[WXApi class]];
     
     //添加新浪微博应用 注册网址 http://open.weibo.com
-    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
-                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
-                             redirectUri:@"http://www.sharesdk.cn"];
+    [ShareSDK connectSinaWeiboWithAppKey:@"4198865960"
+                               appSecret:@"b6f8900bd5e30b42fc61da1c650ab95f"
+                             redirectUri:@"http://www.0731zhongchou.com"];
     
     //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
-    [ShareSDK  connectSinaWeiboWithAppKey:@"568898243"
-                                appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
-                              redirectUri:@"http://www.sharesdk.cn"
+    [ShareSDK  connectSinaWeiboWithAppKey:@"4198865960"
+                                appSecret:@"b6f8900bd5e30b42fc61da1c650ab95f"
+                              redirectUri:@"http://www.0731zhongchou.com"
                               weiboSDKCls:[WeiboSDK class]];
     
     //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
@@ -94,16 +63,17 @@
                        tencentOAuthCls:[TencentOAuth class]];
     
     //添加腾讯微博应用 注册网址 http://dev.t.qq.com
-    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
-                                  appSecret:@"2f4c933e889ff93a61adaa2d5d76ecd8"
-                                redirectUri:@"http://www.sharesdk.cn"];
+    [ShareSDK connectTencentWeiboWithAppKey:@"801550717"
+                                  appSecret:@"68e175193aede829a6aa727a15f68b43"
+                                redirectUri:@"http://www.0731zhongchou.com"];
     
     [ShareSDK ssoEnabled:NO];
     
     
     //重新加载本地数据
     [self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
-    
+    [UIApplication sharedApplication].statusBarHidden = NO;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     return YES;
 }
 
@@ -159,31 +129,17 @@
 
 
 - (void)reachabilityChanged:(NSNotification *)note {
-    Reachability *curReach = [note object];
-    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
-    NetworkStatus status = [curReach currentReachabilityStatus];
 
     NSString *msg = @"";
-    switch (status) {
-        case NotReachable:
-            // 没有网络连接
-            msg = @"当前网络不稳定!";
-            break;
-        case ReachableViaWWAN:
-            // 使用3G网络
-            msg = @"正在使用3G/2G移动网络,会消耗流量哦!";
-            break;
-        case ReachableViaWiFi:
-            // 使用WiFi网络
-            msg = @"正在使用WIFI网络,可以放心使用哦!";
-            break;
+    if (![STSystemUtils isNetConnect]) {
+        msg = @"当前网络不稳定!";
     }
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示信息"
-                                                    message:msg
-                                                   delegate:nil
-                                          cancelButtonTitle:@"确 定" otherButtonTitles:nil];
-    [alert show];
+    if ([STSystemUtils isNetViaWWAN]) {
+        msg = @"正在使用3G/2G移动网络,会消耗流量哦!";
+    }
+    if ([STSystemUtils isNetViaWiFi]) {
+        msg = @"正在使用WIFI网络,可以放心使用哦!";
+    }
     
 }
 
@@ -215,7 +171,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-   
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -290,5 +246,69 @@
         }
     }
 }
+
+
+//独立客户端回调函数
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    
+    [self parse:url application:application];
+    return YES;
+}
+
+- (void)parse:(NSURL *)url application:(UIApplication *)application {
+    
+    //结果处理
+    AlixPayResult* result = [self handleOpenURL:url];
+    
+    if (result)
+    {
+        
+        if (result.statusCode == 9000)
+        {
+            /*
+             *用公钥验证签名 严格验证请使用result.resultString与result.signString验签
+             */
+            
+            //交易成功
+            NSString* key = AlipayPubKey;
+            id<DataVerifier> verifier;
+            verifier = CreateRSADataVerifier(key);
+
+            if ([verifier verifyString:result.resultString withSign:result.signString])
+            {
+                //验证签名成功，交易结果无篡改
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"showPageInfo" object:nil];
+            }
+            
+        }else{
+            //交易失败
+        }
+    }else{
+        //失败
+    }
+    
+}
+
+- (AlixPayResult *)resultFromURL:(NSURL *)url {
+    NSString * query = [[url query] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+#if ! __has_feature(objc_arc)
+    return [[[AlixPayResult alloc] initWithString:query] autorelease];
+#else
+    return [[AlixPayResult alloc] initWithString:query];
+#endif
+}
+
+- (AlixPayResult *)handleOpenURL:(NSURL *)url {
+    AlixPayResult * result = nil;
+    
+    if (url != nil && [[url host] compare:@"safepay"] == 0) {
+        result = [self resultFromURL:url];
+    }
+    
+    return result;
+}
+
+
+
 
 @end

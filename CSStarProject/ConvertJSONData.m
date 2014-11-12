@@ -13,7 +13,7 @@
 @implementation ConvertJSONData
 
 #pragma mark 通过URL请求json数据并解析［自带方法］
--(NSDictionary*)convertJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey{
++(NSDictionary*)convertJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey{
     if(nurl==nil) return nil;
     //加载一个NSURL对象
     NSError *errorMsg;
@@ -35,7 +35,7 @@
 
 
 #pragma mark 通过URL请求json数据并解析［TouchJson方法］
--(NSDictionary*)convertCJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey{
++(NSDictionary*)convertCJsonDataWithURL:(NSString*)nurl withDataKey:(NSString *)dataKey{
     if(nurl==nil) return nil;
     //加载一个NSURL对象
     NSError *errorMsg;
@@ -55,7 +55,7 @@
 }
 
 
--(NSObject *)requestData:(NSString*)nurl{
++(NSObject *)requestData:(NSString*)nurl{
     NSObject *jsonObj;
     NSError *errorMsg;
     NSURL *url = [NSURL URLWithString:nurl];
@@ -76,7 +76,7 @@
     return jsonObj;
 }
 
--(id)requestSData:(NSString*)nurl{
++(id)requestSData:(NSString*)nurl{
     
     NSURL *url = [NSURL URLWithString:nurl];
     NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
@@ -86,7 +86,7 @@
 }
 
 //提交表单数据
--(BOOL)postData:(NSMutableDictionary *)paramData withUrl:(NSString *)url{
++(BOOL)postData:(NSMutableDictionary *)paramData withUrl:(NSString *)url{
     
     DateUtil *dateUtil = [[DateUtil alloc]init];
     if (paramData==nil||paramData.count==0) return false;

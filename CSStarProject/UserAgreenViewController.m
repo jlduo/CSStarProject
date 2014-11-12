@@ -33,9 +33,8 @@
 
 -(void)setWebcontent{
     
-    ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,USER_AGREEMENT_URL];
-    NSArray *agreenArray = (NSArray *)[jsonData requestData:requestUrl];
+    NSArray *agreenArray = (NSArray *)[ConvertJSONData requestData:requestUrl];
     NSString *detailId;
     NSDictionary * agreenDic;
     if (agreenArray!=nil&&agreenArray.count>0) {

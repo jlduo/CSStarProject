@@ -127,10 +127,9 @@
 //初始化数据
 -(void)initProjectData{
     if(dataId!=nil){
-        
-        ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
+    
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-         _peopleData= (NSDictionary *)[convertJson requestData:url];
+         _peopleData= (NSDictionary *)[ConvertJSONData requestData:url];
         //NSLog(@"_peopleData===%@",_peopleData);
         
     }
@@ -202,7 +201,12 @@
         NSString *stateName;
         NSString *tagPicName;
         int stateNum = [[cellDic valueForKey:@"projectStatus"] intValue];
+        //项目状态 1 草稿 2 待审核 3 已审核 4 已成功 5 已失败
         switch (stateNum) {
+            case 1:
+                stateName = @"未开始";
+                tagPicName =@"label_nostart";
+                break;
             case 2:
                 stateName = @"未开始";
                 tagPicName =@"label_nostart";
@@ -211,9 +215,13 @@
                 stateName = @"筹款中";
                 tagPicName =@"label_fundraising.png";
                 break;
-            default:
+            case 4:
                 stateName = @"已结束";
-                tagPicName =@"lable_success.png";
+                tagPicName =@"lable_success_s.png";
+                break;
+            default:
+                stateName = @"已失败";
+                tagPicName =@"lable_success_s.png";
                 break;
         }
         [detailCell.tagTitle setText:stateName];
@@ -247,7 +255,7 @@
         }
         
         float percent = bmoney / amoney;
-        float imgWith = percent*320-20;
+        float imgWith = percent*320;
         
         NSString *perceStr = [NSString stringWithFormat:@"已完成%0.1f%@",percent*100,@"%"];
         detailCell.pecentView.text = perceStr;
@@ -408,12 +416,19 @@
 
 
 -(void)clickSupBtn{
-    
-    //NSLog(@"dddd");
-    ReturnsViewController *returnsController = [[ReturnsViewController alloc]init];
-    passValelegate = returnsController;
-    [passValelegate passValue:dataId];
-    [self.navigationController pushViewController:returnsController animated:YES];
+    int stateNum = [[cellDic valueForKey:@"projectStatus"] intValue];
+    if(stateNum==1||stateNum==2){
+        [self showHint:@"对不起，项目未开始!"];
+    }else if(stateNum==4){
+        [self showHint:@"对不起，项目已结束!"];
+    }else if(stateNum==5){
+        [self showHint:@"对不起，项目已失败!"];
+    }else{
+        ReturnsViewController *returnsController = [[ReturnsViewController alloc]init];
+        passValelegate = returnsController;
+        [passValelegate passValue:dataId];
+        [self.navigationController pushViewController:returnsController animated:YES];
+    }
     
 }
 
@@ -440,6 +455,9 @@
     double times = [self mxGetStringTimeDiff:[dateUtil getCurDateTimeStr] timeE:comDate];
     times = times/(3600*24);
     NSNumber *numStage =  [NSNumber numberWithDouble:times];
+    if([numStage integerValue]<0){
+        numStage = 0;
+    }
     return [numStage intValue];
     
 }

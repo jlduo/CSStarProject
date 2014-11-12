@@ -26,6 +26,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [self showLoading:@"加载中..."];
         self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -91,7 +92,7 @@
     //NSLog(@"add address!");
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     if(sender.tag!=-1){
-        param = [self.orderAddressList objectAtIndex:sender.tag];
+        param = [NSMutableDictionary dictionaryWithDictionary:(NSDictionary *)[self.orderAddressList objectAtIndex:sender.tag]];
         [param setObject:@"edit" forKey:@"oType"];
     }else{
         [param setObject:@"add" forKey:@"oType"];
@@ -113,15 +114,49 @@
 }
 
 -(void)loadTableList{
-    ConvertJSONData *convertJson = [[ConvertJSONData alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ADDRESS_LIST_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
-    NSArray *returnArr = (NSArray *)[convertJson requestData:url];
+    [self requestDataByUrl:url withType:1];
+}
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    
+    NSData *respData = [request responseData];
+    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    NSMutableArray *returnArr = (NSMutableArray *)jsonDic;
     if(returnArr!=nil && returnArr.count>0){
-        _orderAddressList = [NSMutableArray arrayWithArray:returnArr];
+        _orderAddressList = returnArr;
     }else{
-        _orderAddressList = nil;
+        _orderAddressList = [[NSMutableArray alloc]init];
     }
-    NSLog(@"_orderAddressList====%@",_orderAddressList);
+    
+    [addressTableView reloadData];
+    [self hideHud];
+    
+}
+
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    
+    [self hideHud];
+    NSError *error = [request error];
+    NSLog(@"jsonDic->%@",error);
+    
 }
 
 //传递过来的参数
@@ -226,9 +261,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {
         NSDictionary *dic = [_orderAddressList objectAtIndex:current_index];
-        ConvertJSONData *jsonData = [[ConvertJSONData alloc] init];
         NSString *url = [[NSString alloc] initWithFormat:@"%@/CF/setDefaultDelivery/%@",REMOTE_URL,[dic valueForKey:@"id"]];
-        dic = (NSDictionary *)[jsonData requestData:url];
+        dic = (NSDictionary *)[ConvertJSONData requestData:url];
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self loadTableList];
             [addressTableView reloadData];
