@@ -9,9 +9,7 @@
 #import "ContentDetailViewController.h"
 
 @interface ContentDetailViewController (){
-    UIWebView *webDetail;
     NSString *dataId;
-    MarqueeLabel *lblDetail;
 }
 
 @end
@@ -31,18 +29,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
-    
-    //初始化开始
-    [self initTitle];
-    [self initWebView];
-    
-    
     [self initLoadData];
-    
     
 }
 
@@ -62,16 +50,16 @@
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
     _contentData = (NSDictionary *)[ConvertJSONData requestData:url];
     //填充标题
-    lblDetail.text = [_contentData valueForKey:@"projectName"];
+    _contentTitle.text = [_contentData valueForKey:@"projectName"];
     
     //填充webview
     NSURL *contentUrl = [[NSURL alloc]initWithString:[_contentData valueForKey:@"details"]];
-    [webDetail loadRequest:[NSURLRequest requestWithURL:contentUrl]];
+    [_contentView loadRequest:[NSURLRequest requestWithURL:contentUrl]];
     //NSLog(@"_contentData===%@",_contentData);
     
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [webDetail addGestureRecognizer:singleTapWeb];
+    [_contentView addGestureRecognizer:singleTapWeb];
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
     
@@ -83,23 +71,18 @@
     [self.view addSubview:[self setNavBarWithTitle:@"更多详情" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
 }
 
--(void)goPreviou{
-    //NSLog(@"back");
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
 }
 
 //点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
-    CGPoint point = [sender locationInView:webDetail];
+    CGPoint point = [sender locationInView:_contentView];
     NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
-    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
+    NSString *imgUrl = [_contentView stringByEvaluatingJavaScriptFromString:_imgURL];
     if (imgUrl.length > 0) {
         //展示所有图片
-        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        NSString *imgArray = [_contentView stringByEvaluatingJavaScriptFromString:@"getImgs()"];
         if (imgArray.length > 0) {
             imgArray = [imgArray substringFromIndex:1];
             NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
@@ -181,29 +164,6 @@
     return [NSString stringWithFormat:@"%d / %d", index+1,_photos.count];
 }
 
-
-
-
-#pragma mark 初始化标题
--(void)initTitle{
-    
-    lblDetail = [[MarqueeLabel alloc] initWithFrame:CGRectMake(5, 64, SCREEN_WIDTH - 5, 45) duration:15.0 andFadeLength:10.0f];
-    lblDetail.font = TITLE_FONT;
-    lblDetail.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:lblDetail];
-    
-}
-
-
-#pragma mark 初始化内容
--(void)initWebView{
-    
-    webDetail = [[UIWebView alloc] init];
-    webDetail.delegate = self;
-    webDetail.frame = CGRectMake(10, STATU_BAR_HEIGHT + NAV_TITLE_HEIGHT + 45, SCREEN_WIDTH-20, MAIN_FRAME_H - 49-44);
-    [self.view addSubview:webDetail];
-    
-}
 
 
 -(void)viewWillAppear:(BOOL)animated{

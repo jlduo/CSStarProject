@@ -18,12 +18,11 @@
 #import "AlixPayOrder.h"
 
 @interface PayOrderViewController : CommonViewController<UITableViewDelegate,UITableViewDataSource,ViewPassValueDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
     SEL _result;
 }
-
+@property(nonatomic,weak)NSObject<ViewPassValueDelegate> *passValelegate;
 @property (nonatomic,assign) SEL result;//这里声明为属性方便在于外部传入。
 -(void)paymentResult:(NSString *)result;
+@property (weak, nonatomic) IBOutlet UITableView *payOrderTable;
 
 @end

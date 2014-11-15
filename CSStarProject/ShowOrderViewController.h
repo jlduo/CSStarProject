@@ -15,8 +15,9 @@
 
 @interface ShowOrderViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate,UIGestureRecognizerDelegate>{
     // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
+    __weak NSObject<ViewPassValueDelegate> *passValelegate;
 }
 #pragma mark 订单数据
 @property(nonatomic,retain)NSDictionary *orderInfoData;
+@property (weak, nonatomic) IBOutlet UITableView *showOrderTable;
 @end

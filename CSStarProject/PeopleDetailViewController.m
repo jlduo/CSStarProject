@@ -9,8 +9,6 @@
 #import "PeopleDetailViewController.h"
 
 @interface PeopleDetailViewController (){
-    UITableView *detailTableView;
-    
     UIView *toolBar;
     NSString *dataId;
     UIButton *supportBtn;
@@ -47,18 +45,16 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
-    [detailTableView setFrame:temFrame];
 
     [titleLabel removeFromSuperview];
     [self initProjectData];
-    [detailTableView reloadData];
+    [_peopleDetailTable reloadData];
     
 }
-
 
 //初始化底部工具栏
 -(void)initToolBar{
@@ -105,22 +101,10 @@
 
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    
-    detailTableView = [[UITableView alloc] initWithFrame:tframe];
-    detailTableView.delegate = self;
-    detailTableView.dataSource = self;
-    
-    detailTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    detailTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [detailTableView setTableFooterView:view];
-    detailTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:detailTableView];
-    
+
+    _peopleDetailTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _peopleDetailTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     [self initToolBar];
 }
 
@@ -342,7 +326,7 @@
 
 -(void)goDetail{
     //NSLog(@"ssss");
-    ContentDetailViewController *deatilController = [[ContentDetailViewController alloc]init];
+    ContentDetailViewController *deatilController =  (ContentDetailViewController *)[self getVCFromSB:@"contentDetail"];
     passValelegate = deatilController;
     [passValelegate passValue:dataId];
     [self presentViewController:deatilController animated:YES completion:nil];
@@ -351,7 +335,7 @@
 
 -(void)goCommentList{
     //NSLog(@"comment");
-    ProjectCommentViewController *commentController = [[ProjectCommentViewController alloc]init];
+    ProjectCommentViewController *commentController =  (ProjectCommentViewController *)[self getVCFromSB:@"projectComment"];
     passValelegate = commentController;
     [passValelegate passValue:dataId];
     [passValelegate passDicValue:_peopleData];
@@ -360,16 +344,16 @@
 
 -(void)goTaHomePage{
     //NSLog(@"home");
-    OtherUserViewController *otherUserController = [[OtherUserViewController alloc]init];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    OtherUserViewController *otherUserController =  [storyBoard instantiateViewControllerWithIdentifier:@"otherUserCenter"];
     passValelegate = otherUserController;
-    
     NSMutableDictionary *dicParam = [[NSMutableDictionary alloc]init];
     [dicParam setObject:[_peopleData valueForKey:@"userId"] forKey:@"userId"];
     [dicParam setObject:[_peopleData valueForKey:@"userName"] forKey:@"userName"];
     [dicParam setObject:[_peopleData valueForKey:@"nickName"] forKey:@"nickName"];
-    
     [passValelegate passDicValue:dicParam];
     [self.navigationController pushViewController:otherUserController animated:YES];
+    
 }
 
 
@@ -403,7 +387,7 @@
     }else{
         [titleLabel removeFromSuperview];
         [self initProjectData];
-        [detailTableView reloadData];
+        [_peopleDetailTable reloadData];
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
     }
     
@@ -424,7 +408,8 @@
     }else if(stateNum==5){
         [self showHint:@"对不起，项目已失败!"];
     }else{
-        ReturnsViewController *returnsController = [[ReturnsViewController alloc]init];
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        ReturnsViewController *returnsController =  [storyBoard instantiateViewControllerWithIdentifier:@"returnList"];
         passValelegate = returnsController;
         [passValelegate passValue:dataId];
         [self.navigationController pushViewController:returnsController animated:YES];
@@ -468,8 +453,5 @@
     CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
     return [UIImage imageWithCGImage:newImageRef];
 }
-
-
-
 
 @end

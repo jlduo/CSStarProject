@@ -1,17 +1,14 @@
 //
-//  myCommentViewController.m
+//  MyCommentsViewController.m
 //  CSStarProject
 //
-//  Created by jialiduo on 14-10-9.
+//  Created by jialiduo on 14-11-13.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import "myCommentViewController.h"
+#import "MyCommentsViewController.h"
 
-@interface myCommentViewController (){
-    UIImageView *imgchangshaxing;
-    UIImageView *imgzhongchou;
-    UITableView *commentTable;
+@interface MyCommentsViewController (){
     NSInteger typeComment;
     NSMutableArray *tableArray;
     NSInteger currentIndex;
@@ -19,98 +16,44 @@
 
 @end
 
-@implementation myCommentViewController
+@implementation MyCommentsViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.tabBarController.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
+}
 
 -(void)dealloc{
-    NSLog(@"【myCommentViewController】==>释放内存...");
-    imgchangshaxing = nil;
-    imgzhongchou = nil;
-    commentTable = nil;
     tableArray = nil;
-    
 }
 
 - (void)viewDidLoad
 {
     [self showLoading:@"加载中..."];
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
+    [self getCommentList];
     
-    //长沙星
-    imgchangshaxing = [[UIImageView alloc] init];
-    imgchangshaxing.frame = CGRectMake(50, 69, 35, 35);
-    imgchangshaxing.image = [UIImage imageNamed:@"mydiscu_star_on.png"];
-    [self.view addSubview:imgchangshaxing];
-    
-    UIButton *changshaxing = [[UIButton alloc] init];
-    [changshaxing setTitle:@"长沙星" forState:UIControlStateNormal];
-    [changshaxing setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    changshaxing.titleLabel.font = main_font(16);
-    changshaxing.frame = CGRectMake(80, 69, 50, 35);
-    [changshaxing addTarget:self action:@selector(changshaxing) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:changshaxing];
-    
-    //分割线
-    UIImageView *imgSpl = [[UIImageView alloc] init];
-    imgSpl.frame = CGRectMake(165, 80, 1, 14);
-    imgSpl.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    [self.view addSubview:imgSpl];
-    
-    //众筹
-    imgzhongchou =[[UIImageView alloc] init];
-    imgzhongchou.frame = CGRectMake(198, 69, 35, 35);
-    imgzhongchou.image = [UIImage imageNamed:@"mydiscu_zhongchou.png"];
-    [self.view addSubview:imgzhongchou];
-    
-    UIButton *zhongchou = [[UIButton alloc] init];
-    [zhongchou setTitle:@"众筹" forState:UIControlStateNormal];
-    [zhongchou setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    zhongchou.titleLabel.font = main_font(16);
-    zhongchou.frame = CGRectMake(220, 69, 50, 35);
-    [zhongchou addTarget:self action:@selector(zhongchou) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:zhongchou];
-    
-    //评论列表
-    commentTable = [[UITableView alloc] init];
-    commentTable.delegate = self;
-    commentTable.dataSource = self;
-    [commentTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
-    commentTable.frame = CGRectMake(0, NAV_TITLE_HEIGHT + 69, SCREEN_WIDTH, MAIN_FRAME_H -  NAV_TITLE_HEIGHT -49); 
-    [self.view addSubview:commentTable];
+    self.commentsTableView.rowHeight = 80;
+    self.commentsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     
     //注册单元格
     UINib *nibCell = [UINib nibWithNibName:@"userMessageCommentNewTableViewCell" bundle:nil];
-    [commentTable registerNib:nibCell forCellReuseIdentifier:@"userMessageCommentNewCell"];
+    [self.commentsTableView registerNib:nibCell forCellReuseIdentifier:@"userMessageCommentNewCell"];
     
     //默认类型 0、长沙星 1、众筹
     typeComment = 0;
-    
-    //获取数据
-    [self getCommentList];
+
 }
 
-//长沙星按钮
--(void)changshaxing{
-    [self showLoading:@"加载中..."];
-    imgchangshaxing.image = [UIImage imageNamed:@"mydiscu_star_on.png"];
-    imgzhongchou.image = [UIImage imageNamed:@"mydiscu_zhongchou.png"];
-    typeComment = 0;
-    [self getCommentList];
-    [commentTable reloadData];
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
 }
 
-//众筹按钮
--(void)zhongchou{
-    [self showLoading:@"加载中..."];
-    imgchangshaxing.image = [UIImage imageNamed:@"mydiscu_star.png"];
-    imgzhongchou.image = [UIImage imageNamed:@"mydiscu_zhongchou_on.png"];
-    typeComment = 1;
-    [self getCommentList];
-    [commentTable reloadData];
-}
 
 //获取评论
 -(void)getCommentList{
@@ -149,8 +92,7 @@
     }else{
         tableArray = [[NSMutableArray alloc]init];
     }
-    
-    [commentTable reloadData];
+    [self.commentsTableView reloadData];
     [self hideHud];
     
 }
@@ -168,23 +110,36 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    userMessageCommentNewTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];
-    NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
     
+    NSDictionary *dicComment = [tableArray  objectAtIndex:indexPath.row];
+    static BOOL isNibregistered = NO;
+    if(!isNibregistered){
+        UINib *nibCell = [UINib nibWithNibName:@"userMessageCommentNewTableViewCell" bundle:nil];
+        [tableView registerNib:nibCell forCellReuseIdentifier:@"userMessageCommentNewCell"];
+        isNibregistered = YES;
+    }
+    userMessageCommentNewTableViewCell *commentCell = [tableView dequeueReusableCellWithIdentifier:@"userMessageCommentNewCell"];
+    
+    NSString *dateStr;
+    NSString *dateStr1;
     if(typeComment == 0){
-        DateUtil *utilDate = [[DateUtil alloc] init];
-        NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
-        commentCell.lblTime.text = addTime;
-        
-        commentCell.lblTitle.text = [dicComment valueForKey:@"_article_title"]; 
+        dateStr = [dicComment valueForKey:@"_add_time"];
+        if(dateStr.length>10){
+            dateStr1 = [dateStr stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+            dateStr1 = [dateStr1 substringToIndex:16];
+        }
+        commentCell.lblTime.text = dateStr1;
+        commentCell.lblTitle.text = [dicComment valueForKey:@"_article_title"];
         commentCell.lblContent.text = [dicComment valueForKey:@"_content"];
         commentCell.btnDelete.tag = indexPath.row;
-    }
-    else {
-        DateUtil *utilDate = [[DateUtil alloc] init];
-        NSString *addTime = [utilDate getLocalDateFormateUTCDate2:[dicComment valueForKey:@"addTime"]];
-        commentCell.lblTime.text = addTime;
+    } else {
         
+        dateStr = [dicComment valueForKey:@"addTime"];
+        if(dateStr.length>10){
+            dateStr1 = [dateStr stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+            dateStr1 = [dateStr1 substringToIndex:16];
+        }
+        commentCell.lblTime.text = dateStr1;
         commentCell.lblTitle.text = [dicComment valueForKey:@"projectName"];
         commentCell.lblContent.text = [dicComment valueForKey:@"content"];
         commentCell.btnDelete.tag = indexPath.row;
@@ -195,10 +150,10 @@
     CGSize labelsize = [commentCell.lblContent.text sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByTruncatingTail];
     if (labelsize.height > 20) {
         commentCell.lblContent.frame = CGRectMake(commentCell.lblContent.frame.origin.x,commentCell.lblContent.frame.origin.y, commentCell.lblContent.frame.size.width, labelsize.height);
-    } 
+    }
     [commentCell.btnDelete addTarget:self action:@selector(deleteComment:) forControlEvents:UIControlEventTouchDown];
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    
     return commentCell;
 }
 
@@ -210,7 +165,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {
-        NSDictionary *dicComment = [tableArray objectAtIndex:currentIndex]; 
+        NSDictionary *dicComment = [tableArray objectAtIndex:currentIndex];
         if (typeComment == 0) {
             NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/DeleteComment/%@",REMOTE_URL,[dicComment valueForKey:@"_id"]];
             NSURL *request_url = [NSURL URLWithString:url];
@@ -256,7 +211,7 @@
         //处理返回
         if([[jsonDic valueForKey:@"result"] isEqualToString:@"True"]){
             [tableArray removeObjectAtIndex:currentIndex];
-            [commentTable reloadData];
+            [self.commentsTableView reloadData];
         }else{
             [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
         }
@@ -264,7 +219,7 @@
         //处理返回
         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
             [tableArray removeObjectAtIndex:currentIndex];
-            [commentTable reloadData];
+            [self.commentsTableView reloadData];
         }else{
             [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
         }
@@ -298,7 +253,7 @@
     }
     else{
         return 77;
-    } 
+    }
 }
 
 //行选中事件
@@ -308,13 +263,13 @@
     
     if(typeComment==0){
         StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
-        _passValelegate = detailController;
-        [_passValelegate passValue:rowId];
+        passValelegate = detailController;
+        [passValelegate passValue:rowId];
         [self.navigationController pushViewController:detailController animated:YES];
     }else{
         PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-        _passValelegate = deatilViewController;
-        [_passValelegate passValue:[row valueForKey:@"projectId"]];
+        passValelegate = deatilViewController;
+        [passValelegate passValue:[row valueForKey:@"projectId"]];
         [self.navigationController pushViewController:deatilViewController animated:YES];
     }
 }
@@ -326,5 +281,22 @@
 
 -(void)goPreviou{
     [super goPreviou];
+}
+
+- (IBAction)cstarBtnClick:(id)sender {
+    [self showLoading:@"加载中..."];
+    [self.zcBtn setImage:[UIImage imageNamed:@"mydiscu_zhongchou.png"] forState:UIControlStateNormal];
+    [self.cstarBtn setImage:[UIImage imageNamed:@"mydiscu_star_on.png"] forState:UIControlStateNormal];
+    typeComment = 0;
+    [self getCommentList];
+    
+}
+
+- (IBAction)zcBtnClick:(id)sender {
+    [self showLoading:@"加载中..."];
+    [self.zcBtn setImage:[UIImage imageNamed:@"mydiscu_zhongchou_on.png"] forState:UIControlStateNormal];
+    [self.cstarBtn setImage:[UIImage imageNamed:@"mydiscu_star.png"] forState:UIControlStateNormal];
+    typeComment = 1;
+    [self getCommentList];
 }
 @end

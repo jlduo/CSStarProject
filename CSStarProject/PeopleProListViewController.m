@@ -9,7 +9,6 @@
 #import "PeopleProListViewController.h"
 
 @interface PeopleProListViewController (){
-    UITableView *proListTableView;
     NSDictionary *cellDic;
     NSString *dataId;
     NSString *titleName;
@@ -32,28 +31,13 @@
 }
 
 -(void)dealloc{
-    NSLog(@"go dealloc....");
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"viewWillDisappear....");
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    NSLog(@"releaseDMemery....");
-    proListTableView = nil;
+    NSLog(@"【PeopleProListViewController】==>释放内存...");
     cellDic = nil;
     dataId = nil;
     titleName = nil;
     params = nil;
 }
 
--(void)viewDidUnload{
-    [self releaseDMemery];
-}
 
 - (void)viewDidLoad
 {
@@ -101,22 +85,11 @@
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
-    
-    proListTableView = [[UITableView alloc] initWithFrame:tframe];
-    proListTableView.delegate = self;
-    proListTableView.dataSource = self;
-    proListTableView.rowHeight = 80;
-    
-    proListTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    proListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [proListTableView setTableFooterView:view];
-    proListTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:proListTableView];
+
+    _projectListTable.rowHeight = 80;
+    _projectListTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _projectListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+
 }
 
 -(void)loadTableList{
@@ -169,7 +142,7 @@
         _peopleProList = [[NSMutableArray alloc]init];
     }
     
-    [proListTableView reloadData];
+    [_projectListTable reloadData];
     [self hideHud];
     
 }
@@ -220,8 +193,8 @@
     
     if([[params valueForKey:@"titleValue"] isEqualToString:@"order"]){
         ShowOrderViewController *showOrderController = [[ShowOrderViewController alloc]init];
-        passValelegate = showOrderController;
-        [passValelegate passValue:[cellDic valueForKey:@"id"]];
+        _passValelegate = showOrderController;
+        [_passValelegate passValue:[cellDic valueForKey:@"id"]];
         [self.navigationController pushViewController:showOrderController animated:YES];
         
     }else{
@@ -242,10 +215,9 @@
                     break;
             }
             
-            
-            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-            passValelegate = deatilViewController;
-            [passValelegate passValue:proId];
+            PeopleDetailViewController *deatilViewController =  (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
+            _passValelegate = deatilViewController;
+            [_passValelegate passValue:proId];
             [self.navigationController pushViewController:deatilViewController animated:YES];
         }
         

@@ -19,7 +19,6 @@
     UIImageView *imgCategoryDetail;
     UITapGestureRecognizer *singleTap;
     BOOL isOpen;
-    UIWebView *webDetail;
     NSDictionary *dicContent;
 }
 @end
@@ -37,6 +36,7 @@
     return self;
 }
 
+
 -(void)viewWillAppear:(BOOL)animated{
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
@@ -44,92 +44,40 @@
     
 }
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-    //添加WebView
-    webDetail = [[UIWebView alloc] init];
-    webDetail.frame = CGRectMake(0, STATU_BAR_HEIGHT + NAV_TITLE_HEIGHT + 70, SCREEN_WIDTH, MAIN_FRAME_H - 150);
-    [self.view addSubview:webDetail];
     
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [webDetail addGestureRecognizer:singleTapWeb];
+    [_detailContentView addGestureRecognizer:singleTapWeb];
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
-
-    //标题
-    UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(16);
-    lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
-    [self.view addSubview:lblDetail];
-    
-    //时间
-    UILabel *lblTimeDetail = [[UILabel alloc] init];
-    lblTimeDetail.font = main_font(12);
-    lblTimeDetail.textColor = [UIColor grayColor];
-    lblTimeDetail.frame = CGRectMake(5, 104, 75, 30);
-    [self.view addSubview:lblTimeDetail];
-    
-    //分割线
-    UIImageView *imgHomeDetailOne=[[UIImageView alloc] init];
-    imgHomeDetailOne.frame = CGRectMake(75, 111, 1, 14);
-    imgHomeDetailOne.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    [self.view addSubview:imgHomeDetailOne];
-    
-    //栏目名称
-    UILabel *lblCategoryDetail = [[UILabel alloc] init];
-    lblCategoryDetail.font = main_font(12);
-    lblCategoryDetail.textColor = [UIColor grayColor];
-    lblCategoryDetail.frame = CGRectMake(85, 104, 50, 30);
-    lblCategoryDetail.text =@"星城故事";
-    [self.view addSubview:lblCategoryDetail];
-    
-    //分割线
-    UIImageView *imgHomeDetailTwo=[[UIImageView alloc] init];
-    imgHomeDetailTwo.frame = CGRectMake(145, 111, 1, 14);
-    imgHomeDetailTwo.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    [self.view addSubview:imgHomeDetailTwo];
-    
-    //点击图标
-    imgCategoryDetail = [[UIImageView alloc] init];
-    imgCategoryDetail.frame = CGRectMake(155, 112, 16, 14);
-    imgCategoryDetail.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
-    [self.view addSubview:imgCategoryDetail];
-    
-    imgCategoryDetail.userInteractionEnabled = YES;
-    singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setClick)];
-    [imgCategoryDetail addGestureRecognizer:singleTap];
-    
-    //点击量
-    lblNumberDetail = [[UILabel alloc] init];
-    lblNumberDetail.font = [UIFont fontWithName:@"Helvetica" size:12];
-    lblNumberDetail.textColor = [UIColor grayColor];
-    lblNumberDetail.frame = CGRectMake(175, 104, 100, 30);
-    [self.view addSubview:lblNumberDetail];
-    
     
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
      dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
-    lblDetail.text = [dicContent valueForKey:@"_title"];
-    lblTimeDetail.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
+    _contentTitle.text = [dicContent valueForKey:@"_title"];
+    _contentDate.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
     NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
     if (call_index.length > 0) {
-            lblCategoryDetail.text = call_index;
+            _columnTitle.text = call_index;
     }
     NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
-    lblNumberDetail.text = click;
+    _clickNum.text = click;
     
     
     NSString *url = [[NSString alloc] initWithFormat:@"%@/newsConte.aspx?newsid=%@",REMOTE_ADMIN_URL,detailId];
     NSURL *nsUrl = [[NSURL alloc] initWithString:url];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:nsUrl];
-    [webDetail loadRequest:request];
+    [_detailContentView loadRequest:request];
+    
+    _likeImgView.userInteractionEnabled = YES;
+    singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setClick)];
+    [_likeImgView addGestureRecognizer:singleTap];
+    
+    [StringUitl setViewBorder:_contentBackView withColor:@"cccccc" Width:0.5f];
     
     //评论
     [self initToolBar];
@@ -142,12 +90,12 @@
 //点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
     [self dismissKeyBoard];
-    CGPoint point = [sender locationInView:webDetail];
+    CGPoint point = [sender locationInView:_detailContentView];
     NSString  *_imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", point.x, point.y];
-    NSString *imgUrl = [webDetail stringByEvaluatingJavaScriptFromString:_imgURL];
+    NSString *imgUrl = [_detailContentView stringByEvaluatingJavaScriptFromString:_imgURL];
     if (imgUrl.length > 0) {
         //展示所有图片
-        NSString *imgArray = [webDetail stringByEvaluatingJavaScriptFromString:@"getImgs()"];
+        NSString *imgArray = [_detailContentView stringByEvaluatingJavaScriptFromString:@"getImgs()"];
         if (imgArray.length > 0) {
             imgArray = [imgArray substringFromIndex:1];
             NSArray *photos = [imgArray componentsSeparatedByString:@"|"];
@@ -255,15 +203,15 @@
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     //处理返回
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
-        lblNumberDetail.text = [jsonDic valueForKeyPath:@"value"];
-        [imgCategoryDetail removeGestureRecognizer:singleTap];
+        _clickNum.text = [jsonDic valueForKeyPath:@"value"];
+        [_likeImgView removeGestureRecognizer:singleTap];
         //imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
-        imgCategoryDetail.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
+        _likeImgView.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
         CAKeyframeAnimation *k = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
         k.values = @[@(0.5),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.0),@(5.5),@(6.0)];
         k.keyTimes = @[@(0.0),@(0.5),@(0.8),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.5)];
         k.calculationMode = kCAAnimationLinear;
-        [imgCategoryDetail.layer addAnimation:k forKey:@"SHOW"];
+        [_likeImgView.layer addAnimation:k forKey:@"SHOW"];
     }else{
         [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
@@ -462,9 +410,9 @@
             [request setDidFinishSelector:@selector(requestLoginFinished:)];
         } 
     }else{
-        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
-        delegate = storyComment;
-        [delegate passValue:detailId];
+        StoryCommentViewController *storyComment  = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
+        _delegate = storyComment;
+        [_delegate passValue:detailId];
         [self.navigationController pushViewController:storyComment animated:YES];
     }
 }
@@ -528,4 +476,6 @@
     
 }
 
+- (IBAction)clickLikeBtn:(id)sender {
+}
 @end

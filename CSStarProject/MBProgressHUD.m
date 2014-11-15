@@ -270,7 +270,9 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	}
 	// ... otherwise hide the HUD immediately
 	[self hideUsingAnimation:useAnimation];
+    
 }
+
 
 - (void)hide:(BOOL)animated afterDelay:(NSTimeInterval)delay {
 	[self performSelector:@selector(hideDelayed:) withObject:[NSNumber numberWithBool:animated] afterDelay:delay];

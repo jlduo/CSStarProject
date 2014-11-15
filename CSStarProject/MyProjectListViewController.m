@@ -9,7 +9,6 @@
 #import "MyProjectListViewController.h"
 
 @interface MyProjectListViewController (){
-    UITableView *proListTableView;
     NSDictionary *cellDic;
     NSString *dataId;
     NSString *titleName;
@@ -37,41 +36,14 @@
     return self;
 }
 
--(void)dealloc{
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    BtnIcon3 = nil;
-    BtnIcon1 = nil;
-    BtnIcon2 = nil;
-    BtnIcon3 = nil;
-    params = nil;
-    titleName = nil;
-    dataId = nil;
-    cellDic= nil;
-    proListTableView= nil;
-}
-
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     dataId = [StringUitl getSessionVal:LOGIN_USER_ID];
     [self.view setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACK_COLOR]];
     
     [self initLoadData];
-    [self initTopView];
     [self loadTableList:1];
     current_index = 1;
 }
@@ -86,166 +58,44 @@
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 100, SCREEN_WIDTH,MAIN_FRAME_H-44-49);
     
-    proListTableView = [[UITableView alloc] initWithFrame:tframe];
-    proListTableView.delegate = self;
-    proListTableView.dataSource = self;
-    proListTableView.rowHeight = 80;
-    
-    proListTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    proListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [proListTableView setTableFooterView:view];
-    proListTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:proListTableView];
-}
-
--(void)initTopView{
-    
-    int perViewWidth = SCREEN_WIDTH/3;
-    UIView *view1 = [[UIView alloc]initWithFrame:CGRectMake(perViewWidth*0, 64, perViewWidth, 40)];
-    //view1.backgroundColor = [UIColor redColor];
-    //喜欢
-    BtnIcon1 = [[UIImageView alloc] init];
-    BtnIcon1.frame = CGRectMake(20, 5, 35, 35);
-    BtnIcon1.image = [UIImage imageNamed:@"myzone_like_on.png"];
-    BtnIcon1.tag = 1;
-    [BtnIcon1 setMultipleTouchEnabled:YES];
-    [BtnIcon1 setUserInteractionEnabled:YES];
-    [BtnIcon1 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changSelectedImg:)]];
-    [view1 addSubview:BtnIcon1];
-    
-    UIButton *likeBtn = [[UIButton alloc] init];
-    [likeBtn setTitle:@"喜欢" forState:UIControlStateNormal];
-    [likeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    likeBtn.titleLabel.font = main_font(14);
-    likeBtn.frame = CGRectMake(42, 5, 50, 35);
-    likeBtn.tag = 1;
-    [likeBtn addTarget:self action:@selector(changSelectedBtn:) forControlEvents:UIControlEventTouchDown];
-    [view1 addSubview:likeBtn];
-    
-    
-    UIView *view2 = [[UIView alloc]initWithFrame:CGRectMake(perViewWidth*1+1, 64, perViewWidth, 40)];
-    //view2.backgroundColor = [UIColor yellowColor];
-    //支持
-    BtnIcon2 = [[UIImageView alloc] init];
-    BtnIcon2.frame = CGRectMake(20, 5, 35, 35);
-    BtnIcon2.image = [UIImage imageNamed:@"myzone_suport.png"];
-    BtnIcon2.tag = 2;
-    [BtnIcon2 setMultipleTouchEnabled:YES];
-    [BtnIcon2 setUserInteractionEnabled:YES];
-    [BtnIcon2 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changSelectedImg:)]];
-    [view2 addSubview:BtnIcon2];
-    
-    UIButton *supBtn = [[UIButton alloc] init];
-    [supBtn setTitle:@"支持" forState:UIControlStateNormal];
-    [supBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    supBtn.titleLabel.font = main_font(14);
-    supBtn.frame = CGRectMake(42, 5, 50, 35);
-    supBtn.tag = 2;
-    [supBtn addTarget:self action:@selector(changSelectedBtn:) forControlEvents:UIControlEventTouchDown];
-    [view2 addSubview:supBtn];
-    
-    
-    
-    UIView *view3 = [[UIView alloc]initWithFrame:CGRectMake(perViewWidth*2+2, 64, perViewWidth, 40)];
-    //view3.backgroundColor = [UIColor blueColor];
-    //发起
-    BtnIcon3 = [[UIImageView alloc] init];
-    BtnIcon3.frame = CGRectMake(20, 5, 35, 35);
-    BtnIcon3.image = [UIImage imageNamed:@"myzone_sponsor.png"];
-    BtnIcon3.tag = 3;
-    [BtnIcon3 setMultipleTouchEnabled:YES];
-    [BtnIcon3 setUserInteractionEnabled:YES];
-    [BtnIcon3 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changSelectedImg:)]];
-    [view3 addSubview:BtnIcon3];
-    
-    UIButton *orderBtn = [[UIButton alloc] init];
-    [orderBtn setTitle:@"发起" forState:UIControlStateNormal];
-    [orderBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    orderBtn.titleLabel.font = main_font(14);
-    orderBtn.frame = CGRectMake(42, 5, 50, 35);
-    orderBtn.tag = 3;
-    [orderBtn addTarget:self action:@selector(changSelectedBtn:) forControlEvents:UIControlEventTouchDown];
-    [view3 addSubview:orderBtn];
-    
-    
-    //分割线
-    UIImageView *imgSpl1 = [[UIImageView alloc] init];
-    imgSpl1.frame = CGRectMake(perViewWidth*1, 80, 1, 14);
-    imgSpl1.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    imgSpl1.alpha = 0.5;
-    [self.view addSubview:imgSpl1];
-    
-    UIImageView *imgSpl2 = [[UIImageView alloc] init];
-    imgSpl2.frame = CGRectMake(perViewWidth*2+1, 80, 1, 14);
-    imgSpl2.image = [UIImage imageNamed:@"homeplaynumbg.png"];
-    imgSpl2.alpha = 0.5;
-    [self.view addSubview:imgSpl2];
-    
-    [self.view addSubview:view1];
-    [self.view addSubview:view2];
-    [self.view addSubview:view3];
+    _myProjectListTable.rowHeight = 80;
+    _myProjectListTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _myProjectListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 
 }
 
--(void)changSelectedBtn:(UIView *)sender{
-     [self showLoading:@"加载中..."];
-    switch (sender.tag) {
-        case 1:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like_on.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-            break;
-        case 2:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport_on.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-            break;
-        case 3:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor_on.png"]];
-            break;
-        default:
-            break;
-    }
-    current_index = sender.tag;
-    
-    [self loadTableList:sender.tag];
-    [proListTableView reloadData];
-}
-
-
--(void)changSelectedImg:(UITapGestureRecognizer *)tap{
+- (IBAction)clickLikeBtn:(id)sender {
     [self showLoading:@"加载中..."];
-    switch (tap.view.tag) {
-        case 1:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like_on.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-            break;
-        case 2:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport_on.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-            break;
-        case 3:
-            [BtnIcon1 setImage:[UIImage imageNamed:@"myzone_like.png"]];
-            [BtnIcon2 setImage:[UIImage imageNamed:@"myzone_suport.png"]];
-            [BtnIcon3 setImage:[UIImage imageNamed:@"myzone_sponsor_on.png"]];
-            break;
-        default:
-            break;
-    }
-    current_index = tap.view.tag;
-    [self loadTableList:tap.view.tag];
-    [proListTableView reloadData];
+    [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like_on.png"]];
+    [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport.png"]];
+    [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
+    
+    current_index = 1;
+    [self loadTableList:1];
+    
 }
+
+- (IBAction)clickSupportBtn:(id)sender {
+    [self showLoading:@"加载中..."];
+    [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like.png"]];
+    [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport_on.png"]];
+    [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
+    current_index = 2;
+    [self loadTableList:3];
+    
+}
+
+- (IBAction)clickSponsorBtn:(id)sender {
+    [self showLoading:@"加载中..."];
+    [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like.png"]];
+    [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport.png"]];
+    [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor_on.png"]];
+    current_index = 3;
+    [self loadTableList:3];
+
+}
+
 
 -(void)loadTableList:(int)cIndex{
     NSString *url;
@@ -297,7 +147,7 @@
         _peopleProList = [[NSMutableArray alloc]init];
     }
     
-    [proListTableView reloadData];
+    [_myProjectListTable reloadData];
     [self hideHud];
     
 }
@@ -362,11 +212,11 @@
                 break;
         }
         
-        
-        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
-        passValelegate = deatilViewController;
-        [passValelegate passValue:proId];
+        PeopleDetailViewController *deatilViewController =  (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
+        _passValelegate = deatilViewController;
+        [_passValelegate passValue:proId];
         [self.navigationController pushViewController:deatilViewController animated:YES];
+        
     }
 }
 
@@ -494,7 +344,6 @@
     }
     return projectCell;
 }
-
 
 
 @end

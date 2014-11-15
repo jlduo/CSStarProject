@@ -26,7 +26,13 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    UITableView *videoTableView;
+    
+    MPMoviePlayerController *moviePlayer;
+    UIActivityIndicatorView *loadingAni;    //加载动画
+    UILabel *loadingLabel;                  //加载提醒
+    
+    NSMutableDictionary *bannerData;//导航初始数据
+    NSMutableArray *topVideoArray;//推荐视频数据
     
 }
 
@@ -42,20 +48,10 @@
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    
-    videoTableView = [[UITableView alloc] initWithFrame:tframe];
-    videoTableView.delegate = self;
-    videoTableView.dataSource = self;
-    
-    videoTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    videoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [videoTableView setTableFooterView:view];
-    videoTableView.showsVerticalScrollIndicator = YES;
+
+    _girlsVideoTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _girlsVideoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _girlsVideoTable.showsVerticalScrollIndicator = YES;
     
     //处理头部信息
     [self initBannerData];
@@ -68,7 +64,7 @@
     
     //集成刷新控件
     [self setHeaderRereshing];
-    if(topVideoArray!=nil&&topVideoArray.count>2){
+    if(topVideoArray!=nil && topVideoArray.count>2){
         [self setFooterRereshing];
     }
     
@@ -89,11 +85,9 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-40-44);
-    [videoTableView setFrame:temFrame];
     
     //[self initLoadData];
-    [videoTableView reloadData];
+    [_girlsVideoTable reloadData];
     [self changeRation:NO];
     
 }
@@ -427,7 +421,7 @@
     
     //修改videoTable的frame
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,(MAIN_FRAME_H-49-30));
-    [videoTableView setFrame:temFrame];
+    [_girlsVideoTable setFrame:temFrame];
     //8.将UILabel实例作为子视图添加到父视图中，这里的父视图是self.view
     [videoDesc addSubview:descLabel];
     
@@ -436,8 +430,7 @@
     [headView addSubview:moviePlayer.view];
     [headView addSubview:videoDesc];
     
-    videoTableView.tableHeaderView = headView;
-    [self.view addSubview:videoTableView];
+    _girlsVideoTable.tableHeaderView = headView;
     
     //视频监听事件
     [self addNotice];
@@ -603,11 +596,11 @@
             [self setVideoView:TRUE];
             break;
         case MPMoviePlaybackStatePlaying:
-            [self removeLoadTip];
-            [playBtn removeFromSuperview];
+            //[self removeLoadTip];
+            //[playBtn removeFromSuperview];
             break;
         case MPMoviePlaybackStatePaused:
-            [self showPlayBtn];
+            //[self showPlayBtn];
             //[self addLoadTip];
             break;
         case MPMoviePlaybackStateInterrupted:
@@ -743,12 +736,12 @@
 //加载头部刷新
 -(void)setHeaderRereshing{
     if(!isHeaderSeted){
-        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:videoTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_girlsVideoTable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
             NSLog(@"up-");
             [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
         }];
-        [videoTableView addSubview:topPullView];
+        [_girlsVideoTable addSubview:topPullView];
         isHeaderSeted = YES;
     }
 }
@@ -756,12 +749,12 @@
 //加底部部刷新
 -(void)setFooterRereshing{
     if(!isFooterSeted){
-        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:videoTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_girlsVideoTable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
             NSLog(@"down-");
             [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
         }];
-        [videoTableView addSubview:bottomPullView];
+        [_girlsVideoTable addSubview:bottomPullView];
         isFooterSeted = YES;
     }
 }
@@ -770,7 +763,7 @@
 -(void)callBackMethod:(id) obj
 {
     [self loadGirlsData];
-    [videoTableView reloadData];
+    [_girlsVideoTable reloadData];
 }
 
 
@@ -826,11 +819,11 @@
     NSString *newId = [[cellDic valueForKey:@"_id"] stringValue];
     //NSLog(@"newDataId=%@",newId);
     if(![bid isEqual:newId]){
-        GirlsVideoViewController *girlVideoController = [[GirlsVideoViewController alloc]init];
-        passValelegate = girlVideoController;
+        GirlsVideoViewController *girlVideoView = (GirlsVideoViewController*)[self getVCFromSB:@"girlsVideo"];
+        passValelegate = girlVideoView;
         [passValelegate passValue:newId];
         
-        [self presentViewController:girlVideoController animated:YES completion:^{
+        [self presentViewController:girlVideoView animated:YES completion:^{
             [moviePlayer stop];
         }];
     

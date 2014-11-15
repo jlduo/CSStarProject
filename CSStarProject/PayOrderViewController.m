@@ -9,7 +9,6 @@
 #import "PayOrderViewController.h"
 
 @interface PayOrderViewController (){
-    UITableView *payTypeTableView;
     NSMutableArray *titleArr;
     NSString *orderId;
     
@@ -38,8 +37,14 @@
     titleArr = [[NSMutableArray alloc]initWithArray:@[ @"支付宝支付",@"网上银行支付"]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPageInfo) name:@"showPageInfo" object:nil];
-    
-    
+
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+    self.tabBarController.tabBar.hidden = TRUE;
+    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
+    [customTabar hiddenDIYTaBar];
 }
 
 -(void)showPageInfo{
@@ -51,29 +56,17 @@
 }
 
 -(void)initLoadData{
-    //计算高度
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    payTypeTableView = [[UITableView alloc] initWithFrame:tframe];
-    payTypeTableView.delegate = self;
-    payTypeTableView.dataSource = self;
-    payTypeTableView.rowHeight = 180;
-    
-    payTypeTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    payTypeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [payTypeTableView setTableFooterView:view];
-    payTypeTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:payTypeTableView];
+ 
+    _payOrderTable.rowHeight = 180;
+    _payOrderTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _payOrderTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void)setHeadView{
-    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 10)];
     [headView setBackgroundColor:[UIColor clearColor]];
     
-    [payTypeTableView setTableHeaderView:headView];
+    [_payOrderTable setTableHeaderView:headView];
 }
 
 -(void)loadView{
@@ -84,9 +77,9 @@
 
 -(void)goForward{
     //NSLog(@"weweqeqeq");
-    ShowOrderViewController *showOrder = [[ShowOrderViewController alloc]init];
-    passValelegate = showOrder;
-    [passValelegate passValue:orderId];
+    ShowOrderViewController *showOrder = (ShowOrderViewController *)[self getVCFromSB:@"showOrder"];
+    _passValelegate = showOrder;
+    [_passValelegate passValue:orderId];
     [self.navigationController pushViewController:showOrder animated:YES];     
 }
 
@@ -157,7 +150,7 @@
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
@@ -312,8 +305,8 @@
         [payCell.payTitleView setText:@"使用支付宝支付"];
         [payCell.payIconView setImage:[UIImage imageNamed:@"logo-alipay.png"]];
     }else{
-        [payCell.payTitleView setText:@"使用网银支付"];
-        [payCell.payIconView setImage:[UIImage imageNamed:@"logo-unionpay.png"]];
+        //[payCell.payTitleView setText:@"使用网银支付"];
+        //[payCell.payIconView setImage:[UIImage imageNamed:@"logo-unionpay.png"]];
     }
     
     return payCell;

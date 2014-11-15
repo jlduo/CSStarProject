@@ -9,11 +9,19 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "UIViewController+HUD.h"
+#import "UIViewController+DismissKeyboard.h"
 #import "EditCityViewController.h"
 
-@interface AddAddressViewController : CommonViewController<ViewPassValueDelegate,UITextFieldDelegate,UIAlertViewDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
-}
+@interface AddAddressViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
+
+@property(nonatomic,weak)NSObject<ViewPassValueDelegate> *passValelegate;
+@property (weak, nonatomic) IBOutlet UIView *addressBackView;
+@property (weak, nonatomic) IBOutlet UITextField *recPeopleTxt;
+@property (weak, nonatomic) IBOutlet UITextField *phoneNumTxt;
+@property (weak, nonatomic) IBOutlet UITextField *areaCodeTxt;
+@property (weak, nonatomic) IBOutlet UITextField *areaNameTxt;
+@property (weak, nonatomic) IBOutlet UITextView *remarkText;
+@property (weak, nonatomic) IBOutlet UIButton *deleteBtnView;
+- (IBAction)clickDeleteBtn:(id)sender;
 
 @end

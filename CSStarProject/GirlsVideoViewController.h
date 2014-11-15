@@ -25,16 +25,9 @@
 
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
 ViewPassValueDelegate,UITextViewDelegate> {
-    
-    MPMoviePlayerController *moviePlayer;
-    UIActivityIndicatorView *loadingAni;    //加载动画
-    UILabel *loadingLabel;                  //加载提醒
-    
-    NSMutableDictionary *bannerData;//导航初始数据
-    NSMutableArray *topVideoArray;//推荐视频数据
-    
     // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
+    __weak NSObject<ViewPassValueDelegate> *passValelegate;
 }
+@property (weak, nonatomic) IBOutlet UITableView *girlsVideoTable;
 
 @end

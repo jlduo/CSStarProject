@@ -12,18 +12,21 @@
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
 #import "myCommentViewController.h"
+#import "MyCommentsViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "MyProjectListViewController.h"
-#import "ReciverAddressViewController.h"
+#import "MyOrderListViewController.h"
+#import "UserAddressListViewController.h"
 
 
-@interface UserViewController:CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
-}
+@interface UserViewController:CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>
 
 #pragma mark  用户数据
-@property(nonatomic,retain)NSMutableArray *userDataList;
-@property(nonatomic,retain) NSMutableDictionary * userProjectNums;
+@property(nonatomic,strong)NSMutableArray *userDataList;
+@property(nonatomic,strong)NSMutableDictionary * userProjectNums;
+ // 声明一个参数传递代理
+@property(nonatomic,weak)NSObject<ViewPassValueDelegate> *passValelegate;
+
+@property (weak, nonatomic) IBOutlet UITableView *userCenterTable;
 
 @end

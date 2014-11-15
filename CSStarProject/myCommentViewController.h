@@ -16,8 +16,6 @@
 #import "PeopleDetailViewController.h"
 #import "userMessageCommentNewTableViewCell.h"
 
-@interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
-    NSObject<ViewPassValueDelegate> *delegate;
-}
-
+@interface myCommentViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic,weak)NSObject<ViewPassValueDelegate> *passValelegate;
 @end

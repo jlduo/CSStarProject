@@ -19,5 +19,9 @@ ViewPassValueDelegate,UITextViewDelegate>
 
 #pragma mark 回填数据
 @property(nonatomic,retain)NSMutableArray *proCommentList;
+@property (weak, nonatomic) IBOutlet UITableView *projectCommentTable;
+@property (weak, nonatomic) IBOutlet UILabel *commentDate;
+@property (weak, nonatomic) IBOutlet UILabel *commentNum;
+@property (weak, nonatomic) IBOutlet UILabel *comentTitle;
 
 @end

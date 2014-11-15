@@ -9,7 +9,6 @@
 #import "ProjectCommentViewController.h"
 
 @interface ProjectCommentViewController (){
-    UITableView *commentListTableView;
     
     UIToolbar *toolBar;
     UIButton *numBtn;
@@ -19,11 +18,9 @@
     NSDictionary *cellDic;
     NSString *dataId;
     NSDictionary *params;
-    UILabel *lblClickComment;
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
-    
     NSString *commentId;
 }
 
@@ -40,42 +37,13 @@
     return self;
 }
 
--(void)dealloc{
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    lblClickComment = nil;
-    cellDic = nil;
-    dataId = nil;
-    commentId = nil;
-    params = nil;
-    textField = nil;
-    cIconView = nil;
-    plabel = nil;
-    numBtn = nil;
-    toolBar = nil;
-}
-
-
 - (void)viewDidLoad
 {
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-
     [self initHeadView];
     [self initLoadData];
     [self initToolBar];
-    [self showLoading:@"加载中..."];
     [self loadTableList];
     
     //集成刷新控件
@@ -84,20 +52,6 @@
 }
 
 -(void)initHeadView{
-    UIView *headView = [[UIView alloc]init];
-    [headView setFrame:CGRectMake(0, 64, SCREEN_WIDTH, 70)];
-    [headView setBackgroundColor:[StringUitl colorWithHexString:@"#F5F5F5"]];
-    //标题
-    UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(16);
-    lblDetail.frame = CGRectMake(5, 5, SCREEN_WIDTH - 5, 35);
-    lblDetail.text = [params valueForKey:@"projectName"];
-    [headView addSubview:lblDetail];
-    
-    //时间
-    UILabel *lblTimeComment = [[UILabel alloc] init];
-    lblTimeComment.font = main_font(12);
-    lblTimeComment.textColor = [UIColor grayColor];
     
     DateUtil *dateUtil = [[DateUtil alloc]init];
     NSString *ntime =[params valueForKey:@"addTime"];
@@ -105,56 +59,26 @@
         ntime = [ntime substringToIndex:19];
     }
     NSString *stime = [dateUtil getLocalDateFormateUTCDate1:ntime];
-    lblTimeComment.text = stime;
-    lblTimeComment.frame = CGRectMake(5, 40, 130, 30);
-    [headView addSubview:lblTimeComment];
-
-    //评论数图标
-    UIImageView *imgComment=[[UIImageView alloc] init];
-    imgComment.frame = CGRectMake(125, 46, 20, 20);
-    imgComment.image = [UIImage imageNamed:@"myzone-discuss.png"];
-    [headView addSubview:imgComment];
-    
-    //总评论数
-    lblClickComment = [[UILabel alloc] init];
-    lblClickComment.font = main_font(12);
-    lblClickComment.textColor = [UIColor grayColor];
-    lblClickComment.frame = CGRectMake(145, 40, 100, 30);
-    lblClickComment.text = [[NSString alloc] initWithFormat:@"%@ 评论",[params valueForKey:@"talksNum"]];
-    [headView addSubview:lblClickComment];
-    [StringUitl setViewBorder:headView withColor:@"#cccccc" Width:0.5];
-    
-    [self.view addSubview:headView];
+    self.commentDate.text = stime;
+    self.comentTitle.text = [params valueForKey:@"projectName"];
+    self.commentNum.text = [[NSString alloc] initWithFormat:@"%@",[params valueForKey:@"talksNum"]];
     
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64+70, SCREEN_WIDTH,MAIN_FRAME_H-116-40);
-    
-    commentListTableView = [[UITableView alloc] initWithFrame:tframe];
-    commentListTableView.delegate = self;
-    commentListTableView.dataSource = self;
-    commentListTableView.rowHeight = 72;
-    
-    commentListTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _projectCommentTable.rowHeight = 72;
+    _projectCommentTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     //commentListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [commentListTableView setTableFooterView:view];
-    commentListTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:commentListTableView];
 }
 
 //加载头部刷新
 -(void)setHeaderRereshing{
     if(!isHeaderSeted){
-        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:commentListTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_projectCommentTable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
             [self performSelector:@selector(callBackMethod:) withObject:@"new" afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:@"old" afterDelay:1.0f];
         }];
-        [commentListTableView addSubview:topPullView];
+        [_projectCommentTable addSubview:topPullView];
         isHeaderSeted = YES;
     }
 }
@@ -162,11 +86,11 @@
 //加底部部刷新
 -(void)setFooterRereshing{
     if(!isFooterSeted){
-        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:commentListTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_projectCommentTable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
             [self performSelector:@selector(callBackMethod:) withObject:nil afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:1.0f];
         }];
-        [commentListTableView addSubview:bottomPullView];
+        [_projectCommentTable addSubview:bottomPullView];
         isFooterSeted = YES;
     }
 }
@@ -386,9 +310,9 @@
         
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
         [self loadTableList];
-        [commentListTableView reloadData];
+        [_projectCommentTable reloadData];
         
-        lblClickComment.text = [[NSString alloc] initWithFormat:@"%d评论",_proCommentList.count];
+        self.commentNum.text = [[NSString alloc] initWithFormat:@"%d",_proCommentList.count];
     }else{
         [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
     }
@@ -442,7 +366,7 @@
     _proCommentList = jsonArr;
     [self setFooterRereshing];
     [self hideHud];
-    [commentListTableView reloadData];
+    [_projectCommentTable reloadData];
 
 }
 

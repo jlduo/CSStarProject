@@ -9,7 +9,7 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
-#define CONNECT_MODE 1 //访问模式 1 测试版 2 正式版
+#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
 #define PAGESIZE @"5"//列表分页数据
 #define CF_PAGESIZE @"5"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度
@@ -25,6 +25,7 @@
 #define NAV_TITLE_INDEX SCREEN_WIDTH/2//导航标题位置
 
 #define VIEW_FRAME_H self.view.frame.size.height
+#define SVIEW_FRAME_H self.view.frame.size.height-64-49
 #define MAIN_FRAME [[UIScreen mainScreen] applicationFrame]//屏幕尺寸
 #define MAIN_FRAME_X MAIN_FRAME.origin.x
 #define MAIN_FRAME_Y MAIN_FRAME.origin.y

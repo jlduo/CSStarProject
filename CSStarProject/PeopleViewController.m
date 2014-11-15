@@ -34,16 +34,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    
     [self initLoading];
     [self setTableData];
     [self initScroll];
-    
-    _peopleTableView.delegate = self;
-    _peopleTableView.dataSource = self;
     
     _peopleTableView.rowHeight = 300;
     _peopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -177,10 +170,11 @@
     
     if([StringUitl checkLogin]==TRUE){
         NSLog(@"tag==%d",sender.tag);
-        PeopleFilterProjectController *peopleFilterController =[[PeopleFilterProjectController alloc]init];
-        passValelegate = peopleFilterController;
+        PeopleFilterProjectController *filterController = (PeopleFilterProjectController *)[self getVCFromSB:@"peopleFilter"];
+        passValelegate = filterController;
         [passValelegate passValue:[NSString stringWithFormat:@"%d",sender.tag]];
-        [self.navigationController pushViewController:peopleFilterController animated:YES];
+        [self.navigationController pushViewController:filterController animated:YES];
+        
     }else{
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
         LoginViewController *loginView = [[LoginViewController alloc] init];
@@ -231,7 +225,7 @@
 
 -(void)goForward{
     if([StringUitl checkLogin]==TRUE){
-        UserViewController *userView = [[UserViewController alloc] init];
+        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
         [self.navigationController pushViewController:userView animated:YES];
     }else{
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
@@ -298,6 +292,7 @@
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
 {
+    [self initScroll];
     [self loadTableList];
     [self.peopleTableView reloadData];
 }
@@ -328,7 +323,7 @@
         
         if([StringUitl checkLogin]==TRUE){
             NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
-            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
             passValelegate = deatilViewController;
             [passValelegate passValue:projectId];
             [self.navigationController pushViewController:deatilViewController animated:YES];
@@ -455,7 +450,8 @@
     }else{
         cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
         if(cellDic!=nil){
-            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+
+            PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
             passValelegate = deatilViewController;
             [passValelegate passValue:[cellDic valueForKey:@"id"]];
             [self.navigationController pushViewController:deatilViewController animated:YES];

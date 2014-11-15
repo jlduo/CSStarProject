@@ -23,6 +23,21 @@
     [super viewDidLoad];
 }
 
+-(void)dealloc{
+    [self releaseDMemery];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+    [self releaseDMemery];
+}
+
+-(void)releaseDMemery{
+    leftIconName = nil;
+    rightIconName= nil;
+}
+
+
 
 -(void)loadView{
     [super loadView];
@@ -101,20 +116,23 @@
 -(void)goPreviou{
     NSLog(@"back");
     [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)goForward{
     NSLog(@"go");
     if([StringUitl checkLogin]==TRUE){
-        UserViewController *userView = [[UserViewController alloc] init];
+
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UserViewController *userView =  [storyBoard instantiateViewControllerWithIdentifier:@"userCenter"];
         [self.navigationController pushViewController:userView animated:YES];
+        
     }else{
+        
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
         LoginViewController *loginView = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:loginView animated:YES];
-//        [self presentViewController:userView animated:YES completion:^{
-//            //
-//        }];
+        
     }
     
 }
@@ -180,6 +198,14 @@
     [alert show];
 }
 
+-(UIStoryboard *)getStoryBoard:(NSString *)sbName{
+    if([StringUitl isEmpty:sbName])sbName = @"Main";
+    return [UIStoryboard storyboardWithName:sbName bundle:nil];
+}
+
+-(UIViewController *)getVCFromSB:(NSString *)vname{
+    return [[self getStoryBoard:nil] instantiateViewControllerWithIdentifier:vname];
+}
 
 
 @end

@@ -21,5 +21,7 @@
 @property(nonatomic,retain)NSDictionary *contentData;
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
+@property (weak, nonatomic) IBOutlet MarqueeLabel *contentTitle;
+@property (weak, nonatomic) IBOutlet UIWebView *contentView;
 
 @end
