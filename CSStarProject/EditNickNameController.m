@@ -26,9 +26,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.nickNameBg.layer setCornerRadius:5.0f];
-    [self.nickNameBg.layer setBorderWidth:1.0f];
-    [self.nickNameBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    
+    [StringUitl setViewBorder:self.nickNameBg withColor:@"#CCCCCC" Width:0.5f];
+    
     [self.nickName setText:[StringUitl getSessionVal:USER_NICK_NAME]];
     self.nickName.delegate = self;
     

@@ -110,7 +110,7 @@
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
-    [tabBarController showDIYTaBar];
+    [tabBarController hiddenDIYTaBar];
 }
 
 
@@ -272,12 +272,12 @@
     NSLog(@"go detail......!");
     if(![StringUitl checkLogin]==TRUE){
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
     }else{
         cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
         if(cellDic!=nil){
-            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
             passValelegate = deatilViewController;
             [passValelegate passValue:[cellDic valueForKey:@"id"]];
             [self.navigationController pushViewController:deatilViewController animated:YES];

@@ -192,40 +192,9 @@
     
 }
 
-
-
--(void)setNavgationBar{
-    //处理导航开始
-    self.navigationController.navigationBarHidden = YES;
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
-    [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
-    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
-    //处理标题
-    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
-    [titleLabel setText:@"个人中心"];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    
-    //设置左边箭头
-    UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
-    [lbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_LEFT_ICON] forState:UIControlStateNormal];
-    [lbtn addTarget:self action:@selector(goPreviou) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
-    
-    navItem.titleView = titleLabel;
-    navItem.leftBarButtonItem = leftBtnItem;
-    [navgationBar pushNavigationItem:navItem animated:YES];
-    
-    [self.view addSubview:navgationBar];
-    
-}
-
 //跳转到个人信息页面
 -(void)imgBtnClick{
-    UserInfoViewController *userInfoView = [[UserInfoViewController alloc]init];
+    UserInfoViewController *userInfoView = (UserInfoViewController *)[self getVCFromSB:@"userInfo"];
     [self.navigationController pushViewController:userInfoView animated:YES];
 }
 
@@ -343,10 +312,10 @@
         [newUserCell.dataTitle setText:@"清空缓存数据"];
         [newUserCell.dataTitle setTextAlignment:NSTextAlignmentCenter];
         
-        NSString *clearStr = [self getCacheFileSize];
-        if([StringUitl isNotEmpty:clearStr]){
-          [newUserCell.dataTitle setText:[NSString stringWithFormat:@"清空缓存数据(%@)",clearStr]];
-        }
+        //NSString *clearStr = [self getCacheFileSize];
+        //if([StringUitl isNotEmpty:clearStr]){
+          //[newUserCell.dataTitle setText:[NSString stringWithFormat:@"清空缓存数据(%@)",clearStr]];
+        //}
         
         return newUserCell;
     }
@@ -417,26 +386,11 @@
     
 }
 
--(void)goMessage{
-    
-}
-
--(void)goOrder2{
-    PeopleProListViewController *orderController = [[PeopleProListViewController alloc] init];
-    _passValelegate =orderController;
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"2" forKey:@"titleName"];
-    [params setObject:@"order" forKey:@"titleValue"];
-    [_passValelegate passDicValue:params];
-    [_passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
-    [self.navigationController pushViewController:orderController animated:YES];
-}
 
 -(void)goOrder{
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    MyOrderListViewController *orderListView =  [storyBoard instantiateViewControllerWithIdentifier:@"myOrderView"];
+    MyOrderListViewController *orderListView = (MyOrderListViewController *)[self getVCFromSB:@"myOrderView"];
     _passValelegate = orderListView;
     [params setObject:@"2" forKey:@"titleName"];
     [params setObject:@"order" forKey:@"titleValue"];
@@ -449,11 +403,6 @@
 -(void)goProject{
     MyProjectListViewController *projectController =  (MyProjectListViewController *)[self getVCFromSB:@"myProjectList"];
     [self.navigationController pushViewController:projectController animated:YES];
-}
-
--(void)goComment2{
-    myCommentViewController *comController = [[myCommentViewController alloc] init];
-    [self.navigationController pushViewController:comController animated:YES];
 }
 
 

@@ -67,11 +67,9 @@
     self.cityPciker.delegate = self;
     
     [self.cityBg setAlpha:0.8f];
-    [self.cityBg.layer setCornerRadius:5.0f];
-    [self.cityBg.layer setBorderWidth:0.5f];
-    [self.cityBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    [StringUitl setViewBorder:self.cityBg withColor:@"#CCCCCC" Width:0.5f];
     
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{

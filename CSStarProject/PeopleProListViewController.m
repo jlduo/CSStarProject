@@ -30,22 +30,10 @@
     return self;
 }
 
--(void)dealloc{
-    NSLog(@"【PeopleProListViewController】==>释放内存...");
-    cellDic = nil;
-    dataId = nil;
-    titleName = nil;
-    params = nil;
-}
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    
     [self initLoadData];
     [self loadTableList];
 }
@@ -138,12 +126,12 @@
     NSArray *returnArr = (NSArray *)jsonDic;
     if(returnArr!=nil && returnArr.count>0){
         _peopleProList = [NSMutableArray arrayWithArray:returnArr];
+        [self hideHud];
+        [_projectListTable reloadData];
     }else{
         _peopleProList = [[NSMutableArray alloc]init];
+        [self showHint:@"没有最新数据..."];
     }
-    
-    [_projectListTable reloadData];
-    [self hideHud];
     
 }
 
@@ -152,6 +140,7 @@
 {
     
     [self hideHud];
+    [self showCAlert:@"请求数据失败..." widthType:ERROR_LOGO];
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     

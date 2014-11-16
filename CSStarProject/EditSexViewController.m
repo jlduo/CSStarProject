@@ -27,20 +27,16 @@
 {
     [super viewDidLoad];
     [self setNavgationBar];
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    
     [self.boyBg setAlpha:0.8f];
-    [self.boyBg.layer setCornerRadius:22.5f];
-    [self.boyBg.layer setBorderWidth:0.5f];
-    [self.boyBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [StringUitl setViewBorder:self.boyBg withColor:@"#CCCCCC" Width:0.5f];
     
     [self.girlBg setAlpha:0.8f];
-    [self.girlBg.layer setCornerRadius:22.5f];
-    [self.girlBg.layer setBorderWidth:0.5f];
-    [self.girlBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [StringUitl setViewBorder:self.girlBg withColor:@"#CCCCCC" Width:0.5f];
     
     [self.bmBg setAlpha:0.8f];
-    [self.bmBg.layer setCornerRadius:22.5f];
-    [self.bmBg.layer setBorderWidth:0.5f];
-    [self.bmBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [StringUitl setViewBorder:self.bmBg withColor:@"#CCCCCC" Width:0.5f];
     
     _boyRadio.on = YES;
     _girlRadio.on = NO;

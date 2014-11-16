@@ -19,5 +19,6 @@
 #import "EditCityViewController.h"
 @interface UserInfoViewController : CommonViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *userInfoTable;
 
 @end

@@ -18,7 +18,7 @@
 #import "StoryCommentViewController.h"
 
 @interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
-UIGestureRecognizerDelegate,MWPhotoBrowserDelegate>
+UIGestureRecognizerDelegate,MWPhotoBrowserDelegate,UIWebViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;

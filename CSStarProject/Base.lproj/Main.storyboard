@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Friend View Controller - 朋友圈_ViewController-->
+        <!--朋友圈-->
         <scene sceneID="8g0-Fc-4ge">
             <objects>
-                <viewController title="朋友圈_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="HyK-ek-DHZ" customClass="FriendViewController" sceneMemberID="viewController">
+                <viewController title="朋友圈_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="HyK-ek-DHZ" userLabel="朋友圈" customClass="FriendViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y0Y-al-qBh"/>
                         <viewControllerLayoutGuide type="bottom" id="eMC-jo-Kqd"/>
@@ -76,6 +76,152 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cj1-RP-tE1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1372" y="1291"/>
+        </scene>
+        <!--用户登录-->
+        <scene sceneID="GWZ-jU-WFM">
+            <objects>
+                <viewController storyboardIdentifier="userLogin" title="用户登录" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="iT1-PS-APp" userLabel="用户登录" customClass="LoginViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="X1R-J5-eUY"/>
+                        <viewControllerLayoutGuide type="bottom" id="dOd-Hj-9mR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FRQ-Nz-cAw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zRu-n7-3ec">
+                                <rect key="frame" x="10" y="80" width="300" height="140"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5c6-vG-Zj0">
+                                        <rect key="frame" x="10" y="20" width="280" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入用户名" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="j0J-hS-tVm">
+                                                <rect key="frame" x="46" y="5" width="227" height="35"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="iT1-PS-APp" id="q08-R3-fvq"/>
+                                                </connections>
+                                            </textField>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iconuser.png" translatesAutoresizingMaskIntoConstraints="NO" id="DHf-wv-igB">
+                                                <rect key="frame" x="10" y="9" width="28" height="28"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KhD-Yp-Wdp">
+                                        <rect key="frame" x="10" y="75" width="280" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VwK-Jm-Aa0">
+                                                <rect key="frame" x="46" y="5" width="227" height="35"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="iT1-PS-APp" id="vjg-c8-whK"/>
+                                                </connections>
+                                            </textField>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iconlock.png" translatesAutoresizingMaskIntoConstraints="NO" id="uXe-Aq-aso">
+                                                <rect key="frame" x="10" y="9" width="28" height="28"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hhc-DH-gLz">
+                                <rect key="frame" x="10" y="228" width="300" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="登    录">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickLognBtn:" destination="iT1-PS-APp" eventType="touchUpInside" id="g2X-Ew-2Z3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0TR-B0-4iC">
+                                <rect key="frame" x="241" y="272" width="63" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="忘记密码">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickForgetBtn:" destination="iT1-PS-APp" eventType="touchUpInside" id="hT9-jt-ag3"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sXr-74-UgB">
+                                <rect key="frame" x="245" y="291" width="55" height="1"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.32815464989999998" green="0.57069146729999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="forgetBtn" destination="0TR-B0-4iC" id="vVl-dy-xkF"/>
+                        <outlet property="loginBgView" destination="zRu-n7-3ec" id="z0m-Mh-3N7"/>
+                        <outlet property="lognBtn" destination="hhc-DH-gLz" id="Qn5-jg-KVz"/>
+                        <outlet property="passWord" destination="VwK-Jm-Aa0" id="asJ-Ny-mcv"/>
+                        <outlet property="passWordView" destination="KhD-Yp-Wdp" id="yJj-lc-3bT"/>
+                        <outlet property="userName" destination="j0J-hS-tVm" id="byU-1N-vBM"/>
+                        <outlet property="userNameView" destination="5c6-vG-Zj0" id="E1r-J2-Vjc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IiD-6b-d6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="884" y="2000"/>
+        </scene>
+        <!--个人信息-->
+        <scene sceneID="SZK-sf-YBp">
+            <objects>
+                <viewController storyboardIdentifier="userInfo" automaticallyAdjustsScrollViewInsets="NO" id="gGP-qM-xoB" userLabel="个人信息" customClass="UserInfoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fye-1F-YzC"/>
+                        <viewControllerLayoutGuide type="bottom" id="7L1-0u-trk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7qN-ka-GaF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="dD5-2W-Duf">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="gGP-qM-xoB" id="y3y-Eo-PmG"/>
+                                    <outlet property="delegate" destination="gGP-qM-xoB" id="g6c-cU-2QR"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dD5-2W-Duf" firstAttribute="leading" secondItem="7qN-ka-GaF" secondAttribute="leading" id="3rH-Vq-DBZ"/>
+                            <constraint firstAttribute="trailing" secondItem="dD5-2W-Duf" secondAttribute="trailing" id="bhM-MF-94d"/>
+                            <constraint firstAttribute="bottom" secondItem="dD5-2W-Duf" secondAttribute="bottom" id="gRk-0b-hSn"/>
+                            <constraint firstItem="dD5-2W-Duf" firstAttribute="top" secondItem="7qN-ka-GaF" secondAttribute="top" constant="64" id="zFM-UH-85K"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="userInfoTable" destination="dD5-2W-Duf" id="ogP-i4-at0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nfz-SD-P8E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1378" y="2000"/>
         </scene>
         <!--Ta的主页-->
         <scene sceneID="Wae-nc-ayD">
@@ -194,10 +340,10 @@
             </objects>
             <point key="canvasLocation" x="2276" y="1291"/>
         </scene>
-        <!--Home View Controller - 首页_ViewController-->
+        <!--首页-->
         <scene sceneID="HRF-6I-O9P">
             <objects>
-                <viewController title="首页_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="Dzb-sy-isU" customClass="HomeViewController" sceneMemberID="viewController">
+                <viewController title="首页_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="Dzb-sy-isU" userLabel="首页" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="B5C-SA-kna"/>
                         <viewControllerLayoutGuide type="bottom" id="MOI-9q-qSX"/>
@@ -232,10 +378,10 @@
             </objects>
             <point key="canvasLocation" x="895" y="-1613"/>
         </scene>
-        <!--Girls View Controller - 美女私房_ViewController-->
+        <!--美女私房-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
-                <viewController title="美女私房_ViewController" id="kdO-5D-qrW" customClass="GirlsViewController" sceneMemberID="viewController">
+                <viewController title="美女私房_ViewController" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2VX-Ee-d2V"/>
                         <viewControllerLayoutGuide type="bottom" id="Uv1-g8-3ip"/>
@@ -321,7 +467,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ux0-SV-yvC">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -332,10 +478,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="ux0-SV-yvC" secondAttribute="bottom" id="8lh-QI-dDu"/>
                             <constraint firstAttribute="trailing" secondItem="ux0-SV-yvC" secondAttribute="trailing" id="KSj-Q4-EeJ"/>
                             <constraint firstItem="ux0-SV-yvC" firstAttribute="leading" secondItem="5hY-h6-wuF" secondAttribute="leading" id="LvU-be-Exe"/>
                             <constraint firstItem="ux0-SV-yvC" firstAttribute="top" secondItem="5hY-h6-wuF" secondAttribute="top" constant="64" id="OVu-36-GVR"/>
+                            <constraint firstAttribute="bottom" secondItem="ux0-SV-yvC" secondAttribute="bottom" constant="49" id="Vmp-4I-QQQ"/>
                         </constraints>
                     </view>
                     <connections>
@@ -462,10 +608,10 @@
             </objects>
             <point key="canvasLocation" x="1722" y="-1613"/>
         </scene>
-        <!--User Address List View Controller-->
+        <!--用户地址列表-->
         <scene sceneID="2eq-wf-8PW">
             <objects>
-                <viewController storyboardIdentifier="myAddressList" automaticallyAdjustsScrollViewInsets="NO" id="ifM-aL-btu" customClass="UserAddressListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="myAddressList" title="用户地址列表" automaticallyAdjustsScrollViewInsets="NO" id="ifM-aL-btu" userLabel="用户地址列表" customClass="UserAddressListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UKW-XY-7QC"/>
                         <viewControllerLayoutGuide type="bottom" id="QCY-zd-Hmy"/>
@@ -500,10 +646,10 @@
             </objects>
             <point key="canvasLocation" x="2117" y="-1613"/>
         </scene>
-        <!--People View Controller - 活动众筹个_ViewController-->
+        <!--活动众筹-->
         <scene sceneID="bp3-Pq-Adq">
             <objects>
-                <viewController title="活动众筹个_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="oMW-WD-uXC" customClass="PeopleViewController" sceneMemberID="viewController">
+                <viewController title="活动众筹个_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="oMW-WD-uXC" userLabel="活动众筹" customClass="PeopleViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RQm-eW-vjD"/>
                         <viewControllerLayoutGuide type="bottom" id="YFX-DV-uf5"/>
@@ -614,10 +760,10 @@
             </objects>
             <point key="canvasLocation" x="1827" y="589"/>
         </scene>
-        <!--My Project List View Controller-->
+        <!--我的众筹-->
         <scene sceneID="rov-Y4-CdG">
             <objects>
-                <viewController storyboardIdentifier="myProjectList" automaticallyAdjustsScrollViewInsets="NO" id="AIt-HA-1hT" customClass="MyProjectListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="myProjectList" automaticallyAdjustsScrollViewInsets="NO" id="AIt-HA-1hT" userLabel="我的众筹" customClass="MyProjectListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NOW-Ih-wIe"/>
                         <viewControllerLayoutGuide type="bottom" id="9lI-c8-sYg"/>
@@ -846,10 +992,10 @@
             </objects>
             <point key="canvasLocation" x="3510" y="589"/>
         </scene>
-        <!--Story View Controller - 星城故事_ViewController-->
+        <!--星城故事-->
         <scene sceneID="9hq-Y2-9rs">
             <objects>
-                <viewController title="星城故事_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="aGx-Wv-JVF" customClass="StoryViewController" sceneMemberID="viewController">
+                <viewController title="星城故事_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="aGx-Wv-JVF" userLabel="星城故事" customClass="StoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3Nt-YM-Jjg"/>
                         <viewControllerLayoutGuide type="bottom" id="bUC-5V-IZv"/>
@@ -884,10 +1030,10 @@
             </objects>
             <point key="canvasLocation" x="884" y="-117"/>
         </scene>
-        <!--Story Detail View Controller - 星城故事详情_ViewController-->
+        <!--星城故事详情-->
         <scene sceneID="s72-QE-N4T">
             <objects>
-                <viewController storyboardIdentifier="storyDetail" title="星城故事详情_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="ciz-TT-mdh" customClass="StoryDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="storyDetail" title="星城故事详情_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="ciz-TT-mdh" userLabel="星城故事详情" customClass="StoryDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qPJ-EK-9xL"/>
                         <viewControllerLayoutGuide type="bottom" id="rPL-NE-sJR"/>
@@ -1120,10 +1266,10 @@
             </objects>
             <point key="canvasLocation" x="2284" y="-778"/>
         </scene>
-        <!--Story Comment View Controller - 星城故事评论_ViewController-->
+        <!--星城故事评论-->
         <scene sceneID="8Ww-Gb-4iq">
             <objects>
-                <viewController storyboardIdentifier="storyComment" title="星城故事评论_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="lkv-1K-pr1" customClass="StoryCommentViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="storyComment" title="星城故事评论_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="lkv-1K-pr1" userLabel="星城故事评论" customClass="StoryCommentViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MCI-wC-KVn"/>
                         <viewControllerLayoutGuide type="bottom" id="O8d-QU-9WU"/>
@@ -1315,10 +1461,10 @@
             </objects>
             <point key="canvasLocation" x="3083" y="-117"/>
         </scene>
-        <!--Init Tab Bar View Controller-->
+        <!--初始化页面-->
         <scene sceneID="d5d-2v-8yF">
             <objects>
-                <tabBarController storyboardIdentifier="HomePage" id="1qy-3C-6qL" customClass="InitTabBarViewController" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="HomePage" id="1qy-3C-6qL" userLabel="初始化页面" customClass="InitTabBarViewController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="hfM-Fa-FEZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
@@ -1337,10 +1483,10 @@
             </objects>
             <point key="canvasLocation" x="-377" y="-742"/>
         </scene>
-        <!--Navigation Controller - 首页-->
+        <!--首页导航-->
         <scene sceneID="Xg4-s9-CB0">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hnA-XZ-2fr" sceneMemberID="viewController">
+                <navigationController title="首页导航" automaticallyAdjustsScrollViewInsets="NO" id="hnA-XZ-2fr" userLabel="首页导航" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="首页" id="VMW-tR-qEl"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="frB-f8-qkG">
@@ -1356,10 +1502,10 @@
             </objects>
             <point key="canvasLocation" x="352" y="-1613"/>
         </scene>
-        <!--Navigation Controller - 美女私房-->
+        <!--美女私房导航-->
         <scene sceneID="HIg-rY-bCW">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fM3-lm-kza" sceneMemberID="viewController">
+                <navigationController title="美女私房导航" automaticallyAdjustsScrollViewInsets="NO" id="fM3-lm-kza" userLabel="美女私房导航" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="美女私房" id="cUk-qe-19n"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="RG7-f0-EDb">
@@ -1378,10 +1524,10 @@
             </objects>
             <point key="canvasLocation" x="352" y="-837"/>
         </scene>
-        <!--Navigation Controller - 星城故事-->
+        <!--星城故事导航-->
         <scene sceneID="KaJ-Ym-LEP">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qlb-G1-BnD" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qlb-G1-BnD" userLabel="星城故事导航" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="星城故事" id="ySm-Nu-oyG"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="meu-dT-JRs">
@@ -1397,10 +1543,10 @@
             </objects>
             <point key="canvasLocation" x="352" y="-117"/>
         </scene>
-        <!--Navigation Controller - 活动众筹-->
+        <!--活动众筹导航-->
         <scene sceneID="sOg-34-kTs">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pkK-FE-J3V" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pkK-FE-J3V" userLabel="活动众筹导航" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="活动众筹" id="wJ3-ZW-y2N"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LSP-lS-QxP">
@@ -1416,10 +1562,10 @@
             </objects>
             <point key="canvasLocation" x="352" y="589"/>
         </scene>
-        <!--Navigation Controller - 朋友圈-->
+        <!--朋友圈导航-->
         <scene sceneID="O4t-U1-SSn">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Nl-GP-D9l" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Nl-GP-D9l" userLabel="朋友圈导航" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="朋友圈" id="mvX-YJ-YXh"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="JS9-xK-jPS">
@@ -1438,6 +1584,8 @@
     </scenes>
     <resources>
         <image name="discussicon.png" width="47" height="44"/>
+        <image name="iconlock.png" width="47" height="47"/>
+        <image name="iconuser.png" width="47" height="47"/>
         <image name="mydiscu_star_on.png" width="48" height="48"/>
         <image name="mydiscu_zhongchou.png" width="48" height="48"/>
         <image name="myzone_like_on.png" width="48" height="48"/>

@@ -114,9 +114,9 @@
             
         }else{
             if(sender.tag!=0){
-                LoginViewController *loginView = [[LoginViewController alloc]init];
                 [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
-                //[self.tabBarController.navigationController pushViewController:loginView animated:YES];
+                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                LoginViewController *loginView =  [storyBoard instantiateViewControllerWithIdentifier:@"userLogin"];
                 [self presentViewController:loginView animated:YES completion:nil];
             }
         }

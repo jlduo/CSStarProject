@@ -71,7 +71,6 @@
 		7E9EEC1019C27D2600C0514C /* CommentTableListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EEC0E19C27D2600C0514C /* CommentTableListCell.m */; };
 		7E9EEC1119C27D2600C0514C /* CommentTableListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9EEC0F19C27D2600C0514C /* CommentTableListCell.xib */; };
 		7E9EEC1B19C2A84000C0514C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EEC1919C2A84000C0514C /* LoginViewController.m */; };
-		7E9EEC1C19C2A84000C0514C /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9EEC1A19C2A84000C0514C /* LoginViewController.xib */; };
 		7E9EEC2619C2DE5C00C0514C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EEC2419C2DE5C00C0514C /* RegisterViewController.m */; };
 		7E9EEC2719C2DE5C00C0514C /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9EEC2519C2DE5C00C0514C /* RegisterViewController.xib */; };
 		7E9EEC2E19C2EF1E00C0514C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64F63619BEBA2F00C8C62C /* CFNetwork.framework */; };
@@ -555,7 +554,6 @@
 		7E9EEC0F19C27D2600C0514C /* CommentTableListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentTableListCell.xib; sourceTree = "<group>"; };
 		7E9EEC1819C2A84000C0514C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		7E9EEC1919C2A84000C0514C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		7E9EEC1A19C2A84000C0514C /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		7E9EEC2319C2DE5C00C0514C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		7E9EEC2419C2DE5C00C0514C /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		7E9EEC2519C2DE5C00C0514C /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
@@ -1479,7 +1477,6 @@
 			children = (
 				7E9EEC1819C2A84000C0514C /* LoginViewController.h */,
 				7E9EEC1919C2A84000C0514C /* LoginViewController.m */,
-				7E9EEC1A19C2A84000C0514C /* LoginViewController.xib */,
 				7E9EEC2319C2DE5C00C0514C /* RegisterViewController.h */,
 				7E9EEC2419C2DE5C00C0514C /* RegisterViewController.m */,
 				7E9EEC2519C2DE5C00C0514C /* RegisterViewController.xib */,
@@ -2477,7 +2474,6 @@
 				7E9F656A19EF56070041AB5E /* next_icon@2x.png in Resources */,
 				7E3A225C19F4D109004D31D4 /* userMessageCommentNewTableViewCell.xib in Resources */,
 				7E9F654C19EF56070041AB5E /* label_fundraising_s2.png in Resources */,
-				7E9EEC1C19C2A84000C0514C /* LoginViewController.xib in Resources */,
 				7EA1BB051A08A04100995F46 /* nonetwork@2x.png in Resources */,
 				7E9F659119EF56070041AB5E /* video_play_light@2x.png in Resources */,
 				7E9F656F19EF56070041AB5E /* playtimes.png in Resources */,
@@ -2769,6 +2765,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
+				PROVISIONING_PROFILE = "e814dae1-4798-457e-b2ab-7742494d21e8";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -2806,6 +2803,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
+				PROVISIONING_PROFILE = "e814dae1-4798-457e-b2ab-7742494d21e8";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv7s";
@@ -2817,8 +2815,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CSStarProject/ShareSDK/Core",
@@ -2851,8 +2849,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CSStarProject/ShareSDK/Core",

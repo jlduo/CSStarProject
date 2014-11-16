@@ -64,7 +64,7 @@
 
 
 -(void)goPreviou{
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
