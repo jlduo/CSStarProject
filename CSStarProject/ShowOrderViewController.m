@@ -9,7 +9,6 @@
 #import "ShowOrderViewController.h"
 
 @interface ShowOrderViewController (){
-    UITableView *orderInfoTableView;
     NSString *orderId;
     UIButton *rbtn;
     UIImageView *stateView;
@@ -38,32 +37,17 @@
     [self setFooterView];
     [self setNavgationBar];
     
-    [orderInfoTableView addSubview:[self setTagView]];
-    
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
+    [_showOrderTable addSubview:[self setTagView]];
     [self.view setBackgroundColor:[StringUitl colorWithHexString:@"#F5F5F5"]];
 
 }
 
 -(void)initLoadData{
-    //计算高度
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    orderInfoTableView = [[UITableView alloc] initWithFrame:tframe];
-    orderInfoTableView.delegate = self;
-    orderInfoTableView.dataSource = self;
-    orderInfoTableView.rowHeight = 180;
+
+    _showOrderTable.rowHeight = 180;
+    _showOrderTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _showOrderTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    orderInfoTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    orderInfoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [orderInfoTableView setTableFooterView:view];
-    orderInfoTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:orderInfoTableView];
 }
 
 -(void)passValue:(NSString *)val{
@@ -135,11 +119,11 @@
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
 
-    [orderInfoTableView setTableHeaderView:headView];
+    [_showOrderTable setTableHeaderView:headView];
 }
 
 -(void)goProject{
-    PeopleDetailViewController *detailViewController = [[PeopleDetailViewController alloc]init];
+    PeopleDetailViewController *detailViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
     passValelegate = detailViewController;
     [passValelegate passValue:[_orderInfoData valueForKey:@"projectId"]];
     [self.navigationController pushViewController:detailViewController animated:YES];
@@ -160,14 +144,14 @@
     [footerView addSubview:payBox];
     int orderState = [[_orderInfoData valueForKey:@"orderStatus"] intValue];
     if(orderState!=3 && orderState!=4){
-       [orderInfoTableView setTableFooterView:footerView];
+       [_showOrderTable setTableFooterView:footerView];
     }
     
 }
 
 -(void)goPayMoney:(UIButton *)sender{
     //[self goPreviou];
-    PayOrderViewController *payViewController = [[PayOrderViewController alloc]init];
+    PayOrderViewController *payViewController = (PayOrderViewController *)[self getVCFromSB:@"payOrder"];
     passValelegate = payViewController;
     [passValelegate passValue:[_orderInfoData valueForKey:@"id"]];
     [self.navigationController pushViewController:payViewController animated:YES];
@@ -178,12 +162,16 @@
     UIViewController *previousViewController;
     int viewsCount = self.navigationController.viewControllers.count;
     if(viewsCount>5){
-       previousViewController = [self.navigationController.viewControllers objectAtIndex:viewsCount-4];
+       previousViewController = [self.navigationController.viewControllers objectAtIndex:2];
     }else{
        previousViewController = [self.navigationController.viewControllers objectAtIndex:viewsCount-2];
     }
     [self.navigationController popToViewController:previousViewController animated:YES];
     
+//    ReturnsViewController *returnList = (ReturnsViewController *)[self getVCFromSB:@"returnList"];
+//    passValelegate = returnList;
+//    [passValelegate passValue:[_orderInfoData valueForKey:@"projectId"]];
+//    [self.navigationController pushViewController:returnList animated:YES];
 }
 
 -(UIImageView *)setTagView{
@@ -313,7 +301,7 @@
         [rbtn setTitle:@" " forState:UIControlStateHighlighted];
         [rbtn removeTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
         [stateView setImage:[UIImage imageNamed:@"payment_cancel.png"]];
-        [orderInfoTableView setTableFooterView:nil];
+        [_showOrderTable setTableFooterView:nil];
         [self loadOrderInfo];
         [self setTagView];
     }

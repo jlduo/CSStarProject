@@ -217,7 +217,7 @@
         
     }else{
     
-        StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
+        StoryDetailViewController *detailController = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
         delegate = detailController;
         [delegate passValue:rowId];
         [self.navigationController pushViewController:detailController animated:YES];

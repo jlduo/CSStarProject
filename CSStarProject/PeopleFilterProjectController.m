@@ -18,8 +18,7 @@
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
     NSInteger selectedCount;
-    
-    UITableView *peopleTableView;
+
     XHFriendlyLoadingView *friendlyLoadingView;
     
 }
@@ -32,7 +31,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.tabBarController.hidesBottomBarWhenPushed = TRUE;
+        self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -40,44 +39,34 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    _peopleDataList = [[NSMutableArray alloc]init];
-    
-    peopleTableView.delegate = self;
-    peopleTableView.dataSource = self;
-    
     pageIndex = 1;
     [self initLoadData];
     [self initLoading];
     [self loadTableList];
     
+    _peopleDataList = [[NSMutableArray alloc]init];
 
-    
+}
+
+-(void)goPreviou{
+    [self cleanMemery];
+    [super goPreviou];
+}
+
+-(void)cleanMemery{
+    NSLog(@"清理缓存...");
+    [[SDImageCache sharedImageCache] cleanDisk];
+    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49-44);
-    
-    peopleTableView = [[UITableView alloc] initWithFrame:tframe];
-    peopleTableView.delegate = self;
-    peopleTableView.dataSource = self;
-    peopleTableView.rowHeight = 300;
-    
-    peopleTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    peopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [peopleTableView setTableFooterView:view];
-    peopleTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:peopleTableView];
+    _peopleFilterTable.rowHeight = 300;
+    _peopleFilterTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _peopleFilterTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void)dealloc{
+    [self cleanMemery];
     cellDic = nil;
     friendlyLoadingView = nil;
 }
@@ -128,11 +117,11 @@
 //加载头部刷新
 -(void)setHeaderRereshing{
     if(!isHeaderSeted){
-        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:peopleTableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+        AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_peopleFilterTable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
             [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
         }];
-        [peopleTableView addSubview:topPullView];
+        [_peopleFilterTable addSubview:topPullView];
         isHeaderSeted = YES;
     }
 }
@@ -140,12 +129,12 @@
 //加底部部刷新
 -(void)setFooterRereshing{
     if(!isFooterSeted){
-        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:peopleTableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+        AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_peopleFilterTable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
             pageIndex++;
             [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
             [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
         }];
-        [peopleTableView addSubview:bottomPullView];
+        [_peopleFilterTable addSubview:bottomPullView];
         isFooterSeted = YES;
     }
 }
@@ -245,7 +234,7 @@
         
         [self setHeaderRereshing];
         [self setFooterRereshing];
-        [peopleTableView reloadData];
+        [_peopleFilterTable reloadData];
 
     }else{
         [self showHint:@"对不起，没有更多数据了!"];

@@ -41,6 +41,8 @@
 		7E971F3619ADC8B600858D44 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E971F3519ADC8B600858D44 /* Images.xcassets */; };
 		7E971F4219ADC8B600858D44 /* CSStarProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */; };
 		7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */; };
+		7E98FE561A14828500A22527 /* MyOrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E98FE551A14828500A22527 /* MyOrderListViewController.m */; };
+		7E98FE5A1A14964300A22527 /* MyCommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E98FE591A14964300A22527 /* MyCommentsViewController.m */; };
 		7E99058419CA73F90024F74B /* EditSexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99058219CA73F90024F74B /* EditSexViewController.m */; };
 		7E99058519CA73F90024F74B /* EditSexViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E99058319CA73F90024F74B /* EditSexViewController.xib */; };
 		7E99058919CA85410024F74B /* EditCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E99058719CA85410024F74B /* EditCityViewController.m */; };
@@ -265,7 +267,6 @@
 		7EA1E63A19EE50740055158C /* ReturnTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63819EE50740055158C /* ReturnTableViewCell.xib */; };
 		7EA1E64019EE66490055158C /* ReciverTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E63E19EE66490055158C /* ReciverTableViewCell.m */; };
 		7EA1E64119EE66490055158C /* ReciverTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E63F19EE66490055158C /* ReciverTableViewCell.xib */; };
-		7EA1E64419EE6AA60055158C /* ReciverAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */; };
 		7EA1E73B19E6390700DB685E /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73019E6390700DB685E /* NSDate+Category.m */; };
 		7EA1E73C19E6390700DB685E /* NSDateFormatter+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73219E6390700DB685E /* NSDateFormatter+Category.m */; };
 		7EA1E73D19E6390700DB685E /* UIResponder+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E73419E6390700DB685E /* UIResponder+Router.m */; };
@@ -303,6 +304,7 @@
 		7EA4B9F619D11CAF000FF50E /* PhotoScrollViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4B9F419D11CAF000FF50E /* PhotoScrollViewCell.m */; };
 		7EA4B9F719D11CAF000FF50E /* PhotoScrollViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4B9F519D11CAF000FF50E /* PhotoScrollViewCell.xib */; };
 		7EA4B9FF19D14CE9000FF50E /* LASIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */; };
+		7EA4D0651A15BB8000034532 /* UserAddressListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D0641A15BB8000034532 /* UserAddressListViewController.m */; };
 		7EA4D84B19E7B461004608C7 /* userAddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */; };
 		7EA4D84C19E7B461004608C7 /* userAddressTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */; };
 		7EA4D85519E7BABC004608C7 /* myAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D85419E7BABC004608C7 /* myAddressViewController.m */; };
@@ -499,6 +501,10 @@
 		7E971F4119ADC8B600858D44 /* CSStarProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSStarProjectTests.m; sourceTree = "<group>"; };
 		7E971F5119ADCEE100858D44 /* InitTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitTabBarViewController.h; sourceTree = "<group>"; };
 		7E971F5219ADCEE100858D44 /* InitTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitTabBarViewController.m; sourceTree = "<group>"; };
+		7E98FE541A14828500A22527 /* MyOrderListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderListViewController.h; sourceTree = "<group>"; };
+		7E98FE551A14828500A22527 /* MyOrderListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderListViewController.m; sourceTree = "<group>"; };
+		7E98FE581A14964300A22527 /* MyCommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCommentsViewController.h; sourceTree = "<group>"; };
+		7E98FE591A14964300A22527 /* MyCommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCommentsViewController.m; sourceTree = "<group>"; };
 		7E99058119CA73F90024F74B /* EditSexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditSexViewController.h; sourceTree = "<group>"; };
 		7E99058219CA73F90024F74B /* EditSexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditSexViewController.m; sourceTree = "<group>"; };
 		7E99058319CA73F90024F74B /* EditSexViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditSexViewController.xib; sourceTree = "<group>"; };
@@ -773,8 +779,6 @@
 		7EA1E63D19EE66490055158C /* ReciverTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReciverTableViewCell.h; sourceTree = "<group>"; };
 		7EA1E63E19EE66490055158C /* ReciverTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReciverTableViewCell.m; sourceTree = "<group>"; };
 		7EA1E63F19EE66490055158C /* ReciverTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReciverTableViewCell.xib; sourceTree = "<group>"; };
-		7EA1E64219EE6AA60055158C /* ReciverAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReciverAddressViewController.h; sourceTree = "<group>"; };
-		7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReciverAddressViewController.m; sourceTree = "<group>"; };
 		7EA1E72F19E6390700DB685E /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
 		7EA1E73019E6390700DB685E /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		7EA1E73119E6390700DB685E /* NSDateFormatter+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+Category.h"; sourceTree = "<group>"; };
@@ -843,6 +847,8 @@
 		7EA4B9F519D11CAF000FF50E /* PhotoScrollViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoScrollViewCell.xib; sourceTree = "<group>"; };
 		7EA4B9FD19D14CE9000FF50E /* LASIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LASIImageView.h; sourceTree = "<group>"; };
 		7EA4B9FE19D14CE9000FF50E /* LASIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LASIImageView.m; sourceTree = "<group>"; };
+		7EA4D0631A15BB8000034532 /* UserAddressListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAddressListViewController.h; sourceTree = "<group>"; };
+		7EA4D0641A15BB8000034532 /* UserAddressListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAddressListViewController.m; sourceTree = "<group>"; };
 		7EA4D84819E7B461004608C7 /* userAddressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userAddressTableViewCell.h; sourceTree = "<group>"; };
 		7EA4D84919E7B461004608C7 /* userAddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userAddressTableViewCell.m; sourceTree = "<group>"; };
 		7EA4D84A19E7B461004608C7 /* userAddressTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = userAddressTableViewCell.xib; sourceTree = "<group>"; };
@@ -1338,6 +1344,7 @@
 		7E971F4D19ADC92000858D44 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				7E98FE571A1495F900A22527 /* newDesiner */,
 				7E330A7419E679A500DE79F0 /* userMessage */,
 				7E9EEC1619C2A45800C0514C /* login */,
 				7EA32F3F19AEAD00007FE086 /* people */,
@@ -1441,6 +1448,21 @@
 				7EA0B45319F4DD4B002E8BFD /* MyProjectListViewController.m */,
 			);
 			name = user;
+			sourceTree = "<group>";
+		};
+		7E98FE571A1495F900A22527 /* newDesiner */ = {
+			isa = PBXGroup;
+			children = (
+				7EA2BB5519FB495000741FFD /* PeopleFilterProjectController.h */,
+				7EA2BB5619FB495000741FFD /* PeopleFilterProjectController.m */,
+				7E98FE541A14828500A22527 /* MyOrderListViewController.h */,
+				7E98FE551A14828500A22527 /* MyOrderListViewController.m */,
+				7E98FE581A14964300A22527 /* MyCommentsViewController.h */,
+				7E98FE591A14964300A22527 /* MyCommentsViewController.m */,
+				7EA4D0631A15BB8000034532 /* UserAddressListViewController.h */,
+				7EA4D0641A15BB8000034532 /* UserAddressListViewController.m */,
+			);
+			name = newDesiner;
 			sourceTree = "<group>";
 		};
 		7E9D342B19B6B3E5005498D0 /* PullView */ = {
@@ -1594,16 +1616,12 @@
 				7EA48F5319ECC7330091B956 /* ProjectCommentViewController.m */,
 				7EA1E62519EE0EA20055158C /* OrderInfoViewController.h */,
 				7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */,
-				7EA1E64219EE6AA60055158C /* ReciverAddressViewController.h */,
-				7EA1E64319EE6AA60055158C /* ReciverAddressViewController.m */,
 				7E9F65A319EF68980041AB5E /* AddAddressViewController.h */,
 				7E9F65A419EF68980041AB5E /* AddAddressViewController.m */,
 				7E9F544E19F0B3F3009EF83C /* PayOrderViewController.h */,
 				7E9F544F19F0B3F3009EF83C /* PayOrderViewController.m */,
 				7E9F545C19F0C3A5009EF83C /* ShowOrderViewController.h */,
 				7E9F545D19F0C3A5009EF83C /* ShowOrderViewController.m */,
-				7EA2BB5519FB495000741FFD /* PeopleFilterProjectController.h */,
-				7EA2BB5619FB495000741FFD /* PeopleFilterProjectController.m */,
 			);
 			name = people;
 			sourceTree = "<group>";
@@ -2526,6 +2544,7 @@
 				7EA1E74019E6390700DB685E /* UIViewController+DismissKeyboard.m in Sources */,
 				7EAF2B0B19F625DB0047BF3D /* UIView+WebCacheOperation.m in Sources */,
 				7E9B681619BE9DD00053B50E /* CJSONDeserializer.m in Sources */,
+				7EA4D0651A15BB8000034532 /* UserAddressListViewController.m in Sources */,
 				7EA5E28419FF436E006E58F1 /* NSDate+Exts.m in Sources */,
 				7EAF2B0E19F625DB0047BF3D /* SDWebImageDecoder.m in Sources */,
 				7E971F5319ADCEE100858D44 /* InitTabBarViewController.m in Sources */,
@@ -2550,8 +2569,8 @@
 				7EE651A019F61D2C0080AEDC /* PSTGridLayoutItem.m in Sources */,
 				7EA3317219AF0CD6007FE086 /* ConvertJSONData.m in Sources */,
 				7EAF2B0A19F625DB0047BF3D /* UIImageView+HighlightedWebCache.m in Sources */,
+				7E98FE5A1A14964300A22527 /* MyCommentsViewController.m in Sources */,
 				7EAF2A9F19F6087E0047BF3D /* MWGridViewController.m in Sources */,
-				7EA1E64419EE6AA60055158C /* ReciverAddressViewController.m in Sources */,
 				7EA1E63419EE46410055158C /* ChangeNumTableCell.m in Sources */,
 				7EA2A65319E7BB4900A33ACC /* PeopleCommentCell.m in Sources */,
 				7EA1E63919EE50740055158C /* ReturnTableViewCell.m in Sources */,
@@ -2619,6 +2638,7 @@
 				7E971F2B19ADC8B600858D44 /* AppDelegate.m in Sources */,
 				7EAF2AAE19F608AF0047BF3D /* MWZoomingScrollView.m in Sources */,
 				7EA32F5E19AEC4D3007FE086 /* GirlsViewController.m in Sources */,
+				7E98FE561A14828500A22527 /* MyOrderListViewController.m in Sources */,
 				7EE6519819F61D2C0080AEDC /* PSTCollectionViewCell.m in Sources */,
 				7E73E66319B45ABC00EB6024 /* StoryTableViewBigCell.m in Sources */,
 				7E9C0ACA19B437EB005D01A3 /* CustomTableCell.m in Sources */,

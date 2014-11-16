@@ -10,12 +10,6 @@
 
 @interface AddAddressViewController (){
         NSString *dataId;
-    UITextField *recText;
-    UITextField *phoneText;
-    UITextField *codeText;
-    UITextField *areaText;
-    UITextField *addressText;
-    
     NSString *cityID;
     NSString *cityStr;
     NSDictionary *params;
@@ -38,20 +32,59 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     [self.view setBackgroundColor:[StringUitl colorWithHexString:@"#F5F5F5"]];
     
 }
 
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
+    [self changeTFrame:0];
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView{
+    [self changeTFrame:1];
+    [self dismissKeyBoard];
+    return YES;
+}
+
+-(void)changeTFrame:(int)flag{
+    float ft = 0.0;
+    if(flag==1){
+        ft += IPHONE4S ? 95 : 40;
+    }else{
+        ft -= IPHONE4S ? 95 : 40;
+    }
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect tempFrame = self.addressBackView.frame;
+        [self.addressBackView setFrame:CGRectMake(tempFrame.origin.x, tempFrame.origin.y+ft, tempFrame.size.width, tempFrame.size.height)];
+    }];
+    
+}
+
+
 -(void)loadView{
     [super loadView];
-    [self setAddView];
+    [self initBackView];
     [self setNavgationBar];
-    if([otype isEqualToString:@"edit"]){//修改动作
+    if(![otype isEqualToString:@"edit"]){//修改动作
        [self setFooterView];
     }
+    
+}
+
+-(void)initBackView{
+    
+    self.remarkText.delegate = self;
+    
+    [StringUitl setCornerRadius:self.addressBackView withRadius:5.0f];
+    [StringUitl setViewBorder:self.addressBackView withColor:@"#F5F5F5" Width:0.5f];
+    
+    [StringUitl setCornerRadius:self.deleteBtnView withRadius:5.0f];
+    [StringUitl setViewBorder:self.deleteBtnView withColor:@"#F5F5F5" Width:0.5f];
+    
+    [self.areaNameTxt addTarget:self action:@selector(goAreaSelect) forControlEvents:UIControlEventTouchDown];
     
 }
 
@@ -108,112 +141,13 @@
 }
 
 
--(void)setAddView{
-    
-    UIView *addAddressView = [[UIView alloc] initWithFrame:CGRectMake(10, 70, SCREEN_WIDTH-20, 225)];
-    [addAddressView setBackgroundColor:[UIColor whiteColor]];
-    [addAddressView.layer setCornerRadius:5.0];
-    [addAddressView.layer setMasksToBounds:YES];
-    
-    UILabel *recLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 60, 45)];
-    recLabel.font = main_font(13);
-    recLabel.text = @"收件人：";
-    
-    recText = [[UITextField alloc]initWithFrame:CGRectMake(65, 0, SCREEN_WIDTH-85, 45)];
-    recText.font = main_font(13);
-    recText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //recText.borderStyle = UITextBorderStyleLine;
-    //recText.text = @"22222";
-    
-    UILabel *recLine = [[UILabel alloc]initWithFrame:CGRectMake(0, 45, SCREEN_WIDTH-20, 1)];
-    recLine.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    
-    [addAddressView addSubview:recLabel];
-    [addAddressView addSubview:recText];
-    [addAddressView addSubview:recLine];
-    
-    UILabel *phoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 45, 80, 45)];
-    phoneLabel.font = main_font(13);
-    phoneLabel.text = @"手机号码：";
-    
-    phoneText = [[UITextField alloc]initWithFrame:CGRectMake(85, 45, SCREEN_WIDTH-105, 45)];
-    phoneText.font = main_font(13);
-    phoneText.keyboardType = UIKeyboardTypePhonePad;
-    phoneText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //phoneText.text = @"13787047370";
-    //phoneText.borderStyle = UITextBorderStyleLine;
-    
-    UILabel *phoneLine = [[UILabel alloc]initWithFrame:CGRectMake(0, 90, SCREEN_WIDTH-20, 1)];
-    phoneLine.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    
-    [addAddressView addSubview:phoneLabel];
-    [addAddressView addSubview:phoneText];
-    [addAddressView addSubview:phoneLine];
-    
-    UILabel *codeLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 90, 60, 45)];
-    codeLabel.font = main_font(13);
-    codeLabel.text = @"邮  编：";
-    
-    codeText = [[UITextField alloc]initWithFrame:CGRectMake(65, 90, SCREEN_WIDTH-85, 45)];
-    codeText.font = main_font(13);
-    codeText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    codeText.keyboardType = UIKeyboardTypeNumberPad;
-    //codeText.borderStyle = UITextBorderStyleLine;
-    //codeText.text = @"410000";
-    
-    UILabel *codeLine = [[UILabel alloc]initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH-20, 1)];
-    codeLine.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    
-    [addAddressView addSubview:codeLabel];
-    [addAddressView addSubview:codeText];
-    [addAddressView addSubview:codeLine];
-    
-    
-    UILabel *areaLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 135, 80, 45)];
-    areaLabel.font = main_font(13);
-    areaLabel.text = @"所在地区：";
-    
-    areaText = [[UITextField alloc]initWithFrame:CGRectMake(85, 135, SCREEN_WIDTH-105, 45)];
-    areaText.font = main_font(13);
-    areaText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //areaText.borderStyle = UITextBorderStyleLine;
-    //areaText.text = @"410000";
-    
-    [areaText addTarget:self action:@selector(goAreaSelect) forControlEvents:UIControlEventTouchDown];
-    
-    UILabel *areaLine = [[UILabel alloc]initWithFrame:CGRectMake(0, 180, SCREEN_WIDTH-20, 1)];
-    areaLine.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    
-    [addAddressView addSubview:areaLabel];
-    [addAddressView addSubview:areaText];
-    [addAddressView addSubview:areaLine];
-    
-    UILabel *addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 180, 80, 45)];
-    addressLabel.font = main_font(13);
-    addressLabel.text = @"详细地址：";
-    
-    addressText = [[UITextField alloc]initWithFrame:CGRectMake(85, 180, SCREEN_WIDTH-105, 45)];
-    addressText.font = main_font(13);
-    addressText.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //addressText.borderStyle = UITextBorderStyleLine;
-    //addressText.text = @"湖南长沙23123123";
-    
-    [addAddressView addSubview:addressLabel];
-    [addAddressView addSubview:addressText];
-    
-    
-    [self.view addSubview:addAddressView];
-
-}
-
-
 //关闭键盘
 -(void) dismissKeyBoard{
-    [recText resignFirstResponder];
-    [phoneText resignFirstResponder];
-    [codeText resignFirstResponder];
-    [areaText resignFirstResponder];
-    [addressText resignFirstResponder];
+    [self.recPeopleTxt resignFirstResponder];
+    [self.phoneNumTxt resignFirstResponder];
+    [self.areaCodeTxt resignFirstResponder];
+    [self.areaNameTxt resignFirstResponder];
+    [self.remarkText resignFirstResponder];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -224,28 +158,29 @@
 
 -(void)goAreaSelect{
     EditCityViewController *cityController = [[EditCityViewController alloc]init];
-    passValelegate = cityController;
-    [passValelegate passValue:@"address_city"];
+    _passValelegate = cityController;
+    [_passValelegate passValue:@"address_city"];
     [self presentViewController:cityController animated:YES completion:nil];
 }
 
 //传递过来的参数
 -(void)passValue:(NSString *)val{
     dataId = val;
-    //NSLog(@"dataId====%@",dataId);
+    NSLog(@"dataId====%@",dataId);
 }
 -(void)passDicValue:(NSDictionary *)vals{
-    //NSLog(@"vals====%@",vals);
+    NSLog(@"vals====%@",vals);
     otype = [vals valueForKey:@"oType"];
     if([otype isEqualToString:@"edit"]){//修改动作
         params = vals;
         cityID = [vals valueForKey:@"cityId"];
         cityStr = [vals valueForKey:@"areaName"];
     }else{
+        params = vals;
         cityID = [vals valueForKey:ADDRESS_CITY_ID];
         cityStr = [vals valueForKey:ADDRESS_INFO];
     }
-    areaText.text = cityStr;
+    self.areaNameTxt.text = cityStr;
     //NSLog(@"cityId=%@",cityID);
     //NSLog(@"str=%@",cityStr);
 }
@@ -253,33 +188,21 @@
 -(void)viewWillAppear:(BOOL)animated{
     otype = [params valueForKey:@"oType"];
     if([otype isEqualToString:@"edit"]){//修改动作
-        recText.text = [params valueForKey:@"userName"];
-        phoneText.text = [params valueForKey:@"phone"];
-        codeText.text = [params valueForKey:@"zipCode"];
-        areaText.text = cityStr;
-        addressText.text = [params valueForKey:@"address"];
+        self.recPeopleTxt.text = [params valueForKey:@"userName"];
+        self.phoneNumTxt.text = [params valueForKey:@"phone"];
+        self.areaCodeTxt.text = [params valueForKey:@"zipCode"];
+        self.areaNameTxt.text = cityStr;
+        self.remarkText.text = [params valueForKey:@"address"];
         [StringUitl setSessionVal:cityID withKey:ADDRESS_CITY_ID];
         [StringUitl setSessionVal:cityStr withKey:ADDRESS_INFO];
+    }else{
+        [self clearAddress];
     }
 }
 
 
 -(void)setFooterView{
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 300, SCREEN_WIDTH, 70)];
-    
-    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(15, 35, SCREEN_WIDTH-30, 40)];
-    [submitBox setBackgroundColor:[UIColor redColor]];
-    [submitBox setTitle:@"删除收货地址" forState:UIControlStateNormal];
-    [submitBox setTitle:@"删除收货地址" forState:UIControlStateSelected];
-    submitBox.titleLabel.font = main_font(16);
-    [submitBox.layer setCornerRadius:5.0];
-    [submitBox.layer setMasksToBounds:YES];
-    submitBox.tag = -1;
-    [submitBox addTarget:self action:@selector(delAddress:) forControlEvents:UIControlEventTouchDown];
-    
-    [footerView addSubview:submitBox];
-    [self.view addSubview:footerView];
-    
+    [self.deleteBtnView removeFromSuperview];
 }
 
 -(void)delAddress:(UIButton *)sender{
@@ -318,11 +241,11 @@
 
 -(void)saveAddress{
     
-    NSString *username = recText.text;
-    NSString *phone = phoneText.text;
-    NSString *code = codeText.text;
-    NSString *area = areaText.text;
-    NSString *address = addressText.text;
+    NSString *username = self.recPeopleTxt.text;
+    NSString *phone = self.phoneNumTxt.text;
+    NSString *code = self.areaCodeTxt.text;
+    NSString *area = self.areaNameTxt.text;
+    NSString *address = self.remarkText.text;
     
     
     if([StringUitl isEmpty:username]){
@@ -367,7 +290,7 @@
        [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
      }
     [request setPostValue:cityID forKey:CITY_ID];
-    [request setPostValue:addressText.text forKey:USER_ADDRESS];
+    [request setPostValue:address forKey:USER_ADDRESS];
     [request setPostValue:phone forKey:USER_PHONE];
     [request setPostValue:code forKey:USER_ZIPCODE];
     [request setPostValue:username forKey:USER_NAME];
@@ -411,4 +334,7 @@
     [self showCAlert:@"处理数据失败！" widthType:ERROR_LOGO];
 }
 
+- (IBAction)clickDeleteBtn:(id)sender {
+    [self delAddress:sender];
+}
 @end

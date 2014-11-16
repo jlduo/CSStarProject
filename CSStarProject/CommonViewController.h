@@ -7,6 +7,7 @@
 //
 #import "common.h"
 #import "StringUitl.h"
+#import "MBProgressHUD.h"
 #import <UIKit/UIKit.h>
 #import "ConvertJSONData.h"
 #import "AllAroundPullView.h"
@@ -31,5 +32,6 @@
 -(BOOL)isNotEmpty:(NSString *)str;
 
 -(void)alertMsg:(NSString *)msg withtitle:(NSString *)title;
-
+-(UIStoryboard *)getStoryBoard:(NSString *)sbName;
+-(UIViewController *)getVCFromSB:(NSString *)vname;
 @end

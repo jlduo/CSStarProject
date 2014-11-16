@@ -15,9 +15,7 @@
     UILabel *plabel;
     UIImageView *cIconView;
     UITextView *textField;
-    UITableView *table;
     NSInteger pageIndex;
-    UILabel *lblClickComment;
     NSMutableArray *tableArray;
     
     NSString *commentId;
@@ -50,51 +48,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    self.view.backgroundColor = [UIColor whiteColor];
-    table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    //标题
-    UILabel *lblDetail=[[UILabel alloc] init];
-    lblDetail.font = main_font(24);
-    lblDetail.frame = CGRectMake(5, 69, SCREEN_WIDTH - 5, 35);
-    [self.view addSubview:lblDetail];
-    
-    //时间
-    UILabel *lblTimeComment = [[UILabel alloc] init];
-    lblTimeComment.font = main_font(12);
-    lblTimeComment.textColor = [UIColor grayColor];
-    lblTimeComment.frame = CGRectMake(5, 104, 130, 30);
-    [self.view addSubview:lblTimeComment];
-    
-    //评论数图标
-    UIImageView *imgComment=[[UIImageView alloc] init];
-    imgComment.frame = CGRectMake(125, 110, 20, 20);
-    imgComment.image = [UIImage imageNamed:@"myzone-discuss.png"];
-    [self.view addSubview:imgComment];
-    
-    //总评论数
-    lblClickComment = [[UILabel alloc] init];
-    lblClickComment.font = main_font(12);
-    lblClickComment.textColor = [UIColor grayColor];
-    lblClickComment.frame = CGRectMake(145, 104, 100, 30);
-    [self.view addSubview:lblClickComment];
-    
     //现实参数
     NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
     NSDictionary *dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
-    lblDetail.text = [dicContent valueForKey:@"_title"];
+    _commentTitle.text = [dicContent valueForKey:@"_title"];
     
     NSString *addTime = [dicContent valueForKey:@"_add_time"];
     DateUtil *utilDate = [[DateUtil alloc] init];
     addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
-    lblTimeComment.text = addTime;
+    _commentDate.text = addTime;
     
     NSString *clickNum = [self getCommentNum];
-    lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
-    lblClickComment.font = main_font(12);
+    _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
+    _commentNum.font = main_font(12);
     //评论
     [self initTable];
     [self initToolBar];
@@ -116,15 +82,9 @@
 }
 
 -(void)initTable{
-    table = [[UITableView alloc] initWithFrame:self.view.frame];
-    table.delegate = self;
-    table.dataSource = self;
-    table.frame = CGRectMake(0, 140, SCREEN_WIDTH, MAIN_FRAME_H - STATU_BAR_HEIGHT - NAV_TITLE_HEIGHT - 105);
-    [self.view addSubview:table];
-    
     //注册单元格
     UINib *nibCell = [UINib nibWithNibName:@"StoryCommentTableCell" bundle:nil];
-    [table registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
+    [_commentTable registerNib:nibCell forCellReuseIdentifier:@"storyCommentCell"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -420,10 +380,10 @@
         [self showCAlert:@"评论提交成功" widthType:WARNN_LOGO];
         pageIndex = 1;
         tableArray  = [self getCommentList];
-        [table reloadData];
+        [_commentTable reloadData];
         
         NSString *clickNum = [self getCommentNum];
-        lblClickComment.text = [[NSString alloc] initWithFormat:@"%@评论",clickNum];
+        _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
     }else{
         [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
     }
@@ -462,22 +422,22 @@
 
 //加载头部刷新
 -(void)setHeaderRereshing{
-    AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
+    AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_commentTable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
         [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
     }];
-    [table addSubview:topPullView];
+    [_commentTable addSubview:topPullView];
 }
 
 //加底部部刷新
 -(void)setFooterRereshing{
-    AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:table position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
+    AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_commentTable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
         pageIndex++;
         [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
     }];
-    [table addSubview:bottomPullView];
+    [_commentTable addSubview:bottomPullView];
 }
 
 //请求完成之后，回调方法
@@ -490,7 +450,7 @@
         } else {
             [tableArray  addObjectsFromArray:nextArray];
         }
-        [table reloadData];
+        [_commentTable reloadData];
     }else{
         [self showCAlert:@"没有数据了" widthType:WARNN_LOGO];
     }

@@ -9,10 +9,8 @@
 #import "ReturnsViewController.h"
 
 @interface ReturnsViewController (){
-    UITableView *returnsTableView;
     NSDictionary *cellDic;
     NSString *dataId;
-    
     int target_id;
 }
 
@@ -32,31 +30,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     [self initLoadData];
-    
     [self loadTableList];
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
+   
+    _returnListTable.rowHeight = 180;
+    _returnListTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _returnListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    returnsTableView = [[UITableView alloc] initWithFrame:tframe];
-    returnsTableView.delegate = self;
-    returnsTableView.dataSource = self;
-    returnsTableView.rowHeight = 180;
-    
-    returnsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    returnsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [returnsTableView setTableFooterView:view];
-    returnsTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:returnsTableView];
 }
 
 -(void)loadView{
@@ -69,10 +52,6 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
-    [returnsTableView setFrame:temFrame];
-    
-    [returnsTableView reloadData];
     
 }
 
@@ -114,7 +93,7 @@
 #pragma mark 行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //跳转到详情页面
-    OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
+    OrderInfoViewController *orderController = (OrderInfoViewController*)[self getVCFromSB:@"orderInfo"];
     passValelegate = orderController;
     [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:indexPath.row]];
     [self.navigationController pushViewController:orderController animated:YES];
@@ -188,7 +167,7 @@
 //        [peopelCell addSubview:textBtn];
         
         if(indexPath.row%2==1){
-            peopelCell.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+            peopelCell.backgroundColor = [StringUitl colorWithHexString:@"#cccccc"];
             peopelCell.descText.backgroundColor = [UIColor clearColor];
         }else{
             peopelCell.backgroundColor = [UIColor whiteColor];
@@ -201,7 +180,7 @@
 
 -(void)goOrderInfo:(UIButton *)sender{
     //NSLog(@"go order");
-    OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
+    OrderInfoViewController *orderController = (OrderInfoViewController*)[self getVCFromSB:@"orderInfo"];
     passValelegate = orderController;
     [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:sender.tag]];
     [self.navigationController pushViewController:orderController animated:YES];
@@ -209,11 +188,11 @@
          
          
 -(void)goOrderInfo1:(UITapGestureRecognizer *)gester{
- NSLog(@"gester.view.tag==%d",gester.view.tag);
- OrderInfoViewController *orderController = [[OrderInfoViewController alloc]init];
- passValelegate = orderController;
- [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:gester.view.tag]];
- [self.navigationController pushViewController:orderController animated:YES];
+    NSLog(@"gester.view.tag==%d",gester.view.tag);
+    OrderInfoViewController *orderController = (OrderInfoViewController*)[self getVCFromSB:@"orderInfo"];
+    passValelegate = orderController;
+    [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:gester.view.tag]];
+    [self.navigationController pushViewController:orderController animated:YES];
 }
          
          

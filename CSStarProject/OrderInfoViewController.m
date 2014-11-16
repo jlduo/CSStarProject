@@ -9,7 +9,6 @@
 #import "OrderInfoViewController.h"
 
 @interface OrderInfoViewController (){
-    UITableView *orderTableView;
     NSDictionary *cellDic;
     NSString *dataId;
     NSString *orderId;
@@ -47,9 +46,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     
     firstFlag = TRUE;
     selectedNum = 1;
@@ -65,22 +61,9 @@
 }
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    
-    orderTableView = [[UITableView alloc] initWithFrame:tframe];
-    orderTableView.delegate = self;
-    orderTableView.dataSource = self;
-    orderTableView.rowHeight = 180;
-    
-    orderTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    orderTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [orderTableView setTableFooterView:view];
-    orderTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:orderTableView];
+    _orderInfoTable.rowHeight = 180;
+    _orderInfoTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _orderInfoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void)loadView{
@@ -145,12 +128,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     //[self loadDefaultAddress];
-    [orderTableView reloadData];
-    
-}
-
--(void)reloadOrder{
-    
+    [_orderInfoTable reloadData];
     
 }
 
@@ -194,7 +172,7 @@
     [headView addSubview:descLabel];
     
     [headView setBackgroundColor:[UIColor whiteColor]];
-    [orderTableView setTableHeaderView:headView];
+    [_orderInfoTable setTableHeaderView:headView];
     
 }
 
@@ -213,7 +191,7 @@
         [sender setBackgroundImage:[UIImage imageNamed:@"iconnochecked.png"] forState:UIControlStateSelected];
         [sender setTag:99];
     }
-    [orderTableView reloadData];
+    [_orderInfoTable reloadData];
     //NSLog(@"sectionNum=%d",sectionNum);
 }
 
@@ -236,7 +214,7 @@
 
     [footerView addSubview:descLabel];
     [footerView addSubview:submitBox];
-    [orderTableView setTableFooterView:footerView];
+    [_orderInfoTable setTableFooterView:footerView];
     
 }
 
@@ -326,7 +304,7 @@
 }
 
 -(void)goPayPage{
-    PayOrderViewController *payController = [[PayOrderViewController alloc]init];
+    PayOrderViewController *payController = (PayOrderViewController *)[self getVCFromSB:@"payOrder"];
     passValelegate = payController;
     [passValelegate passValue:orderId];
     [self.navigationController pushViewController:payController animated:YES];
@@ -546,9 +524,8 @@
 
 -(void)addReciver:(UIButton *)sender{
     //NSLog(@"add reciver!");
-    ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc]init];
+    UserAddressListViewController *addressController = (UserAddressListViewController *)[self getVCFromSB:@"myAddressList"];
     passValelegate = addressController;
-    
     [passValelegate passValue:dataId];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:self forKey:@"controller"];

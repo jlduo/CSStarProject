@@ -25,6 +25,7 @@
 #define NAV_TITLE_INDEX SCREEN_WIDTH/2//导航标题位置
 
 #define VIEW_FRAME_H self.view.frame.size.height
+#define SVIEW_FRAME_H self.view.frame.size.height-64-49
 #define MAIN_FRAME [[UIScreen mainScreen] applicationFrame]//屏幕尺寸
 #define MAIN_FRAME_X MAIN_FRAME.origin.x
 #define MAIN_FRAME_Y MAIN_FRAME.origin.y

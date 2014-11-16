@@ -15,11 +15,10 @@
     NSString *dataNum;
     NSString *cellTitle;
     NSString *dataId;
-    NSMutableDictionary *params;
     
-    UITableView *stableView;
     UIButton *imgBtn;
     UILabel *userLabel;
+    NSMutableDictionary *params;
 }
 
 @end
@@ -38,9 +37,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
 
     [self initLoadData];
     [self initLoadUserData];
@@ -51,30 +47,9 @@
 
 
 -(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
     
-    stableView = [[UITableView alloc] initWithFrame:tframe];
-    stableView.delegate = self;
-    stableView.dataSource = self;
-    
-    stableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [stableView setTableFooterView:view];
-    stableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:stableView];
-    
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    
-    InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
-    [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
-    [stableView setFrame:temFrame];
+    _otherUserCenterTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _otherUserCenterTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
 }
 
@@ -164,7 +139,7 @@
     [imgView addSubview:imgBtn];
     [headView addSubview:imgView];
     
-    stableView.tableHeaderView = headView;
+    _otherUserCenterTable.tableHeaderView = headView;
     
 }
 
@@ -172,7 +147,7 @@
 -(void)goPreviou{
     NSLog(@"back");
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)loadView{
@@ -235,11 +210,10 @@
 -(void)goUserProList:(NSString *)titleName{
     
     NSLog(@"name=%@",titleName);
-    PeopleProListViewController *peopleListController = [[PeopleProListViewController alloc]init];
-    passValelegate = peopleListController;
-    
+    PeopleProListViewController *peopleListController =  (PeopleProListViewController *)[self getVCFromSB:@"peopleProList"];
+    _passValelegate = peopleListController;
     [params setObject:titleName forKey:@"titleName"];
-    [passValelegate passDicValue:params];
+    [_passValelegate passDicValue:params];
     [self.navigationController pushViewController:peopleListController animated:YES];
 }
 
@@ -248,9 +222,9 @@
     
     static NSString *nibIdentifier = @"UserViewCell";
     UINib *nibCell = [UINib nibWithNibName:@"UserTableViewCell" bundle:nil];
-    [stableView registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
+    [_otherUserCenterTable registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
     
-    UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
+    UserTableViewCell *userCell = [_otherUserCenterTable dequeueReusableCellWithIdentifier:@"UserViewCell"];
     userCell.backgroundColor = [UIColor clearColor];
     switch (indexPath.row) {
         case 0:

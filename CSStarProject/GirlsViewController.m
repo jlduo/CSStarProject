@@ -54,26 +54,6 @@
     
 }
 
--(void)dealloc{
-    
-    dataType = nil;
-    cellDic = nil;
-    sourceArray = nil;
-    commonArr = nil;
-    artId = nil;
-    imageArr= nil;
-    photo = nil;
-    max_id = nil;
-    imageArr = nil;
-    titleArr = nil;
-    photoArray = nil;
-    scrollView = nil;
-    comViewController = nil;
-    friendlyLoadingView = nil;
-    
-}
-
-
 -(void)initLoadData{
     
     bannerData = [[NSMutableDictionary alloc]init];
@@ -691,7 +671,7 @@
 }
 
 -(void)goVideoView:(NSString *)articleId{
-    GirlsVideoViewController *girlVideoView = [[GirlsVideoViewController alloc]init];
+    GirlsVideoViewController *girlVideoView = (GirlsVideoViewController*)[self getVCFromSB:@"girlsVideo"];
     passValelegate = girlVideoView;
     [passValelegate passValue:articleId];
     [self.navigationController pushViewController:girlVideoView animated:YES];

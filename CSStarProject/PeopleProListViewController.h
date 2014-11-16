@@ -12,10 +12,9 @@
 #import "ProjectTableViewCell.h"
 #import "ViewPassValueDelegate.h"
 #import "PeopleDetailViewController.h"
-@interface PeopleProListViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
-}
+@interface PeopleProListViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>
 #pragma mark 回填数据
-@property(nonatomic,retain)NSMutableArray *peopleProList;
+@property(nonatomic,strong)NSMutableArray *peopleProList;
+@property (weak, nonatomic) IBOutlet UITableView *projectListTable;
+@property(nonatomic,weak)NSObject<ViewPassValueDelegate> *passValelegate;
 @end

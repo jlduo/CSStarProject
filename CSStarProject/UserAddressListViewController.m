@@ -1,26 +1,23 @@
 //
-//  ReciverAddressViewController.m
+//  UserAddressListViewController.m
 //  CSStarProject
 //
-//  Created by jialiduo on 14-10-15.
+//  Created by jialiduo on 14-11-14.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
-#import "ReciverAddressViewController.h"
+#import "UserAddressListViewController.h"
 
-@interface ReciverAddressViewController (){
-    UITableView *addressTableView;
+@interface UserAddressListViewController (){
     NSDictionary *cellDic;
     NSString *dataId;
-    
-    NSMutableDictionary *params;
-    
     int current_index;
+    NSMutableDictionary *params;
 }
 
 @end
 
-@implementation ReciverAddressViewController
+@implementation UserAddressListViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,43 +32,37 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    
-    [self initLoadData];
+    [self loadTableList];
     [self setFooterView];
-    //[self loadTableList];
+    
+    _orderAddressTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    _orderAddressTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
--(void)initLoadData{
-    //计算高度
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49);
-    
-    addressTableView = [[UITableView alloc] initWithFrame:tframe];
-    addressTableView.delegate = self;
-    addressTableView.dataSource = self;
-    
-    addressTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
-    addressTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[[UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [addressTableView setTableFooterView:view];
-    addressTableView.showsVerticalScrollIndicator = YES;
-    [self.view addSubview:addressTableView];
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+    [self loadTableList];
+    [self.orderAddressTable reloadData];
 }
 
 -(void)loadView{
     [super loadView];
+    
     [self.view addSubview:[self setNavBarWithTitle:@"收货地址" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
     
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
+
 -(void)setFooterView{
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
-
+    
     UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(10, 16, SCREEN_WIDTH-20, 40)];
     [submitBox setBackgroundColor:[UIColor redColor]];
     [submitBox setTitle:@"添加收货地址" forState:UIControlStateNormal];
@@ -83,7 +74,7 @@
     [submitBox addTarget:self action:@selector(addAddress:) forControlEvents:UIControlEventTouchDown];
     
     [footerView addSubview:submitBox];
-    [addressTableView setTableFooterView:footerView];
+    [_orderAddressTable setTableFooterView:footerView];
     
 }
 
@@ -97,20 +88,11 @@
     }else{
         [param setObject:@"add" forKey:@"oType"];
     }
-    AddAddressViewController *addAddressController = [[AddAddressViewController alloc]init];
+    AddAddressViewController *addAddressController = (AddAddressViewController *)[self getVCFromSB:@"addAddress"];
     passValelegate = addAddressController;
     [passValelegate passDicValue:param];
     [self presentViewController:addAddressController animated:YES completion:nil];
     
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [self loadTableList];
-    [addressTableView reloadData];
-}
-
--(void)dealloc{
-    _orderAddressList = nil;
 }
 
 -(void)loadTableList{
@@ -144,7 +126,7 @@
         _orderAddressList = [[NSMutableArray alloc]init];
     }
     
-    [addressTableView reloadData];
+    [_orderAddressTable reloadData];
     [self hideHud];
     
 }
@@ -194,8 +176,8 @@
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-  return 150;
-
+    return 150;
+    
 }
 
 #pragma mark 数据加载
@@ -265,7 +247,7 @@
         dic = (NSDictionary *)[ConvertJSONData requestData:url];
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self loadTableList];
-            [addressTableView reloadData];
+            [_orderAddressTable reloadData];
             [self showCAlert:@"设置成功！" widthType:WARNN_LOGO];
         }else{
             [self showCAlert:@"设置失败！" widthType:WARNN_LOGO];

@@ -18,13 +18,17 @@
 #import "StoryCommentViewController.h"
 
 @interface StoryDetailViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
-UIGestureRecognizerDelegate,MWPhotoBrowserDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *delegate;
-    
-}
+UIGestureRecognizerDelegate,MWPhotoBrowserDelegate>
 
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
+@property (nonatomic, weak) NSObject<ViewPassValueDelegate> *delegate;
+@property (weak, nonatomic) IBOutlet UIWebView *detailContentView;
+@property (weak, nonatomic) IBOutlet UILabel *contentTitle;
+@property (weak, nonatomic) IBOutlet UILabel *contentDate;
+@property (weak, nonatomic) IBOutlet UILabel *columnTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *likeImgView;
+@property (weak, nonatomic) IBOutlet UILabel *clickNum;
+@property (weak, nonatomic) IBOutlet UIView *contentBackView;
 
 @end

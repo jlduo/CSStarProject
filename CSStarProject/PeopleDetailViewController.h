@@ -24,10 +24,11 @@
 @interface PeopleDetailViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
 ViewPassValueDelegate>{
     // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
+    __weak NSObject<ViewPassValueDelegate> *passValelegate;
 }
 
 #pragma mark 活动众筹数据
 @property(nonatomic,retain)NSDictionary *peopleData;
+@property (weak, nonatomic) IBOutlet UITableView *peopleDetailTable;
 
 @end

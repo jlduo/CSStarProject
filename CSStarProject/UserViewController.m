@@ -15,8 +15,6 @@
     UIImage *cellImg;
     NSString *imgName;
     NSString *cellTitle;
-    
-    UITableView *stableView;
     UIImageView *imgBtn;
     UILabel *userLabel;
     
@@ -26,48 +24,23 @@
 
 @implementation UserViewController
 
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    //[self showLoading:@"数据初始化中..."];
     _userProjectNums = [[NSMutableDictionary alloc]init];
-    
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-49-44);
-    stableView = [[UITableView alloc] initWithFrame:tframe];
-    stableView.delegate = self;
-    stableView.dataSource = self;
-    //[StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
-    
+
     //处理头部信息
     [self setHeaderView];
     [self setFooterView];
-    [self.view addSubview:stableView];
-    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
-    stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [_userCenterTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
+    _userCenterTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //处理数据回填
     //[self setImgBtnImage];
     //[self setUserTitle];
     
-}
-
--(void)dealloc{
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    cellImg = nil;
-    imgName= nil;
-    cellTitle= nil;
-    stableView= nil;
-    imgBtn= nil;
-    userLabel= nil;
 }
 
 
@@ -86,7 +59,7 @@
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
-    [stableView setFrame:temFrame];
+    [_userCenterTable setFrame:temFrame];
     
     [self setImgBtnImage];
     [self setUserTitle];
@@ -134,7 +107,6 @@
 {
     NSData *respData = [request responseData];
     NSString *pro_nums = [[NSString alloc] initWithData:respData encoding:NSUTF8StringEncoding];
-    NSLog(@"pro_nums->%@",pro_nums);
     if([StringUitl isNotEmpty:pro_nums]){
         pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
         NSArray *num = [pro_nums componentsSeparatedByString:@","];
@@ -146,15 +118,13 @@
         }
     }
 
-    [stableView reloadData];
-    [self hideHud];
+    [_userCenterTable reloadData];
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     NSError *error = [request error];
     NSLog(@"error->%@",error);
-    [self hideHud];
     [self showCAlert:@"加载失败,请检查网络连接!" widthType:ERROR_LOGO];
     
 }
@@ -200,7 +170,7 @@
     [imgView addSubview:imgBtn];
     [headView addSubview:imgView];
     
-    stableView.tableHeaderView = headView;
+    _userCenterTable.tableHeaderView = headView;
     
 }
 
@@ -218,7 +188,7 @@
     [loginOutBtn setBackgroundColor:[UIColor redColor]];
     [loginOutBtn addTarget:self action:@selector(userLoginOut) forControlEvents:UIControlEventTouchUpInside];
     [footView addSubview:loginOutBtn];
-    stableView.tableFooterView = footView;
+    _userCenterTable.tableFooterView = footView;
     
 }
 
@@ -311,11 +281,11 @@
     
     static NSString *nibIdentifier = @"UserViewCell";
     UINib *nibCell = [UINib nibWithNibName:@"UserTableViewCell" bundle:nil];
-    [stableView registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
+    [_userCenterTable registerNib:nibCell forCellReuseIdentifier:nibIdentifier];
     
     if(indexPath.section==0){
         
-        UserTableViewCell *userCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
+        UserTableViewCell *userCell = [_userCenterTable dequeueReusableCellWithIdentifier:@"UserViewCell"];
         userCell.backgroundColor = [UIColor clearColor];
         NSString *valKey;
         switch (indexPath.row) {
@@ -362,7 +332,7 @@
         
     }else{
         
-        UserTableViewCell *newUserCell = [stableView dequeueReusableCellWithIdentifier:@"UserViewCell"];
+        UserTableViewCell *newUserCell = [_userCenterTable dequeueReusableCellWithIdentifier:@"UserViewCell"];
         newUserCell.backgroundColor = [UIColor clearColor];
         newUserCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -438,7 +408,7 @@
     }else{
         clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"清除%d文件共[%.2fM]",tmpCount,tmpSize] : [NSString stringWithFormat:@"清除%d文件共[%.2fK]",tmpCount,tmpSize * 1024];
         NSLog(@" clearCacheName=%@",clearCacheName);
-        [stableView reloadData];
+        [_userCenterTable reloadData];
         [[SDImageCache sharedImageCache] clearDisk];
         [[SDImageCache sharedImageCache] clearMemory];
         [self showHint:clearCacheName];
@@ -451,31 +421,51 @@
     
 }
 
--(void)goOrder{
+-(void)goOrder2{
     PeopleProListViewController *orderController = [[PeopleProListViewController alloc] init];
-    passValelegate =orderController;
+    _passValelegate =orderController;
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"2" forKey:@"titleName"];
     [params setObject:@"order" forKey:@"titleValue"];
-    [passValelegate passDicValue:params];
-    [passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
+    [_passValelegate passDicValue:params];
+    [_passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
     [self.navigationController pushViewController:orderController animated:YES];
 }
 
+-(void)goOrder{
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    MyOrderListViewController *orderListView =  [storyBoard instantiateViewControllerWithIdentifier:@"myOrderView"];
+    _passValelegate = orderListView;
+    [params setObject:@"2" forKey:@"titleName"];
+    [params setObject:@"order" forKey:@"titleValue"];
+    [_passValelegate passDicValue:params];
+    [_passValelegate passValue:[StringUitl getSessionVal:LOGIN_USER_ID]];
+    [self.navigationController pushViewController:orderListView animated:YES];
+    
+}
+
 -(void)goProject{
-    MyProjectListViewController *projectController = [[MyProjectListViewController alloc] init];
+    MyProjectListViewController *projectController =  (MyProjectListViewController *)[self getVCFromSB:@"myProjectList"];
     [self.navigationController pushViewController:projectController animated:YES];
 }
 
--(void)goComment{
+-(void)goComment2{
     myCommentViewController *comController = [[myCommentViewController alloc] init];
     [self.navigationController pushViewController:comController animated:YES];
 }
 
+
+-(void)goComment{
+    MyCommentsViewController *commentsView =  (MyCommentsViewController *)[self getVCFromSB:@"myComments"];
+    [self.navigationController pushViewController:commentsView animated:YES];
+}
+
 -(void)goRecAddress{
-    ReciverAddressViewController *addressController = [[ReciverAddressViewController alloc] init];
-    passValelegate = addressController;
-    [passValelegate passValue:@"userAdd"];
+    UserAddressListViewController *addressController = (UserAddressListViewController *)[self getVCFromSB:@"myAddressList"];
+    _passValelegate = addressController;
+    [_passValelegate passValue:@"userAdd"];
     [self.navigationController pushViewController:addressController animated:YES];
 }
 

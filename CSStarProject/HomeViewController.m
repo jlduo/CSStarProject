@@ -44,10 +44,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    
     //[self showLoading:@"加载中，请稍后..."];
     [self initLoading];
     [self initLoadData];
@@ -56,23 +52,6 @@
     [self setFooterRereshing];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showContent) name:@"showContent" object:nil];
-}
-
--(void)dealloc{
-    
-    dataType = nil;
-    cellDic = nil;
-    sourceArray = nil;
-    slideArr = nil;
-    commonArr = nil;
-    artId = nil;
-    imageArr= nil;
-    photo = nil;
-    scrollView = nil;
-    footerBtn = nil;
-    comViewController = nil;
-    friendlyLoadingView = nil;
-    
 }
 
 -(void)initLoading{
@@ -179,7 +158,7 @@
     if([self isNotEmpty:dataID]){
 
         if([dataTP isEqual:@"video"]){//视频
-            GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+            GirlsVideoViewController *videoView = (GirlsVideoViewController *)[self getVCFromSB:@"girlsVideo"];
             passValelegate = videoView;
             [passValelegate passValue:dataID];
             [self.navigationController pushViewController:videoView animated:YES];
@@ -191,7 +170,7 @@
         
         if([dataTP isEqual:@"article"]){//文章
             
-            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+            StoryDetailViewController *storyDetail = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
             passValelegate = storyDetail;
             [passValelegate passValue:dataID];
             [self.navigationController pushViewController:storyDetail animated:YES];
@@ -200,7 +179,7 @@
         
         if([dataTP isEqual:@"story"]){//跳转到星城故事
             
-            StoryDetailViewController *storyDetailView = [[StoryDetailViewController alloc] init];
+            StoryDetailViewController *storyDetailView = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
             passValelegate = storyDetailView;
             [passValelegate passValue:dataID];
             [self.navigationController pushViewController:storyDetailView animated:YES];
@@ -209,7 +188,7 @@
         
         if([dataTP isEqual:@"people"]){//跳转到活动众筹
 
-            PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+            PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
             passValelegate = deatilViewController;
             [passValelegate passValue:dataID];
             [self.navigationController pushViewController:deatilViewController animated:YES];
@@ -471,7 +450,7 @@
         [self.navigationController pushViewController:login animated:YES];
         return;
     }else{
-        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
+        StoryCommentViewController *storyComment  = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         passValelegate = storyComment;
         [passValelegate passValue:artId];
         [self.navigationController pushViewController:storyComment animated:YES];
@@ -582,7 +561,7 @@
                 dataID = dataId;
                 if([data_Type isEqual:@"video"]){//视频
                      dataTP = @"video";
-                     GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+                     GirlsVideoViewController *videoView = (GirlsVideoViewController *)[self getVCFromSB:@"girlsVideo"];
                      passValelegate = videoView;
                     [passValelegate passValue:dataId];
                     if([self check_login]){
@@ -601,7 +580,7 @@
                 
                 if([data_Type isEqual:@"article"]){//文章
                     dataTP = @"article";
-                    StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+                    StoryDetailViewController *storyDetail = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
                     passValelegate = storyDetail;
                     [passValelegate passValue:dataId];
                     if([self check_login]){
@@ -622,7 +601,7 @@
             dataID = dataId;
             dataTP = @"story";
             
-            StoryDetailViewController *storyDetailView = [[StoryDetailViewController alloc] init];
+            StoryDetailViewController *storyDetailView = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
             passValelegate = storyDetailView;
             [passValelegate passValue:dataId];
             if([self check_login]){
@@ -638,8 +617,7 @@
                 
                 dataID = projectId;
                 dataTP = @"people";
-                
-                PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+                PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
                 passValelegate = deatilViewController;
                 [passValelegate passValue:projectId];
                 if([self check_login]){

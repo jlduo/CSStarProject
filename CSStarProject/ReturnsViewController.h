@@ -14,10 +14,11 @@
 
 @interface ReturnsViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
     // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
+    __weak NSObject<ViewPassValueDelegate> *passValelegate;
 }
 
 #pragma mark 回填数据
 @property(nonatomic,retain)NSMutableArray *peopleReturnList;
+@property (weak, nonatomic) IBOutlet UITableView *returnListTable;
 
 @end

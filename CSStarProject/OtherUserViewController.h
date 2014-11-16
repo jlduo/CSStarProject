@@ -13,12 +13,11 @@
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
 
-@interface OtherUserViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
-    // 声明一个参数传递代理
-    NSObject<ViewPassValueDelegate> *passValelegate;
-}
+@interface OtherUserViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>
 
-@property(nonatomic,retain) NSDictionary * userData;
-@property(nonatomic,retain) NSMutableDictionary * userProjectNums;
+@property(nonatomic,strong) NSDictionary * userData;
+@property(nonatomic,strong) NSMutableDictionary * userProjectNums;
+@property(nonatomic,weak) NSObject<ViewPassValueDelegate> *passValelegate;
+@property (weak, nonatomic) IBOutlet UITableView *otherUserCenterTable;
 
 @end

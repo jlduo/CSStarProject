@@ -29,16 +29,13 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
 - (void)showHudInView:(UIView *)view hint:(NSString *)hint{
     MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:view];
     HUD.labelText = hint;
+    HUD.removeFromSuperViewOnHide = YES;
     [view addSubview:HUD];
     [HUD show:YES];
     [self setHUD:HUD];
 }
 
 - (void)showHint:(NSString *)hint {
-    if ([hint isEqualToString:@"录音没有开始"]) {
-        NSLog(@"dd");
-    }
-    
     //显示提示信息
     UIView *view = [[UIApplication sharedApplication].delegate window];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
@@ -49,7 +46,8 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.margin = 10.f;
     hud.yOffset = IS_IPHONE_5?200.f:150.f;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:2];
+    [self setHUD:hud];
+    [hud hide:YES afterDelay:1];
 }
 
 - (void)showHint:(NSString *)hint yOffset:(float)yOffset {
@@ -64,7 +62,8 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.yOffset = IS_IPHONE_5?200.f:150.f;
     hud.yOffset += yOffset;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [self setHUD:hud];
+    [hud hide:YES afterDelay:1.0];
 }
 
 -(void)showCAlert:(NSString *)msg widthType:(NSString *)tp{
@@ -76,11 +75,12 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.customView = imgView;
     
     hud.mode = MBProgressHUDModeCustomView;
+    hud.removeFromSuperViewOnHide = YES;
     hud.labelText = msg;
     hud.dimBackground = YES;
-	
+	[self setHUD:hud];
     [hud show:YES];
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1.0];
     
 }
 
@@ -89,6 +89,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     UIView *view = [[UIApplication sharedApplication].delegate window];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
+    hud.removeFromSuperViewOnHide = YES;
     hud.labelText = msg;
     hud.dimBackground = YES;
     hud.alpha = 0.5;
