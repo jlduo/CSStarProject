@@ -249,27 +249,28 @@
     
     
     if([StringUitl isEmpty:username]){
-        [self showCAlert:@"收件人为空" widthType:WARNN_LOGO];
+        [self showNo:@"收件人为空"];
         return;
     }
     if([StringUitl isEmpty:phone]){
-        [self showCAlert:@"手机号码为空" widthType:WARNN_LOGO];
+        [self showNo:@"手机号码为空"];
         return;
     }
     if([StringUitl isEmpty:code]){
-        [self showCAlert:@"邮编为空" widthType:WARNN_LOGO];
+        [self showNo:@"邮编为空"];
         return;
     }
     if([StringUitl isEmpty:area]){
-        [self showCAlert:@"所在地区为空" widthType:WARNN_LOGO];
+        [self showNo:@"所在地区为空"];
         return;
     }
     if([StringUitl isEmpty:address]){
-        [self showCAlert:@"详细地址为空" widthType:WARNN_LOGO];
+        [self showNo:@"详细地址为空"];
         return;
     }
 
-    
+    [self dismissKeyBoard];
+    [self showLoading:@"数据保存中..."];
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ADDRESS_URL]];
     if([otype isEqualToString:@"edit"]){//修改动作
@@ -309,10 +310,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         [self dismissViewControllerAnimated:YES completion:^{
             [self clearAddress];
         }];
@@ -331,7 +334,8 @@
 
 - (void)addInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"处理数据失败！" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"处理数据失败！"];
 }
 
 - (IBAction)clickDeleteBtn:(id)sender {

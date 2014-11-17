@@ -45,7 +45,6 @@
 }
 
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -60,8 +59,8 @@
     NSString *url = [[NSString alloc] initWithFormat:@"%@/newsConte.aspx?newsid=%@",REMOTE_ADMIN_URL,detailId];
     NSURL *nsUrl = [[NSURL alloc] initWithString:url];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:nsUrl];
-    _detailContentView.opaque = NO;
-    _detailContentView.scalesPageToFit = YES;
+    //_detailContentView.opaque = NO;
+    //_detailContentView.scalesPageToFit = YES;
     [_detailContentView setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACKGROUND]];
     [_detailContentView loadRequest:request];
     
@@ -245,7 +244,7 @@
         k.calculationMode = kCAAnimationLinear;
         [_likeImgView.layer addAnimation:k forKey:@"SHOW"];
     }else{
-        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
+        [self showNo:[jsonDic valueForKey:@"result"]];
     }
 }
 
@@ -410,7 +409,7 @@
     //点击发表提交数据
     if(isOpen){
         if([self isEmpty:textVal]){
-            [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+            [self showNo:@"请输入评论信息后提交"];
         }else{ 
             //提交评论
             NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
@@ -468,14 +467,14 @@
         [textField addSubview:plabel];
         isOpen = NO;
         
-        [self showCAlert:@"提交成功" widthType:SUCCESS_LOGO];
+        [self showOk:@"提交成功"];
     }else{
-        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"result"]];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showNo:@"请求数据失败"];
 }
 
 -(void)passValue:(NSString *)val{

@@ -19,6 +19,8 @@
 
 - (void)hideHud;
 
+-(void)showOk:(NSString *)okMsg;
+-(void)showNo:(NSString *)noMsg;
 - (void)showHint:(NSString *)hint;
 -(void)showLoading:(NSString *)msg;
 // 从默认(showHint:)显示的位置再往上(下)yOffset

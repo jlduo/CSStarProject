@@ -177,17 +177,17 @@
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == TRUE){
-        [self showCAlert:@"登录信息不完整" widthType:WARNN_LOGO];
+        [self showNo:@"登录信息不完整"];
         return;
     }
     
     if(isLoginNameNull==TRUE && isLoginPaswNull == FALSE){
-        [self showCAlert:@"登录账号不能为空" widthType:WARNN_LOGO];
+        [self showNo:@"登录账号不能为空"];
         return;
     }
     
     if(isLoginNameNull==FALSE && isLoginPaswNull == TRUE){
-        [self showCAlert:@"登录密码不能为空" widthType:WARNN_LOGO];
+        [self showNo:@"登录密码不能为空"];
         return;
     }
     
@@ -216,7 +216,7 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
         //先清除信息
@@ -260,7 +260,7 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
         
@@ -288,6 +288,6 @@
 - (void)requestLoginFailed:(ASIHTTPRequest *)req
 {
     
-    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self showNo:@"请求数据失败"];
 }
 @end

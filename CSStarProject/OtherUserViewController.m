@@ -37,7 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [self showLoading:@"加载中..."];
+    _userProjectNums = [[NSMutableDictionary alloc]init];
+    
     [self initLoadData];
     [self initLoadUserData];
     [self getMyProjectsNums];
@@ -65,28 +67,64 @@
 }
 
 -(void)initLoadUserData{
-
     NSString *url = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,dataId];
-    _userData = (NSDictionary *)[ConvertJSONData requestData:url];
-    NSLog(@"_userData===%@",_userData);
+    [self requestDataByUrl:url withType:1];
 }
 
 -(void)getMyProjectsNums{
-    _userProjectNums = [[NSMutableDictionary alloc]init];
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_MYPROJECT_NUMS_URL,[params valueForKey:@"userId"]];
-    NSString *pro_nums = (NSString *)[ConvertJSONData requestSData:url];
-    if([StringUitl isNotEmpty:pro_nums]){
-        pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
-        NSArray *num = [pro_nums componentsSeparatedByString:@","];
-        if(num!=nil&&num.count>0){
-            for (int i=0; i<num.count; i++) {
-                NSArray *nums = [num[i] componentsSeparatedByString:@":"];
-                [_userProjectNums setObject:nums[1] forKey:nums[0]];
+    [self requestDataByUrl:url withType:0];
+}
+
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    int tag = request.tag;
+    NSData *respData = [request responseData];
+    if(tag==0){
+        NSString *pro_nums = [[NSString alloc] initWithData:respData encoding:NSUTF8StringEncoding];
+        if([StringUitl isNotEmpty:pro_nums]){
+            pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
+            NSArray *num = [pro_nums componentsSeparatedByString:@","];
+            if(num!=nil&&num.count>0){
+                for (int i=0; i<num.count; i++) {
+                    NSArray *nums = [num[i] componentsSeparatedByString:@":"];
+                    [_userProjectNums setObject:nums[1] forKey:nums[0]];
+                }
             }
         }
+    }else{
+        _userData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+        [self setImgBtnImage];
+        [self setUserTitle];
     }
-    NSLog(@"pro_nums===%@",_userProjectNums);
-} 
+    
+    [self hideHud];
+    [_otherUserCenterTable reloadData];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSError *error = [request error];
+    NSLog(@"error->%@",error);
+    [self hideHud];
+    [self showNo:@"加载失败,请检查网络连接!"];
+    
+}
 
 
 -(void)setImgBtnImage{
@@ -121,8 +159,7 @@
     imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
-    
-    [self setImgBtnImage];
+    [StringUitl setViewBorder:imgBtn withColor:@"#FFFFFF" Width:4.0f];
     
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"myzonebg.png"]];
     
@@ -130,7 +167,6 @@
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
     userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-240)/2, 100, 240, 100)];
-    [self setUserTitle];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -256,7 +292,7 @@
     if([StringUitl isNotEmpty:dataNum]){
        [userCell.dataNum setText:dataNum];
     }else{
-        [userCell.tagBgView setBackgroundImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+       [userCell.dataNum setText:@"0"];
     }
    
     userCell.selectionStyle = UITableViewCellSelectionStyleNone;

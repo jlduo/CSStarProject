@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 @property (weak, nonatomic) IBOutlet UIButton *cstarBtn;
 @property (weak, nonatomic) IBOutlet UIButton *zcBtn;
+@property (weak, nonatomic) IBOutlet UIView *myCommentBackView;
 - (IBAction)cstarBtnClick:(id)sender;
 - (IBAction)zcBtnClick:(id)sender;
 

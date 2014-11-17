@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"加载中..."];
     [self setNavgationBar];
     self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
@@ -92,7 +93,7 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor greenColor]];
+    [rbtn setTintColor:[UIColor whiteColor]];
     //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
     
@@ -114,14 +115,19 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self hideHud];
+}
+
 -(void)saveUserInfo{
-    
+
     NSString *pwd = _sexValue;
     if([StringUitl isEmpty:pwd]){
-        [self showCAlert:@"对不起，请先选择性别！" widthType:ERROR_LOGO];
+        [self showNo:@"对不起，请先选择性别！"];
         return;
     }
     
+    [self showLoading:@"数据保存中..."];
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
@@ -148,10 +154,13 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
         [StringUitl setSessionVal:_sexValue withKey:USER_SEX];
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         [self dismissViewControllerAnimated:YES completion:nil];
         
     }
@@ -160,7 +169,8 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败！"];
 }
 
 

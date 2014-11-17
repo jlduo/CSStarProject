@@ -680,7 +680,7 @@
 }
 
 -(void)goArticelView:(NSString *)articleId{
-    StoryDetailViewController *articelView = [[StoryDetailViewController alloc]init];
+    StoryCommentViewController *articelView = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
     passValelegate = articelView;
     [passValelegate passValue:articleId];
     [self.navigationController pushViewController:articelView animated:YES];
@@ -715,7 +715,7 @@
         [self.navigationController pushViewController:login animated:YES];
         return;
     }else{
-        StoryCommentViewController *storyComment  = [[StoryCommentViewController alloc] init];
+        StoryCommentViewController *storyComment = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         passValelegate = storyComment;
         [passValelegate passValue:artId];
         [self.navigationController pushViewController:storyComment animated:YES];

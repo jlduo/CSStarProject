@@ -36,6 +36,8 @@
 
 - (void)viewDidLoad
 {
+    
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -110,7 +112,7 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    
+    [self hideHud];
     [_userInfoTable reloadData];
 }
 
@@ -324,6 +326,7 @@
 
 - (void)saveImage:(UIImage *)image {
     NSLog(@"保存头像！");
+    [self showLoading:@"上传照片中..."];
     //[userPhotoButton setImage:image forState:UIControlStateNormal];
     BOOL success;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -383,7 +386,6 @@
     
     [request setDidFailSelector:@selector(uploadFailed:)];
     [request setDidFinishSelector:@selector(uploadFinished:)];
-    
 
     return YES;
 }
@@ -402,7 +404,8 @@
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//上传失败
         //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
         
@@ -415,11 +418,8 @@
             [tempStr replaceCharactersInRange:range withString:@""];
             
             [StringUitl setSessionVal:tempStr withKey:USER_LOGO];
-//            UIImageView *btnImgView = [[UIImageView alloc]init];
-//            [btnImgView md_setImageWithURL:tempStr placeholderImage:NO_IMG options:SDWebImageRefreshCached];
-//            bigCell.bigCellPic.image = btnImgView.image;
         }
-
+        [self hideHud];
         [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
         
     }
@@ -428,7 +428,8 @@
 
 - (void)uploadFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败"];
 }
 
 //获取用户信息
@@ -458,11 +459,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
     }
+
     
 }
 

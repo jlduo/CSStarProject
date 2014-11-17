@@ -270,12 +270,15 @@
     }
 }
 
+
+
 +(void)setViewBorder:(UIView *)bview withColor:(NSString *)color Width:(CGFloat)width{
     if (bview!=nil) {
         bview.layer.borderColor = [StringUitl colorWithHexString:color].CGColor;
         bview.layer.borderWidth = width;
     }
 }
+
 
 //打印系统字体
 +(void)printSystemFont{

@@ -18,6 +18,8 @@
 
 @interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
 UITableViewDataSource,UITableViewDelegate>
+
+@property(nonatomic,retain)NSMutableArray *commentList;
 @property (weak, nonatomic) IBOutlet UITableView *commentTable;
 @property (weak, nonatomic) IBOutlet UILabel *commentTitle;
 @property (weak, nonatomic) IBOutlet UILabel *commentDate;

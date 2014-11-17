@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"加载中..."];
     self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
     [StringUitl setViewBorder:self.nickNameBg withColor:@"#CCCCCC" Width:0.5f];
@@ -63,7 +64,7 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor greenColor]];
+    [rbtn setTintColor:[UIColor whiteColor]];
     //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
@@ -80,6 +81,10 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self hideHud];
+}
+
 -(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     NSMutableString *text = [_nickName.text mutableCopy];
     [text replaceCharactersInRange:range withString:string];
@@ -92,17 +97,20 @@
 }
 
 -(void)saveUserInfo{
+    [_nickName resignFirstResponder];
     
     NSString *username = self.nickName.text;
     if([StringUitl isEmpty:username]){
-        [self showCAlert:@"请先输入昵称" widthType:WARNN_LOGO];
+        [self showNo:@"请先输入昵称"];
         return;
     }
     
     if([[StringUitl getSessionVal:USER_NICK_NAME] isEqual:self.nickName.text]){
-        [self showCAlert:@"请先修改昵称" widthType:WARNN_LOGO];
+        [self showNo:@"请先修改昵称"];
         return;
     }
+    
+    [self showLoading:@"数据保存中..."];
 
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
@@ -130,18 +138,21 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         [StringUitl setSessionVal:_nickName.text withKey:USER_NICK_NAME];
         [self dismissViewControllerAnimated:YES completion:nil];
-        
     }
     
 }
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败"];
 }
 @end

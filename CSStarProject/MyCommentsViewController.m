@@ -39,6 +39,7 @@
     
     self.commentsTableView.rowHeight = 80;
     self.commentsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
+    [StringUitl setViewBorder:self.myCommentBackView withColor:@"#cccccc" Width:0.5f];
     
     //注册单元格
     UINib *nibCell = [UINib nibWithNibName:@"userMessageCommentNewTableViewCell" bundle:nil];
@@ -158,13 +159,14 @@
 }
 
 -(void)deleteComment:(UIButton *)sender{
-    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"系统提示" message:@"确定删除？" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"系统提示" message:@"确定删除评论吗？" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
     currentIndex = sender.tag;
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {
+        [self showLoading:@"正在删除..."];
         NSDictionary *dicComment = [tableArray objectAtIndex:currentIndex];
         if (typeComment == 0) {
             NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/DeleteComment/%@",REMOTE_URL,[dicComment valueForKey:@"_id"]];
@@ -212,22 +214,31 @@
         if([[jsonDic valueForKey:@"result"] isEqualToString:@"True"]){
             [tableArray removeObjectAtIndex:currentIndex];
             [self.commentsTableView reloadData];
+            [self hideHud];
+            [self showOk:@"删除成功！"];
+            
         }else{
-            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self hideHud];
+            [self showNo:@"删除失败！"];
         }
     }else{
         //处理返回
         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
             [tableArray removeObjectAtIndex:currentIndex];
             [self.commentsTableView reloadData];
+            
+            [self hideHud];
+            [self showOk:@"删除成功！"];
         }else{
-            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self hideHud];
+            [self showNo:@"删除失败！"];
         }
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+    [self hideHud];
+    [self showNo:@"删除失败！"];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

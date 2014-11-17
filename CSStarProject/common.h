@@ -9,7 +9,8 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
-#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
+#define CONNECT_MODE 1 //访问模式 1 测试版 2 正式版
+#define TIPS_TYPE 1 //提示信息样式 1 白色底图标 2 细线图标
 #define PAGESIZE @"5"//列表分页数据
 #define CF_PAGESIZE @"5"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度

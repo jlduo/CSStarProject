@@ -28,6 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"加载中..."];
     self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     [StringUitl setViewBorder:self.passBg withColor:@"#CCCCCC" Width:0.5f];
     
@@ -64,7 +65,7 @@
     [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
-    [rbtn setTintColor:[UIColor greenColor]];
+    [rbtn setTintColor:[UIColor whiteColor]];
     //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
     
@@ -83,23 +84,28 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //关闭时候到操作
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self hideHud];
 }
 
 -(void)saveUserInfo{
+    [self.passText resignFirstResponder];
     
     NSString *pwd = self.passText.text;
     if([StringUitl isEmpty:pwd]){
-        [self showCAlert:@"请先输入密码" widthType:WARNN_LOGO];
+        [self showNo:@"请先输入密码"];
         return;
     }
     
     if([[StringUitl getSessionVal:LOGIN_USER_PSWD] isEqual:pwd]){
-        [self showCAlert:@"新密码不能和旧密码相同" widthType:WARNN_LOGO];
+        [self showNo:@"新密码不能和旧密码相同"];
         return;
     }
+    
+    [self showLoading:@"数据保存中..."];
     
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_PASSWORD_URL]];
@@ -127,19 +133,22 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
         [StringUitl setSessionVal:_passText.text withKey:LOGIN_USER_PSWD];
         [self dismissViewControllerAnimated:YES completion:nil];
-        
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
     }
     
 }
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败"];
 }
 
 @end

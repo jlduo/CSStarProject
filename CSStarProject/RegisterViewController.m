@@ -100,7 +100,7 @@
     }
     
     if(isRegiNameNull==TRUE){
-        [self showCAlert:@"请输入接收验证码的手机号" widthType:WARNN_LOGO];
+        [self showNo:@"请输入接收验证码的手机号"];
         return;
     }
     
@@ -153,35 +153,35 @@
     }
     
     if(isRegiNameNull==TRUE){
-        [self showCAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
+        [self showNo:@"请先输入手机号码"];
         return;
     }
     
     if(isRegiPaswNull==TRUE){
-        [self showCAlert:@"请设置您的密码" widthType:WARNN_LOGO];
+        [self showNo:@"请设置您的密码"];
         return;
     }
     
     if(isCheckNumNull==TRUE){
-        [self showCAlert:@"请先输入接收的验证码" widthType:WARNN_LOGO];
+        [self showNo:@"请先输入接收的验证码"];
         return;
     }
     
     //验证手机号码
     if(![StringUitl validateMobile:user_name]){
-        [self showCAlert:@"您输入的手机号码有误" widthType:WARNN_LOGO];
+        [self showNo:@"您输入的手机号码有误"];
         return;
     }
     
     //验证码密码
     if(pass_word.length<6||pass_word.length>14){
-        [self showCAlert:@"密码长度只能设置6-14位字符" widthType:WARNN_LOGO];
+        [self showNo:@"密码长度只能设置6-14位字符"];
         return;
     }
     
     //检查验证码
     if(checkNum.length!=4){
-        [self showCAlert:@"验证码只能为4位" widthType:WARNN_LOGO];
+        [self showNo:@"验证码只能为4位"];
         return;
     }
     
@@ -219,10 +219,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         [self startTime];
         //[self.navigationController popToRootViewControllerAnimated:YES];
         //[self dismissViewControllerAnimated:YES completion:nil];
@@ -342,7 +342,7 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//注册失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
@@ -356,7 +356,7 @@
 
 - (void)requestRegFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self showNo:@"请求数据失败!"];
 }
 
 

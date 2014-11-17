@@ -30,6 +30,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
+    [StringUitl setViewBorder:self.contentBackView withColor:@"#cccccc" Width:0.5f];
     [self initLoadData];
     
 }
@@ -46,9 +47,40 @@
 
 
 -(void)initLoadData{
+    [self loadData];
+    //添加手势
+    UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [_contentView addGestureRecognizer:singleTapWeb];
+    singleTapWeb.delegate= self;
+    singleTapWeb.cancelsTouchesInView = NO;
+    
+}
+
+-(void)loadData{
     
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-    _contentData = (NSDictionary *)[ConvertJSONData requestData:url];
+    NSURL *requestUrl = [NSURL URLWithString:url];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
+    [ASIHTTPRequest setSessionCookies:nil];
+    
+    [request setUseCookiePersistence:YES];
+    [request setDelegate:self];
+    [request setRequestMethod:@"GET"];
+    [request setStringEncoding:NSUTF8StringEncoding];
+    
+    [request buildPostBody];
+    
+    [request startAsynchronous];
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    
+}
+//请求完成
+- (void)requestDataFinished:(ASIHTTPRequest *)req{
+    
+    NSData *respData = [req responseData];
+    _contentData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    //处理返回
     //填充标题
     _contentTitle.text = [_contentData valueForKey:@"projectName"];
     
@@ -56,12 +88,6 @@
     NSURL *contentUrl = [[NSURL alloc]initWithString:[_contentData valueForKey:@"details"]];
     [_contentView loadRequest:[NSURLRequest requestWithURL:contentUrl]];
     //NSLog(@"_contentData===%@",_contentData);
-    
-    //添加手势
-    UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [_contentView addGestureRecognizer:singleTapWeb];
-    singleTapWeb.delegate= self;
-    singleTapWeb.cancelsTouchesInView = NO;
     
 }
 
@@ -175,21 +201,14 @@
 
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
-    
-    NSLog(@"webViewDidStartLoad");
-    
+    [self showLoading:@"数据加载中..."];
 }
-
-- (void)webViewDidFinishLoad:(UIWebView *)web{
-    
-    NSLog(@"webViewDidFinishLoad");
-    
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    [self hideHud];
 }
-
--(void)webView:(UIWebView*)webView  DidFailLoadWithError:(NSError*)error{
-    
-    NSLog(@"DidFailLoadWithError");
-    
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+    [self hideHud];
+    [self showNo:@"加载数据失败..."];
 }
 
 @end

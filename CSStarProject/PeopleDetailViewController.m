@@ -32,6 +32,7 @@
 
 - (void)viewDidLoad
 {
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
     [self initProjectData];
     [self initLoadData];
@@ -105,7 +106,7 @@
     _peopleDetailTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _peopleDetailTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    [self initToolBar];
+    
 }
 
 //初始化数据
@@ -113,10 +114,32 @@
     if(dataId!=nil){
     
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-         _peopleData= (NSDictionary *)[ConvertJSONData requestData:url];
-        //NSLog(@"_peopleData===%@",_peopleData);
+        [self requestDataByUrl:url];
         
     }
+}
+
+-(void)requestDataByUrl:(NSString *)url{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    
+}
+
+
+- (void)requestDataFinished:(ASIHTTPRequest *)request
+{
+    NSData *respData = [request responseData];
+    _peopleData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    [self initToolBar];
+    [self hideHud];
+    [_peopleDetailTable reloadData];
 }
 
 //传递过来的参数
@@ -383,30 +406,31 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }else{
         [titleLabel removeFromSuperview];
         [self initProjectData];
         [_peopleDetailTable reloadData];
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showOk:[jsonDic valueForKey:@"info"]];
     }
     
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败!"];
 }
 
 
 -(void)clickSupBtn{
     int stateNum = [[cellDic valueForKey:@"projectStatus"] intValue];
     if(stateNum==1||stateNum==2){
-        [self showHint:@"对不起，项目未开始!"];
+        [self showNo:@"对不起，项目未开始!"];
     }else if(stateNum==4){
-        [self showHint:@"对不起，项目已结束!"];
+        [self showNo:@"对不起，项目已结束!"];
     }else if(stateNum==5){
-        [self showHint:@"对不起，项目已失败!"];
+        [self showNo:@"对不起，项目已失败!"];
     }else{
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ReturnsViewController *returnsController =  [storyBoard instantiateViewControllerWithIdentifier:@"returnList"];

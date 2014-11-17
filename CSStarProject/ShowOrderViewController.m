@@ -292,10 +292,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         
         [rbtn setTitle:@" " forState:UIControlStateNormal];
         [rbtn setTitle:@" " forState:UIControlStateHighlighted];
@@ -311,7 +311,7 @@
 
 - (void)addInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"处理数据失败！" widthType:ERROR_LOGO];
+    [self showNo:@"处理数据失败！"];
 }
 
 
