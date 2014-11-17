@@ -2841,7 +2841,7 @@
 					"$(PROJECT_DIR)/CSStarProject",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7154f5a6-3a7d-4791-b5bc-d615d3e696e4";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2875,7 +2875,7 @@
 					"$(PROJECT_DIR)/CSStarProject",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7154f5a6-3a7d-4791-b5bc-d615d3e696e4";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
