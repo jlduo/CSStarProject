@@ -446,7 +446,7 @@
     //提交评论
     NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
     if ([self isEmpty:userId]) {
-        LoginViewController *login = [[LoginViewController alloc] init];
+        LoginViewController *login  = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:login animated:YES];
         return;
     }else{

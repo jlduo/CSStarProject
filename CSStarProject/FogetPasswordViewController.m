@@ -30,6 +30,7 @@
     self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
     [StringUitl setCornerRadius:self.fogetView withRadius:5.0f];
+    [StringUitl setCornerRadius:self.forgetBgView withRadius:5.0f];
     [StringUitl setCornerRadius:self.forgetBtnView withRadius:5.0f];
 }
 

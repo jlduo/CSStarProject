@@ -130,6 +130,7 @@
         [_projectListTable reloadData];
     }else{
         _peopleProList = [[NSMutableArray alloc]init];
+        [self hideHud];
         [self showHint:@"没有最新数据..."];
     }
     

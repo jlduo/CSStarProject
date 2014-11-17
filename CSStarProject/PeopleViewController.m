@@ -49,17 +49,6 @@
    
 }
 
--(void)dealloc{
-    cellDic = nil;
-    sourceArray = nil;
-    slideArr = nil;
-    commonArr = nil;
-    scrollView = nil;
-    filterBgView = nil;
-    photoScroll = nil;
-    friendlyLoadingView = nil;
-}
-
 -(void)initLoading{
     if(friendlyLoadingView==nil){
         friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
@@ -223,17 +212,17 @@
     
 }
 
--(void)goForward{
-    if([StringUitl checkLogin]==TRUE){
-        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
-        [self.navigationController pushViewController:userView animated:YES];
-    }else{
-        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
-        [self.navigationController pushViewController:loginView animated:YES];
-    }
-    
-}
+//-(void)goForward{
+//    if([StringUitl checkLogin]==TRUE){
+//        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
+//        [self.navigationController pushViewController:userView animated:YES];
+//    }else{
+//        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+//        LoginViewController *loginView = [[LoginViewController alloc] init];
+//        [self.navigationController pushViewController:loginView animated:YES];
+//    }
+//    
+//}
 
 -(void)showFilterView:(UIButton *)sender{
     
