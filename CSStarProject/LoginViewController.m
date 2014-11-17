@@ -31,9 +31,7 @@
     [super viewDidLoad];
 
     self.navigationController.navigationBarHidden = YES;
-    
-    self.passWord.delegate = self;
-    self.userName.delegate = self;
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
     [self.loginBgView.layer setCornerRadius:6.0];
     [self.userNameView.layer setCornerRadius:6.0];
@@ -135,8 +133,8 @@
 -(void)getPassword{
     FogetPasswordViewController *getPassword = [[FogetPasswordViewController alloc] init];
     if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
+
+        [self presentViewController:getPassword animated:YES completion:nil];
         
     }else{
         
@@ -274,7 +272,7 @@
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
         
-        UserViewController *userView = [[UserViewController alloc]init];
+        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
         if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
             [self dismissViewControllerAnimated:YES completion:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTabar" object:nil];

@@ -15,8 +15,7 @@
     UIImage *cellImg;
     NSString *imgName;
     NSString *cellTitle;
-    
-    UITableView *stableView;
+
     NSMutableDictionary *_userDictionay;
     
     UIView *bgView;
@@ -35,51 +34,14 @@
 
 @implementation UserInfoViewController
 
--(void)dealloc{
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    cellImg = nil;
-    imgName = nil;
-    cellTitle = nil;
-    stableView = nil;
-    stableView = nil;
-    _userDictionay = nil;
-    bgView = nil;
-    sheetView= nil;
-    bigCell= nil;
-    smallCell1= nil;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-     //加入导航
-    //[self setNavgationBar];
-    
-    CGRect tframe = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-64-49);
+    [_userInfoTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
+    _userInfoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    stableView = [[UITableView alloc] initWithFrame:tframe];
-    stableView.delegate = self;
-    stableView.dataSource = self;
-    
-    [stableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
-    stableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //隐藏多余的行
-    UIView *view =[ [UIView alloc]init];
-    view.backgroundColor = [UIColor clearColor];
-    [stableView setTableFooterView:view];
-    
-    //处理头部信息
-    [self.view addSubview:stableView];
     
     //处理actionSheet
     CGRect frameRect = CGRectMake(MAIN_FRAME_X, MAIN_FRAME_H+20, SCREEN_WIDTH, 200);
@@ -148,55 +110,9 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H);
-    [stableView setFrame:temFrame];
     
-//    if(smArray==nil||smArray.count==0){
-//        smArray = [[NSMutableArray alloc]init];
-//    }
-//    if(smArray !=nil && smArray.count>0){
-//        UserSmallTableViewCell *scell =  (UserSmallTableViewCell *)[smArray objectAtIndex:0];
-//        scell.smallCellValue.text = [StringUitl getSessionVal:USER_NICK_NAME];
-//
-////        UserSmallTableViewCell *ccell =  (UserSmallTableViewCell *)[smArray objectAtIndex:1];
-////        ccell.smallCellValue.text = [_userInfo valueForKey:LOGIN_USER_PSWD];
-//    }
-    
-    
-    
-    [stableView reloadData];
+    [_userInfoTable reloadData];
 }
-
-
--(void)setNavgationBar{
-    //处理导航开始
-    self.navigationController.navigationBarHidden = YES;
-    UINavigationBar *navgationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, STATU_BAR_HEIGHT, SCREEN_WIDTH, NAV_TITLE_HEIGHT)];
-    [navgationBar setBackgroundImage:[UIImage imageNamed:NAVBAR_BG_ICON] forBarMetrics:UIBarMetricsDefault];
-    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
-    //处理标题
-    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
-    [titleLabel setText:@"个人信息"];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    
-    //设置左边箭头
-    UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
-    [lbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_LEFT_ICON] forState:UIControlStateNormal];
-    [lbtn addTarget:self action:@selector(goPreviou) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
-    
-    navItem.titleView = titleLabel;
-    navItem.leftBarButtonItem = leftBtnItem;
-    [navgationBar pushNavigationItem:navItem animated:YES];
-    
-    [self.view addSubview:navgationBar];
-
-}
-
 
 -(void)goPreviou{
     NSLog(@"back");
@@ -604,8 +520,8 @@
         
         if(indexPath.row==0){
             UINib *nibCell = [UINib nibWithNibName:@"UserBigTableViewCell" bundle:nil];
-            [stableView registerNib:nibCell forCellReuseIdentifier:@"UserBigCell"];
-            bigCell= [stableView dequeueReusableCellWithIdentifier:@"UserBigCell"];
+            [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserBigCell"];
+            bigCell= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserBigCell"];
             bigCell.selectionStyle = UITableViewCellSelectionStyleNone;
             //处理圆形图片
             NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
@@ -635,8 +551,8 @@
         }else{
             
             UINib *nibCell = [UINib nibWithNibName:@"UserSmallTableViewCell" bundle:nil];
-            [stableView registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
-            smallCell1= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
+            [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
+            smallCell1= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserSmallCell"];
             smallCell1.selectionStyle = UITableViewCellSelectionStyleNone;
             smallCell1.smallCellValue.font = main_font(14);
             smallCell1.smallCellTitle.font = main_font(14);
@@ -662,8 +578,8 @@
     }else{//section
         
         UINib *nibCell = [UINib nibWithNibName:@"UserSmallTableViewCell" bundle:nil];
-        [stableView registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
-        UserSmallTableViewCell *smallCell= [stableView dequeueReusableCellWithIdentifier:@"UserSmallCell"];
+        [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
+        UserSmallTableViewCell *smallCell= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserSmallCell"];
         smallCell.selectionStyle = UITableViewCellSelectionStyleNone;
         smallCell.smallCellValue.font = main_font(14);
         smallCell.smallCellTitle.font = main_font(14);

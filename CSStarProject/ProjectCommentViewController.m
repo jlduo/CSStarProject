@@ -49,6 +49,9 @@
     //集成刷新控件
     [self setHeaderRereshing];
     
+    
+    UIView *footerView = [[UIView alloc]init];
+    _projectCommentTable.tableFooterView = footerView;
 }
 
 -(void)initHeadView{
@@ -363,11 +366,15 @@
     
     NSData *respData = [request responseData];
     NSMutableArray *jsonArr = (NSMutableArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    _proCommentList = jsonArr;
+    if(jsonArr!=nil&&jsonArr.count>0){
+      _proCommentList = jsonArr;
+        [self hideHud];
+      [_projectCommentTable reloadData];
+    }else{
+        [self hideHud];
+        [self showHint:@"没有最新数据..."];
+    }
     [self setFooterRereshing];
-    [self hideHud];
-    [_projectCommentTable reloadData];
-
 }
 
 

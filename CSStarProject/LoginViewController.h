@@ -13,9 +13,10 @@
 #import "HomeViewController.h"
 #import "UIViewController+HUD.h"
 #import "FogetPasswordViewController.h"
+#import "CommonViewController.h"
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : UIViewController<UITextFieldDelegate>
+@interface LoginViewController : CommonViewController<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *loginBgView;
 

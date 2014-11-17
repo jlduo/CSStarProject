@@ -23,22 +23,6 @@
     [super viewDidLoad];
 }
 
--(void)dealloc{
-    [self releaseDMemery];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewDidDisappear:YES];
-    [self releaseDMemery];
-}
-
--(void)releaseDMemery{
-    leftIconName = nil;
-    rightIconName= nil;
-}
-
-
-
 -(void)loadView{
     [super loadView];
     self.navigationController.navigationBarHidden = YES;
@@ -130,7 +114,8 @@
     }else{
         
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginViewController *loginView =  [storyBoard instantiateViewControllerWithIdentifier:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
         
     }

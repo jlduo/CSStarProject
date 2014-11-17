@@ -111,7 +111,7 @@
     //跳转到详情页面
     NSLog(@"go detail......!");
     cellDic = [self.peopleProList objectAtIndex:indexPath.row];
-    ShowOrderViewController *showOrderController = [[ShowOrderViewController alloc]init];
+    ShowOrderViewController *showOrderController = (ShowOrderViewController *)[self getVCFromSB:@"showOrder"];
     passValelegate = showOrderController;
     [passValelegate passValue:[cellDic valueForKey:@"id"]];
     [self.navigationController pushViewController:showOrderController animated:YES];

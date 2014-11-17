@@ -28,9 +28,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.passBg.layer setCornerRadius:5.0f];
-    [self.passBg.layer setBorderWidth:1.0f];
-    [self.passBg.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    [StringUitl setViewBorder:self.passBg withColor:@"#CCCCCC" Width:0.5f];
+    
     self.passText.secureTextEntry = TRUE;
     [self.passText setText:[StringUitl getSessionVal:LOGIN_USER_PSWD]];
     

@@ -76,9 +76,7 @@
 
 -(void)goPreviou{
     [self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{
-        //关闭时候到操作
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

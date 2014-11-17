@@ -49,28 +49,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self loadData];
     
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [_detailContentView addGestureRecognizer:singleTapWeb];
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
-    
-    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-     dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
-    _contentTitle.text = [dicContent valueForKey:@"_title"];
-    _contentDate.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
-    NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
-    if (call_index.length > 0) {
-            _columnTitle.text = call_index;
-    }
-    NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
-    _clickNum.text = click;
-    
-    
+    //加载网页数据
     NSString *url = [[NSString alloc] initWithFormat:@"%@/newsConte.aspx?newsid=%@",REMOTE_ADMIN_URL,detailId];
     NSURL *nsUrl = [[NSURL alloc] initWithString:url];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:nsUrl];
+    _detailContentView.opaque = NO;
+    _detailContentView.scalesPageToFit = YES;
+    [_detailContentView setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACKGROUND]];
     [_detailContentView loadRequest:request];
     
     _likeImgView.userInteractionEnabled = YES;
@@ -82,6 +74,53 @@
     //评论
     [self initToolBar];
 }
+
+-(void)loadData{
+    NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
+    NSURL *requestUrl = [NSURL URLWithString:url];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
+    [ASIHTTPRequest setSessionCookies:nil];
+    
+    [request setUseCookiePersistence:YES];
+    [request setDelegate:self];
+    [request setRequestMethod:@"GET"];
+    [request setStringEncoding:NSUTF8StringEncoding];
+    
+    [request buildPostBody];
+    
+    [request startAsynchronous];
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    
+}
+//请求完成
+- (void)requestDataFinished:(ASIHTTPRequest *)req{
+
+    NSData *respData = [req responseData];
+    dicContent = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    //处理返回
+    _contentTitle.text = [dicContent valueForKey:@"_title"];
+    _contentDate.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
+    NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
+    if (call_index.length > 0) {
+        _columnTitle.text = call_index;
+    }
+    NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
+    _clickNum.text = click;
+
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView{
+    [self showLoading:@"数据加载中..."];
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    [self hideHud];
+}
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+    [self showHint:@"加载数据失败..."];
+}
+
+
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
@@ -117,7 +156,7 @@
             self.photos = imgPhotes;
             self.thumbs = imgPhotes;
             
-            BOOL displayActionButton = NO;
+            BOOL displayActionButton = YES;
             BOOL displaySelectionButtons = NO;
             BOOL displayNavArrows = YES;
             BOOL enableGrid = YES;
@@ -164,13 +203,6 @@
     if (index < _thumbs.count)
         return [_thumbs objectAtIndex:index];
     return nil;
-}
-
-
-- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
-    
-    
-    
 }
 
 - (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
@@ -476,6 +508,4 @@
     
 }
 
-- (IBAction)clickLikeBtn:(id)sender {
-}
 @end

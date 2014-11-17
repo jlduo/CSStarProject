@@ -44,24 +44,24 @@
     
     UIImageView *firstImageView = [[UIImageView alloc]initWithFrame:fitRect];
     
-    [firstImageView md_setImageWithURL:[sourceArr lastObject] placeholderImage:NO_IMG options:SDWebImageProgressiveDownload];
+    [firstImageView md_setImageWithURL:[sourceArr lastObject] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     [self.scrollView addSubview:firstImageView];
     
     for (int i = 0; i < sourceArr.count; i++) {
         
         UIImageView *imageview = CGIMAG(width*(i+1), 0, width, height);
-        [imageview md_setImageWithURL:[sourceArr objectAtIndex:i] placeholderImage:NO_IMG options:SDWebImageProgressiveDownload];
+        [imageview md_setImageWithURL:[sourceArr objectAtIndex:i] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         [self.scrollView addSubview:imageview];
         
     }
     
     UIImageView *lastImageView = CGIMAG(width*(sourceArr.count+1), 0, width, height);
-    [lastImageView md_setImageWithURL:[sourceArr objectAtIndex:0] placeholderImage:NO_IMG options:SDWebImageProgressiveDownload];
+    [lastImageView md_setImageWithURL:[sourceArr objectAtIndex:0] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
     
     [self.scrollView addSubview:lastImageView];
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];
-    self.pageControl.backgroundColor = [UIColor clearColor];
-    self.pageControl.alpha = 0.45;
+    self.pageControl.backgroundColor = [UIColor blackColor];
+    self.pageControl.alpha = 0.35;
     self.pageControl.numberOfPages = sourceArr.count;
     self.pageControl.currentPage = 0;
     self.pageControl.pageIndicatorTintColor = [UIColor whiteColor];

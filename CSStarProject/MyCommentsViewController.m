@@ -262,12 +262,12 @@
     NSString *rowId = [row valueForKey:@"_article_id"];
     
     if(typeComment==0){
-        StoryDetailViewController *detailController = [[StoryDetailViewController alloc] init];
+        StoryDetailViewController *detailController =  (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
         passValelegate = detailController;
         [passValelegate passValue:rowId];
         [self.navigationController pushViewController:detailController animated:YES];
     }else{
-        PeopleDetailViewController *deatilViewController = [[PeopleDetailViewController alloc]init];
+        PeopleDetailViewController *deatilViewController =  (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
         passValelegate = deatilViewController;
         [passValelegate passValue:[row valueForKey:@"projectId"]];
         [self.navigationController pushViewController:deatilViewController animated:YES];

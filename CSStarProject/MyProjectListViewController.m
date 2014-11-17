@@ -143,12 +143,13 @@
     NSArray *returnArr = (NSArray *)jsonDic;
     if(returnArr!=nil && returnArr.count>0){
         _peopleProList = [NSMutableArray arrayWithArray:returnArr];
+        [self hideHud];
     }else{
         _peopleProList = [[NSMutableArray alloc]init];
+        [self hideHud];
+        [self showCAlert:@"暂无数据..." widthType:ERROR_LOGO];
     }
-    
     [_myProjectListTable reloadData];
-    [self hideHud];
     
 }
 
