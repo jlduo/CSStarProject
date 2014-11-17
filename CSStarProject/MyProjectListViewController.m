@@ -42,6 +42,7 @@
     
     dataId = [StringUitl getSessionVal:LOGIN_USER_ID];
     [self.view setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACK_COLOR]];
+    [StringUitl setViewBorder:self.projectBackView withColor:@"#cccccc" Width:0.5f];
     
     [self initLoadData];
     [self loadTableList:1];
@@ -147,7 +148,7 @@
     }else{
         _peopleProList = [[NSMutableArray alloc]init];
         [self hideHud];
-        [self showCAlert:@"暂无数据..." widthType:ERROR_LOGO];
+        [self showNo:@"暂无数据!"];
     }
     [_myProjectListTable reloadData];
     

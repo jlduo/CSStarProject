@@ -123,7 +123,7 @@
         dataID = dataId;
         if([data_Type isEqual:@"video"]){//视频
             dataTP = @"video";
-            GirlsVideoViewController *videoView = [[GirlsVideoViewController alloc] init];
+            GirlsVideoViewController *videoView = (GirlsVideoViewController *)[self getVCFromSB:@"girlsVideo"];
             passValelegate = videoView;
             [passValelegate passValue:dataId];
             if([self check_login]){
@@ -142,7 +142,7 @@
         
         if([data_Type isEqual:@"article"]||[data_Type isEqual:@"slide"]||[data_Type isEqual:@"city"]){//文章
             dataTP = @"article";
-            StoryDetailViewController *storyDetail = [[StoryDetailViewController alloc] init];
+            StoryDetailViewController *storyDetail = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
             passValelegate = storyDetail;
             [passValelegate passValue:dataId];
             if([self check_login]){
@@ -534,7 +534,7 @@
 -(BOOL)check_login{
     
     if(![StringUitl checkLogin]){
-        LoginViewController *loginView = [[LoginViewController alloc]init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self presentViewController:loginView animated:YES completion:nil];
         [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
         //[self.navigationController pushViewController:loginView animated:YES];

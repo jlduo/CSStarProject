@@ -23,7 +23,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self showLoading:@"加载中..."];
         self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -32,8 +31,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"加载中..."];
     [self loadTableList];
-    [self setFooterView];
     
     _orderAddressTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _orderAddressTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -63,11 +62,11 @@
 -(void)setFooterView{
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
     
-    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(10, 16, SCREEN_WIDTH-20, 40)];
+    UIButton *submitBox = [[UIButton alloc]initWithFrame:CGRectMake(10, 16, SCREEN_WIDTH-20, 45)];
     [submitBox setBackgroundColor:[UIColor redColor]];
     [submitBox setTitle:@"添加收货地址" forState:UIControlStateNormal];
     [submitBox setTitle:@"添加收货地址" forState:UIControlStateSelected];
-    submitBox.titleLabel.font = main_font(16);
+    submitBox.titleLabel.font = main_font(22);
     [submitBox.layer setCornerRadius:5.0];
     [submitBox.layer setMasksToBounds:YES];
     submitBox.tag = -1;
@@ -125,7 +124,7 @@
     }else{
         _orderAddressList = [[NSMutableArray alloc]init];
     }
-    
+    [self setFooterView];
     [_orderAddressTable reloadData];
     [self hideHud];
     
@@ -248,9 +247,9 @@
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self loadTableList];
             [_orderAddressTable reloadData];
-            [self showCAlert:@"设置成功！" widthType:WARNN_LOGO];
+            [self showOk:@"设置成功！"];
         }else{
-            [self showCAlert:@"设置失败！" widthType:WARNN_LOGO];
+            [self showNo:@"设置失败！"];
         }
     }
 }

@@ -23,5 +23,6 @@ ViewPassValueDelegate,UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *commentDate;
 @property (weak, nonatomic) IBOutlet UILabel *commentNum;
 @property (weak, nonatomic) IBOutlet UILabel *comentTitle;
+@property (weak, nonatomic) IBOutlet UIView *commentBackView;
 
 @end

@@ -258,7 +258,7 @@
             [tableArray removeObjectAtIndex:currentIndex];
             [commentTable reloadData];
         }else{
-            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self showNo:@"删除失败！"];
         }
     }else{
         //处理返回
@@ -266,13 +266,13 @@
             [tableArray removeObjectAtIndex:currentIndex];
             [commentTable reloadData];
         }else{
-            [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+            [self showNo:@"删除失败！"];
         }
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCAlert:@"删除失败！" widthType:WARNN_LOGO];
+    [self showNo:@"删除失败！"];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

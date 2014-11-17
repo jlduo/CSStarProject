@@ -14,7 +14,7 @@
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"
 
-@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate,MWPhotoBrowserDelegate>
+@interface ContentDetailViewController : CommonViewController<ViewPassValueDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate,MWPhotoBrowserDelegate,UIWebViewDelegate>
 
 
 #pragma mark 活动众筹数据
@@ -23,5 +23,6 @@
 @property (nonatomic, strong) NSMutableArray *thumbs;
 @property (weak, nonatomic) IBOutlet MarqueeLabel *contentTitle;
 @property (weak, nonatomic) IBOutlet UIWebView *contentView;
+@property (weak, nonatomic) IBOutlet UIView *contentBackView;
 
 @end

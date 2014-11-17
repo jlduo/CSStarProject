@@ -22,6 +22,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -38,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"加载中..."];
     [self loadTableList];
     self.orderTableView.rowHeight = 80;
     self.orderTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -46,7 +48,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"我的订单" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[self setNavBarWithTitle:@"我的订单" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
 }
 
 - (void)didReceiveMemoryWarning

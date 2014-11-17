@@ -48,7 +48,7 @@
     
     //集成刷新控件
     [self setHeaderRereshing];
-    
+    [StringUitl setViewBorder:self.commentBackView withColor:@"#cccccc" Width:0.5f];
     
     UIView *footerView = [[UIView alloc]init];
     _projectCommentTable.tableFooterView = footerView;
@@ -238,32 +238,40 @@
 }
 
 -(void)commentBtnClick{
-    
+
     NSString *contentKey;
     NSString *contentId;
     NSString *textVal = textField.text;
     NSLog(@"content=%@",textVal);
     
-    //点击发表提交数据
+    //处理换行符号
+    textVal = [textVal stringByTrimmingBlank];
+    NSLog(@"处理换行=%@",textVal);
+    
     if([self isEmpty:textVal]){
-        [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+        textField.text = nil;
+        [self dismissKeyBoard];
+        [self showNo:@"请输入评论信息后提交"];
     }else{
         
         NSString *hf = [textVal substringToIndex:2];
         if([hf isEqualToString:@"回复"]){
             NSArray *charArr = [textVal componentsSeparatedByString:@"："];
             if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
-                [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
-                return;
+                textField.text = nil;
+                [self dismissKeyBoard];
+                [self showNo:@"请输入评论信息后提交"];
             }
         }else{
             commentId = nil;
         }
-        
+
+        [self dismissKeyBoard];
+        [self showLoading:@"数据保存中..."];
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
         if ([self isEmpty:userId]) {
-            LoginViewController *login = [[LoginViewController alloc] init];
+            LoginViewController *login = (LoginViewController *)[self getVCFromSB:@"userLogin"];
             [self.navigationController pushViewController:login animated:YES];
             return;
         }
@@ -305,24 +313,24 @@
     //处理返回
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
         textField.text = nil;
-        [self dismissKeyBoard];
-        
         [textField addSubview:cIconView];
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
-        
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         [self loadTableList];
         [_projectCommentTable reloadData];
         
         self.commentNum.text = [[NSString alloc] initWithFormat:@"%d",_proCommentList.count];
     }else{
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)req{
-    [self showCAlert:@"请求数据失败" widthType:WARNN_LOGO];
+    [self hideHud];
+    [self showNo:@"请求数据失败"];
 }
 
 
@@ -483,7 +491,7 @@
         projectCommCell.userName.text = creatName;
         projectCommCell.userAddress.text = [cellDic valueForKey:@"userCity"];
         
-        [StringUitl setCornerRadius:projectCommCell.userIconView withRadius:24.0];
+        [StringUitl setCornerRadius:projectCommCell.userIconView withRadius:20.0];
         NSString *imgUrl =[cellDic valueForKey:@"avatar"];
         if(![imgUrl isEqual:[NSNull null]]){
             //改写异步加载图片

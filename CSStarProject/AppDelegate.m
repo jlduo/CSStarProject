@@ -127,23 +127,6 @@
 }
 
 
-
-- (void)reachabilityChanged:(NSNotification *)note {
-
-    NSString *msg = @"";
-    if (![STSystemUtils isNetConnect]) {
-        msg = @"当前网络不稳定!";
-    }
-    if ([STSystemUtils isNetViaWWAN]) {
-        msg = @"正在使用3G/2G移动网络,会消耗流量哦!";
-    }
-    if ([STSystemUtils isNetViaWiFi]) {
-        msg = @"正在使用WIFI网络,可以放心使用哦!";
-    }
-    
-}
-
-
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {
     if(_isFull){

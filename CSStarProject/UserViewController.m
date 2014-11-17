@@ -27,6 +27,7 @@
 
 - (void)viewDidLoad {
     
+    [self showLoading:@"初始化中..."];
     [super viewDidLoad];
     _userProjectNums = [[NSMutableDictionary alloc]init];
 
@@ -118,6 +119,7 @@
         }
     }
 
+    [self hideHud];
     [_userCenterTable reloadData];
 }
 
@@ -125,7 +127,8 @@
 {
     NSError *error = [request error];
     NSLog(@"error->%@",error);
-    [self showCAlert:@"加载失败,请检查网络连接!" widthType:ERROR_LOGO];
+    [self hideHud];
+    [self showNo:@"加载失败,请检查网络连接!"];
     
 }
 
@@ -147,10 +150,11 @@
     
      UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [headView setBackgroundColor:[UIColor grayColor]];
-    
+
     imgBtn = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
+    [StringUitl setViewBorder:imgBtn withColor:@"#FFFFFF" Width:4.0f];
 
     [imgBtn setMultipleTouchEnabled:YES];
     [imgBtn setUserInteractionEnabled:YES];
@@ -161,7 +165,7 @@
     [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     
-    userLabel =[[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-240)/2, 100, 240, 100)];
+    userLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 100)];
     [userLabel setTextColor:[UIColor blackColor]];
     [userLabel setTextAlignment:NSTextAlignmentCenter];
     [userLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
@@ -312,6 +316,8 @@
         [newUserCell.dataTitle setText:@"清空缓存数据"];
         [newUserCell.dataTitle setTextAlignment:NSTextAlignmentCenter];
         
+        [StringUitl setViewBorder:newUserCell.cellView withColor:@"#cccccc" Width:0.5f];
+        
         //NSString *clearStr = [self getCacheFileSize];
         //if([StringUitl isNotEmpty:clearStr]){
           //[newUserCell.dataTitle setText:[NSString stringWithFormat:@"清空缓存数据(%@)",clearStr]];
@@ -363,7 +369,6 @@
     float tmpSize = [[SDImageCache sharedImageCache] checkTmpSize];
     if(tmpSize!=0.0f){
         clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"%.2fM",tmpSize] : [NSString stringWithFormat:@"%.2fK",tmpSize * 1024];
-        NSLog(@"clearCacheName=%@",clearCacheName);
     }
     return clearCacheName;
 }
@@ -376,7 +381,6 @@
         [self showHint:@"暂无缓存数据!"];
     }else{
         clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"清除%d文件共[%.2fM]",tmpCount,tmpSize] : [NSString stringWithFormat:@"清除%d文件共[%.2fK]",tmpCount,tmpSize * 1024];
-        NSLog(@" clearCacheName=%@",clearCacheName);
         [_userCenterTable reloadData];
         [[SDImageCache sharedImageCache] clearDisk];
         [[SDImageCache sharedImageCache] clearMemory];

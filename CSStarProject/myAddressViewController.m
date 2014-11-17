@@ -104,9 +104,9 @@
         if ([[dic valueForKey:@"status"] isEqualToString:@"true"]) {
             [self getAddressList];
             [addressTable reloadData];
-            [self showCAlert:@"设置成功！" widthType:WARNN_LOGO];
+            [self showOk:@"设置成功！"];
         }else{
-            [self showCAlert:@"设置失败！" widthType:WARNN_LOGO];
+            [self showNo:@"设置失败！"];
         }
     }
 }

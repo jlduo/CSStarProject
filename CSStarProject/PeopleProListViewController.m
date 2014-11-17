@@ -24,7 +24,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self showLoading:@"加载中..."];
         self.tabBarController.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -33,6 +32,7 @@
 
 - (void)viewDidLoad
 {
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
     [self initLoadData];
     [self loadTableList];
@@ -140,7 +140,7 @@
 {
     
     [self hideHud];
-    [self showCAlert:@"请求数据失败..." widthType:ERROR_LOGO];
+    [self showNo:@"请求数据失败..."];
     NSError *error = [request error];
     NSLog(@"jsonDic->%@",error);
     

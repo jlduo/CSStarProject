@@ -9,6 +9,7 @@
 #import "CommonViewController.h"
 #import "UserTableViewCell.h"
 #import "UIViewController+HUD.h"
+#import "SDImageCache.h"
 #import "PeopleProListViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "InitTabBarViewController.h"

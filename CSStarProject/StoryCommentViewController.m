@@ -47,35 +47,83 @@
 
 - (void)viewDidLoad
 {
+    [self showLoading:@"数据加载中..."];
     [super viewDidLoad];
-    //现实参数
-    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-    NSDictionary *dicContent = (NSDictionary *)[ConvertJSONData requestData:requestUrl];
-    _commentTitle.text = [dicContent valueForKey:@"_title"];
     
-    NSString *addTime = [dicContent valueForKey:@"_add_time"];
-    DateUtil *utilDate = [[DateUtil alloc] init];
-    addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
-    _commentDate.text = addTime;
-    
-    NSString *clickNum = [self getCommentNum];
-    _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
-    _commentNum.font = main_font(12);
+    UIView *footerView = [[UIView alloc]init];
+    _commentTable.tableFooterView = footerView;
     //评论
     [self initTable];
     [self initToolBar];
     //获取评论列表
     pageIndex = 1;
-    tableArray = [self getCommentList];
+    //tableArray = [self getCommentList];
+    [self loadHeadData];
+    [self getCommentList];
     
     [self setHeaderRereshing];
     [self setFooterRereshing];
 }
 
--(NSMutableArray *)getCommentList{
-    NSString *url = [[NSString alloc] initWithFormat:@"%@%@/%@/10/%d",REMOTE_URL,GET_COMMENT_URL,detailId,pageIndex];
-    return (NSMutableArray *)[ConvertJSONData requestData:url];
+-(void)loadHeadData{
+    NSString *requestUrl = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
+    [self requestDataByUrl:requestUrl withType:1];
 }
+
+-(void)getCommentList{
+    NSString *url = [[NSString alloc] initWithFormat:@"%@%@/%@/10/%d",REMOTE_URL,GET_COMMENT_URL,detailId,pageIndex];
+    //return (NSMutableArray *)[ConvertJSONData requestData:url];
+    [self requestDataByUrl:url withType:0];
+}
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    
+}
+
+- (void)requestDataFinished:(ASIHTTPRequest *)request
+{
+    
+    NSData *respData = [request responseData];
+    if(request.tag==0){
+        NSMutableArray *jsonArr = (NSMutableArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+        if(jsonArr!=nil&&jsonArr.count>0){
+            tableArray = jsonArr;
+            [self hideHud];
+            [_commentTable reloadData];
+        }else{
+            [self hideHud];
+            [self showHint:@"没有最新数据..."];
+        }
+    }else{
+        
+        NSDictionary *dicContent = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+        _commentTitle.text = [dicContent valueForKey:@"_title"];
+        
+        NSString *addTime = [dicContent valueForKey:@"_add_time"];
+        DateUtil *utilDate = [[DateUtil alloc] init];
+        addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
+        _commentDate.text = addTime;
+        
+        NSString *clickNum = [self getCommentNum];
+        _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
+        _commentNum.font = main_font(12);
+
+        [self hideHud];
+        [_commentTable reloadData];
+        
+    }
+}
+
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self dismissKeyBoard];
@@ -312,14 +360,14 @@
     NSString *textVal = textField.text;
     //点击发表提交数据
     if([self isEmpty:textVal]){
-        [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+        [self showNo:@"请输入评论信息后提交"];
     }else{
         
         NSString *hf = [textVal substringToIndex:2];
         if([hf isEqualToString:@"回复"]){
             NSArray *charArr = [textVal componentsSeparatedByString:@"："];
             if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
-                [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+                [self showNo:@"请输入评论信息后提交"];
                 return;
             }
         }else{
@@ -377,20 +425,20 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
         
-        [self showCAlert:@"评论提交成功" widthType:WARNN_LOGO];
+        [self showOk:@"评论提交成功"];
         pageIndex = 1;
-        tableArray  = [self getCommentList];
+        [self getCommentList];
         [_commentTable reloadData];
         
         NSString *clickNum = [self getCommentNum];
         _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
     }else{
-        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:WARNN_LOGO];
+        [self showNo:[jsonDic valueForKey:@"result"]];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showCAlert:@"请求数据失败" widthType:WARNN_LOGO];
+    [self showNo:@"请求数据失败"];
 }
 
 -(void)loadView{
@@ -443,17 +491,19 @@
 //请求完成之后，回调方法
 -(void)callBackMethod:(id)isTop
 {
-    NSMutableArray *nextArray = [self getCommentList];
-    if(nextArray!=nil && nextArray.count>0){
-        if ([isTop isEqualToString:@"top"]) {
-            tableArray  = nextArray;
-        } else {
-            [tableArray  addObjectsFromArray:nextArray];
-        }
-        [_commentTable reloadData];
-    }else{
-        [self showCAlert:@"没有数据了" widthType:WARNN_LOGO];
-    }
+    [self getCommentList];
+    [_commentTable reloadData];
+//    NSMutableArray *nextArray = [self getCommentList];
+//    if(nextArray!=nil && nextArray.count>0){
+//        if ([isTop isEqualToString:@"top"]) {
+//            tableArray  = nextArray;
+//        } else {
+//            [tableArray  addObjectsFromArray:nextArray];
+//        }
+//        [_commentTable reloadData];
+//    }else{
+//        [self showNo:@"没有数据了"];
+//    }
 }
 
 @end

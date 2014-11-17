@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *likeBtnView;
 @property (weak, nonatomic) IBOutlet UIButton *supportBtnView;
 @property (weak, nonatomic) IBOutlet UIButton *sponsorBtnView;
+@property (weak, nonatomic) IBOutlet UIView *projectBackView;
 - (IBAction)clickLikeBtn:(id)sender;
 - (IBAction)clickSupportBtn:(id)sender;
 - (IBAction)clickSponsorBtn:(id)sender;

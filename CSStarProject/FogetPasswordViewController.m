@@ -27,10 +27,10 @@
 {
     [super viewDidLoad];
     [self setNavgationBar];
-    [self.fogetView.layer setCornerRadius:6.0];
-    [self.fogetView.layer setBorderColor:[UIColor darkGrayColor].CGColor];
-    [self.forgetBgView.layer setCornerRadius:6.0];
-    [self.forgetBtnView.layer setCornerRadius:6.0];
+    self.view.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    
+    [StringUitl setCornerRadius:self.fogetView withRadius:5.0f];
+    [StringUitl setCornerRadius:self.forgetBtnView withRadius:5.0f];
 }
 
 -(void)setNavgationBar{
@@ -82,7 +82,7 @@
         isNameNull = TRUE;
     }
     if(isNameNull==TRUE){
-        [self showCAlert:@"请先输入手机号码" widthType:WARNN_LOGO];
+        [self showNo:@"请先输入手机号码"];
         return;
     }
     
@@ -111,10 +111,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         
     }
     
@@ -122,7 +122,7 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"请求数据失败！" widthType:ERROR_LOGO];
+    [self showNo:@"请求数据失败！"];
 }
 
 //关闭键盘

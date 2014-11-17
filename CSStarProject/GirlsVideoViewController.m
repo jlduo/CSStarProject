@@ -289,7 +289,7 @@
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
-            [self showCAlert:@"请输入评论信息后提交" widthType:WARNN_LOGO];
+            [self showNo:@"请输入评论信息后提交"];
         }else{
             //提交数据
             [self postCommetnVal:dataId];
@@ -298,7 +298,7 @@
     }else{//点击数字进入评论列表
         NSLog(@"进入评论列表....");
         //NSLog(@"newDataId=%@",dataId);
-        StoryCommentViewController *commentController = [[StoryCommentViewController alloc]init];
+        StoryCommentViewController *commentController = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         passValelegate = commentController;
         [passValelegate passValue:dataId];
         
@@ -340,12 +340,12 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [self showCAlert:@"提交评论信息成功!" widthType:SUCCESS_LOGO];
+        [self showOk:@"提交评论信息成功!"];
         [textField setText:nil];
         [self dismissKeyBoard];
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
-        [self showCAlert:[jsonDic valueForKey:@"result"] widthType:SUCCESS_LOGO];
+        [self showNo:[jsonDic valueForKey:@"result"]];
         
     }
     
@@ -353,7 +353,7 @@
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"提交数据失败" widthType:ERROR_LOGO];
+    [self showNo:@"提交数据失败"];
 }
 
 
@@ -634,20 +634,20 @@
          NSRange range2 = [string2 rangeOfString:@"http://"];
         if(range2.location!=NSNotFound){
             [self changeRation:NO];
-            [self showCAlert:@"视频地址有误,加载失败" widthType:ERROR_LOGO];
+            [self showNo:@"视频地址有误,加载失败"];
             return;
         }
     }
     
     
     if([StringUitl isEmpty:remoteUrl]){
-        [self showCAlert:@"视频地址为空,加载失败" widthType:ERROR_LOGO];
+        [self showNo:@"视频地址为空,加载失败"];
         return;
     }
     
     NSString *fileExt = [StringUitl getFileExtName:remoteUrl];
     if(![fileExt isEqualToString:@"mp4"]){
-        [self showCAlert:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt] widthType:ERROR_LOGO];
+        [self showNo:[NSString stringWithFormat:@"对不起，不支持[%@]视频格式!",fileExt]];
         return;
     }
     

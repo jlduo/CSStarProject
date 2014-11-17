@@ -37,6 +37,7 @@
 
 - (void)viewDidLoad
 {
+    [self showLoading:@"加载中..."];
     [super viewDidLoad];
     [self setNavgationBar];
     
@@ -98,6 +99,8 @@
     [self.cityPciker reloadComponent:1];
     [self.cityPciker selectRow:selectedProvinceIndex inComponent:0 animated:YES];
     [self.cityPciker selectRow:selectedCityIndex inComponent:1 animated:YES];
+    
+    [self hideHud];
 }
 
 
@@ -161,9 +164,7 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //关闭时候到操作
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -194,6 +195,7 @@
         return;
     }
     
+    [self showLoading:@"数据保存中..."];
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
@@ -222,10 +224,14 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+        [self hideHud];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"提示信息"];
+        
+        [self hideHud];
+        [self showOk:[jsonDic valueForKey:@"info"]];
+        
         [StringUitl setSessionVal:_cityValue withKey:CITY_ID];
         [StringUitl setSessionVal:_cityText.text withKey:USER_ADDRESS];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -236,6 +242,7 @@
 
 - (void)editInfoFailed:(ASIHTTPRequest *)req
 {
+    [self hideHud];
     [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
 }
 
@@ -306,6 +313,55 @@
     }
     return nil;
 }
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    
+    UILabel *myView = nil;
+    if (component == 0) {
+        
+        myView = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100, 40)];
+        myView.textAlignment = NSTextAlignmentCenter;
+        myView.text = [_provinceArray objectAtIndex:row];
+        myView.font = [UIFont systemFontOfSize:16];
+        myView.backgroundColor = [UIColor clearColor];
+        
+    }else {
+        
+        myView = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100, 40)];
+        myView.text = [_cityArray objectAtIndex:row];
+        myView.textAlignment = NSTextAlignmentCenter;
+        myView.font = [UIFont systemFontOfSize:16];
+        myView.backgroundColor = [UIColor clearColor];
+        
+    }
+    
+    return myView;
+}
+
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+
+{
+    
+    CGFloat componentWidth = 0.0;
+    if(component == 0){
+       componentWidth = 100.0; // 第一个组键的宽度
+    }else{
+       componentWidth = 100.0; // 第2个组键的宽度
+    }
+    return componentWidth;
+    
+}
+
+
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+
+{
+    return 40.0;
+}
+
+
 
 //行选择事件
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{

@@ -251,12 +251,12 @@
     NSString *returnId = [[_orderInfoData valueForKey:@"id"] stringValue];
     
     if([StringUitl isEmpty:addressId] && checkBox.tag==99){
-        [self showCAlert:@"收货地址不能为空" widthType:WARNN_LOGO];
+        [self showNo:@"收货地址不能为空"];
         return;
     }
     
     if([StringUitl isEmpty:snum]){
-        [self showCAlert:@"数量不能为空" widthType:WARNN_LOGO];
+        [self showNo:@"数量不能为空"];
         return;
     }
     
@@ -293,10 +293,10 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:ERROR_LOGO];
+        [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
-        [self showCAlert:[jsonDic valueForKey:@"info"] widthType:SUCCESS_LOGO];
+        [self showOk:[jsonDic valueForKey:@"info"]];
         orderId = [jsonDic valueForKey:@"orderid"];
         [self performSelector:@selector(goPayPage) withObject:nil afterDelay:1];
     }
@@ -312,7 +312,7 @@
 
 - (void)addInfoFailed:(ASIHTTPRequest *)req
 {
-    [self showCAlert:@"处理数据失败！" widthType:ERROR_LOGO];
+    [self showNo:@"处理数据失败！"];
 }
 
 #pragma mark 设置组
