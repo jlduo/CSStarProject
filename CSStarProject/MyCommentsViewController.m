@@ -89,13 +89,17 @@
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     NSArray *returnArr = (NSArray *)jsonDic;
     if(returnArr!=nil && returnArr.count>0){
+        [self hideHud];
         tableArray = [NSMutableArray arrayWithArray:returnArr];
     }else{
         tableArray = [[NSMutableArray alloc]init];
+        [self hideHud];
+        
+        UIView *blankView = [[UIView alloc]init];
+        self.commentsTableView.tableFooterView = blankView;
+        [self showNo:@"暂无数据!"];
     }
     [self.commentsTableView reloadData];
-    [self hideHud];
-    
 }
 
 

@@ -27,9 +27,6 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <action selector="cityClick:" destination="-1" eventType="editingDidEnd" id="hqM-eQ-b5o"/>
-                            </connections>
                         </textField>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="地区:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7kR-wA-BdV">
                             <rect key="frame" x="9" y="2" width="53" height="40"/>

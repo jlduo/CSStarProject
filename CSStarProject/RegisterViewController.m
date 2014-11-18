@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.registerBtn setEnabled:TRUE];
     self.navigationController.navigationBarHidden = YES;
     
     self.passwordVal.delegate = self;
@@ -40,8 +40,29 @@
     
     [self setNavgationBar];
     
-    
-    
+    //添加手势
+    [self.agreenIconView setMultipleTouchEnabled:YES];
+    [self.agreenIconView setUserInteractionEnabled:YES];
+    [self.agreenIconView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                      action:@selector(handleSingleTap:)]];
+}
+
+//点击事件
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+    int btag = self.agreenIconView.tag;
+    NSLog(@"tag==%d",btag);
+    if(btag==88){
+        
+        self.agreenIconView.tag = 99;
+        [self.agreenIconView setImage:CG_IMG(@"iconnochecked.png")];
+        [self.agreenIconView setImage:CG_IMG(@"iconnochecked.png")];
+        
+    }else{
+        self.agreenIconView.tag = 88;
+        [self.agreenIconView setImage:CG_IMG(@"iconchecked.png")];
+        [self.agreenIconView setImage:CG_IMG(@"iconchecked.png")];
+        
+    }
 }
 
 -(void)setNavgationBar{
@@ -90,6 +111,7 @@
 //发送验证码
 - (IBAction)clickCheckBtn:(id)sender {
     NSLog(@"get verifycode......");
+    [self dismissKeyBoard];
     BOOL isRegiNameNull = FALSE;
 
     NSString * phoneNum = _phoneNum.text;
@@ -126,7 +148,8 @@
 
 //注册账号
 - (IBAction)clickRegisterBtn:(id)sender {
-    
+    [self dismissKeyBoard];
+    [StringUitl clearUserInfo];
     NSLog(@"user register......");
     NSString * user_name = _phoneNum.text;
     NSString *pass_word = _passwordVal.text;
@@ -185,8 +208,12 @@
         return;
     }
     
+    if (self.agreenIconView.tag==99) {
+        [self showNo:@"请确认同意用户协议"];
+        return;
+    }
+    
     //开始提交注册
-
     NSURL *reg_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,REGISTER_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:reg_url];
     [ASIHTTPRequest setSessionCookies:nil];
@@ -332,6 +359,10 @@
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
         
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UserViewController *userView =  [storyBoard instantiateViewControllerWithIdentifier:@"userCenter"];
+        [self.navigationController pushViewController:userView animated:YES];
+        
     }
     
 }
@@ -346,7 +377,7 @@
     }
     
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
-        
+        [self.registerBtn setEnabled:FALSE];
         [self loadUserInfo:_phoneNum.text];
     }
 
@@ -356,6 +387,7 @@
 
 - (void)requestRegFailed:(ASIHTTPRequest *)req
 {
+    [StringUitl clearUserInfo];
     [self showNo:@"请求数据失败!"];
 }
 

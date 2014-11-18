@@ -13,7 +13,7 @@
 #import "ViewPassValueDelegate.h"
 
 @interface StoryViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate>{
-    NSObject<ViewPassValueDelegate> *delegate;
+    __weak NSObject<ViewPassValueDelegate> *delegate;
 }
 
 #pragma mark 星城故事 表格视图

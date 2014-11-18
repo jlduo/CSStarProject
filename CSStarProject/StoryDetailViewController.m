@@ -405,13 +405,18 @@
 
 
 -(void)commentBtnClick{
+    [self dismissKeyBoard];
     NSString *textVal = textField.text;
     //点击发表提交数据
     if(isOpen){
+        //处理换行符号
+        textVal = [textVal stringByTrimmingBlank];
+        NSLog(@"处理换行=%@",textVal);
         if([self isEmpty:textVal]){
             [self showNo:@"请输入评论信息后提交"];
         }else{ 
             //提交评论
+            [self showLoading:@"数据保存中..."];
             NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
             if ([self isEmpty:userId]) {
                 LoginViewController *login = [[LoginViewController alloc] init];
@@ -444,6 +449,11 @@
         StoryCommentViewController *storyComment  = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         _delegate = storyComment;
         [_delegate passValue:detailId];
+        
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"wz" forKey:@"stype"];
+        [_delegate passDicValue:params];
+        
         [self.navigationController pushViewController:storyComment animated:YES];
     }
 }
@@ -466,14 +476,16 @@
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
         isOpen = NO;
-        
+        [self hideHud];
         [self showOk:@"提交成功"];
     }else{
+        [self hideHud];
         [self showNo:[jsonDic valueForKey:@"result"]];
     }
 }
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req{
+    [self hideHud];
     [self showNo:@"请求数据失败"];
 }
 
@@ -495,7 +507,7 @@
 
 -(void)goForward{
     
-    NSString *con_url = [NSString stringWithFormat:@"%@ http://192.168.1.210:888/text.aspx?id=%@",[dicContent valueForKey:@"_title"],detailId];
+    NSString *con_url = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_AT,detailId];
     NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
     [showMsg setObject:@"星城故事分享" forKey:@"showTitle"];
     [showMsg setObject:con_url forKey:@"contentString"];

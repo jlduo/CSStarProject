@@ -196,7 +196,7 @@
 }
 
 -(void)setFooterView{
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 140)];
     UILabel *descLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, SCREEN_WIDTH-30, 45)];
     descLabel.font = main_font(13);
     descLabel.numberOfLines = 2;

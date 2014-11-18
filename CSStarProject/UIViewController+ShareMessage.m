@@ -21,7 +21,7 @@
                           ShareTypeWeixiSession,
                           ShareTypeWeixiTimeline,
                           ShareTypeSinaWeibo,
-                          ShareTypeQQSpace,
+                          //ShareTypeQQSpace,
                           ShareTypeTencentWeibo,
                           ShareTypeQQ,
                           nil];
@@ -89,9 +89,9 @@
              case ShareTypeWeixiSession:
                  name = @"微信好友";
                  break;
-             case ShareTypeQQSpace:
-                 name = @"QQ空间";
-                 break;
+//             case ShareTypeQQSpace:
+//                 name = @"QQ空间";
+//                 break;
              case ShareTypeTencentWeibo:
                  name = @"腾讯微博";
                  break;

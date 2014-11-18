@@ -9,8 +9,8 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
-#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
-#define TIPS_TYPE 1 //提示信息样式 1 白色底图标 2 细线图标
+#define CONNECT_MODE 1 //访问模式 1 测试版 2 正式版
+#define TIPS_TYPE 2 //提示信息样式 1 白色底图标 2 细线图标
 #define PAGESIZE @"5"//列表分页数据
 #define CF_PAGESIZE @"5"//列表分页数据
 #define STATU_BAR_HEIGHT 20 //状态栏高度
@@ -55,6 +55,7 @@
 #define SHARE_ICON @"btnshare@2x.png"//分享图片
 #define NOIMG_ICON @"imgloading@2X.png"//无图片
 #define NOIMG_ICON_TX @"avatarbig.png"//无头像图片
+#define NOIMG_ICON_PL @"avatar.png"//无头像图片
 #define CG_IMG(x) [UIImage imageNamed:x]//图片
 #define NO_IMG [UIImage imageNamed:NOIMG_ICON]//无图片
 #define CGIMG() [[UIImageView alloc]init]//创建图片
@@ -77,6 +78,10 @@
 
 #endif
 
+#define SHARE_AT [NSString stringWithFormat:@"%@%@",REMOTE_URL,@"/text.aspx?id="]
+#define SHARE_SP [NSString stringWithFormat:@"%@%@",REMOTE_URL,@"/sp.aspx?id="]
+#define SHARE_XC [NSString stringWithFormat:@"%@%@",REMOTE_URL,@"/xc.aspx?id="]
+
 #define USER_AGREEMENT_URL @"/cms/GetArticleList/agreement"
 #define LOGIN_URL @"/AndroidApi/LoginService/Login"//登录地址
 #define REGISTER_URL @"/AndroidApi/RegisterService/Register"//注册地址
@@ -92,7 +97,7 @@
 #define GET_COMMENT_URL @"/Comment/GetArticleComments"//获取文章评论
 
 //首页数据
-#define SLIDE_TOP @"/cms/GetSlides/5"
+#define SLIDE_TOP @"/cms/GetSlides"
 #define CITY_TOP @"/cms/GetArticles/city"
 #define GIRLS_TOP @"/cms/GetArticles/girl"
 

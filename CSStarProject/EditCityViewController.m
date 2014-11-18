@@ -395,8 +395,8 @@
     
     NSInteger proInex = [self.cityPciker selectedRowInComponent:0];
     NSInteger cityInex = [self.cityPciker selectedRowInComponent:1];
-    //NSLog(@"proInex=%d",proInex);
-    //NSLog(@"cityInex=%d",cityInex);
+    NSLog(@"proInex=%d",proInex);
+    NSLog(@"cityInex=%d",cityInex);
     
     NSString *pname = [_provinceArray objectAtIndex:proInex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",pname];
@@ -405,8 +405,8 @@
         NSDictionary * ndic = (NSDictionary *)[presult objectAtIndex:0];
         NSString *provId = [[ndic objectForKey:@"id"] stringValue];
 
-        //NSLog(@"pname=%@",pname);
-        //NSLog(@"provId=%@",provId);
+        NSLog(@"pname=%@",pname);
+        NSLog(@"provId=%@",provId);
         self.provinceValue = provId;
     }
     
@@ -420,8 +420,8 @@
         
         NSString * cityStr = [[NSString alloc]initWithFormat:@"%@,%@",pname,cname];
         
-        //NSLog(@"cname=%@",cname);
-        //NSLog(@"cityId=%@",cityId);
+        NSLog(@"cname=%@",cname);
+        NSLog(@"cityId=%@",cityId);
         self.cityText.text = cityStr;
         self.cityValue = cityId;
     }

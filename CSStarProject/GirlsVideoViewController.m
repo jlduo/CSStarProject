@@ -43,6 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self showLoading:@"正在加载..."];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initLoadData];
 }
@@ -99,6 +100,7 @@
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_ARTICLE_URL,dataId];
         bannerData = (NSMutableDictionary *)[ConvertJSONData requestData:url];
         //NSLog(@"bannerData===%@",bannerData);
+        [self requestDataByUrl:url withType:0];
         
     }
 }
@@ -285,22 +287,30 @@
     NSString *textVal = textField.text;
     //NSLog(@"textVal=%@",textVal);
     //NSLog(@"btnText=%@",btnText);
-    
+    //处理换行符号
+    textVal = [textVal stringByTrimmingBlank];
+    NSLog(@"处理换行=%@",textVal);
     if([btnText isEqual:@"发 表"]){//点击发表提交数据
         NSLog(@"提交数据....");
         if([self isEmpty:textVal]){
             [self showNo:@"请输入评论信息后提交"];
         }else{
             //提交数据
+            [self showLoading:@"正在提交数据..."];
             [self postCommetnVal:dataId];
         }
         
     }else{//点击数字进入评论列表
         NSLog(@"进入评论列表....");
         //NSLog(@"newDataId=%@",dataId);
+        
         StoryCommentViewController *commentController = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         passValelegate = commentController;
         [passValelegate passValue:dataId];
+        
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"sp" forKey:@"stype"];
+        [passValelegate passDicValue:params];
         
         [self presentViewController:commentController animated:YES completion:nil];
     }
@@ -312,7 +322,7 @@
 
 //提价评论信息
 -(void)postCommetnVal:(NSString *)articelId{
-    
+    [self dismissKeyBoard];
     NSURL *comment_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:comment_url];
     [ASIHTTPRequest setSessionCookies:nil];
@@ -340,19 +350,22 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
+        [self hideHud];
         [self showOk:@"提交评论信息成功!"];
         [textField setText:nil];
         [self dismissKeyBoard];
+        
     }
     if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
+        [self hideHud];
         [self showNo:[jsonDic valueForKey:@"result"]];
-        
     }
     
 }
 
 - (void)addCommentFailed:(ASIHTTPRequest *)req
 {
+    [self hideHud];
     [self showNo:@"提交数据失败"];
 }
 
@@ -361,11 +374,8 @@
 -(void)loadGirlsData{
 
     NSString *url = [NSString stringWithFormat:@"%@%@/3/is_red=1",REMOTE_URL,GIRL_VIDEO_URL];
-    NSArray *girlsArr = (NSArray *)[ConvertJSONData requestData:url];
-    if(girlsArr!=nil && girlsArr.count>0){
-        topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
-    }
     //NSLog(@"topVideoArray====%@",topVideoArray);
+    [self requestDataByUrl:url withType:1];
     
 }
 
@@ -722,9 +732,10 @@
 
 -(void)goForward{
     
-    NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
+     NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
+     NSString *con_url = [NSString stringWithFormat:@"%@ %@%@",[bannerData valueForKey:@"_title"],SHARE_SP,dataId];
     [showMsg setObject:@"美女私房视频" forKey:@"showTitle"];
-    [showMsg setObject:@"美女私房视频分享哦！" forKey:@"contentString"];
+    [showMsg setObject:con_url forKey:@"contentString"];
     [showMsg setObject:@"http://baidu.com" forKey:@"urlString"];
     [showMsg setObject:@"很无敌啊！" forKey:@"description"];
     [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
@@ -763,7 +774,42 @@
 -(void)callBackMethod:(id) obj
 {
     [self loadGirlsData];
+}
+
+
+-(void)requestDataByUrl:(NSString *)url withType:(int)type{
+    //处理路劲
+    NSURL *reqUrl = [NSURL URLWithString:url];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
+    //设置代理
+    [request setDelegate:self];
+    [request startAsynchronous];
+    [request setTag:type];
+    
+    [request setDidFailSelector:@selector(requestFailed:)];
+    [request setDidFinishSelector:@selector(requestFinished:)];
+    
+}
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *respData = [request responseData];
+    if(request.tag==1){
+        NSArray *girlsArr = (NSArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+        topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
+    }else{
+        bannerData = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+    }
+    
+    [self hideHud];
     [_girlsVideoTable reloadData];
+    
+}
+
+
+- (void)requestLoginFailed:(ASIHTTPRequest *)req{
+    [self hideHud];
+    [self showNo:@"请求数据失败"];
 }
 
 

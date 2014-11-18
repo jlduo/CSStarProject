@@ -48,8 +48,9 @@
     
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
-    //CGRect temFrame = CGRectMake(0, 64, SCREEN_WIDTH,MAIN_FRAME_H-44);
-    //[stableView setFrame:temFrame];
+    
+    self.userName.text = nil;
+    self.passWord.text = nil;
 
 }
 
@@ -192,6 +193,7 @@
     }
     
     //开始处理登录
+    [self showLoading:@"正在登录..."];
     NSURL *login_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,LOGIN_URL]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
     [ASIHTTPRequest setSessionCookies:nil];
@@ -212,10 +214,12 @@
 
 - (void)requestLoginFinished:(ASIHTTPRequest *)req
 {
-    //NSLog(@"login info->%@",[req responseString]);
+    NSLog(@"login info->%@",[req responseString]);
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
+        [self hideHud];
+        [StringUitl clearUserInfo];
         [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
@@ -226,7 +230,7 @@
         [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
         [StringUitl setSessionVal:_passWord.text withKey:LOGIN_USER_PSWD];
         [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
-        
+        [self hideHud];
         //通过用户名获取信息
         [self loadUserInfo:_userName.text];
     }
@@ -272,6 +276,7 @@
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
         [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
         
+        
         UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
         if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
             [self dismissViewControllerAnimated:YES completion:^{
@@ -287,7 +292,7 @@
 
 - (void)requestLoginFailed:(ASIHTTPRequest *)req
 {
-    
+    [self hideHud];
     [self showNo:@"请求数据失败"];
 }
 @end

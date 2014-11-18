@@ -12,6 +12,7 @@
 #import "ASIHTTPRequest.h"
 #import "StringUitl.h"
 #import "UIViewController+HUD.h"
+#import "UserViewController.h"
 #import "UserAgreenViewController.h"
 
 @interface RegisterViewController : UIViewController<UITextFieldDelegate>
@@ -35,6 +36,9 @@
 - (IBAction)clickRegisterBtn:(id)sender;
 
 - (IBAction)clickAgreen:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIImageView *agreenIconView;
+
 
 
 @end

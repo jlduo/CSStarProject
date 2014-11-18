@@ -115,6 +115,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.alpha = 0.5;
 	[self setHUD:hud];
     [hud show:YES];
+    [hud hide:YES afterDelay:2.0];
 }
 
 

@@ -41,22 +41,6 @@
     _storyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
--(void)dealloc{
-    
-    dataType = nil;
-    cellDic = nil;
-    nowDownTime = nil;
-    nowUpTime = nil;
-    dateUtil = nil;
-    comViewController = nil;
-    friendlyLoadingView = nil;
-    
-    _storyTableView = nil;
-    _storyDataList = nil;
-    
-}
-
-
 -(void)initLoading{
     if(friendlyLoadingView==nil){
         friendlyLoadingView = [[XHFriendlyLoadingView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, MAIN_FRAME_H)];
@@ -89,6 +73,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    
+    [self loadTableData:nil];
+    [_storyTableView reloadData];
 }
 
 //加载头部刷新
@@ -212,7 +199,7 @@
     if(![StringUitl checkLogin]==TRUE){
         
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
         
     }else{

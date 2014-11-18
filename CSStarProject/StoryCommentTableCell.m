@@ -18,7 +18,7 @@
 - (void)drawRect:(CGRect)rect
 { 
     self.commentImage.layer.masksToBounds = YES;
-    self.commentImage.layer.cornerRadius = 25;
+    self.commentImage.layer.cornerRadius = 16;
     
     NSString *labelString = self.commentTextView.text; 
     //评论内容自适应

@@ -42,10 +42,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
     [self initLoading];
     [self initLoadData];
     
@@ -216,7 +212,7 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
-    
+    [self reloadTData:nil];
     //[_girlsTableView reloadData];
     
 }
@@ -447,7 +443,7 @@
     if(![StringUitl checkLogin]==TRUE){
         
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
         
     }else{
@@ -624,7 +620,7 @@
         [self goPhotoView:artId];
     }else{
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
     }
     
@@ -683,6 +679,10 @@
     StoryCommentViewController *articelView = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
     passValelegate = articelView;
     [passValelegate passValue:articleId];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setObject:@"wz" forKey:@"stype"];
+    [passValelegate passDicValue:params];
     [self.navigationController pushViewController:articelView animated:YES];
     //NSLog(@"articleId=%@",articleId);
     
@@ -718,6 +718,11 @@
         StoryCommentViewController *storyComment = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
         passValelegate = storyComment;
         [passValelegate passValue:artId];
+        
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"xc" forKey:@"stype"];
+        [passValelegate passDicValue:params];
+
         [self.navigationController pushViewController:storyComment animated:YES];
     }
 

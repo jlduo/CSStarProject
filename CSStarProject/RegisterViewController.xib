@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D2061" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegisterViewController">
             <connections>
+                <outlet property="agreenIconView" destination="TCK-q5-RpX" id="A9Z-Cz-6H9"/>
                 <outlet property="checkNum" destination="ly8-8W-ID8" id="ks2-Jl-WQ2"/>
                 <outlet property="checkNumBtn" destination="ce5-eV-kfV" id="AF6-9m-HHy"/>
                 <outlet property="checkNumView" destination="cuu-Yu-rrF" id="BaM-Os-cHF"/>
@@ -129,16 +130,10 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogP-YQ-gVg">
-                    <rect key="frame" x="6" y="341" width="24" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="iconchecked.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nq8-lx-wUl">
-                    <rect key="frame" x="117" y="339" width="100" height="30"/>
+                    <rect key="frame" x="117" y="340" width="100" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="《用户协议》">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -146,13 +141,10 @@
                         <action selector="clickAgreen:" destination="-1" eventType="touchUpInside" id="0LM-B0-IG3"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="________" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJ2-hi-yJv">
-                    <rect key="frame" x="133" y="345" width="70" height="21"/>
+                <imageView userInteractionEnabled="NO" tag="88" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iconchecked.png" translatesAutoresizingMaskIntoConstraints="NO" id="TCK-q5-RpX">
+                    <rect key="frame" x="2" y="340" width="28" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0078431377190000002" green="0.5647059083" blue="0.98823535439999999" alpha="1" colorSpace="deviceRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

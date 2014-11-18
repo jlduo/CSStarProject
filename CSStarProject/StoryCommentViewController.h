@@ -15,9 +15,12 @@
 #import "LoginViewController.h"
 #import "StoryCommentTableCell.h"
 #import "XHFriendlyLoadingView.h"
+#import "ViewPassValueDelegate.h"
 
 @interface StoryCommentViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,
-UITableViewDataSource,UITableViewDelegate>
+UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
+     __weak NSObject<ViewPassValueDelegate> *passDelegate;
+}
 
 @property(nonatomic,retain)NSMutableArray *commentList;
 @property (weak, nonatomic) IBOutlet UITableView *commentTable;

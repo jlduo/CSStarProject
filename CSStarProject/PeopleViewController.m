@@ -36,7 +36,6 @@
     
     [self initLoading];
     [self setTableData];
-    [self initScroll];
     
     _peopleTableView.rowHeight = 300;
     _peopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -252,6 +251,8 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
+    
+    [self setTableData];
 }
 
 //加载头部刷新
@@ -318,7 +319,7 @@
             [self.navigationController pushViewController:deatilViewController animated:YES];
         }else{
             [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-            LoginViewController *loginView = [[LoginViewController alloc] init];
+            LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
             [self.navigationController pushViewController:loginView animated:YES];
         }
         
@@ -330,6 +331,8 @@
     [self loadProjectCats];
     [self loadSliderPic];
     [self loadTableList];
+    
+    [self initScroll];
 }
 
 -(void)loadProjectCats{

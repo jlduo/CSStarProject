@@ -208,8 +208,8 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
-    //[self initLoadData];
-    //[_homeTableView reloadData];
+    [self initLoadData];
+    [_homeTableView reloadData];
     
     
 }
@@ -245,13 +245,7 @@
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
 {
-    [self loadSliderPic];
-    [self loadGirlsData];
-    [self loadStoryData];
-    [self loadPeopleData];
-    
-    [self.homeTableView reloadData];
-    
+    [self reloadTData];
     //[self showHint:@"数据刷新成功!"];
 }
 

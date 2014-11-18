@@ -78,9 +78,10 @@
     NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
     NSMutableString *newString = [[NSMutableString alloc]initWithString:userLogo];
     NSRange srange = [userLogo rangeOfString:@"small_"];
-    [newString replaceCharactersInRange:srange withString:@""];
+    if(srange.length!=0){
+        [newString replaceCharactersInRange:srange withString:@""];
+    }
     [imgBtn md_setImageWithURL:newString placeholderImage:NO_IMG options:SDWebImageRefreshCached];
-    
 }
 
 -(void)getMyProjectsNums{

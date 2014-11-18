@@ -36,6 +36,7 @@
     [super viewDidLoad];
     [self initProjectData];
     [self initLoadData];
+    [self initToolBar];
     
     self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
 }
@@ -114,8 +115,9 @@
     if(dataId!=nil){
     
         NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-        [self requestDataByUrl:url];
-        
+        _peopleData = (NSDictionary *)[ConvertJSONData requestData:url];
+        [self hideHud];
+        [_peopleDetailTable reloadData];
     }
 }
 
@@ -137,7 +139,6 @@
 {
     NSData *respData = [request responseData];
     _peopleData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    [self initToolBar];
     [self hideHud];
     [_peopleDetailTable reloadData];
 }
@@ -243,8 +244,8 @@
         
         
         NSString *days =[cellDic valueForKey:@"days"];
-        NSString *money = [cellDic valueForKey:@"amount"];
-        NSString *smoney = [cellDic valueForKey:@"totalamount"];
+        NSString *money = [[cellDic valueForKey:@"amount"] stringValue];
+        NSString *smoney = [[cellDic valueForKey:@"totalamount"] stringValue];
         NSString *endTime = [cellDic valueForKey:@"endTime"];
         endTime = [endTime substringToIndex:19];
         
@@ -252,6 +253,8 @@
         detailCell.moneyView.layer.cornerRadius = 5;
         detailCell.dateView.text = [NSString stringWithFormat:@"目标%@天 剩余%d天",days,[self changeDate:endTime]];
         detailCell.moneyView.text = [NSString stringWithFormat:@"￥%@ / ￥%@",smoney,money];
+        NSLog(@"money=%@",money);
+        NSLog(@"smoney=%@",smoney);
         //计算百分比
         float amoney = [money floatValue];
         float bmoney;

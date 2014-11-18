@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1qy-3C-6qL">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -137,10 +137,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hhc-DH-gLz">
-                                <rect key="frame" x="10" y="228" width="300" height="40"/>
+                                <rect key="frame" x="10" y="228" width="300" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="24"/>
                                 <state key="normal" title="登    录">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -150,7 +150,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0TR-B0-4iC">
-                                <rect key="frame" x="241" y="272" width="63" height="24"/>
+                                <rect key="frame" x="251" y="272" width="63" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="忘记密码">
@@ -161,7 +161,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sXr-74-UgB">
-                                <rect key="frame" x="245" y="291" width="55" height="1"/>
+                                <rect key="frame" x="255" y="291" width="55" height="1"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.32815464989999998" green="0.57069146729999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -382,7 +382,7 @@
         <!--美女私房-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
-                <viewController title="美女私房_ViewController" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsViewController" sceneMemberID="viewController">
+                <viewController title="美女私房_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2VX-Ee-d2V"/>
                         <viewControllerLayoutGuide type="bottom" id="Uv1-g8-3ip"/>
@@ -712,8 +712,8 @@
                         <constraints>
                             <constraint firstItem="pos-nG-Bhj" firstAttribute="leading" secondItem="pyk-4P-3ZY" secondAttribute="leading" id="9Pm-hS-GIm"/>
                             <constraint firstItem="pos-nG-Bhj" firstAttribute="top" secondItem="pyk-4P-3ZY" secondAttribute="top" constant="64" id="IaP-A9-78V"/>
+                            <constraint firstAttribute="bottom" secondItem="pos-nG-Bhj" secondAttribute="bottom" constant="49" id="KeA-ic-WCM"/>
                             <constraint firstAttribute="trailing" secondItem="pos-nG-Bhj" secondAttribute="trailing" id="TqL-rq-99f"/>
-                            <constraint firstAttribute="bottom" secondItem="pos-nG-Bhj" secondAttribute="bottom" constant="49" id="pw7-K9-f5b"/>
                         </constraints>
                     </view>
                     <connections>

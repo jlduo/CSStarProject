@@ -17,8 +17,11 @@
     UITextView *textField;
     NSInteger pageIndex;
     NSMutableArray *tableArray;
-    
+    NSDictionary *dicContent;
     NSString *commentId;
+    NSDictionary * params;
+    
+    int flag;
 }
 @end
 
@@ -29,7 +32,8 @@
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
-    
+    params = vals;
+    NSLog(@"params=%@",params);
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,6 +54,7 @@
     [self showLoading:@"数据加载中..."];
     [super viewDidLoad];
     
+    [StringUitl setViewBorder:self.contentBackView withColor:@"#cccccc" Width:0.5f];
     UIView *footerView = [[UIView alloc]init];
     _commentTable.tableFooterView = footerView;
     //评论
@@ -57,6 +62,7 @@
     [self initToolBar];
     //获取评论列表
     pageIndex = 1;
+    flag = 1;
     //tableArray = [self getCommentList];
     [self loadHeadData];
     [self getCommentList];
@@ -95,18 +101,27 @@
     
     NSData *respData = [request responseData];
     if(request.tag==0){
-        NSMutableArray *jsonArr = (NSMutableArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-        if(jsonArr!=nil&&jsonArr.count>0){
-            tableArray = jsonArr;
+        NSArray *nextArray = (NSArray *)[NSJSONSerialization JSONObjectWithData:respData
+                                                                                      options:NSJSONReadingMutableLeaves
+                                                                                        error:nil];
+        if(nextArray!=nil && nextArray.count>0){
+            if (flag==1) {
+                tableArray  =[NSMutableArray arrayWithArray:nextArray];
+            } else {
+                [tableArray  addObjectsFromArray:nextArray];
+            }
+            
             [self hideHud];
             [_commentTable reloadData];
         }else{
+            
             [self hideHud];
-            [self showHint:@"没有最新数据..."];
+            [self showNo:@"没有数据了"];
         }
+
     }else{
         
-        NSDictionary *dicContent = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
+        dicContent = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
         _commentTitle.text = [dicContent valueForKey:@"_title"];
         
         NSString *addTime = [dicContent valueForKey:@"_add_time"];
@@ -142,11 +157,17 @@
     NSString *addTime = [utilDate getLocalDateFormateUTCDate1:[dicComment valueForKey:@"_add_time"]];
     commentCell.commentDateTime.text = addTime;
     NSString *imgUrl = [dicComment valueForKey:@"_avatar"];
-    UIImage *picImg = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
-    [commentCell.commentImage setImage:picImg];
+    [commentCell.commentImage md_setImageWithURL:imgUrl placeholderImage:CG_IMG(NOIMG_ICON_PL) options:SDWebImageRefreshCached];
+    
     NSString *commnetContent = [dicComment valueForKey:@"_content"];
+    
     commentCell.commentTextView.text = commnetContent;
-    commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
+    if([StringUitl isEmpty:[dicComment valueForKey:@"_nick_name"]]){
+       commentCell.commentUsername.text =@"网友";
+    }else{
+        commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
+    }
+    
     commentCell.commentUsername.font = main_font(13);
     commentCell.commentTextView.font = main_font(12);
     commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -358,8 +379,12 @@
 
     NSString *contentId;
     NSString *textVal = textField.text;
-    //点击发表提交数据
+    //处理换行符号
+    textVal = [textVal stringByTrimmingBlank];
+    NSLog(@"处理换行=%@",textVal);
     if([self isEmpty:textVal]){
+        textField.text = nil;
+        [self dismissKeyBoard];
         [self showNo:@"请输入评论信息后提交"];
     }else{
         
@@ -367,6 +392,8 @@
         if([hf isEqualToString:@"回复"]){
             NSArray *charArr = [textVal componentsSeparatedByString:@"："];
             if(charArr.count==1 ||[charArr[1] isEqualToString:@""]){
+                textField.text = nil;
+                [self dismissKeyBoard];
                 [self showNo:@"请输入评论信息后提交"];
                 return;
             }
@@ -374,10 +401,13 @@
             commentId = nil;
         }
         
+        [self dismissKeyBoard];
+        [self showLoading:@"数据保存中..."];
+        
         //提交评论
         NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
         if ([self isEmpty:userId]) {
-            LoginViewController *login = [[LoginViewController alloc] init];
+            LoginViewController *login = (LoginViewController *)[self getVCFromSB:@"userLogin"];
             [self.navigationController pushViewController:login animated:YES];
             return;
         }
@@ -420,19 +450,20 @@
     if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
         textField.text = nil;
         [self dismissKeyBoard];
-        
+        [self hideHud];
         [textField addSubview:cIconView];
         [plabel setFrame:CGRectMake(25, 2, 40, 26)];
         [textField addSubview:plabel];
         
         [self showOk:@"评论提交成功"];
         pageIndex = 1;
+        flag = 1;
         [self getCommentList];
-        [_commentTable reloadData];
         
         NSString *clickNum = [self getCommentNum];
         _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
     }else{
+        [self hideHud];
         [self showNo:[jsonDic valueForKey:@"result"]];
     }
 }
@@ -447,17 +478,25 @@
 }
 
 -(void)goForward{
-    
+    NSString *shareContent;
+    NSString *type = [params valueForKey:@"stype"];
+    if([type isEqualToString:@"wz"]){
+       shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_AT,detailId];
+    }else if([type isEqualToString:@"xc"]){
+        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_XC,detailId];
+    }else{
+        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_SP,detailId];
+    }
     NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
-    [showMsg setObject:@"星城故事文章" forKey:@"showTitle"];
-    [showMsg setObject:@"星城故事文章分享哦！" forKey:@"contentString"];
-    [showMsg setObject:@"http://baidu.com" forKey:@"urlString"];
+    [showMsg setObject:@"分享内容" forKey:@"showTitle"];
+    [showMsg setObject:shareContent forKey:@"contentString"];
     [showMsg setObject:@"很无敌啊！" forKey:@"description"];
     [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
     
     [self showShareAlert:showMsg];
     
 }
+
 
 -(void)goPreviou{
     [super goPreviou];
@@ -472,6 +511,7 @@
 -(void)setHeaderRereshing{
     AllAroundPullView *topPullView = [[AllAroundPullView alloc] initWithScrollView:_commentTable position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
         pageIndex = 1;
+        flag = 1;
         [self performSelector:@selector(callBackMethod:) withObject:@"top" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"top" afterDelay:1.0f];
     }];
@@ -482,6 +522,7 @@
 -(void)setFooterRereshing{
     AllAroundPullView *bottomPullView = [[AllAroundPullView alloc] initWithScrollView:_commentTable position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
         pageIndex++;
+        flag = 2;
         [self performSelector:@selector(callBackMethod:) withObject:@"foot" afterDelay:DELAY_TIME];
         [view performSelector:@selector(finishedLoading) withObject:@"foot" afterDelay:1.0f];
     }];
@@ -492,7 +533,6 @@
 -(void)callBackMethod:(id)isTop
 {
     [self getCommentList];
-    [_commentTable reloadData];
 //    NSMutableArray *nextArray = [self getCommentList];
 //    if(nextArray!=nil && nextArray.count>0){
 //        if ([isTop isEqualToString:@"top"]) {

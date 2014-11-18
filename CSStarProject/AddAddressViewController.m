@@ -9,7 +9,7 @@
 #import "AddAddressViewController.h"
 
 @interface AddAddressViewController (){
-        NSString *dataId;
+    NSString *dataId;
     NSString *cityID;
     NSString *cityStr;
     NSDictionary *params;
@@ -176,7 +176,6 @@
         cityID = [vals valueForKey:@"cityId"];
         cityStr = [vals valueForKey:@"areaName"];
     }else{
-        params = vals;
         cityID = [vals valueForKey:ADDRESS_CITY_ID];
         cityStr = [vals valueForKey:ADDRESS_INFO];
     }
@@ -197,6 +196,9 @@
         [StringUitl setSessionVal:cityStr withKey:ADDRESS_INFO];
     }else{
         [self clearAddress];
+        [StringUitl setSessionVal:@"1" withKey:ADDRESS_CITY_ID];
+        [StringUitl setSessionVal:@"35" withKey:ADDRESS_PROVINCE_ID];
+        [StringUitl setSessionVal:@"北京市,北京市" withKey:ADDRESS_INFO];
     }
 }
 
@@ -219,6 +221,7 @@
 
 
 -(void)delAddress2:(UIButton *)sender{
+    
     NSString *cid = [params valueForKey:@"id"];
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,DEL_ADDRESS_URL]];
@@ -270,7 +273,6 @@
     }
 
     [self dismissKeyBoard];
-    [self showLoading:@"数据保存中..."];
     //开始处理
     NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ADDRESS_URL]];
     if([otype isEqualToString:@"edit"]){//修改动作
@@ -310,11 +312,9 @@
     NSData *respData = [req responseData];
     NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
-        [self hideHud];
         [self showNo:[jsonDic valueForKey:@"info"]];
     }
     if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
-        [self hideHud];
         [self showOk:[jsonDic valueForKey:@"info"]];
         [self dismissViewControllerAnimated:YES completion:^{
             [self clearAddress];
