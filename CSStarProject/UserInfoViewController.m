@@ -219,28 +219,32 @@
 -(void)goEditNickName{
     
     EditNickNameController *editNickName = [[EditNickNameController alloc]init];
-    [self presentViewController:editNickName animated:YES completion:nil];
+    [self.navigationController pushViewController:editNickName animated:YES];
+    //[self presentViewController:editNickName animated:YES completion:nil];
     
 }
 
 -(void)goEditPasswd{
     
     EditPasswordController *editPassword = [[EditPasswordController alloc]init];
-    [self presentViewController:editPassword animated:YES completion:nil];
+    [self.navigationController pushViewController:editPassword animated:YES];
+    //[self presentViewController:editPassword animated:YES completion:nil];
     
 }
 
 -(void)goEditSex{
     
     EditSexViewController *editSex = [[EditSexViewController alloc]init];
-    [self presentViewController:editSex animated:YES completion:nil];
+    [self.navigationController pushViewController:editSex animated:YES];
+    //[self presentViewController:editSex animated:YES completion:nil];
     
 }
 
 -(void)goEditCity{
     
     EditCityViewController *editCity = [[EditCityViewController alloc]init];
-    [self presentViewController:editCity animated:YES completion:nil];
+    [self.navigationController pushViewController:editCity animated:YES];
+    //[self presentViewController:editCity animated:YES completion:nil];
     
 }
 
@@ -315,19 +319,18 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
         UIImage *img = [info objectForKey:UIImagePickerControllerEditedImage];
-        [self performSelector:@selector(saveImage:)  withObject:img afterDelay:0.5];
-        [picker dismissViewControllerAnimated:YES completion:nil];
+        [self saveImage:img];
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)saveImage:(UIImage *)image {
     NSLog(@"保存头像！");
     [self showLoading:@"上传照片中..."];
-    //[userPhotoButton setImage:image forState:UIControlStateNormal];
     BOOL success;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
@@ -343,52 +346,71 @@
     UIImage *smallImage=[self scaleFromImage:image toSize:CGSizeMake(180.0f, 180.0f)];//将图片尺寸改为80*80
     //UIImage *smallImage = [self thumbnailWithImageWithoutScale:image size:CGSizeMake(120, 129)];
     [UIImageJPEGRepresentation(smallImage, 1.0f) writeToFile:imageFilePath atomically:YES];//写入文件
-    UIImage *selfPhoto = [UIImage imageWithContentsOfFile:imageFilePath];//读取图片文件
-    //[userPhotoButton setImage:selfPhoto forState:UIControlStateNormal];
-    bigCell.bigCellPic.image = selfPhoto;
+    //UIImage *selfPhoto = [UIImage imageWithContentsOfFile:imageFilePath];//读取图片文件
+    
     [self uploadUserLogo:imageFilePath];
     //处理完图片关闭窗口
     [self cancelBtnClick];
 }
 
-
-//上传用户头像
 -(BOOL)uploadUserLogo:(NSString *)imageUrl{
+    
+    //图片位置
     if([StringUitl isEmpty:imageUrl]){
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         imageUrl = [documentsDirectory stringByAppendingPathComponent:@"selfPhoto.jpg"];
     }
     
-    //NSLog(@"imageUrl->>%@",imageUrl);
-    //NSLog(@"imageExt->>%@",[self getFileExtName:imageUrl]);
-    
-    NSURL *uploadImgUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_ADMIN_URL,UPLOAD_IMG_URL]];
-    //NSLog(@"uploadImgUrl->>%@",uploadImgUrl);
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadImgUrl];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
     //上传图片
     NSData *imageData = [[NSData alloc] initWithContentsOfFile:imageUrl];
     if(imageData==nil){
         return FALSE;
     }
-    NSString *base64Str = [imageData base64Encoding];
-    [request setPostValue:[self getFileExtName:imageUrl] forKey:@"fileExt"];
-    [request setPostValue:base64Str forKey:@"base64"];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:@"username"];
-    [request buildPostBody];
-    [request startAsynchronous];
     
-    [request setDidFailSelector:@selector(uploadFailed:)];
-    [request setDidFinishSelector:@selector(uploadFinished:)];
-
+    NSString *base64Str = [imageData base64Encoding];
+    [HttpClient uploadUserIcon:[StringUitl getSessionVal:LOGIN_USER_NAME]
+                       fileExt:[self getFileExtName:imageUrl] base64Str:base64Str
+                        isjson:FALSE
+                       success:^(AFHTTPRequestOperation *operation, id responseObject)
+                     {
+                         
+                         NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+                         if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//上传失败
+                             [self hideHud];
+                             [self showNo:[jsonDic valueForKey:@"info"]];
+                         }
+                         
+                         if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
+                             
+                             //存储头像信息
+                             NSString *filePath =[jsonDic valueForKey:@"msg"];
+                             if([StringUitl isNotEmpty:filePath]){
+                                 NSMutableString *tempStr = [NSMutableString stringWithString:filePath];
+                                 NSRange range = [tempStr rangeOfString:@"small_"];
+                                 [tempStr replaceCharactersInRange:range withString:@""];
+                                 
+                                 [bigCell.bigCellPic md_setImageWithURL:tempStr placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+                                 [StringUitl setSessionVal:tempStr withKey:USER_LOGO];
+                             }
+                             [self hideHud];
+                             [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+                             
+                         }
+                         
+                     }
+     
+                       failure:^(AFHTTPRequestOperation *operation, NSError *error)
+                     {
+                         
+                         [self requestFailed:(NSError *)error];
+                         
+                     }
+     ];
+    
     return YES;
 }
+
 
 -(NSString *)getFileExtName:(NSString *)fileName{
     
@@ -396,75 +418,38 @@
     return  [rslt lastObject];
 }
 
-- (void)uploadFinished:(ASIHTTPRequest *)req
-{
-    
-    NSLog(@"upload->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//上传失败
-        //[StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//上传成功
-        
-        //存储头像信息
-        NSString *filePath =[jsonDic valueForKey:@"msg"];
-        
-        if([StringUitl isNotEmpty:filePath]){
-            NSMutableString *tempStr = [NSMutableString stringWithString:filePath];
-            NSRange range = [tempStr rangeOfString:@"small_"];
-            [tempStr replaceCharactersInRange:range withString:@""];
-            
-            [StringUitl setSessionVal:tempStr withKey:USER_LOGO];
-        }
-        [self hideHud];
-        [StringUitl loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
-        
-    }
-    
-}
 
-- (void)uploadFailed:(ASIHTTPRequest *)req
+- (void)requestFailed:(NSError *)error
 {
     [self hideHud];
-    [self showNo:@"请求数据失败"];
+    NSLog(@"error=%@",error);
+    [self showNo:@"请求失败,网络错误!"];
 }
 
 //获取用户信息
 -(void)loadUserInfo:(NSString *)userName{
     if([StringUitl isNotEmpty:userName]){
         
-        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
-        [ASIHTTPRequest setSessionCookies:nil];
-        
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"GET"];
-        [request setStringEncoding:NSUTF8StringEncoding];
-        [request startAsynchronous];
-        
-        [request setDidFailSelector:@selector(uploadFailed:)];
-        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
-        
+        [HttpClient loadUserInfo:userName
+                          isjson:TRUE
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             
+                             NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+                                 [self showNo:[jsonDic valueForKey:@"info"]];
+                             }
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+                             }
+                             
+                         }
+         
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             
+                             [self requestFailed:(NSError *)error];
+                             
+                         }];
     }
-}
-
-- (void)getUserInfoFinished:(ASIHTTPRequest *)req
-{
-    
-    NSLog(@"getUserInfo->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
-    }
-
     
 }
 

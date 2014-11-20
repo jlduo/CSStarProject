@@ -292,6 +292,10 @@
     }
 }
 
+/*转换数据为dictionary*/
++(NSDictionary *)getDicFromData:(id)fromData{
+   return [NSJSONSerialization JSONObjectWithData:fromData options:NSJSONReadingMutableLeaves error:nil];
+}
 
 @end
 

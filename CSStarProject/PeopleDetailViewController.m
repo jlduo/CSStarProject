@@ -122,25 +122,31 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+    {
+        
+        _peopleData = [StringUitl getDicFromData:responseObject];
+        [self hideHud];
+        [_peopleDetailTable reloadData];
+        
+    }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+    {
+        [self requestFailed:error];
+        
+    }];
     
 }
 
-
-- (void)requestDataFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    NSData *respData = [request responseData];
-    _peopleData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
     [self hideHud];
-    [_peopleDetailTable reloadData];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 //传递过来的参数
@@ -325,7 +331,10 @@
         centerCell.userIcon.layer.cornerRadius = 18;
         centerCell.userIcon.layer.masksToBounds = YES;
         
-        centerCell.userName.text = [NSString stringWithFormat:@"%@(发起人)",[cellDic valueForKey:@"nickName"]];
+        NSString *nickName =[cellDic valueForKey:@"nickName"];
+        if([StringUitl isEmpty:nickName])nickName = BLANK_NICK_NAME;
+        
+        centerCell.userName.text = [NSString stringWithFormat:@"%@(发起人)",nickName];
         centerCell.userName.font = DESC_FONT;
         
         [StringUitl setCornerRadius:centerCell.backgroundView withRadius:5.0];
@@ -417,12 +426,6 @@
         [self showOk:[jsonDic valueForKey:@"info"]];
     }
     
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)req
-{
-    [self hideHud];
-    [self showNo:@"请求数据失败!"];
 }
 
 

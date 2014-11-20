@@ -85,7 +85,6 @@
     
     [self setTableData];
     self.homeTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    //_homeTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _homeTableView.rowHeight = 85;
     _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -308,68 +307,81 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+            {
+                
+                commonArr = (NSArray *)responseObject;
+                if(commonArr!=nil && commonArr.count>0){
+                    
+                    switch (type) {
+                            
+                        case 1:
+                            sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"_img_url"]];
+                            slideArr = commonArr;
+                            [self initScroll];
+                            break;
+                        case 2:
+                            _girlsDataList = [NSMutableArray arrayWithArray:commonArr];
+                            break;
+                        case 3:
+                            _storyDataList = [NSMutableArray arrayWithArray:commonArr];
+                            break;
+                        case 4:
+                            _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
+                            break;
+                        case 5:
+                            imageArr = [[NSMutableArray alloc]init];
+                            for (int i=0; i<commonArr.count; i++) {
+                                NSDictionary * dic = (NSDictionary *)commonArr[i];
+                                photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
+                                photo.caption = [dic valueForKey:@"_remark"];
+                                [imageArr addObject:photo];
+                                photo = nil;
+                            }
+                            [self goPhotoView:imageArr];
+                            imageArr = nil;
+                            
+                            break;
+                        default:
+                            break;
+                            
+                    }//end switch
+                    
+                    
+                    _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
+                    [_homeTableView reloadData];
+                    showflag++;
+                    if (showflag==4) {
+                        [friendlyLoadingView removeFromSuperview];
+                    }
+                    
+                    
+                }//end if
+                
+            }
+     
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+            {
+                
+                [self requestFailed:error];
+                
+            }
+     ];
     
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    [self hideHud];
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //NSLog(@"jsonDic->%@",jsonDic);
-    commonArr = (NSArray *)jsonDic;
-    if(commonArr!=nil && commonArr.count>0){
-    
-        switch (request.tag) {
-            case 1:
-                sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"_img_url"]];
-                slideArr = commonArr;
-                [self initScroll];
-                break;
-            case 2:
-                _girlsDataList = [NSMutableArray arrayWithArray:commonArr];
-                break;
-            case 3:
-                _storyDataList = [NSMutableArray arrayWithArray:commonArr];
-                break;
-            case 4:
-                _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
-                break;
-            case 5:
-                imageArr = [[NSMutableArray alloc]init];
-                for (int i=0; i<commonArr.count; i++) {
-                    NSDictionary * dic = (NSDictionary *)commonArr[i];
-                    photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
-                    photo.caption = [dic valueForKey:@"_remark"];
-                    [imageArr addObject:photo];
-                    photo = nil;
-                }
-                [self goPhotoView:imageArr];
-                imageArr = nil;
 
-                break;
-            default:
-                break;
-        }
-        
-        
-        _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
-        [_homeTableView reloadData];
-        showflag++;
-        if (showflag==4) {
-            [friendlyLoadingView removeFromSuperview];
-        }
-    }
+    showflag = 0;
+    NSLog(@"error->%@",error);
+    [self initLoading];
+    [self showLoading];
+    [self showNo:@"请求失败,网络错误!"];
     
 }
 
@@ -405,17 +417,6 @@
     [tabBarController hiddenDIYTaBar];
 }
 
-
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    showflag = 0;
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
-    [self initLoading];
-    [self showLoading];
-    
-}
 
 #pragma mark - MWPhotoBrowserDelegate
 
@@ -529,8 +530,30 @@
     
     if(![StringUitl checkLogin]){
         LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
+        NSString *passString;
+        passValelegate = loginView;
+        if([dataTP isEqual:@"video"]){//视频
+            passString = @"1";
+        }
+        
+        if([dataTP isEqual:@"albums"]){//相册
+           passString = @"1";
+        }
+        
+        if([dataTP isEqual:@"article"]){//文章
+            passString = @"2";
+        }
+        
+        if([dataTP isEqual:@"story"]){//跳转到星城故事
+            passString = @"2";
+        }
+        
+        if([dataTP isEqual:@"people"]){//跳转到活动众筹
+            passString = @"3";
+        }
+        [passValelegate passValue:passString];
         [self presentViewController:loginView animated:YES completion:nil];
-        [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
+        [StringUitl setSessionVal:@"HTAB" withKey:FORWARD_TYPE];
         //[self.navigationController pushViewController:loginView animated:YES];
         return NO;
     }else{

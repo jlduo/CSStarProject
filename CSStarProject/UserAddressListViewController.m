@@ -100,45 +100,38 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSMutableArray *returnArr = (NSMutableArray *)responseObject;
+         if(returnArr!=nil && returnArr.count>0){
+             _orderAddressList = returnArr;
+         }else{
+             _orderAddressList = [[NSMutableArray alloc]init];
+         }
+         [self setFooterView];
+         [_orderAddressTable reloadData];
+         [self hideHud];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSMutableArray *returnArr = (NSMutableArray *)jsonDic;
-    if(returnArr!=nil && returnArr.count>0){
-        _orderAddressList = returnArr;
-    }else{
-        _orderAddressList = [[NSMutableArray alloc]init];
-    }
-    [self setFooterView];
-    [_orderAddressTable reloadData];
     [self hideHud];
-    
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    
-    [self hideHud];
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
-    
-}
 
 //传递过来的参数
 -(void)passValue:(NSString *)val{

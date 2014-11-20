@@ -65,9 +65,7 @@
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
     [rbtn setTintColor:[UIColor whiteColor]];
-    //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
-    //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
@@ -93,19 +91,19 @@
 
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)saveUserInfo{
     [_nickName resignFirstResponder];
-    
-    NSString *username = self.nickName.text;
-    if([StringUitl isEmpty:username]){
+    NSString * username = [StringUitl getSessionVal:LOGIN_USER_NAME];
+    NSString *nickname = self.nickName.text;
+    if([StringUitl isEmpty:nickname]){
         [self showNo:@"请先输入昵称"];
         return;
     }
     
-    if([[StringUitl getSessionVal:USER_NICK_NAME] isEqual:self.nickName.text]){
+    if([[StringUitl getSessionVal:USER_NICK_NAME] isEqual:nickname]){
         [self showNo:@"请先修改昵称"];
         return;
     }
@@ -113,46 +111,38 @@
     [self showLoading:@"数据保存中..."];
 
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
+    NSDictionary *parameters = @{USER_NAME:username,USER_NICK_NAME:nickname};
+    [HttpClient updateUserInfo:parameters
+                        isjson:FALSE
+                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                           
+                           NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+                           if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
+                               [self hideHud];
+                               [self showNo:[jsonDic valueForKey:@"info"]];
+                           }
+                           if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+                               [self hideHud];
+                               [self showOk:[jsonDic valueForKey:@"info"]];
+                               [StringUitl setSessionVal:nickname withKey:USER_NICK_NAME];
+                               [self.navigationController popViewControllerAnimated:YES];
+                           }
+                           
+                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                           
+                           [self requestFaild:error];
+                           
+                       }
+     ];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
-    [request setPostValue:username forKey:USER_NICK_NAME];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(editInfoFailed:)];
-    [request setDidFinishSelector:@selector(editFinished:)];
-    
-    
-}
-
-- (void)editFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"login info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [self hideHud];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        [StringUitl setSessionVal:_nickName.text withKey:USER_NICK_NAME];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
     
 }
 
-- (void)editInfoFailed:(ASIHTTPRequest *)req
+- (void)requestFaild:(NSError *)error
 {
     [self hideHud];
-    [self showNo:@"请求数据失败"];
+    NSLog(@"error=%@",error);
+    [self showNo:@"请求失败,网络错误!"];
 }
+
 @end

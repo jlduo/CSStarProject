@@ -11,8 +11,10 @@
 #import "StringUitl.h"
 #import "LoginViewController.h"
 #import "GirlsViewController.h"
-
-@interface InitTabBarViewController : UITabBarController
+#import "ViewPassValueDelegate.h"
+@interface InitTabBarViewController : UITabBarController<ViewPassValueDelegate>{
+    __weak NSObject<ViewPassValueDelegate> *passDelegate;
+}
 
 
 -(void)hiddenDIYTaBar;

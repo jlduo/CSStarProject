@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ASIHTTPRequest.h"
 #import "UIViewController+HUD.h"
-#import "ASIFormDataRequest.h"
 #import "CommonViewController.h"
 #import "UserInfoViewController.h"
 

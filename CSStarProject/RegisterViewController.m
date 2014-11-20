@@ -73,11 +73,11 @@
     UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
     //处理标题
     UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 160, 50, 44)];
-    [titleLabel setText:@"注册"];
+    [titleLabel setText:@"注 册"];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    
+    titleLabel.font = TITLE_FONT;
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
@@ -85,7 +85,6 @@
     [lbtn addTarget:self action:@selector(goPreviou) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
-
     
     navItem.titleView = titleLabel;
     navItem.leftBarButtonItem = leftBtnItem;
@@ -127,27 +126,48 @@
     }
     
     //开始获取验证码
-    NSURL *reg_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,CHECK_CODE_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:reg_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:phoneNum forKey:@"mobile"];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestRegFailed:)];
-    [request setDidFinishSelector:@selector(requestCodeFinished:)];
-
-    
+    [HttpClient getCheckCode:phoneNum
+                      isjson:TRUE
+                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+                            NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                            if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取失败
+                                [self showNo:[jsonDic valueForKey:@"info"]];
+                            }
+                            if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
+                                [self showOk:[jsonDic valueForKey:@"info"]];
+                                [self startTime];
+                            }
+        
+                     }
+     
+                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+                            [self requestFailed:error];
+        
+                     }
+     ];
     
 }
 
+-(void)resetRegBtn:(int) flag{
+    if(flag==0){
+        [self.registerBtn setEnabled:TRUE];
+        [self.registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [self.registerBtn setBackgroundColor:[UIColor redColor]];
+    }else{
+        [self.registerBtn setEnabled:FALSE];
+        [self.registerBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.registerBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        [self.registerBtn setBackgroundColor:[UIColor grayColor]];
+    }
+}
+
+
 //注册账号
 - (IBAction)clickRegisterBtn:(id)sender {
+    
     [self dismissKeyBoard];
     [StringUitl clearUserInfo];
     NSLog(@"user register......");
@@ -213,23 +233,34 @@
         return;
     }
     
+    [self resetRegBtn:1];
+    
     //开始提交注册
-    NSURL *reg_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,REGISTER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:reg_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:user_name forKey:@"username"];
-    [request setPostValue:[StringUitl md5:pass_word] forKey:@"password"];
-    [request setPostValue:checkNum forKey:@"verifycode"];
-    [request buildPostBody];
-
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestRegFailed:)];
-    [request setDidFinishSelector:@selector(requestRegFinished:)];
+    [HttpClient userRegister:user_name
+                    password:[StringUitl md5:pass_word]
+                   checkcode:checkNum
+                      isjson:TRUE
+                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                         
+                         NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                         if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//注册失败
+                             [self resetRegBtn:0];
+                             [self showNo:[jsonDic valueForKey:@"info"]];
+                         }
+                         
+                         if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
+                             [self resetRegBtn:0];
+                             [self loadUserInfo:_phoneNum.text];
+                         }
+                         
+                     }
+     
+                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                         
+                         [self requestFailed:error];
+                         
+                     }
+     ];
 
 }
 
@@ -240,24 +271,6 @@
     
 }
 
-- (void)requestCodeFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"register info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取成功
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        [self startTime];
-        //[self.navigationController popToRootViewControllerAnimated:YES];
-        //[self dismissViewControllerAnimated:YES completion:nil];
-    }
-    
-    
-
-}
 
 //关闭键盘
 -(void)dismissKeyBoard{
@@ -319,77 +332,52 @@
 -(void)loadUserInfo:(NSString *)userName{
     if([StringUitl isNotEmpty:userName]){
         
-        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
-        [ASIHTTPRequest setSessionCookies:nil];
-        
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"GET"];
-        [request setStringEncoding:NSUTF8StringEncoding];
-        [request startAsynchronous];
-        
-        [request setDidFailSelector:@selector(requestRegFailed:)];
-        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
+        [HttpClient loadUserInfo:userName
+                          isjson:TRUE
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             
+                             NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+                                 [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
+                             }
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+                                 
+                                 //存储用户信息
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
+                                 [StringUitl setSessionVal:_phoneNum.text withKey:LOGIN_USER_NAME];
+                                 [StringUitl setSessionVal:_passwordVal.text withKey:LOGIN_USER_PSWD];
+                                 [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
+                                 
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+                                 
+                                 UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                                 UserViewController *userView =  [storyBoard instantiateViewControllerWithIdentifier:@"userCenter"];
+                                 [self.navigationController pushViewController:userView animated:YES];
+                                 
+                             }
+                             
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             
+                             [self requestFailed:error];
+                             
+                         }
+         ];
         
     }
 }
 
-- (void)getUserInfoFinished:(ASIHTTPRequest *)req
+- (void)requestFailed:(NSError *)error
 {
-    
-    NSLog(@"getUserInfo->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [StringUitl alertMsg:[jsonDic valueForKey:@"info"] withtitle:@"错误提示"];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
-        
-        //存储用户信息
-        [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
-        [StringUitl setSessionVal:_phoneNum.text withKey:LOGIN_USER_NAME];
-        [StringUitl setSessionVal:_passwordVal.text withKey:LOGIN_USER_PSWD];
-        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
-        
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
-        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
-        
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UserViewController *userView =  [storyBoard instantiateViewControllerWithIdentifier:@"userCenter"];
-        [self.navigationController pushViewController:userView animated:YES];
-        
-    }
-    
+    NSLog(@"error=%@",error);
+    [self hideHud];
+    [self resetRegBtn:0];
+    [self showNo:@"请求失败,网络错误!"];
 }
-
-- (void)requestRegFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"register info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//注册失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//注册成功
-        [self.registerBtn setEnabled:FALSE];
-        [self loadUserInfo:_phoneNum.text];
-    }
-
-}
-
-
-
-- (void)requestRegFailed:(ASIHTTPRequest *)req
-{
-    [StringUitl clearUserInfo];
-    [self showNo:@"请求数据失败!"];
-}
-
 
 @end

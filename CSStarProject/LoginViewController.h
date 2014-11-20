@@ -5,18 +5,18 @@
 //  Created by jialiduo on 14-9-12.
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
-
+#import <UIKit/UIKit.h>
 #import "common.h"
-#import "ASIHTTPRequest.h"
-#import "ASIFormDataRequest.h"
 #import "UserViewController.h"
 #import "HomeViewController.h"
 #import "UIViewController+HUD.h"
 #import "FogetPasswordViewController.h"
 #import "CommonViewController.h"
-#import <UIKit/UIKit.h>
+#import "ViewPassValueDelegate.h"
 
-@interface LoginViewController : CommonViewController<UITextFieldDelegate>
+@interface LoginViewController : CommonViewController<UITextFieldDelegate,ViewPassValueDelegate>{
+    __weak NSObject<ViewPassValueDelegate> *passDelegate;
+}
 
 @property (weak, nonatomic) IBOutlet UIView *loginBgView;
 

@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "common.h"
-#import "ASIFormDataRequest.h"
-#import "ASIHTTPRequest.h"
 #import "StringUitl.h"
 #import "UIViewController+HUD.h"
 #import "UserViewController.h"

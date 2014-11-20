@@ -120,10 +120,31 @@
 -(void)loadDefaultAddress{
 
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_DEFAULT_ADDRESS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
-    defaultAddress = (NSMutableDictionary *)[ConvertJSONData requestData:url];
-    [self.orderInfoData setValue:defaultAddress forKey:@"defaultAdd"];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         defaultAddress = (NSMutableDictionary *)responseObject;
+         [self.orderInfoData setValue:defaultAddress forKey:@"defaultAdd"];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
+    
     //NSLog(@"defaultAddress====%@",defaultAddress);
     //NSLog(@"orderInfoData====%@",self.orderInfoData);
+}
+
+- (void)requestFailed:(NSError *)error
+{
+    [self hideHud];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -260,46 +281,41 @@
         return;
     }
     
+    [self showLoading:@"订单提交中..."];
+    
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,SUB_ORDER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
+    NSString *userid = [StringUitl getSessionVal:LOGIN_USER_ID];
+    NSString *edit_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,SUB_ORDER_URL];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
-    [request setPostValue:returnId forKey:@"returnId"];
-    [request setPostValue:ismianfei forKey:@"ismianfei"];
-    [request setPostValue:beizhu forKey:@"beizhu"];
+    NSDictionary * parameters = @{@"returnId":returnId,@"ismianfei":ismianfei,@"beizhu":beizhu,@"qty":snum,USER_ID:userid};
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     if([StringUitl isNotEmpty:addressId] && checkBox.tag==99){
-       [request setPostValue:addressId forKey:@"deliveryId"];
+        [param setObject:addressId forKey:@"deliveryId"];
     }
-    [request setPostValue:snum forKey:@"qty"];
     
-    [request buildPostBody];
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(addInfoFailed:)];
-    [request setDidFinishSelector:@selector(addFinished:)];
+    [HttpClient POST:edit_url
+         parameters:param
+             isjson:FALSE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         [self hideHud];
+         NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
+             [self showOk:[jsonDic valueForKey:@"info"]];
+             orderId = [jsonDic valueForKey:@"orderid"];
+             [self performSelector:@selector(goPayPage) withObject:nil afterDelay:0.5];
+         }
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
-    
-}
-
-- (void)addFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        orderId = [jsonDic valueForKey:@"orderid"];
-        [self performSelector:@selector(goPayPage) withObject:nil afterDelay:1];
-    }
     
 }
 

@@ -72,7 +72,7 @@
     [self addSubview:self.pageControl];
     
     [self.scrollView scrollRectToVisible:CGRectMake(width, 0, width, height) animated:NO];
-    timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(nextPage:) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(nextPage:) userInfo:nil repeats:YES];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
     singleTap.numberOfTapsRequired = 1;

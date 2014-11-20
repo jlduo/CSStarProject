@@ -59,38 +59,33 @@
 -(void)loadData{
     
     NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PROJECT_URL,dataId];
-    NSURL *requestUrl = [NSURL URLWithString:url];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
-    [ASIHTTPRequest setSessionCookies:nil];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:FALSE
+             success:^(AFHTTPRequestOperation *operation, id responseObject)
+             {
+                 
+                 _contentData = [StringUitl getDicFromData:responseObject];
+                 _contentTitle.text = [_contentData valueForKey:@"projectName"];
+                 NSURL *contentUrl = [[NSURL alloc]initWithString:[_contentData valueForKey:@"details"]];
+                 [_contentView loadRequest:[NSURLRequest requestWithURL:contentUrl]];
+                 
+             }
+     
+             failure:^(AFHTTPRequestOperation *operation, NSError *error)
+             {
+                 [self requestFailed:error];
+                 
+             }
+     ];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"GET"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestDataFinished:)];
-    
-}
-//请求完成
-- (void)requestDataFinished:(ASIHTTPRequest *)req{
-    
-    NSData *respData = [req responseData];
-    _contentData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    //填充标题
-    _contentTitle.text = [_contentData valueForKey:@"projectName"];
-    
-    //填充webview
-    NSURL *contentUrl = [[NSURL alloc]initWithString:[_contentData valueForKey:@"details"]];
-    [_contentView loadRequest:[NSURLRequest requestWithURL:contentUrl]];
-    //NSLog(@"_contentData===%@",_contentData);
     
 }
-
+- (void)requestFailed:(NSError *)error
+{
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
+}
 
 -(void)loadView{
     [super loadView];

@@ -9,7 +9,9 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 
-@interface LoginViewController ()
+@interface LoginViewController (){
+    NSString *passString;
+}
 
 @end
 
@@ -55,6 +57,16 @@
 }
 
 
+-(void)passValue:(NSString *)val{
+    
+    passString = val;
+    NSLog(@"passString=%@",passString);
+}
+
+-(void)passDicValue:(NSDictionary *)vals{
+    
+}
+
 -(void)setNavgationBar{
     //处理导航开始
     self.navigationController.navigationBarHidden = YES;
@@ -67,7 +79,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    
+    titleLabel.font=TITLE_FONT;
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
@@ -78,11 +90,11 @@
     
     //设置右侧按钮
     UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [rbtn setFrame:CGRectMake(0, 0, 32, 32)];
+    [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
     [rbtn setTitle:@"注册" forState:UIControlStateNormal];
     [rbtn setTitle:@"注册" forState:UIControlStateHighlighted];
     [rbtn setTintColor:[UIColor whiteColor]];
-    rbtn.titleLabel.font=Font_Size(16);
+    rbtn.titleLabel.font=TITLE_FONT;
     
     //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(goRegister) forControlEvents:UIControlEventTouchUpInside];
@@ -90,7 +102,10 @@
     UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
     
     navItem.titleView = titleLabel;
-    navItem.leftBarButtonItem = leftBtnItem;
+    if(![passString isEqualToString:@"relogin"]){//重新登录不能回退
+       navItem.leftBarButtonItem = leftBtnItem;
+    }
+    
     navItem.rightBarButtonItem = rightBtnItem;
     [navgationBar pushNavigationItem:navItem animated:YES];
     
@@ -156,6 +171,20 @@
     [self getPassword];
 }
 
+-(void)resetLoginBtn:(int) flag{
+    if(flag==0){
+        [self.lognBtn setEnabled:TRUE];
+        [self.lognBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.lognBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [self.lognBtn setBackgroundColor:[UIColor redColor]];
+    }else{
+        [self.lognBtn setEnabled:FALSE];
+        [self.lognBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.lognBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        [self.lognBtn setBackgroundColor:[UIColor grayColor]];
+    }
+}
+
 //用户登录方法
 - (IBAction)clickLognBtn:(id)sender {
     NSLog(@"user login......");
@@ -192,48 +221,46 @@
         return;
     }
     
+    [self resetLoginBtn:1];
     //开始处理登录
     [self showLoading:@"正在登录..."];
-    NSURL *login_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,LOGIN_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:user_name forKey:@"username"];
-    [request setPostValue:[StringUitl md5:pass_word] forKey:@"password"];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestLoginFailed:)];
-    [request setDidFinishSelector:@selector(requestLoginFinished:)];
-    
-}
 
-- (void)requestLoginFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"login info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
-        [self hideHud];
-        [StringUitl clearUserInfo];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
-        //先清除信息
-        [StringUitl clearUserInfo];
-        //存储用户信息
-        [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
-        [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
-        [StringUitl setSessionVal:_passWord.text withKey:LOGIN_USER_PSWD];
-        [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
-        [self hideHud];
-        //通过用户名获取信息
-        [self loadUserInfo:_userName.text];
-    }
+    [HttpClient userLogin:user_name
+                 password:[StringUitl md5:pass_word]
+                   isjson:TRUE
+                  success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {//登录成功
+         
+         NSLog(@"login info->%@",responseObject);
+         NSDictionary *jsonDic = (NSDictionary *)responseObject;
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//登录失败
+             [self hideHud];
+             [StringUitl clearUserInfo];
+             [self resetLoginBtn:0];
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//登录成功
+             //先清除信息
+             [StringUitl clearUserInfo];
+             //存储用户信息
+             [StringUitl setSessionVal:[jsonDic valueForKey:@"userid"] withKey:LOGIN_USER_ID];
+             [StringUitl setSessionVal:_userName.text withKey:LOGIN_USER_NAME];
+             [StringUitl setSessionVal:_passWord.text withKey:LOGIN_USER_PSWD];
+             [StringUitl setSessionVal:@"1" withKey:USER_IS_LOGINED];
+             [self hideHud];
+             [self resetLoginBtn:0];
+             //通过用户名获取信息
+             [self loadUserInfo:_userName.text];
+         }
+         
+         
+     }
+                  failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {//登录失败
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
 
@@ -241,58 +268,69 @@
 -(void)loadUserInfo:(NSString *)userName{
     if([StringUitl isNotEmpty:userName]){
         
-        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
-        [ASIHTTPRequest setSessionCookies:nil];
-        
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"GET"];
-        [request setStringEncoding:NSUTF8StringEncoding];
-        [request startAsynchronous];
-        
-        [request setDidFailSelector:@selector(requestLoginFailed:)];
-        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
-        
-    }
-}
-
-- (void)getUserInfoFinished:(ASIHTTPRequest *)req
-{
-    
-    //NSLog(@"getUserInfo->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
-        
-        //存储用户信息
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
-        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
-        
-        
-        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
-        if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTabar" object:nil];
-                
-            }];
-        }else{
-            [self.navigationController pushViewController:userView animated:YES];
+        [HttpClient loadUserInfo:userName
+                          isjson:TRUE
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+                                 [self showNo:[jsonDic valueForKey:@"info"]];
+                             }
+                             if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+                                 
+                                 //存储用户信息
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+                                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+                                 
+                                 if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+                                     
+                                     UIViewController *viewController = self;
+                                     while (viewController.presentingViewController){
+                                         viewController = viewController.presentingViewController;
+                                         if ([viewController isMemberOfClass:[InitTabBarViewController class]]) {
+                                             passDelegate = (InitTabBarViewController *)viewController;
+                                             [passDelegate passValue:passString];
+                                             [viewController dismissViewControllerAnimated:YES completion:nil];
+                                             break;
+                                         }
+                                     }
+                                     
+                                 }if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"HTAB"]) {
+                                     
+                                     [[NSNotificationCenter defaultCenter] postNotificationName:@"showContent" object:nil];
+                                     [self dismissViewControllerAnimated:YES completion:nil];
+                                     
+                                     
+                                 }else{
+                                     
+                                     UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
+                                     [self.navigationController pushViewController:userView animated:YES];
+                                     
+                                 }
+                                 
+                             }
+                             
+                             
+                         }
+         
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             
+                             [self requestFailed:(NSError *)error];
+                             
+                         }];
         }
-    }
-
+    
 }
 
-- (void)requestLoginFailed:(ASIHTTPRequest *)req
+
+- (void)requestFailed:(NSError *)error
 {
+    NSLog(@"error=%@",error);
     [self hideHud];
-    [self showNo:@"请求数据失败"];
+    [self resetLoginBtn:0];
+    [self showNo:@"请求失败,网络错误!"];
 }
 @end

@@ -40,6 +40,8 @@
 +(NSString *)getFileExtName:(NSString *)fileName;
 +(void)setCornerRadius:(UIView *)cview withRadius:(CGFloat)radius;
 +(void)setViewBorder:(UIView *)bview withColor:(NSString *)color Width:(CGFloat)width;
+/*转换数据为dictionary*/
++(NSDictionary *)getDicFromData:(id)fromData;
 
 //打印系统字体
 +(void)printSystemFont;

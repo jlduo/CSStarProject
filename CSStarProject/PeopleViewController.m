@@ -211,18 +211,6 @@
     
 }
 
-//-(void)goForward{
-//    if([StringUitl checkLogin]==TRUE){
-//        UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
-//        [self.navigationController pushViewController:userView animated:YES];
-//    }else{
-//        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-//        LoginViewController *loginView = [[LoginViewController alloc] init];
-//        [self.navigationController pushViewController:loginView animated:YES];
-//    }
-//    
-//}
-
 -(void)showFilterView:(UIButton *)sender{
     
     [UIView animateWithDuration:0.35 animations:^{
@@ -252,7 +240,13 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     
-    [self setTableData];
+    
+    [self loadSliderPic];
+    [self loadTableList];
+    [self initScroll];
+    
+    [filterBgView removeFromSuperview];
+    [self initFilterView];
 }
 
 //加载头部刷新
@@ -368,55 +362,63 @@
     [request setDidFailSelector:@selector(requestFailed:)];
     [request setDidFinishSelector:@selector(requestFinished:)];
     
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //NSLog(@"jsonDic->%@",jsonDic);
-    commonArr = (NSArray *)jsonDic;
-    if(commonArr!=nil && commonArr.count>0){
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+    {
         
-        switch (request.tag) {
-            case 0:
-                projectsArray = commonArr;
-                [self initFilterView];
-                break;
-            case 1:
-                sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgUrl"]];
-                slideArr = commonArr;
-                [self initScroll];
-                break;
-            case 2:
-                _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
-                break;
-            default:
-                break;
+        commonArr = (NSArray *)responseObject;
+        if(commonArr!=nil && commonArr.count>0){
+            
+            switch (request.tag) {
+                case 0:
+                    projectsArray = commonArr;
+                    [self initFilterView];
+                    break;
+                case 1:
+                    sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgUrl"]];
+                    slideArr = commonArr;
+                    [self initScroll];
+                    break;
+                case 2:
+                    _peopleDataList = [NSMutableArray arrayWithArray:commonArr];
+                    break;
+                default:
+                    break;
+            }
+            
+            
+            [self setHeaderRereshing];
+            [self setFooterRereshing];
+            [_peopleTableView reloadData];
+            
         }
         
-            
-        [self setHeaderRereshing];
-        [self setFooterRereshing];
-        [_peopleTableView reloadData];
+        showflag++;
+        if (showflag==3) {
+            [friendlyLoadingView removeFromSuperview];
+        }
+        
         
     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+    {
+        
+        [self requestFailed:error];
+        
+    }];
     
-    showflag++;
-    if (showflag==3) {
-        [friendlyLoadingView removeFromSuperview];
-    }
 }
 
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
+    
     showflag=0;
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
+    NSLog(@"error->%@",error);
     [self initLoading];
     [self showLoading];
-    
+    [self showNo:ERROR_INNER];
     
 }
 

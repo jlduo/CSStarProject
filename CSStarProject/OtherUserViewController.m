@@ -16,7 +16,7 @@
     NSString *cellTitle;
     NSString *dataId;
     
-    UIButton *imgBtn;
+    UIImageView *imgBtn;
     UILabel *userLabel;
     NSMutableDictionary *params;
 }
@@ -67,87 +67,84 @@
 }
 
 -(void)initLoadUserData{
-    NSString *url = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,dataId];
-    [self requestDataByUrl:url withType:1];
+    
+    [HttpClient loadUserInfo:dataId
+                      isjson:FALSE
+                     success:^(AFHTTPRequestOperation *operation, id responseObject)
+                    {
+                        _userData = [StringUitl getDicFromData:responseObject];
+                        [self setImgBtnImage];
+                        [self setUserTitle];
+                        [_otherUserCenterTable reloadData];
+                        
+                    }
+                     failure:^(AFHTTPRequestOperation *operation, NSError *error)
+                    {
+                        
+                        [self requestFailed:error];
+                        
+                    }
+     ];
+    
 }
+
 
 -(void)getMyProjectsNums{
-    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_MYPROJECT_NUMS_URL,[params valueForKey:@"userId"]];
-    [self requestDataByUrl:url withType:0];
-}
-
-
--(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
     
+    NSString *userid = [StringUitl getSessionVal:LOGIN_USER_ID];
+    NSLog(@"userid=%@",userid);
+    [HttpClient getOTUserCenterData:userid
+                           isjson:FALSE
+                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+                         {
+                             
+                             NSString *pro_nums = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                             if([StringUitl isNotEmpty:pro_nums]){
+                                 pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
+                                 NSArray *num = [pro_nums componentsSeparatedByString:@","];
+                                 if(num!=nil && num.count>0){
+                                     NSArray *nums;
+                                     for (int i=0; i<num.count; i++) {
+                                         nums = [num[i] componentsSeparatedByString:@":"];
+                                         [_userProjectNums setObject:nums[1] forKey:nums[0]];
+                                     }
+                                 }
+                             }
+                             
+                             [self hideHud];
+                             [_otherUserCenterTable reloadData];
+                             
+                         }
+     
+                          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+                         {
+                             
+                             [self requestFailed:error];
+                             
+                         }
+     ];
 }
 
-
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    int tag = request.tag;
-    NSData *respData = [request responseData];
-    if(tag==0){
-        NSString *pro_nums = [[NSString alloc] initWithData:respData encoding:NSUTF8StringEncoding];
-        if([StringUitl isNotEmpty:pro_nums]){
-            pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
-            NSArray *num = [pro_nums componentsSeparatedByString:@","];
-            if(num!=nil&&num.count>0){
-                for (int i=0; i<num.count; i++) {
-                    NSArray *nums = [num[i] componentsSeparatedByString:@":"];
-                    [_userProjectNums setObject:nums[1] forKey:nums[0]];
-                }
-            }
-        }
-    }else{
-        _userData = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-        [self setImgBtnImage];
-        [self setUserTitle];
-    }
-    
+    NSLog(@"error=%@",error);
     [self hideHud];
-    [_otherUserCenterTable reloadData];
+    [self showNo:@"请求失败,网络错误!"];
 }
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"error->%@",error);
-    [self hideHud];
-    [self showNo:@"加载失败,请检查网络连接!"];
-    
-}
-
 
 -(void)setImgBtnImage{
     
     NSString *userLogo = [_userData valueForKey:@"logo"];
-    NSRange range = [userLogo rangeOfString:@"upload"];
-    if(range.location==NSNotFound){
-        [imgBtn setBackgroundImage:[UIImage imageNamed:@"avatarbig.png"] forState:UIControlStateNormal];
-    }else{
-        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:userLogo]];
-        [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
-        [imgBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateSelected];
-        if(imgData==nil){
-            [imgBtn setBackgroundImage:[UIImage imageNamed:NOIMG_ICON_TX] forState:UIControlStateNormal];
-            [imgBtn setBackgroundImage:[UIImage imageNamed:NOIMG_ICON_TX] forState:UIControlStateSelected];
-        }
-    }
+    [imgBtn md_setImageWithURL:userLogo placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+    
 }
 
 
 -(void)setUserTitle{
     userLabel.font = main_font(16);
-    [userLabel setText:[_userData valueForKey:@"nickname"]];
+    NSString *nickName = [_userData valueForKey:@"nickname"];
+    if([StringUitl isEmpty:nickName])nickName = BLANK_NICK_NAME;
+    [userLabel setText:nickName];
 }
 
 
@@ -156,13 +153,12 @@
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [headView setBackgroundColor:[UIColor grayColor]];
     
-    imgBtn = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
+    imgBtn = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
     [StringUitl setViewBorder:imgBtn withColor:@"#FFFFFF" Width:4.0f];
     
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"myzonebg.png"]];
-    
     [imgView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     [imgView setUserInteractionEnabled:YES];//处理图片点击生效
     

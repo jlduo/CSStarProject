@@ -116,37 +116,39 @@
     [request setDidFailSelector:@selector(requestFailed:)];
     [request setDidFinishSelector:@selector(requestFinished:)];
     
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+
+         NSArray *returnArr = (NSArray *)responseObject;
+         if(returnArr!=nil && returnArr.count>0){
+             _peopleProList = [NSMutableArray arrayWithArray:returnArr];
+             [self hideHud];
+             [_projectListTable reloadData];
+         }else{
+             _peopleProList = [[NSMutableArray alloc]init];
+             [self hideHud];
+             [self showHint:@"没有最新数据..."];
+         }
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
+    
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSArray *returnArr = (NSArray *)jsonDic;
-    if(returnArr!=nil && returnArr.count>0){
-        _peopleProList = [NSMutableArray arrayWithArray:returnArr];
-        [self hideHud];
-        [_projectListTable reloadData];
-    }else{
-        _peopleProList = [[NSMutableArray alloc]init];
-        [self hideHud];
-        [self showHint:@"没有最新数据..."];
-    }
-    
-}
-
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    
     [self hideHud];
-    [self showNo:@"请求数据失败..."];
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
-    
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
-
 
 -(void)loadView{
     [super loadView];

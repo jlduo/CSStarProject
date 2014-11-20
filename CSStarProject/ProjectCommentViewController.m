@@ -285,56 +285,48 @@
             contentId = dataId;
             url = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_TALK_URL];
         }
-        NSURL *comm_url = [NSURL URLWithString:url];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:comm_url];
-        [ASIHTTPRequest setSessionCookies:nil];
         
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"POST"];
-        [request setStringEncoding:NSUTF8StringEncoding];
-        
-        [request setPostValue:contentId forKey:contentKey];
-        [request setPostValue:textVal forKey:@"content"];
-        [request setPostValue:userId forKey:@"userId"];
-        
-        [request buildPostBody];
-        
-        [request startAsynchronous];
-        [request setDidFailSelector:@selector(requestFailed:)];
-        [request setDidFinishSelector:@selector(requestFinished:)];
+        NSDictionary *parameters = @{contentKey:contentId,@"content":textVal,@"userId":userId};
+        [HttpClient POST:url
+              parameters:parameters
+                  isjson:FALSE
+                 success:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             
+             NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+             //处理返回
+             if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
+                 textField.text = nil;
+                 [textField addSubview:cIconView];
+                 [plabel setFrame:CGRectMake(25, 2, 40, 26)];
+                 [textField addSubview:plabel];
+                 [self hideHud];
+                 [self showOk:[jsonDic valueForKey:@"info"]];
+                 [self loadTableList];
+                 [_projectCommentTable reloadData];
+                 
+                 self.commentNum.text = [[NSString alloc] initWithFormat:@"%d",_proCommentList.count];
+             }else{
+                 [self hideHud];
+                 [self showNo:[jsonDic valueForKey:@"info"]];
+             }
+             
+         }
+                 failure:^(AFHTTPRequestOperation *operation, NSError *error)
+         {
+             
+             [self requestFailed:error];
+             
+         }];
     }
 }
 
-//请求完成
-- (void)requestFinished:(ASIHTTPRequest *)req{
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
-        textField.text = nil;
-        [textField addSubview:cIconView];
-        [plabel setFrame:CGRectMake(25, 2, 40, 26)];
-        [textField addSubview:plabel];
-        [self hideHud];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        [self loadTableList];
-        [_projectCommentTable reloadData];
-        
-        self.commentNum.text = [[NSString alloc] initWithFormat:@"%d",_proCommentList.count];
-    }else{
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)req{
+- (void)requestFailed:(NSError *)error
+{
     [self hideHud];
-    [self showNo:@"请求数据失败"];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
-
-
-
 
 
 //传递过来的参数
@@ -357,34 +349,32 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+
+         NSMutableArray *jsonArr = (NSMutableArray *)responseObject;
+         if(jsonArr!=nil&&jsonArr.count>0){
+             _proCommentList = jsonArr;
+             [self hideHud];
+             [_projectCommentTable reloadData];
+         }else{
+             [self hideHud];
+             [self showHint:@"没有最新数据..."];
+         }
+         [self setFooterRereshing];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
 }
-
-- (void)requestDataFinished:(ASIHTTPRequest *)request
-{
-    
-    NSData *respData = [request responseData];
-    NSMutableArray *jsonArr = (NSMutableArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if(jsonArr!=nil&&jsonArr.count>0){
-      _proCommentList = jsonArr;
-        [self hideHud];
-      [_projectCommentTable reloadData];
-    }else{
-        [self hideHud];
-        [self showHint:@"没有最新数据..."];
-    }
-    [self setFooterRereshing];
-}
-
 
 -(void)loadView{
     [super loadView];

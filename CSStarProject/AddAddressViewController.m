@@ -221,26 +221,45 @@
 
 
 -(void)delAddress2:(UIButton *)sender{
-    
+    [self showLoading:@"数据删除中..."];
     NSString *cid = [params valueForKey:@"id"];
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,DEL_ADDRESS_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:cid forKey:@"id"];
-    
-    [request buildPostBody];
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(addInfoFailed:)];
-    [request setDidFinishSelector:@selector(addFinished:)];
+    NSString *edit_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,DEL_ADDRESS_URL];
+    NSDictionary *param = @{@"id":cid};
+    [HttpClient POST:edit_url
+          parameters:param
+              isjson:TRUE
+             success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         [self hideHud];
+         NSDictionary *jsonDic = (NSDictionary *)responseObject;
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
+             [self showOk:[jsonDic valueForKey:@"info"]];
+             [self dismissViewControllerAnimated:YES completion:^{
+                 [self clearAddress];
+             }];
+             
+         }
+         
+     }
+             failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
 
 }
 
+- (void)requestFailed:(NSError *)error
+{
+    [self hideHud];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
+}
 
 -(void)saveAddress{
     
@@ -273,54 +292,52 @@
     }
 
     [self dismissKeyBoard];
+    [self showLoading:@"数据保存中..."];
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ADDRESS_URL]];
+    NSString *edit_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ADDRESS_URL];
     if([otype isEqualToString:@"edit"]){//修改动作
-         edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_ADDRESS_URL]];
+         edit_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_ADDRESS_URL];
     }
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-     if([otype isEqualToString:@"edit"]){//修改动作
-       [request setPostValue:[params valueForKey:@"isDefault"] forKey:@"isDefault"];
-       [request setPostValue:[params valueForKey:@"id"] forKey:@"id"];
-     }else{
-       [request setPostValue:@"0" forKey:@"isDefault"];
-       [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
+    NSDictionary *param;
+    NSMutableDictionary * parameters;
+    if([otype isEqualToString:@"edit"]){//修改动作
+        param =@{@"isDefault":[params valueForKey:@"isDefault"],@"id":[params valueForKey:@"id"]};
+    }else{
+        param =@{@"isDefault":@"0",USER_ID:[StringUitl getSessionVal:LOGIN_USER_ID]};
+    }
+    parameters = [NSMutableDictionary dictionaryWithDictionary:param];
+    [parameters setObject:cityID forKey:CITY_ID];
+    [parameters setObject:address forKey:USER_ADDRESS];
+    [parameters setObject:phone forKey:USER_PHONE];
+    [parameters setObject:code forKey:USER_ZIPCODE];
+    [parameters setObject:username forKey:USER_NAME];
+    
+    [HttpClient POST:edit_url
+          parameters:parameters
+              isjson:FALSE
+             success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
+             [self showOk:[jsonDic valueForKey:@"info"]];
+             [self dismissViewControllerAnimated:YES completion:^{
+                 [self clearAddress];
+             }];
+             
+         }
+         
      }
-    [request setPostValue:cityID forKey:CITY_ID];
-    [request setPostValue:address forKey:USER_ADDRESS];
-    [request setPostValue:phone forKey:USER_PHONE];
-    [request setPostValue:code forKey:USER_ZIPCODE];
-    [request setPostValue:username forKey:USER_NAME];
+             failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
-    [request buildPostBody];
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(addInfoFailed:)];
-    [request setDidFinishSelector:@selector(addFinished:)];
-    
-    
-}
-
-- (void)addFinished:(ASIHTTPRequest *)req
-{
-   //NSLog(@"info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        [self dismissViewControllerAnimated:YES completion:^{
-            [self clearAddress];
-        }];
-        
-    }
     
 }
 
@@ -330,12 +347,6 @@
     [StringUitl setSessionVal:@"" withKey:ADDRESS_CITY_ID];
     [StringUitl setSessionVal:@"" withKey:ADDRESS_PROVINCE_ID];
     
-}
-
-- (void)addInfoFailed:(ASIHTTPRequest *)req
-{
-    [self hideHud];
-    [self showNo:@"处理数据失败！"];
 }
 
 - (IBAction)clickDeleteBtn:(id)sender {

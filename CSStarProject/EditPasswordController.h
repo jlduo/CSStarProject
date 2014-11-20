@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "common.h"
-#import "ASIHTTPRequest.h"
 #import "UIViewController+HUD.h"
-#import "ASIFormDataRequest.h"
 #import "CommonViewController.h"
 #import "LoginViewController.h"
+#import "UserViewController.h"
+#import "ViewPassValueDelegate.h"
 
-@interface EditPasswordController : UIViewController
+@interface EditPasswordController : UIViewController{
+   __weak NSObject<ViewPassValueDelegate> *passDelegate;
+}
 @property (weak, nonatomic) IBOutlet UIView *passBg;
 @property (weak, nonatomic) IBOutlet UITextField *passText;
 

@@ -40,7 +40,7 @@
 #define Main_Font_Size Font_Size(14)//主字体
 
 #define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",28)//标题字体
-#define TITLE_FONT main_font(16)//标题字体
+#define TITLE_FONT main_font(18)//标题字体
 #define DESC_FONT main_font(14)//描述字体
 
 #define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
@@ -48,9 +48,11 @@
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
 #define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
 #define NAVBAR_BG_ICON @"titlebar-gray@2x"//导航背景
-#define NAVBAR_LEFT_ICON @"nav_back2@2x.png"//返回按钮图标
+#define NAVBAR_LEFT_ICON @"nav_back@2x.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标
 #define REFRESH_TITLE @"刷新数据"
+#define ERROR_INNER @"请求失败,内部错误！"
+#define BLANK_NICK_NAME @"网友"//昵称为空
 #define REFRESH_LOADING @"玩命加载中..."
 #define SHARE_ICON @"btnshare@2x.png"//分享图片
 #define NOIMG_ICON @"imgloading@2X.png"//无图片
@@ -188,3 +190,20 @@
 
 #endif
 
+#define DEFINE_SINGLETON_FOR_HEADER(className) \
+\
++ (className *)singleton##className;
+//单例宏模板，定义
+#define DEFINE_SINGLETON_FOR_CLASS(className) \
+\
++ (className *)singleton##className { \
+static className* singleton##className = nil; \
+static dispatch_once_t onceToken; \
+dispatch_once(&onceToken, ^{ \
+singleton##className = [[self alloc] init]; \
+}); \
+return singleton##className; \
+}
+
+
+#import "HttpClient.h"

@@ -163,7 +163,7 @@
     
     commentCell.commentTextView.text = commnetContent;
     if([StringUitl isEmpty:[dicComment valueForKey:@"_nick_name"]]){
-       commentCell.commentUsername.text =@"网友";
+       commentCell.commentUsername.text =BLANK_NICK_NAME;
     }else{
         commentCell.commentUsername.text = [dicComment valueForKey:@"_nick_name"];
     }

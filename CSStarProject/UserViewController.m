@@ -84,66 +84,63 @@
     [imgBtn md_setImageWithURL:newString placeholderImage:NO_IMG options:SDWebImageRefreshCached];
 }
 
+//获取用户统计数据
 -(void)getMyProjectsNums{
     
-    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_USERCENTER_NUMS_URL,[StringUitl getSessionVal:LOGIN_USER_ID]];
-    [self requestDataByUrl:url];
+    NSString *userid = [StringUitl getSessionVal:LOGIN_USER_ID];
+    NSLog(@"userid=%@",userid);
+    [HttpClient getUserCenterData:userid
+                           isjson:FALSE
+                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         
+         NSString *pro_nums = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+         if([StringUitl isNotEmpty:pro_nums]){
+             pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
+             NSArray *num = [pro_nums componentsSeparatedByString:@","];
+             if(num!=nil && num.count>0){
+                 NSArray *nums;
+                 for (int i=0; i<num.count; i++) {
+                      nums = [num[i] componentsSeparatedByString:@":"];
+                     [_userProjectNums setObject:nums[1] forKey:nums[0]];
+                 }
+             }
+         }
+         
+         [self hideHud];
+         [_userCenterTable reloadData];
+         
+     }
+     
+                          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }
+     ];
 }
 
-
--(void)requestDataByUrl:(NSString *)url{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
-}
-
-
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    NSData *respData = [request responseData];
-    NSString *pro_nums = [[NSString alloc] initWithData:respData encoding:NSUTF8StringEncoding];
-    if([StringUitl isNotEmpty:pro_nums]){
-        pro_nums = [pro_nums substringWithRange:NSMakeRange(1,[pro_nums length]-2)];
-        NSArray *num = [pro_nums componentsSeparatedByString:@","];
-        if(num!=nil&&num.count>0){
-            for (int i=0; i<num.count; i++) {
-                NSArray *nums = [num[i] componentsSeparatedByString:@":"];
-                [_userProjectNums setObject:nums[1] forKey:nums[0]];
-            }
-        }
-    }
-
+    NSLog(@"error=%@",error);
     [self hideHud];
-    [_userCenterTable reloadData];
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"error->%@",error);
-    [self hideHud];
-    [self showNo:@"加载失败,请检查网络连接!"];
-    
+    [self showNo:@"请求失败,网络错误!"];
 }
 
 -(void)passValue:(NSString *)val{
-    
+    //
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
-    
+    //
 }
 
 
 -(void)setUserTitle{
     userLabel.font = main_font(16);
+    NSString *nickName =[StringUitl getSessionVal:USER_NICK_NAME];
+    if([StringUitl isEmpty:nickName])nickName = BLANK_NICK_NAME;
     [userLabel setText:[StringUitl getSessionVal:USER_NICK_NAME]];
 }
 
@@ -155,7 +152,7 @@
     imgBtn = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
-    [StringUitl setViewBorder:imgBtn withColor:@"#FFFFFF" Width:4.0f];
+    [StringUitl setViewBorder:imgBtn withColor:@"#ffffff" Width:1.0f];
 
     [imgBtn setMultipleTouchEnabled:YES];
     [imgBtn setUserInteractionEnabled:YES];

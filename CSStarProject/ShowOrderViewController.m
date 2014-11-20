@@ -267,51 +267,48 @@
 -(void)delOrder{
     
     //开始处理
-    NSURL *del_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,DEL_ORDER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:del_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    
-    [request setPostValue:orderId forKey:@"id"];
-    
-    [request buildPostBody];
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(addInfoFailed:)];
-    [request setDidFinishSelector:@selector(addFinished:)];
-    
-    
-}
-
-- (void)addFinished:(ASIHTTPRequest *)req
-{
-    //NSLog(@"info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
-        [self showOk:[jsonDic valueForKey:@"info"]];
+    [self showLoading:@"正在取消订单..."];
+    NSString *del_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,DEL_ORDER_URL];
+    NSDictionary *param = @{@"id":orderId};
+    [HttpClient POST:del_url
+          parameters:param
+              isjson:FALSE
+             success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         
+         NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
+             [self hideHud];
+             [self showOk:[jsonDic valueForKey:@"info"]];
         
-        [rbtn setTitle:@" " forState:UIControlStateNormal];
-        [rbtn setTitle:@" " forState:UIControlStateHighlighted];
-        [rbtn removeTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
-        [stateView setImage:[UIImage imageNamed:@"payment_cancel.png"]];
-        [_showOrderTable setTableFooterView:nil];
-        [self loadOrderInfo];
-        [self setTagView];
-    }
+             [rbtn setTitle:@" " forState:UIControlStateNormal];
+             [rbtn setTitle:@" " forState:UIControlStateHighlighted];
+             [rbtn removeTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
+             [stateView setImage:[UIImage imageNamed:@"payment_cancel.png"]];
+             [_showOrderTable setTableFooterView:nil];
+             [self loadOrderInfo];
+             [self setTagView];
+         }
+         
+     }
+             failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
 
 
-- (void)addInfoFailed:(ASIHTTPRequest *)req
+- (void)requestFailed:(NSError *)error
 {
-    [self showNo:@"处理数据失败！"];
+    [self hideHud];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 

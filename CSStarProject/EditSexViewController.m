@@ -94,10 +94,8 @@
     [rbtn setTitle:@"保 存" forState:UIControlStateNormal];
     [rbtn setTitle:@"保 存" forState:UIControlStateHighlighted];
     [rbtn setTintColor:[UIColor whiteColor]];
-    //[rbtn setFont:Font_Size(18)];
     rbtn.titleLabel.font=main_font(18);
     
-    //[rbtn setBackgroundImage:[UIImage imageNamed:NAVBAR_RIGHT_ICON] forState:UIControlStateNormal];
     [rbtn addTarget:self action:@selector(saveUserInfo) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc] initWithCustomView:rbtn];
@@ -112,7 +110,7 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -121,58 +119,49 @@
 
 -(void)saveUserInfo{
 
-    NSString *pwd = _sexValue;
-    if([StringUitl isEmpty:pwd]){
+    NSString *sex = _sexValue;
+    if([StringUitl isEmpty:sex]){
         [self showNo:@"对不起，请先选择性别！"];
         return;
     }
     
     [self showLoading:@"数据保存中..."];
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
+    NSString * username = [StringUitl getSessionVal:LOGIN_USER_NAME];
+    NSDictionary *parameters = @{USER_NAME:username,USER_SEX:sex};
+    [HttpClient updateUserInfo:parameters
+                        isjson:FALSE
+                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                           
+                           NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+                           if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
+                               [self hideHud];
+                               [self showNo:[jsonDic valueForKey:@"info"]];
+                           }
+                           if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+                               [StringUitl setSessionVal:_sexValue withKey:USER_SEX];
+                               [self hideHud];
+                               [self showOk:[jsonDic valueForKey:@"info"]];
+                               [self.navigationController popViewControllerAnimated:YES];
+                               
+                           }
+                           
+                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                           
+                           [self requestFaild:error];
+                           
+                       }
+     ];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
-    [request setPostValue:_sexValue forKey:USER_SEX];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(editInfoFailed:)];
-    [request setDidFinishSelector:@selector(editFinished:)];
-    
-    
-}
-
-- (void)editFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"login info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [StringUitl setSessionVal:_sexValue withKey:USER_SEX];
-        [self hideHud];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
-    }
     
 }
 
-- (void)editInfoFailed:(ASIHTTPRequest *)req
+- (void)requestFaild:(NSError *)error
 {
     [self hideHud];
-    [self showNo:@"请求数据失败！"];
+    NSLog(@"error=%@",error);
+    [self showNo:@"请求失败,网络错误!"];
 }
-
 
 - (IBAction)boyClick:(id)sender {
     _boyRadio.on = YES;

@@ -46,7 +46,7 @@
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    
+    titleLabel.font = TITLE_FONT;
     //设置左边箭头
     UIButton *lbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [lbtn setFrame:CGRectMake(0, 0, 32, 32)];
@@ -70,8 +70,22 @@
 }
 
 - (IBAction)clickForgetBtn:(id)sender {
-    
+    [self dismissKeyBoard];
     [self getPassword];
+}
+
+-(void)resetFBtn:(int) flag{
+    if(flag==0){
+        [self.forgetBtnView setEnabled:TRUE];
+        [self.forgetBtnView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.forgetBtnView setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [self.forgetBtnView setBackgroundColor:[UIColor redColor]];
+    }else{
+        [self.forgetBtnView setEnabled:FALSE];
+        [self.forgetBtnView setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.forgetBtnView setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        [self.forgetBtnView setBackgroundColor:[UIColor grayColor]];
+    }
 }
 
 -(void)getPassword{
@@ -87,43 +101,46 @@
         return;
     }
     
+    [self resetFBtn:1];
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,GET_PASSWORD_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:phoneNum forKey:USER_NAME];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(editInfoFailed:)];
-    [request setDidFinishSelector:@selector(editFinished:)];
+    [HttpClient findPassword:phoneNum
+                      isjson:TRUE
+                    success:^(AFHTTPRequestOperation *operation, id responseObject)
+                    {
+                        
+                        NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                        if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
+                            
+                            [self resetFBtn:0];
+                            [self showNo:[jsonDic valueForKey:@"info"]];
+                            
+                        }
+                        if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+                            
+                            [self resetFBtn:0];
+                            [self showOk:@"新的密码已发送!"];
+                            
+                        }
+                        
+                    }
+     
+                    failure:^(AFHTTPRequestOperation *operation, NSError *error)
+                    {
+                        
+                        [self requestFailed:error];
+                        
+                    }
+     ];
     
     
 }
 
-- (void)editFinished:(ASIHTTPRequest *)req
+- (void)requestFailed:(NSError *)error
 {
-    NSLog(@"login info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        
-    }
-    
-}
-
-- (void)editInfoFailed:(ASIHTTPRequest *)req
-{
-    [self showNo:@"请求数据失败！"];
+    NSLog(@"error=%@",error);
+    [self hideHud];
+    [self resetFBtn:0];
+    [self showNo:@"请求失败,网络错误!"];
 }
 
 //关闭键盘

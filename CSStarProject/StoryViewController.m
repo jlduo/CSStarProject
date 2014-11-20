@@ -144,46 +144,55 @@
     [request setDidFailSelector:@selector(requestFailed:)];
     [request setDidFinishSelector:@selector(requestFinished:)];
     
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //NSLog(@"jsonDic->%@",jsonDic);
-    NSArray *nextArray = (NSArray *)jsonDic;
-    if(nextArray!=nil && nextArray.count>0){
-        if (request.tag==0) {
-            
-            _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
-            
-        }else if(request.tag==1){
-            
-           _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
-            
-        }else{
-            
-            [_storyDataList  addObjectsFromArray:nextArray];
-            
-        }
-    }
     
-    [_storyTableView reloadData];
-    showflag++;
-    if (showflag==1) {
-        [friendlyLoadingView removeFromSuperview];
-    }
+    [HttpClient GET:url parameters:nil isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+            {
+                
+                NSArray *nextArray = (NSArray *)responseObject;
+                if(nextArray!=nil && nextArray.count>0){
+                    if (request.tag==0) {
+                        
+                        _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
+                        
+                    }else if(request.tag==1){
+                        
+                        _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
+                        
+                    }else{
+                        
+                        [_storyDataList  addObjectsFromArray:nextArray];
+                        
+                    }
+                }
+                
+                [_storyTableView reloadData];
+                showflag++;
+                if (showflag==1) {
+                    [friendlyLoadingView removeFromSuperview];
+                }
+                
+                
+            }
+     
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+            {
+                [self requestFailed:error];
+                
+            }
+     ];
+    
 }
 
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
+
+    NSLog(@"error=%@",error);
     showflag = 0;
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
     [self initLoading];
     [self setHeaderRereshing];
     [self showLoading];
-    //[self setFooterRereshing];
+    [self showNo:@"请求失败,网络错误!"];
     
 }
 

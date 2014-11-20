@@ -164,7 +164,7 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -197,53 +197,41 @@
     
     [self showLoading:@"数据保存中..."];
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_USER_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
-    [request setPostValue:_cityText.text forKey:USER_ADDRESS];
-    [request setPostValue:cityVal forKey:CITY_ID];
-    [request setPostValue:proVal forKey:PROVINCE_ID];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(editInfoFailed:)];
-    [request setDidFinishSelector:@selector(editFinished:)];
+    NSString * username = [StringUitl getSessionVal:LOGIN_USER_NAME];
+    NSDictionary *parameters = @{USER_NAME:username,USER_ADDRESS:_cityText.text,CITY_ID:cityVal,PROVINCE_ID:proVal};
+    [HttpClient updateUserInfo:parameters isjson:FALSE success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+        if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
+            [self hideHud];
+            [self showNo:[jsonDic valueForKey:@"info"]];
+        }
+        if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+            
+            [self hideHud];
+            [self showOk:[jsonDic valueForKey:@"info"]];
+            
+            [StringUitl setSessionVal:_cityValue withKey:CITY_ID];
+            [StringUitl setSessionVal:_cityText.text withKey:USER_ADDRESS];
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self requestFaild:error];
+        
+    }];
     
     
 }
 
-- (void)editFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"edit info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        
-        [self hideHud];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-        
-        [StringUitl setSessionVal:_cityValue withKey:CITY_ID];
-        [StringUitl setSessionVal:_cityText.text withKey:USER_ADDRESS];
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
-    }
-    
-}
-
-- (void)editInfoFailed:(ASIHTTPRequest *)req
+- (void)requestFaild:(NSError *)error
 {
     [self hideHud];
-    [StringUitl alertMsg:@"请求数据失败！" withtitle:@"错误提示"];
+    NSLog(@"error=%@",error);
+    [self showNo:@"请求失败,网络错误!"];
 }
 
 -(void)loadProvData{

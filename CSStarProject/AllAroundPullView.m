@@ -1,13 +1,3 @@
-//  
-//  AllAroundPullView.m
-//  
-//  Created by r_plus on 9/2/12
-//  Copyright (c) 2012 r_plus All rights reserved.
-//
-//  https://github.com/r-plus/AllAroundPullView
-//
-//  based on twobitlabs modified version of PullToRefreshView by Grant Paul (chpwn)
-//
 
 #import "AllAroundPullView.h"
 

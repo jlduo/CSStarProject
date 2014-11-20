@@ -135,7 +135,7 @@
         }
     }else{
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
     }
     
@@ -185,6 +185,7 @@
     }
     
     [self initBannerData];
+    [self setBannerView];
     [self.girlsTableView reloadData];
 }
 
@@ -212,14 +213,9 @@
     self.tabBarController.tabBar.hidden = YES;
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
-    [self reloadTData:nil];
-    //[_girlsTableView reloadData];
+//    [self initLoadData];
+//    [_girlsTableView reloadData];
     
-}
-
-
--(void)viewDidAppear:(BOOL)animated{
-    [self setFooterRereshing];
 }
 
 
@@ -292,117 +288,105 @@
 
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type withIndex:(NSString *)pageIndex{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
-    [request setUsername:pageIndex];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //NSLog(@"tag->%d",request.tag);
-    commonArr = (NSMutableArray *)jsonDic;
-    if(commonArr!=nil && commonArr.count>0){
-        
-        switch (request.tag) {
-            case 1:
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                
+                commonArr = (NSMutableArray *)responseObject;
                 if(commonArr!=nil && commonArr.count>0){
-                    bannerData = (NSMutableDictionary *)commonArr[0];
-                }
-                [self setBannerView];
-                break;
-            case 2:
-                //_girlsDataList = [[NSMutableArray alloc] init];
-                if (commonArr!=nil && commonArr.count>0) {
-                    [_girlsDataList addObjectsFromArray:commonArr];
-                    if([request.username isEqualToString:@"1"]){
-                        max_id = [[commonArr objectAtIndex:0] valueForKey:@"_id"];
+                    
+                    switch (type) {
+                        case 1:
+                            
+                            if(commonArr!=nil && commonArr.count>0){
+                                bannerData = (NSMutableDictionary *)commonArr[0];
+                            }
+                            [self setBannerView];
+                            break;
+                            
+                        case 2:
+                            
+                            if (commonArr!=nil && commonArr.count>0) {
+                                [_girlsDataList addObjectsFromArray:commonArr];
+                                if([pageIndex isEqualToString:@"1"]){
+                                    max_id = [[commonArr objectAtIndex:0] valueForKey:@"_id"];
+                                }
+                            }else{
+                                [self showHint:@"没有更多数据了!"];
+                            }
+                            break;
+                            
+                        case 3:
+                            if (commonArr!=nil && commonArr.count>0) {
+                                [commonArr addObjectsFromArray:_girlsDataList];
+                                _girlsDataList = [[NSMutableArray alloc]init];
+                                [_girlsDataList addObjectsFromArray:commonArr];
+                            }else{
+                                [self showHint:@"没有更多数据了!"];
+                            }
+                            break;
+                        case 4:
+                            imageArr = [[NSMutableArray alloc]init];
+                            thumb_ImageArr = [[NSMutableArray alloc]init];
+                            photoArray = imageArr;
+                            for (int i=0; i<commonArr.count; i++) {
+                                NSDictionary * dic = (NSDictionary *)commonArr[i];
+                                photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
+                                photo.caption = [dic valueForKey:@"_remark"];
+                                [imageArr addObject:photo];
+                                
+                                photo = nil;
+                                photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_thumb_path"]]];
+                                [thumb_ImageArr addObject:photo];
+                                
+                            }
+                            
+                            break;
+                        default:
+                            break;
                     }
-                }else{
-                    [self showHint:@"没有更多数据了!"];
-                }
-                break;
-            case 3:
-                if (commonArr!=nil && commonArr.count>0) {
-                    [commonArr addObjectsFromArray:_girlsDataList];
-                    _girlsDataList = [[NSMutableArray alloc]init];
-                    [_girlsDataList addObjectsFromArray:commonArr];
-                }else{
-                    [self showHint:@"没有更多数据了!"];
-                }
-                break;
-            case 4:
-                imageArr = [[NSMutableArray alloc]init];
-                thumb_ImageArr = [[NSMutableArray alloc]init];
-                photoArray = imageArr;
-                for (int i=0; i<commonArr.count; i++) {
-                    NSDictionary * dic = (NSDictionary *)commonArr[i];
-                    photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
-                    photo.caption = [dic valueForKey:@"_remark"];
-                    [imageArr addObject:photo];
+                    [_girlsTableView reloadData];
+                    //处理集合数据
+                    if(_girlsDataList!=nil && _girlsDataList.count>0){
+                        for (NSDictionary *gdic in _girlsDataList) {
+                            
+                            [self loadGirlPics:[[gdic valueForKey:@"_id"] stringValue]];
+                            
+                        }
+                        
+                    }
                     
-                    photo = nil;
-                    photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_thumb_path"]]];
-                    [thumb_ImageArr addObject:photo];
+                    showflag++;
+                    if (showflag==2) {
+                        [friendlyLoadingView removeFromSuperview];
+                    }
                     
-                }
+                }// end if
                 
-                break;
-            default:
-                break;
-        }
-        [_girlsTableView reloadData];
-        //处理集合数据
-        if(_girlsDataList!=nil && _girlsDataList.count>0){
-            for (NSDictionary *gdic in _girlsDataList) {
-                
-                [self loadGirlPics:[[gdic valueForKey:@"_id"] stringValue]];
                 
             }
-            
-        }
-        
-        showflag++;
-        if (showflag==2) {
-            [friendlyLoadingView removeFromSuperview];
-        }
-        
-    }
+     
+            failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                
+                [self requestFailed:error];
+                
+            }];
+    
 }
 
-
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
+    
     showflag=0;
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
     [self initLoading];
-    [self setHeaderRereshing];
     [self showLoading];
-    
-    //[self setFooterRereshing];
+    [self setHeaderRereshing];
+    NSLog(@"error->%@",error);
+    [self showNo:@"请求失败,网络错误!"];
     
 }
-
--(void)loadGirlPhotos:(NSString *)articleId {
-    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PHOTO_LIST,articleId];
-    NSMutableArray * newDataArr = (NSMutableArray *)[ConvertJSONData requestData:url];
-    photoArray = [[NSMutableArray alloc]init];
-    [photoArray addObjectsFromArray:newDataArr];
-    //NSLog(@"photoArray===%@",photoArray);
-}
-
-
 
 
 /*********************************************处理数据方法 结束********************************************/

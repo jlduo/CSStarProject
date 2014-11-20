@@ -117,6 +117,8 @@
                 [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
                 UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                 LoginViewController *loginView =  [storyBoard instantiateViewControllerWithIdentifier:@"userLogin"];
+                passDelegate = loginView;
+                [passDelegate passValue:[NSString stringWithFormat:@"%d",current_index]];
                 [self presentViewController:loginView animated:YES completion:nil];
             }
         }
@@ -146,6 +148,19 @@
     } completion:^(BOOL finished) {
         
     }];
+    
+}
+
+
+-(void)passValue:(NSString *)val{
+    NSLog(@"val=%@",val);
+    int sl_index = [val intValue];
+    self.selectedIndex = sl_index;
+    _selectView.frame = CGRectMake(sl_index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+}
+
+-(void)passDicValue:(NSDictionary *)vals{
+    
     
 }
 

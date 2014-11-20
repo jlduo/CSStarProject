@@ -84,7 +84,7 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -95,6 +95,7 @@
     [self.passText resignFirstResponder];
     
     NSString *pwd = self.passText.text;
+    NSString * username = [StringUitl getSessionVal:LOGIN_USER_NAME];
     if([StringUitl isEmpty:pwd]){
         [self showNo:@"请先输入密码"];
         return;
@@ -108,47 +109,49 @@
     [self showLoading:@"数据保存中..."];
     
     //开始处理
-    NSURL *edit_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,EDIT_PASSWORD_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:edit_url];
-    [ASIHTTPRequest setSessionCookies:nil];
+    NSDictionary *parameters = @{USER_NAME:username,USER_PASS:[StringUitl md5:pwd]};
+    [HttpClient updateUserInfo:parameters isjson:FALSE success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+        if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
+            [self hideHud];
+            [self showNo:[jsonDic valueForKey:@"info"]];
+        }
+        if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
+            [self hideHud];
+            [self showOk:@"修改成功,请重新登录!"];
+            [StringUitl clearUserInfo];
+            LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
+            passDelegate = loginView;
+            [passDelegate passValue:@"relogin"];
+            [self.navigationController pushViewController:loginView animated:YES];
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self requestFaild:error];
+        
+    }];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
-    [request setPostValue:[StringUitl md5:pwd] forKey:USER_PASS];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(editInfoFailed:)];
-    [request setDidFinishSelector:@selector(editFinished:)];
-    
-    
-}
-
-- (void)editFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"login info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//修改失败
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//修改成功
-        [StringUitl setSessionVal:_passText.text withKey:LOGIN_USER_PSWD];
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [self hideHud];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-    }
     
 }
 
-- (void)editInfoFailed:(ASIHTTPRequest *)req
+- (void)requestFaild:(NSError *)error
 {
     [self hideHud];
-    [self showNo:@"请求数据失败"];
+    NSLog(@"error=%@",error);
+    [self showNo:@"请求失败,网络错误!"];
+}
+
+
+-(UIStoryboard *)getStoryBoard:(NSString *)sbName{
+    if([StringUitl isEmpty:sbName])sbName = @"Main";
+    return [UIStoryboard storyboardWithName:sbName bundle:nil];
+}
+
+-(UIViewController *)getVCFromSB:(NSString *)vname{
+    return [[self getStoryBoard:nil] instantiateViewControllerWithIdentifier:vname];
 }
 
 @end

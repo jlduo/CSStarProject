@@ -21,7 +21,6 @@
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
 #import "UIViewController+ShareMessage.h"
-#import "DirectionMPMoviePlayerViewController.h"
 
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,
 ViewPassValueDelegate,UITextViewDelegate> {
