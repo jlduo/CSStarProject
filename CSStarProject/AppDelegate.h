@@ -14,13 +14,9 @@
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <CoreData/CoreData.h>
-#import "STSystemUtils.h"
-
-@class Reachability;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
     BOOL _isFull; // 是否全屏
-    Reachability  *hostReach;
 }
 
 

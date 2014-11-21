@@ -8,9 +8,7 @@
 
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
-#import "ASIHTTPRequest.h"
 #import "UIViewController+HUD.h"
-#import "ASIFormDataRequest.h"
 #import "ViewPassValueDelegate.h"
 #import "LoginViewController.h"
 #import "StoryCommentTableCell.h"

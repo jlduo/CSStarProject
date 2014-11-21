@@ -62,44 +62,37 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSArray *returnArr = (NSArray *)jsonDic;
-    if(returnArr!=nil && returnArr.count>0){
-        _peopleProList = [NSMutableArray arrayWithArray:returnArr];
-    }else{
-        _peopleProList = [[NSMutableArray alloc]init];
-    }
-    
-    [self.orderTableView reloadData];
-    [self hideHud];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSArray *returnArr = (NSArray *)responseObject;
+         if(returnArr!=nil && returnArr.count>0){
+             _peopleProList = [NSMutableArray arrayWithArray:returnArr];
+         }else{
+             _peopleProList = [[NSMutableArray alloc]init];
+         }
+         
+         [self.orderTableView reloadData];
+         [self hideHud];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
 
-
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    
     [self hideHud];
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
-    
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 

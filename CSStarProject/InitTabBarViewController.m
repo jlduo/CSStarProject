@@ -13,6 +13,8 @@
     UIImageView *_selectView;
     
     int current_index;
+    
+    NSMutableArray *btnArray;
 }
 
 @end
@@ -25,7 +27,7 @@
     [self initTabarView];
     [self setSelectedIndex:0];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTabSelect) name:@"changeTabar" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTabSelect) name:@"changeTabar" object:nil];
     
 }
 
@@ -69,8 +71,10 @@
     
     // 初始化自定义TabBarItem -> UIButton
     float coordinateX = 0;
+    UIButton *button;
+    btnArray = [[NSMutableArray alloc]init];
     for (int index = 0; index < 5; index++) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         button.tag = index;
         button.frame = CGRectMake(index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
         NSString *imageName = [NSString stringWithFormat:@"tabbar%d@2x.png", index];
@@ -78,18 +82,47 @@
         [_tabBarBG addSubview:button];
         [button addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventTouchDown];
         coordinateX += 62;
+        [btnArray addObject:button];
+        
     }
     
     self.selectedIndex = 0;
+    [self changeSelectedBtn:0];
     
 }
 
+
 -(void)changeTabSelect{
     self.selectedIndex = current_index;
+    [self changeSelectedBtn:current_index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"showContent" object:nil];
+
+}
+
+-(void)changeSelectedBtn:(int)sender{
+    
+    for (int i=0; i<btnArray.count; i++) {
+        UIButton *sbtn = (UIButton *)btnArray[i];
+        if(sbtn.tag == sender){
+            NSString *imageName = [NSString stringWithFormat:@"tabbar%don@2x.png", i];
+            [sbtn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+            [sbtn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateHighlighted];
+            [sbtn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateSelected];
+            [self changTBarBgFrame:i];
+        }else{
+            NSString *imageName = [NSString stringWithFormat:@"tabbar%d@2x.png", i];
+            [sbtn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+            [sbtn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateSelected];
+        }
+    }
+}
+
+-(void)changTBarBgFrame:(int)index{
+
     [UIView animateWithDuration:0.2 animations:^{
-        _selectView.frame = CGRectMake(current_index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"showContent" object:nil];
-    }];
+       _selectView.frame = CGRectMake(index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+    } completion:nil];
+    
 }
 
 #pragma mark 监听按钮点击切换视图
@@ -100,18 +133,13 @@
     if(sender.tag==0){
         
         self.selectedIndex = 0;
-        [UIView animateWithDuration:0.2 animations:^{
-            _selectView.frame = CGRectMake(0, 0, BTN_WIDTH, BTN_HEIGHT);
-        }];
+        [self changeSelectedBtn:current_index];
         
     }else{
         
         if([StringUitl checkLogin]){
             self.selectedIndex = sender.tag;
-            [UIView animateWithDuration:0.2 animations:^{
-                _selectView.frame = CGRectMake(sender.tag*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
-            }];
-            
+            [self changeSelectedBtn:current_index];
         }else{
             if(sender.tag!=0){
                 [StringUitl setSessionVal:@"TAB" withKey:FORWARD_TYPE];
@@ -128,35 +156,13 @@
 }
 
 
-#pragma mark控制滑动条效果
--(void)changeTabsFrameWithAnimation:(UIButton *) sender{
-    
-    [UIView animateWithDuration:0.35 animations:^{
-        //CGRect labelFrame = CGRectMake(self.selectedIndex * BTN_WIDTH, -1, BTN_WIDTH, SLIDER_HEIGHT);
-        //[imageView setFrame:labelFrame];
-    } completion:^(BOOL finished) {
-        
-    }];
-    
-}
-
--(void)changeTabsFrame{
-    
-    [UIView animateWithDuration:0.35 animations:^{
-        //CGRect labelFrame = CGRectMake(0, -1, BTN_WIDTH, SLIDER_HEIGHT);
-        //[imageView setFrame:labelFrame];
-    } completion:^(BOOL finished) {
-        
-    }];
-    
-}
-
 
 -(void)passValue:(NSString *)val{
     NSLog(@"val=%@",val);
     int sl_index = [val intValue];
     self.selectedIndex = sl_index;
     _selectView.frame = CGRectMake(sl_index*BTN_WIDTH, 0, BTN_WIDTH, BTN_HEIGHT);
+    [self changeSelectedBtn:sl_index];
 }
 
 -(void)passDicValue:(NSDictionary *)vals{

@@ -91,7 +91,7 @@
     NSLog(@"userid=%@",userid);
     [HttpClient getUserCenterData:userid
                            isjson:FALSE
-                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+    success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          
          NSString *pro_nums = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
@@ -112,13 +112,12 @@
          
      }
      
-                          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+        failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          
          [self requestFailed:error];
          
-     }
-     ];
+     }];
 }
 
 - (void)requestFailed:(NSError *)error
@@ -152,7 +151,7 @@
     imgBtn = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 10, 120, 120)];
     imgBtn.layer.masksToBounds = YES;
     imgBtn.layer.cornerRadius = 60.0f;
-    [StringUitl setViewBorder:imgBtn withColor:@"#ffffff" Width:1.0f];
+    [StringUitl setViewBorder:imgBtn withColor:@"#ffffff" Width:3.0f];
 
     [imgBtn setMultipleTouchEnabled:YES];
     [imgBtn setUserInteractionEnabled:YES];

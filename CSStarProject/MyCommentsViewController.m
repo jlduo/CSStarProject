@@ -69,49 +69,37 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSArray *returnArr = (NSArray *)jsonDic;
-    if(returnArr!=nil && returnArr.count>0){
-        [self hideHud];
-        tableArray = [NSMutableArray arrayWithArray:returnArr];
-    }else{
-        tableArray = [[NSMutableArray alloc]init];
-        [self hideHud];
-        
-        UIView *blankView = [[UIView alloc]init];
-        self.commentsTableView.tableFooterView = blankView;
-        [self showNo:@"暂无数据!"];
-    }
-    [self.commentsTableView reloadData];
-}
-
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    
-    [self hideHud];
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         
+         NSArray *returnArr = (NSArray *)responseObject;
+         if(returnArr!=nil && returnArr.count>0){
+             [self hideHud];
+             tableArray = [NSMutableArray arrayWithArray:returnArr];
+         }else{
+             tableArray = [[NSMutableArray alloc]init];
+             [self hideHud];
+             
+             UIView *blankView = [[UIView alloc]init];
+             self.commentsTableView.tableFooterView = blankView;
+             [self showNo:@"暂无数据!"];
+         }
+         [self.commentsTableView reloadData];
+         
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
-
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -171,78 +159,69 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {
         [self showLoading:@"正在删除..."];
+        
+        NSString *url;
+        NSDictionary *parameters;
         NSDictionary *dicComment = [tableArray objectAtIndex:currentIndex];
         if (typeComment == 0) {
-            NSString *url = [[NSString alloc] initWithFormat:@"%@/Comment/DeleteComment/%@",REMOTE_URL,[dicComment valueForKey:@"_id"]];
-            NSURL *request_url = [NSURL URLWithString:url];
-            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:request_url];
-            [ASIHTTPRequest setSessionCookies:nil];
+            url = [[NSString alloc] initWithFormat:@"%@/Comment/DeleteComment/%@",REMOTE_URL,[dicComment valueForKey:@"_id"]];
             
-            [request setUseCookiePersistence:YES];
-            [request setDelegate:self];
-            [request setRequestMethod:@"POST"];
-            [request setStringEncoding:NSUTF8StringEncoding];
-            [request buildPostBody];
-            
-            [request startAsynchronous];
-            [request setDidFailSelector:@selector(requestLoginFailed:)];
-            [request setDidFinishSelector:@selector(requestLoginFinished:)];
         }else{
-            NSString *url = [[NSString alloc] initWithFormat:@"%@/AndroidApi/CFService/deleteTalk",REMOTE_URL];
-            NSURL *request_url = [NSURL URLWithString:url];
-            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:request_url];
-            [ASIHTTPRequest setSessionCookies:nil];
             
-            [request setUseCookiePersistence:YES];
-            [request setDelegate:self];
-            [request setRequestMethod:@"POST"];
-            [request setStringEncoding:NSUTF8StringEncoding];
+            url = [[NSString alloc] initWithFormat:@"%@/AndroidApi/CFService/deleteTalk",REMOTE_URL];
+            parameters = @{@"Id":[dicComment valueForKey:@"id"]};
             
-            [request setPostValue:[dicComment valueForKey:@"id"] forKey:@"Id"];
-            
-            [request buildPostBody];
-            
-            [request startAsynchronous];
-            [request setDidFailSelector:@selector(requestLoginFailed:)];
-            [request setDidFinishSelector:@selector(requestLoginFinished:)];
         }
+        
+        [HttpClient POST:url
+              parameters:nil
+                  isjson:TRUE
+                 success:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             
+             NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+             if (typeComment == 0) {
+                 //处理返回
+                 if([[jsonDic valueForKey:@"result"] isEqualToString:@"True"]){
+                     [tableArray removeObjectAtIndex:currentIndex];
+                     [self.commentsTableView reloadData];
+                     [self hideHud];
+                     [self showOk:@"删除成功！"];
+                     
+                 }else{
+                     [self hideHud];
+                     [self showNo:@"删除失败！"];
+                 }
+             }else{
+                 //处理返回
+                 if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
+                     [tableArray removeObjectAtIndex:currentIndex];
+                     [self.commentsTableView reloadData];
+                     
+                     [self hideHud];
+                     [self showOk:@"删除成功！"];
+                 }else{
+                     [self hideHud];
+                     [self showNo:@"删除失败！"];
+                 }
+             }
+             
+             
+         }
+                 failure:^(AFHTTPRequestOperation *operation, NSError *error)
+         {
+             [self requestFailed:error];
+             
+         }];
     }
 }
 
-//请求完成
-- (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if (typeComment == 0) {
-        //处理返回
-        if([[jsonDic valueForKey:@"result"] isEqualToString:@"True"]){
-            [tableArray removeObjectAtIndex:currentIndex];
-            [self.commentsTableView reloadData];
-            [self hideHud];
-            [self showOk:@"删除成功！"];
-            
-        }else{
-            [self hideHud];
-            [self showNo:@"删除失败！"];
-        }
-    }else{
-        //处理返回
-        if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){
-            [tableArray removeObjectAtIndex:currentIndex];
-            [self.commentsTableView reloadData];
-            
-            [self hideHud];
-            [self showOk:@"删除成功！"];
-        }else{
-            [self hideHud];
-            [self showNo:@"删除失败！"];
-        }
-    }
-}
 
-- (void)requestLoginFailed:(ASIHTTPRequest *)req{
+- (void)requestFailed:(NSError *)error
+{
     [self hideHud];
-    [self showNo:@"删除失败！"];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

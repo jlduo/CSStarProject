@@ -11,8 +11,6 @@
 #import "common.h"
 #import "NSString+STRegex.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "ASIHTTPRequest.h"
-#import "ASIFormDataRequest.h"
 #import "ConvertJSONData.h"
 
 

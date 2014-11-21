@@ -382,7 +382,7 @@
         <!--美女私房-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
-                <viewController title="美女私房_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="girlsInfo" title="美女私房_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsInfoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2VX-Ee-d2V"/>
                         <viewControllerLayoutGuide type="bottom" id="Uv1-g8-3ip"/>
@@ -391,31 +391,106 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gj1-0U-roh">
-                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lXC-zm-BN7">
+                                <rect key="frame" x="0.0" y="65" width="320" height="454"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dq3-Ky-gZw">
+                                    <size key="itemSize" width="78" height="74"/>
+                                    <size key="headerReferenceSize" width="320" height="180"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="headView" id="Wjq-hV-Xos" customClass="GirlsCollectionHeadView">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rcJ-iK-Efo">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="标题信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7Y-cp-2Ce">
+                                            <rect key="frame" x="0.0" y="151" width="320" height="29"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <connections>
+                                        <outlet property="bannerImageView" destination="rcJ-iK-Efo" id="ORy-I0-YRb"/>
+                                        <outlet property="bannerTitler" destination="E7Y-cp-2Ce" id="m0i-In-j69"/>
+                                    </connections>
+                                </collectionReusableView>
                                 <connections>
-                                    <outlet property="dataSource" destination="kdO-5D-qrW" id="B87-wd-daZ"/>
-                                    <outlet property="delegate" destination="kdO-5D-qrW" id="Xnb-7H-b0P"/>
+                                    <outlet property="dataSource" destination="kdO-5D-qrW" id="i6F-MW-F6P"/>
+                                    <outlet property="delegate" destination="kdO-5D-qrW" id="ROQ-sQ-LgS"/>
                                 </connections>
-                            </tableView>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="gj1-0U-roh" secondAttribute="trailing" id="1eq-ZJ-EcS"/>
-                            <constraint firstItem="gj1-0U-roh" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="CsL-Xf-kMb"/>
-                            <constraint firstItem="gj1-0U-roh" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="Foy-rr-4Qt"/>
-                            <constraint firstAttribute="bottom" secondItem="gj1-0U-roh" secondAttribute="bottom" constant="49" id="VNu-Wg-EoS"/>
+                            <constraint firstAttribute="trailing" secondItem="lXC-zm-BN7" secondAttribute="trailing" id="1mI-HG-ng2"/>
+                            <constraint firstItem="lXC-zm-BN7" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="aex-dx-r7w"/>
+                            <constraint firstItem="lXC-zm-BN7" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="65" id="dMD-RO-Mc5"/>
+                            <constraint firstAttribute="bottom" secondItem="lXC-zm-BN7" secondAttribute="bottom" constant="49" id="gex-78-A5H"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hGs-S2-uNo"/>
                     <connections>
-                        <outlet property="girlsTableView" destination="gj1-0U-roh" id="Fg0-BK-OWE"/>
+                        <outlet property="girlsCollectionView" destination="lXC-zm-BN7" id="pnn-1T-TGs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LWl-7f-pHL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884" y="-837"/>
+        </scene>
+        <!--Girls Photo List View Controller-->
+        <scene sceneID="7cZ-9v-QXv">
+            <objects>
+                <viewController storyboardIdentifier="GirlsPhotoView" id="o9B-hG-PiM" customClass="GirlsPhotoListViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wtM-zP-8n0"/>
+                        <viewControllerLayoutGuide type="bottom" id="dXL-LE-pcr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VEd-YF-KvN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gvZ-OW-1gB" userLabel="美女私房相册">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TgM-EB-91c">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="o9B-hG-PiM" id="dXp-n2-Qca"/>
+                                    <outlet property="delegate" destination="o9B-hG-PiM" id="jri-zF-nhC"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gvZ-OW-1gB" firstAttribute="top" secondItem="VEd-YF-KvN" secondAttribute="top" constant="64" id="FVJ-ow-zU7"/>
+                            <constraint firstItem="gvZ-OW-1gB" firstAttribute="leading" secondItem="VEd-YF-KvN" secondAttribute="leading" id="NzW-ee-KLe"/>
+                            <constraint firstAttribute="bottom" secondItem="gvZ-OW-1gB" secondAttribute="bottom" id="XOS-D2-KJX"/>
+                            <constraint firstAttribute="trailing" secondItem="gvZ-OW-1gB" secondAttribute="trailing" id="vbm-I5-a3c"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="girlsPhotoTableView" destination="gvZ-OW-1gB" id="qJ7-XM-5mF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nmb-hS-Vof" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1336" y="-837"/>
         </scene>
         <!--美女视频-->
         <scene sceneID="KKA-S5-SR0">
@@ -453,7 +528,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWZ-oz-3t5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1316" y="-837"/>
+            <point key="canvasLocation" x="1736" y="-837"/>
         </scene>
         <!--众筹列表-->
         <scene sceneID="L3F-fL-ZPQ">
@@ -491,7 +566,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3g-AJ-mku" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1722" y="-837"/>
+            <point key="canvasLocation" x="2234" y="-837"/>
         </scene>
         <!--我的订单-->
         <scene sceneID="ZEe-HT-a1r">
@@ -1277,7 +1352,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bfy-Dd-qvV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2196" y="-837"/>
+            <point key="canvasLocation" x="2764" y="-837"/>
         </scene>
         <!--星城故事评论-->
         <scene sceneID="8Ww-Gb-4iq">

@@ -9,7 +9,6 @@
 #import "CommonViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "ShowOrderViewController.h"
-#import "LASIImageView.h"
 
 @interface MyOrderListViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,ViewPassValueDelegate>{
     // 声明一个参数传递代理

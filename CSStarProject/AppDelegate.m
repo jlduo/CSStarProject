@@ -7,7 +7,6 @@
 #import "common.h"
 #import "StringUitl.h"
 #import "AppDelegate.h"
-#import "Reachability.h"
 #import "AlixPayResult.h"
 #import "DataVerifier.h"
 #import "InitTabBarViewController.h"
@@ -81,49 +80,38 @@
 -(void)loadUserInfo:(NSString *)userName{
     if([StringUitl isNotEmpty:userName]){
         
-        NSURL *getUserUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName]];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:getUserUrl];
-        [ASIHTTPRequest setSessionCookies:nil];
+        NSString *getUserUrl = [NSString stringWithFormat:@"%@%@?username=%@",REMOTE_URL,USER_CENTER_URL,userName];
         
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"GET"];
-        [request setStringEncoding:NSUTF8StringEncoding];
-        [request startAsynchronous];
-        
-        [request setDidFailSelector:@selector(requestLoginFailed:)];
-        [request setDidFinishSelector:@selector(getUserInfoFinished:)];
-        
-    }
-}
-
-- (void)getUserInfoFinished:(ASIHTTPRequest *)req
-{
-    
-    //NSLog(@"getUserInfo->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
-        [StringUitl clearUserInfo];
-    }
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
-        
-        //存储用户信息
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
-        [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
-        [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+        [HttpClient GET:getUserUrl
+             parameters:nil
+                 isjson:TRUE
+                success:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             NSDictionary *jsonDic = (NSDictionary *)responseObject;
+             if([[jsonDic valueForKey:@"status"] isEqualToString:@"error"]){//获取信息失败
+                 [StringUitl clearUserInfo];
+             }
+             if([[jsonDic valueForKey:@"status"] isEqualToString:@"success"]){//获取信息成功
+                 
+                 //存储用户信息
+                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_NICK_NAME] withKey:USER_NICK_NAME];
+                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_ADDRESS] withKey:USER_ADDRESS];
+                 [StringUitl setSessionVal:[jsonDic valueForKey:PROVINCE_ID] withKey:PROVINCE_ID];
+                 [StringUitl setSessionVal:[jsonDic valueForKey:CITY_ID] withKey:CITY_ID];
+                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_SEX] withKey:USER_SEX];
+                 [StringUitl setSessionVal:[jsonDic valueForKey:USER_LOGO] withKey:USER_LOGO];
+                 
+             }
+             
+         }
+                failure:^(AFHTTPRequestOperation *operation, NSError *error)
+         {
+             NSLog(@"error=%@",error);
+             NSLog(@"初始化用户数据失败.....!");
+             
+         }];
         
     }
-    
-}
-
-- (void)requestLoginFailed:(ASIHTTPRequest *)req
-{
-    
-    NSLog(@"初始化用户数据失败.....!");
 }
 
 

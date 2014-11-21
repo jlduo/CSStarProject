@@ -219,11 +219,6 @@
     return reciverCell;
 }
 
--(void)goEditInfo{
-    
-    
-}
-
 
 //设为默认地址
 -(void)checkAddress:(UIButton *)sender{

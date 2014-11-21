@@ -162,9 +162,9 @@
 -(void)loadTableList{
     NSString *url;
     if([dataId isEqualToString:@"-1"]){
-       url = [NSString stringWithFormat:@"%@%@/%@/%d/",REMOTE_URL,GET_PPLIST_URL,CF_PAGESIZE,pageIndex];
+       url = [NSString stringWithFormat:@"%@%@%@/%d/",REMOTE_URL,GET_PPLIST_URL,CF_PAGESIZE,pageIndex];
     }else{
-       url = [NSString stringWithFormat:@"%@%@/%@/%d/%@",REMOTE_URL,GET_PPLIST_URL,CF_PAGESIZE,pageIndex,dataId];
+       url = [NSString stringWithFormat:@"%@%@%@/%d/%@",REMOTE_URL,GET_PPLIST_URL,CF_PAGESIZE,pageIndex,dataId];
     }
     
     [self requestDataByUrl:url withType:1];
@@ -191,68 +191,61 @@
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
     //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         commonArr = (NSArray *)responseObject;
+         if(commonArr!=nil && commonArr.count>0){
+             NSMutableArray *newArr;
+             switch (type) {
+                 case 1:
+                     [_peopleDataList addObjectsFromArray:commonArr];
+                     break;
+                 case 2:
+                     
+                     newArr = [[NSMutableArray alloc]init];
+                     [newArr addObjectsFromArray:commonArr];
+                     [newArr addObject:_peopleDataList];
+                     
+                     _peopleDataList = [[NSMutableArray alloc]init];
+                     _peopleDataList = newArr;
+                     break;
+                     
+                 default:
+                     break;
+             }
+             
+             [self setHeaderRereshing];
+             [self setFooterRereshing];
+             [_peopleFilterTable reloadData];
+             
+         }else{
+             [self showHint:@"对不起，没有更多数据了!"];
+         }
+         [friendlyLoadingView removeFromSuperview];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    
-    NSData *respData = [request responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    NSLog(@"jsonDic->%@",jsonDic);
-    commonArr = (NSArray *)jsonDic;
-    if(commonArr!=nil && commonArr.count>0){
-        NSMutableArray *newArr;
-        switch (request.tag) {
-            case 1:
-                [_peopleDataList addObjectsFromArray:commonArr];
-                break;
-            case 2:
-                
-                newArr = [[NSMutableArray alloc]init];
-                [newArr addObjectsFromArray:commonArr];
-                [newArr addObject:_peopleDataList];
-                
-                _peopleDataList = [[NSMutableArray alloc]init];
-                _peopleDataList = newArr;
-                break;
-                
-            default:
-                break;
-        }
-        
-        
-        
-        [self setHeaderRereshing];
-        [self setFooterRereshing];
-        [_peopleFilterTable reloadData];
-
-    }else{
-        [self showHint:@"对不起，没有更多数据了!"];
-    }
-    [friendlyLoadingView removeFromSuperview];
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"jsonDic->%@",error);
+    [self hideHud];
     [self initLoading];
     [self setHeaderRereshing];
     [self showLoading];
-    //[self setFooterRereshing];
-    
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
-
 
 
 #pragma mark 设置组

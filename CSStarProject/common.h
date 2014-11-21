@@ -106,6 +106,8 @@
 #define LOAD_NEW_DATA @"/cms/GetArticlesById"
 
 #define PHOTO_BANNER_URL @"/cms/GetArticles/albums/1/is_top=1"
+#define GIRLS_CLIST @"/cms/GetChildList/"
+#define GIRLS_SCLIST @"cms/GetArticleListByCategoryid/"
 #define GIRLS_LIST @"/cms/GetArticleList/girl"
 #define GET_PHOTO_LIST @"/cms/GetAlbums"
 

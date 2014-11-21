@@ -76,37 +76,36 @@
 
 -(void)loadData{
     NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/GetArticle/%@",REMOTE_URL,detailId];
-    NSURL *requestUrl = [NSURL URLWithString:url];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"GET"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         dicContent = (NSDictionary *)responseObject;
+         //处理返回
+         _contentTitle.text = [dicContent valueForKey:@"_title"];
+         _contentDate.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
+         NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
+         if (call_index.length > 0) {
+             _columnTitle.text = call_index;
+         }
+         NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
+         _clickNum.text = click;
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
 }
-//请求完成
-- (void)requestDataFinished:(ASIHTTPRequest *)req{
 
-    NSData *respData = [req responseData];
-    dicContent = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    _contentTitle.text = [dicContent valueForKey:@"_title"];
-    _contentDate.text = [[dicContent valueForKey:@"_add_time"] substringToIndex:10];
-    NSString *call_index = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_call_index"]];
-    if (call_index.length > 0) {
-        _columnTitle.text = call_index;
-    }
-    NSString *click = [[NSString alloc] initWithFormat:@"%@",[dicContent valueForKey:@"_click"]];
-    _clickNum.text = click;
-
+- (void)requestFailed:(NSError *)error
+{
+    [self hideHud];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
@@ -212,40 +211,33 @@
 //点赞按钮事件
 -(void)setClick{
     NSString *url = [[NSString alloc] initWithFormat:@"%@/cms/UpdateClick/%@/1",REMOTE_URL,detailId];
-    NSURL *requestUrl = [NSURL URLWithString:url];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:requestUrl];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"GET"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestLoginFinishedClick:)];
-}
-
-//请求完成
-- (void)requestLoginFinishedClick:(ASIHTTPRequest *)req{
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
-        _clickNum.text = [jsonDic valueForKeyPath:@"value"];
-        [_likeImgView removeGestureRecognizer:singleTap];
-        //imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
-        _likeImgView.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
-        CAKeyframeAnimation *k = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-        k.values = @[@(0.5),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.0),@(5.5),@(6.0)];
-        k.keyTimes = @[@(0.0),@(0.5),@(0.8),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.5)];
-        k.calculationMode = kCAAnimationLinear;
-        [_likeImgView.layer addAnimation:k forKey:@"SHOW"];
-    }else{
-        [self showNo:[jsonDic valueForKey:@"result"]];
-    }
+    [HttpClient GET:url
+          parameters:nil
+              isjson:TRUE
+             success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSDictionary *jsonDic = (NSDictionary *)responseObject;
+         //处理返回
+         if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
+             _clickNum.text = [jsonDic valueForKeyPath:@"value"];
+             [_likeImgView removeGestureRecognizer:singleTap];
+             //imgCategoryDetail.image = [UIImage imageNamed:@"heartred.png"];
+             _likeImgView.image = [UIImage imageNamed:@"profile_btn_like@2x.png"];
+             CAKeyframeAnimation *k = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+             k.values = @[@(0.5),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.0),@(5.5),@(6.0)];
+             k.keyTimes = @[@(0.0),@(0.5),@(0.8),@(1.0),@(1.5),@(2.0),@(2.5),@(3.0),@(3.5),@(4.0),@(4.5),@(5.5)];
+             k.calculationMode = kCAAnimationLinear;
+             [_likeImgView.layer addAnimation:k forKey:@"SHOW"];
+         }else{
+             [self showNo:[jsonDic valueForKey:@"result"]];
+         }
+         
+     }
+             failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
 }
 
 //初始化底部工具栏
@@ -425,25 +417,43 @@
             }
             NSString *userName = [StringUitl getSessionVal:LOGIN_USER_NAME];
             NSString *url = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
-            NSURL *login_url = [NSURL URLWithString:url];
-            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
-            [ASIHTTPRequest setSessionCookies:nil];
+            NSDictionary *parameters = @{@"id":@"0",@"username":userName,
+                                         @"articleId":detailId,@"txtContent":textVal,@"userid":userId};
             
-            [request setUseCookiePersistence:YES];
-            [request setDelegate:self];
-            [request setRequestMethod:@"POST"];
-            [request setStringEncoding:NSUTF8StringEncoding];
+            [HttpClient POST:url
+                  parameters:parameters
+                      isjson:TRUE
+                     success:^(AFHTTPRequestOperation *operation, id responseObject)
+             {
+                 NSDictionary *jsonDic = (NSDictionary *)responseObject;
+                 //处理返回
+                 if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
+                     textField.text = nil;
+                     [self dismissKeyBoard];
+                     
+                     NSString *clickNum = [self getCommentNum];
+                     [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
+                     [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
+                     numBtn.titleLabel.font = Font_Size(14);
+                     
+                     [textField addSubview:cIconView];
+                     [plabel setFrame:CGRectMake(25, 2, 40, 26)];
+                     [textField addSubview:plabel];
+                     isOpen = NO;
+                     [self hideHud];
+                     [self showOk:@"提交成功"];
+                 }else{
+                     [self hideHud];
+                     [self showNo:[jsonDic valueForKey:@"result"]];
+                 }
+                 
+             }
+                     failure:^(AFHTTPRequestOperation *operation, NSError *error)
+             {
+                 [self requestFailed:error];
+                 
+             }];
             
-            [request setPostValue:detailId forKey:@"articleId"];
-            [request setPostValue:textVal forKey:@"txtContent"];
-            [request setPostValue:userId forKey:@"userid"];
-            [request setPostValue:userName forKey:@"username"];
-            [request setPostValue:@"0" forKey:@"id"];
-            [request buildPostBody];
-            
-            [request startAsynchronous];
-            [request setDidFailSelector:@selector(requestLoginFailed:)];
-            [request setDidFinishSelector:@selector(requestLoginFinished:)];
         } 
     }else{
         StoryCommentViewController *storyComment  = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
@@ -456,37 +466,6 @@
         
         [self.navigationController pushViewController:storyComment animated:YES];
     }
-}
-
-//请求完成
-- (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
-        textField.text = nil;
-        [self dismissKeyBoard];
-        
-        NSString *clickNum = [self getCommentNum];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateNormal];
-        [numBtn setTitle:[NSString stringWithFormat:@"%@",clickNum] forState:UIControlStateHighlighted];
-        numBtn.titleLabel.font = Font_Size(14);
-        
-        [textField addSubview:cIconView];
-        [plabel setFrame:CGRectMake(25, 2, 40, 26)];
-        [textField addSubview:plabel];
-        isOpen = NO;
-        [self hideHud];
-        [self showOk:@"提交成功"];
-    }else{
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"result"]];
-    }
-}
-
-- (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self hideHud];
-    [self showNo:@"请求数据失败"];
 }
 
 -(void)passValue:(NSString *)val{

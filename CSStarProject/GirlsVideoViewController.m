@@ -323,50 +323,46 @@
 //提价评论信息
 -(void)postCommetnVal:(NSString *)articelId{
     [self dismissKeyBoard];
-    NSURL *comment_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:comment_url];
-    [ASIHTTPRequest setSessionCookies:nil];
+    NSString *comment_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
     
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:articelId forKey:@"articleId"];
-    [request setPostValue:textField.text forKey:@"txtContent"];
-    [request setPostValue:@"0" forKey:@"id"];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_ID] forKey:USER_ID];
-    [request setPostValue:[StringUitl getSessionVal:LOGIN_USER_NAME] forKey:USER_NAME];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(addCommentFailed:)];
-    [request setDidFinishSelector:@selector(addCommentFinished:)];
-    
-}
-
-- (void)addCommentFinished:(ASIHTTPRequest *)req
-{
-    NSLog(@"comment info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
-        [self hideHud];
-        [self showOk:@"提交评论信息成功!"];
-        [textField setText:nil];
-        [self dismissKeyBoard];
-        
-    }
-    if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"result"]];
-    }
+    NSDictionary *parameter = @{@"articleId":articelId,
+                                @"id":@"0",
+                                @"txtContent":textField.text,
+                                USER_ID:[StringUitl getSessionVal:LOGIN_USER_ID],
+                                USER_NAME:[StringUitl getSessionVal:LOGIN_USER_NAME]};
+    [HttpClient POST:comment_url
+         parameters:parameter
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+         if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//失败
+             [self hideHud];
+             [self showOk:@"提交评论信息成功!"];
+             [textField setText:nil];
+             [self dismissKeyBoard];
+             
+         }
+         if(![[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){//成功
+             [self hideHud];
+             [self showNo:[jsonDic valueForKey:@"result"]];
+         }
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self requestFailed:error];
+         
+     }];
     
 }
 
-- (void)addCommentFailed:(ASIHTTPRequest *)req
+- (void)requestFailed:(NSError *)error
 {
     [self hideHud];
-    [self showNo:@"提交数据失败"];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 
@@ -779,38 +775,29 @@
 
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if(type==1){
+             NSArray *girlsArr = (NSArray *)responseObject;
+             topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
+         }else{
+             bannerData = (NSMutableDictionary *)responseObject;
+         }
+         
+         [self hideHud];
+         [_girlsVideoTable reloadData];
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSData *respData = [request responseData];
-    if(request.tag==1){
-        NSArray *girlsArr = (NSArray *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-        topVideoArray = [NSMutableArray arrayWithArray:girlsArr];
-    }else{
-        bannerData = (NSMutableDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    }
-    
-    [self hideHud];
-    [_girlsVideoTable reloadData];
-    
-}
-
-
-- (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self hideHud];
-    [self showNo:@"请求数据失败"];
 }
 
 

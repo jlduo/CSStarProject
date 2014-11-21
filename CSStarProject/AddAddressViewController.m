@@ -89,7 +89,6 @@
 }
 
 -(void)goPreviou{
-    [super goPreviou];
     [self dismissViewControllerAnimated:YES completion:^{
         [self clearAddress];
     }];
@@ -234,9 +233,11 @@
          [self hideHud];
          NSDictionary *jsonDic = (NSDictionary *)responseObject;
          if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//修改失败
+             [self hideHud];
              [self showNo:[jsonDic valueForKey:@"info"]];
          }
          if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//修改成功
+             [self hideHud];
              [self showOk:[jsonDic valueForKey:@"info"]];
              [self dismissViewControllerAnimated:YES completion:^{
                  [self clearAddress];
@@ -247,7 +248,7 @@
      }
              failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         
+         [self hideHud];
          [self requestFailed:error];
          
      }];
@@ -320,20 +321,21 @@
      {
          NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
          if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){//失败
+             [self hideHud];
              [self showNo:[jsonDic valueForKey:@"info"]];
          }
          if([[jsonDic valueForKey:@"status"] isEqualToString:@"true"]){//成功
+             [self hideHud];
              [self showOk:[jsonDic valueForKey:@"info"]];
-             [self dismissViewControllerAnimated:YES completion:^{
-                 [self clearAddress];
-             }];
+             [self clearAddress];
+             [self dismissViewControllerAnimated:YES completion:nil];
              
          }
          
      }
              failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         
+         [self hideHud];
          [self requestFailed:error];
          
      }];

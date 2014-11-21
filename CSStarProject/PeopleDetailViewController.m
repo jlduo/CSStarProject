@@ -129,7 +129,7 @@
             success:^(AFHTTPRequestOperation *operation, id responseObject)
     {
         
-        _peopleData = [StringUitl getDicFromData:responseObject];
+        _peopleData = (NSDictionary *)responseObject;
         [self hideHud];
         [_peopleDetailTable reloadData];
         
@@ -394,37 +394,29 @@
 
 -(void)clickLikeBtn{
     
-    NSURL *like_url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ENJOY_PROJECT_URL]];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:like_url];
-    [ASIHTTPRequest setSessionCookies:nil];
-    
-    [request setUseCookiePersistence:YES];
-    [request setDelegate:self];
-    [request setRequestMethod:@"POST"];
-    [request setStringEncoding:NSUTF8StringEncoding];
-    [request setPostValue:[StringUitl getSessionVal:@"login_user_id"] forKey:@"uid"];
-    [request setPostValue:dataId forKey:@"pid"];
-    [request buildPostBody];
-    
-    [request startAsynchronous];
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)req
-{
-    //NSLog(@"request info->%@",[req responseString]);
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
-        [self showNo:[jsonDic valueForKey:@"info"]];
-    }else{
-        [titleLabel removeFromSuperview];
-        [self initProjectData];
-        [_peopleDetailTable reloadData];
-        [self showOk:[jsonDic valueForKey:@"info"]];
-    }
+    NSString *like_url = [NSString stringWithFormat:@"%@%@",REMOTE_URL,ADD_ENJOY_PROJECT_URL];
+    NSDictionary *parameters = @{@"pid":dataId,@"uid":[StringUitl getSessionVal:@"login_user_id"]};
+    [HttpClient POST:like_url
+         parameters:parameters
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSDictionary *jsonDic =(NSDictionary *)responseObject;
+         if([[jsonDic valueForKey:@"status"] isEqualToString:@"false"]){
+             [self showNo:[jsonDic valueForKey:@"info"]];
+         }else{
+             [titleLabel removeFromSuperview];
+             [self initProjectData];
+             [_peopleDetailTable reloadData];
+             [self showOk:[jsonDic valueForKey:@"info"]];
+         }
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
 }
 

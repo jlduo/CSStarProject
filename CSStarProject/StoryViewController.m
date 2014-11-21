@@ -133,17 +133,6 @@
 
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
-    
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
-    
     
     [HttpClient GET:url parameters:nil isjson:TRUE
             success:^(AFHTTPRequestOperation *operation, id responseObject)
@@ -151,11 +140,11 @@
                 
                 NSArray *nextArray = (NSArray *)responseObject;
                 if(nextArray!=nil && nextArray.count>0){
-                    if (request.tag==0) {
+                    if (type==0) {
                         
                         _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
                         
-                    }else if(request.tag==1){
+                    }else if(type==1){
                         
                         _storyDataList = [[NSMutableArray alloc] initWithArray:nextArray];
                         

@@ -18,8 +18,6 @@
 #import "ViewPassValueDelegate.h"
 #import "ConvertJSONData.h"
 #import "UIImageView+WebCache.h"
-#import "ASIHTTPRequest.h"
-#import "ASIFormDataRequest.h"
 #import "UIViewController+ShareMessage.h"
 
 @interface GirlsVideoViewController : CommonViewController<UITableViewDataSource,UITableViewDelegate,

@@ -105,16 +105,6 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
-    
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestFinished:)];
     
     [HttpClient GET:url
          parameters:nil

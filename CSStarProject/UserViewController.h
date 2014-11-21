@@ -11,7 +11,6 @@
 #import "UIImageView+WebCache.h"
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
-#import "myCommentViewController.h"
 #import "MyCommentsViewController.h"
 #import "ViewPassValueDelegate.h"
 #import "MyProjectListViewController.h"

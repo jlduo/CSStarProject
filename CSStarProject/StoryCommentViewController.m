@@ -83,60 +83,62 @@
 }
 
 -(void)requestDataByUrl:(NSString *)url withType:(int)type{
-    //处理路劲
-    NSURL *reqUrl = [NSURL URLWithString:url];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:reqUrl];
-    //设置代理
-    [request setDelegate:self];
-    [request startAsynchronous];
-    [request setTag:type];
     
-    [request setDidFailSelector:@selector(requestFailed:)];
-    [request setDidFinishSelector:@selector(requestDataFinished:)];
+    [HttpClient GET:url
+         parameters:nil
+             isjson:TRUE
+            success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if(type==0){
+             NSArray *nextArray = (NSArray *)responseObject;
+             if(nextArray!=nil && nextArray.count>0){
+                 if (flag==1) {
+                     tableArray  =[NSMutableArray arrayWithArray:nextArray];
+                 } else {
+                     [tableArray  addObjectsFromArray:nextArray];
+                 }
+                 
+                 [self hideHud];
+                 [_commentTable reloadData];
+             }else{
+                 
+                 [self hideHud];
+                 [self showNo:@"没有数据了"];
+             }
+             
+         }else{
+             
+             dicContent = (NSDictionary *)responseObject;
+             _commentTitle.text = [dicContent valueForKey:@"_title"];
+             
+             NSString *addTime = [dicContent valueForKey:@"_add_time"];
+             DateUtil *utilDate = [[DateUtil alloc] init];
+             addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
+             _commentDate.text = addTime;
+             
+             NSString *clickNum = [self getCommentNum];
+             _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
+             _commentNum.font = main_font(12);
+             
+             [self hideHud];
+             [_commentTable reloadData];
+             
+         }
+         
+     }
+            failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self requestFailed:error];
+         
+     }];
     
 }
 
-- (void)requestDataFinished:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
-    
-    NSData *respData = [request responseData];
-    if(request.tag==0){
-        NSArray *nextArray = (NSArray *)[NSJSONSerialization JSONObjectWithData:respData
-                                                                                      options:NSJSONReadingMutableLeaves
-                                                                                        error:nil];
-        if(nextArray!=nil && nextArray.count>0){
-            if (flag==1) {
-                tableArray  =[NSMutableArray arrayWithArray:nextArray];
-            } else {
-                [tableArray  addObjectsFromArray:nextArray];
-            }
-            
-            [self hideHud];
-            [_commentTable reloadData];
-        }else{
-            
-            [self hideHud];
-            [self showNo:@"没有数据了"];
-        }
-
-    }else{
-        
-        dicContent = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-        _commentTitle.text = [dicContent valueForKey:@"_title"];
-        
-        NSString *addTime = [dicContent valueForKey:@"_add_time"];
-        DateUtil *utilDate = [[DateUtil alloc] init];
-        addTime = [utilDate getLocalDateFormateUTCDate1:addTime];
-        _commentDate.text = addTime;
-        
-        NSString *clickNum = [self getCommentNum];
-        _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
-        _commentNum.font = main_font(12);
-
-        [self hideHud];
-        [_commentTable reloadData];
-        
-    }
+    [self hideHud];
+    NSLog(@"error=%@",error);
+    [self showNo:ERROR_INNER];
 }
 
 
@@ -418,59 +420,48 @@
             contentId = @"0";
         }
         
-        NSString *url = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
-        NSURL *login_url = [NSURL URLWithString:url];
-        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:login_url];
-        [ASIHTTPRequest setSessionCookies:nil];
+        NSString *curl = [[NSString alloc] initWithFormat:@"%@%@",REMOTE_URL,ADD_COMMENT_URL];
+        NSDictionary *parameters = @{@"id":contentId,@"username":userName,
+                                     @"articleId":detailId,@"txtContent":textVal,@"userid":userId};
+        [HttpClient POST:curl
+              parameters:parameters
+                  isjson:TRUE
+                 success:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             NSDictionary *jsonDic = (NSDictionary *)responseObject;
+             //处理返回
+             if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
+                 textField.text = nil;
+                 [self dismissKeyBoard];
+                 [self hideHud];
+                 [textField addSubview:cIconView];
+                 [plabel setFrame:CGRectMake(25, 2, 40, 26)];
+                 [textField addSubview:plabel];
+                 
+                 [self showOk:@"评论提交成功"];
+                 pageIndex = 1;
+                 flag = 1;
+                 [self getCommentList];
+                 
+                 NSString *clickNum = [self getCommentNum];
+                 _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
+             }else{
+                 [self hideHud];
+                 [self showNo:[jsonDic valueForKey:@"result"]];
+             }
+             
+         }
+                 failure:^(AFHTTPRequestOperation *operation, NSError *error)
+         {
+             [self requestFailed:error];
+             
+         }];
         
-        [request setUseCookiePersistence:YES];
-        [request setDelegate:self];
-        [request setRequestMethod:@"POST"];
-        [request setStringEncoding:NSUTF8StringEncoding];
         
-        [request setPostValue:detailId forKey:@"articleId"];
-        [request setPostValue:textVal forKey:@"txtContent"];
-        [request setPostValue:userId forKey:@"userid"];
-        [request setPostValue:userName forKey:@"username"];
-        [request setPostValue:contentId forKey:@"id"];
         
-        [request buildPostBody];
-        
-        [request startAsynchronous];
-        [request setDidFailSelector:@selector(requestLoginFailed:)];
-        [request setDidFinishSelector:@selector(requestLoginFinished:)];
     }
 }
 
-//请求完成
-- (void)requestLoginFinished:(ASIHTTPRequest *)req{
-    NSData *respData = [req responseData];
-    NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:respData options:NSJSONReadingMutableLeaves error:nil];
-    //处理返回
-    if([[jsonDic valueForKey:@"result"] isEqualToString:@"ok"]){
-        textField.text = nil;
-        [self dismissKeyBoard];
-        [self hideHud];
-        [textField addSubview:cIconView];
-        [plabel setFrame:CGRectMake(25, 2, 40, 26)];
-        [textField addSubview:plabel];
-        
-        [self showOk:@"评论提交成功"];
-        pageIndex = 1;
-        flag = 1;
-        [self getCommentList];
-        
-        NSString *clickNum = [self getCommentNum];
-        _commentNum.text = [[NSString alloc] initWithFormat:@"%@",clickNum];
-    }else{
-        [self hideHud];
-        [self showNo:[jsonDic valueForKey:@"result"]];
-    }
-}
-
-- (void)requestLoginFailed:(ASIHTTPRequest *)req{
-    [self showNo:@"请求数据失败"];
-}
 
 -(void)loadView{
     [super loadView];

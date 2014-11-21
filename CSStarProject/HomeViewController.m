@@ -471,6 +471,8 @@
 }
 
 
+
+
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     CGRect headFrame = CGRectMake(0, 4, 320, 35);
@@ -722,13 +724,6 @@
         }
 
         [picCell.picView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
-        
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        
-        [paragraphStyle setLineSpacing:25.0f];//调整行间距
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
-        picCell.descView.attributedText = attributedString;
         picCell.titleView.text = ctitle;
         picCell.titleView.font = TITLE_FONT;
         picCell.descView.text = labelText;

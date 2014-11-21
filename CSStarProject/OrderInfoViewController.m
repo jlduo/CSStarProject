@@ -326,10 +326,6 @@
     [self.navigationController pushViewController:payController animated:YES];
 }
 
-- (void)addInfoFailed:(ASIHTTPRequest *)req
-{
-    [self showNo:@"处理数据失败！"];
-}
 
 #pragma mark 设置组
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

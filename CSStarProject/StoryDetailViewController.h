@@ -10,10 +10,8 @@
 #import "CommonViewController.h"
 #import "InitTabBarViewController.h"
 #import "StoryViewController.h"
-#import "ASIHTTPRequest.h"
 #import <ShareSDK/ShareSDK.h>
 #import "UIViewController+HUD.h"
-#import "ASIFormDataRequest.h"
 #import "LoginViewController.h"
 #import "StoryCommentViewController.h"
 
