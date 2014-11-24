@@ -39,6 +39,7 @@
     _returnListTable.rowHeight = 180;
     _returnListTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _returnListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _returnListTable.showsVerticalScrollIndicator = NO;
     
 }
 

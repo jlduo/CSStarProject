@@ -32,6 +32,5 @@
 -(BOOL)isNotEmpty:(NSString *)str;
 
 -(void)alertMsg:(NSString *)msg withtitle:(NSString *)title;
--(UIStoryboard *)getStoryBoard:(NSString *)sbName;
 -(UIViewController *)getVCFromSB:(NSString *)vname;
 @end

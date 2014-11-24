@@ -43,6 +43,7 @@
     
     [_userInfoTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     _userInfoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _userInfoTable.showsVerticalScrollIndicator = NO;
 
     
     //处理actionSheet

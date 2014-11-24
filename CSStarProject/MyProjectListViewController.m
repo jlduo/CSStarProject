@@ -41,6 +41,7 @@
     [super viewDidLoad];
     
     dataId = [StringUitl getSessionVal:LOGIN_USER_ID];
+    _myProjectListTable.showsVerticalScrollIndicator=NO;
     [self.view setBackgroundColor:[StringUitl colorWithHexString:CONTENT_BACK_COLOR]];
     [StringUitl setViewBorder:self.projectBackView withColor:@"#cccccc" Width:0.5f];
     

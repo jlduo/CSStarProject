@@ -31,12 +31,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if(IOS_VERSION>=7.0){
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
+
     pageIndex = 1;
     [self initLoading];
     [self setTableData];
+    self.storyTableView.showsVerticalScrollIndicator = NO;
     _storyTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     _storyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }

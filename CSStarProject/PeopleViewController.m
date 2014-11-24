@@ -38,6 +38,7 @@
     [self setTableData];
     
     _peopleTableView.rowHeight = 300;
+    _peopleTableView.showsVerticalScrollIndicator = NO;
     _peopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _peopleTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     
@@ -184,7 +185,7 @@
     UILabel *titleLabels =[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 44)];
     [titleLabels setText:@"活动众筹"];
     titleLabels.font = BANNER_FONT;
-    [titleLabels setTextColor:[StringUitl colorWithHexString:@"#0099FF"]];
+    [titleLabels setTextColor:[StringUitl colorWithHexString:@"#FFFFFF"]];
     [titleLabels setTextAlignment:NSTextAlignmentCenter];
     [titleLabels setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     [centerView addSubview:titleLabels];
@@ -306,7 +307,7 @@
     if(slideDic!=nil){
         
         if([StringUitl checkLogin]==TRUE){
-            NSString *projectId = [[slideDic valueForKey:@"id"] stringValue];
+            NSString *projectId = [[slideDic valueForKey:@"projectid"] stringValue];
             PeopleDetailViewController *deatilViewController = (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
             passValelegate = deatilViewController;
             [passValelegate passValue:projectId];
@@ -367,7 +368,7 @@
                     [self initFilterView];
                     break;
                 case 1:
-                    sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgUrl"]];
+                    sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgurl"]];
                     slideArr = commonArr;
                     [self initScroll];
                     break;

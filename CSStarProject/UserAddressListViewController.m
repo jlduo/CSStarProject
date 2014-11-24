@@ -36,6 +36,7 @@
     
     _orderAddressTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _orderAddressTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _orderAddressTable.showsVerticalScrollIndicator = NO;
 }
 
 

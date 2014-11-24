@@ -42,6 +42,7 @@
     [self showLoading:@"加载中..."];
     [self loadTableList];
     self.orderTableView.rowHeight = 80;
+    self.orderTableView.showsVerticalScrollIndicator = NO;
     self.orderTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.orderTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
 }

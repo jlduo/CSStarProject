@@ -52,6 +52,7 @@
 
     _girlsVideoTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _girlsVideoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _girlsVideoTable.showsVerticalScrollIndicator = NO;
     _girlsVideoTable.showsVerticalScrollIndicator = YES;
     
     //处理头部信息
@@ -808,27 +809,20 @@
 
 #pragma mark 设置组高度
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 35;
+    return 25;
 }
 
 #pragma mark 设置组视图
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    CGRect headFrame = CGRectMake(0, 6, 320, 22);
+    CGRect headFrame = CGRectMake(0, 2, 320, 22);
     UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
-    sectionHeadView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:CONTENT_BACK_COLOR]];
-    //设置每组的头部图片
-    NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
-    UIImageView *imageView = IMG_WITH_NAME(imgName);
-    [imageView setFrame:CGRectMake(5, 10, 3, 20)];
+    sectionHeadView.backgroundColor = [StringUitl colorWithHexString:@"#cccccc"];
     //设置每组的标题
-    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(12, 8, 100, 22)];
+    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 2, 100, 22)];
     headtitle.text = @"私房推荐";
-    headtitle.font = TITLE_FONT;
-    
-    [sectionHeadView addSubview:imageView];
+    headtitle.font = main_font(16);
     [sectionHeadView addSubview:headtitle];
-    
     
     return sectionHeadView;
 }

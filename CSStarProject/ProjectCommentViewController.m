@@ -72,6 +72,7 @@
     _projectCommentTable.rowHeight = 72;
     _projectCommentTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     //commentListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _projectCommentTable.showsVerticalScrollIndicator = NO;
 }
 
 //加载头部刷新

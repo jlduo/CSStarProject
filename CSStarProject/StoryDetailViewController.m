@@ -53,6 +53,7 @@
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [_detailContentView addGestureRecognizer:singleTapWeb];
+    _detailContentView.scrollView.showsVerticalScrollIndicator = NO;
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
     //加载网页数据

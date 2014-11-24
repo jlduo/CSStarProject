@@ -43,7 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.homeTableView.showsVerticalScrollIndicator = NO;
     //[self showLoading:@"加载中，请稍后..."];
     [self initLoading];
     [self initLoadData];
@@ -479,15 +479,15 @@
     UIView *sectionHeadView = [[UIView alloc]initWithFrame:headFrame];
     sectionHeadView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
     //设置每组的头部图片
-    NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
-    UIImageView *imageView = IMG_WITH_NAME(imgName);
-    [imageView setFrame:CGRectMake(5, 6, 3, 20)];
+//    NSString *imgName = [NSString stringWithFormat:@"header_%d@2x.png",section];
+//    UIImageView *imageView = IMG_WITH_NAME(imgName);
+//    [imageView setFrame:CGRectMake(5, 6, 3, 20)];
     //设置每组的标题
-    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, 100, 30)];
+    UILabel *headtitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 100, 30)];
     headtitle.text = [_headTitleArray objectAtIndex:section];
     headtitle.font = TITLE_FONT;
     
-    [sectionHeadView addSubview:imageView];
+    //[sectionHeadView addSubview:imageView];
     [sectionHeadView addSubview:headtitle];
 
     
@@ -632,7 +632,7 @@
         if(indexPath.section==2){//跳转到活动众筹
             NSDictionary *peopleDic = [_peopleDataList objectAtIndex:0];
             if(peopleDic!=nil){
-                NSString *projectId = [[peopleDic valueForKey:@"id"] stringValue];
+                NSString *projectId = [[peopleDic valueForKey:@"projectid"] stringValue];
                 
                 dataID = projectId;
                 dataTP = @"people";
@@ -718,7 +718,7 @@
         NSString *labelText = [cellDic valueForKey:@"_zhaiyao"];
         NSString *ctitle = [cellDic valueForKey:@"_title"];
         if (indexPath.section==2) {//处理众筹
-            imgUrl = [cellDic valueForKey:@"imgUrl"];
+            imgUrl = [cellDic valueForKey:@"imgurl"];
             labelText = [cellDic valueForKey:@"introduction"];
             ctitle = [cellDic valueForKey:@"projectName"];
         }

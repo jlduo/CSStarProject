@@ -39,6 +39,7 @@
     [self initToolBar];
     
     self.view.backgroundColor = [StringUitl colorWithHexString:CONTENT_BACK_COLOR];
+    _peopleDetailTable.showsVerticalScrollIndicator = NO;
 }
 -(void)loadView{
     [super loadView];

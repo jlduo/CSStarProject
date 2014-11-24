@@ -29,6 +29,7 @@
 
 -(void)passValue:(NSString *)val{
     detailId = val;
+    NSLog(@"detailId=%@",detailId);
 }
 
 -(void)passDicValue:(NSDictionary *)vals{
@@ -57,6 +58,7 @@
     [StringUitl setViewBorder:self.contentBackView withColor:@"#cccccc" Width:0.5f];
     UIView *footerView = [[UIView alloc]init];
     _commentTable.tableFooterView = footerView;
+    _commentTable.showsVerticalScrollIndicator = NO;
     //评论
     [self initTable];
     [self initToolBar];

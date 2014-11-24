@@ -29,6 +29,7 @@
     
     [self showLoading:@"初始化中..."];
     [super viewDidLoad];
+    
     _userProjectNums = [[NSMutableDictionary alloc]init];
 
     //处理头部信息
@@ -37,6 +38,7 @@
     
     [_userCenterTable setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]]];
     _userCenterTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _userCenterTable.showsVerticalScrollIndicator = NO;
     
     //处理数据回填
     //[self setImgBtnImage];

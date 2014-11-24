@@ -70,7 +70,7 @@
     
     
     //重新加载本地数据
-    [self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
+    //[self loadUserInfo:[StringUitl getSessionVal:LOGIN_USER_NAME]];
     [UIApplication sharedApplication].statusBarHidden = NO;
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     return YES;

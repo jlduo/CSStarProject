@@ -12,6 +12,15 @@
     NSInteger typeComment;
     NSMutableArray *tableArray;
     NSInteger currentIndex;
+    
+    //处理相册变量
+    NSString * artId;
+    NSMutableArray *imageArr;
+    NSMutableArray *titleArr;
+    NSMutableArray *thumb_ImageArr;
+    NSMutableDictionary *totalData;
+    MWPhoto *photo;
+    
 }
 
 @end
@@ -27,10 +36,6 @@
     return self;
 }
 
--(void)dealloc{
-    tableArray = nil;
-}
-
 - (void)viewDidLoad
 {
     [self showLoading:@"加载中..."];
@@ -38,6 +43,7 @@
     [self getCommentList];
     
     self.commentsTableView.rowHeight = 80;
+    self.commentsTableView.showsVerticalScrollIndicator = NO;
     self.commentsTableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     [StringUitl setViewBorder:self.myCommentBackView withColor:@"#cccccc" Width:0.5f];
     
@@ -49,6 +55,16 @@
     typeComment = 0;
 
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
+    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
+    [tabBarController hiddenDIYTaBar];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -100,6 +116,44 @@
      }];
     
 }
+
+//处理相册信息
+-(void)loadGirlPics:(NSString *)articleId{
+    
+    totalData = [[NSMutableDictionary alloc]init];
+    NSMutableDictionary *perData = [[NSMutableDictionary alloc]init];
+    NSString *url = [NSString stringWithFormat:@"%@%@/%@",REMOTE_URL,GET_PHOTO_LIST,articleId];
+    NSMutableArray *jsonArr = (NSMutableArray *)[ConvertJSONData requestData:url];
+    if(jsonArr!=nil){
+        
+        imageArr = [[NSMutableArray alloc]init];
+        thumb_ImageArr = [[NSMutableArray alloc]init];
+        for (NSDictionary *dic in jsonArr) {
+            
+            photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_original_path"]]];
+            photo.caption = [dic valueForKey:@"_remark"];
+            [imageArr addObject:photo];
+            
+            photo = nil;
+            
+            photo = [MWPhoto photoWithURL:[NSURL URLWithString:[dic valueForKey:@"_thumb_path"]]];
+            [thumb_ImageArr addObject:photo];
+            
+            
+        }
+        
+        //以每条文章信息的ID保存信息
+        [perData setObject:imageArr forKey:@"imageArr"];//大图
+        [perData setObject:thumb_ImageArr forKey:@"thumb_ImageArr"];//小图
+        
+        [totalData setObject:perData forKey:articleId];
+        
+        NSLog(@"totalData=%@",totalData);
+        
+    }
+    
+}
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -253,13 +307,25 @@
 //行选中事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *row = [tableArray objectAtIndex:indexPath.row];
-    NSString *rowId = [row valueForKey:@"_article_id"];
-    
+    artId = [[row valueForKey:@"_article_id"] stringValue];
+    NSString *category_index = [row valueForKey:@"_category_call_index"];
     if(typeComment==0){
-        StoryDetailViewController *detailController =  (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
-        passValelegate = detailController;
-        [passValelegate passValue:rowId];
-        [self.navigationController pushViewController:detailController animated:YES];
+
+        if ([category_index isEqualToString:@"albums"]) {//相册
+            
+            [self loadGirlPics:artId];
+            [self goPhotoView:artId];
+            
+        } else if ([category_index isEqualToString:@"city"]) {//文章
+            
+            [self goArticelView:artId];
+            
+        } else {//视频
+            
+            [self goVideoView:artId];
+            
+        }
+        
     }else{
         PeopleDetailViewController *deatilViewController =  (PeopleDetailViewController *)[self getVCFromSB:@"peopleDetail"];
         passValelegate = deatilViewController;
@@ -293,4 +359,106 @@
     typeComment = 1;
     [self getCommentList];
 }
+
+
+-(void)goVideoView:(NSString *)articleId{
+    
+    GirlsVideoViewController *girlVideoView = (GirlsVideoViewController*)[self getVCFromSB:@"girlsVideo"];
+    passValelegate = girlVideoView;
+    [passValelegate passValue:articleId];
+    [self.navigationController pushViewController:girlVideoView animated:YES];
+    
+}
+
+-(void)goArticelView:(NSString *)articleId{
+    
+    StoryDetailViewController *storyDetail = (StoryDetailViewController *)[self getVCFromSB:@"storyDetail"];
+    passValelegate = storyDetail;
+    [passValelegate passValue:articleId];
+    [self.navigationController pushViewController:storyDetail animated:YES];
+    
+}
+
+-(void)goPhotoView:(NSString *)articleId{
+    
+    
+    self.photos = [[totalData valueForKey:articleId] valueForKey:@"imageArr"];
+    self.thumbs = [[totalData valueForKey:articleId] valueForKey:@"thumb_ImageArr"];
+    
+    BOOL displayActionButton = YES;
+    BOOL displaySelectionButtons = NO;
+    BOOL displayNavArrows = YES;
+    BOOL enableGrid = YES;
+    BOOL startOnGrid = NO;
+	
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = displayActionButton;
+    browser.displayNavArrows = displayNavArrows;
+    browser.displaySelectionButtons = displaySelectionButtons;
+    browser.alwaysShowControls = displaySelectionButtons;
+    browser.zoomPhotosToFill = YES;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+    browser.wantsFullScreenLayout = YES;
+#endif
+    browser.enableGrid = enableGrid;
+    browser.startOnGrid = startOnGrid;
+    browser.enableSwipeToDismiss = YES;
+    [browser setCurrentPhotoIndex:0];
+    
+    [self.navigationController pushViewController:browser animated:YES];
+//    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+//    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//    [self presentViewController:nc animated:YES completion:nil];
+    
+    self.tabBarController.tabBar.hidden = YES;
+    InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
+    [tabBarController hiddenDIYTaBar];
+    
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < _thumbs.count)
+        return [_thumbs objectAtIndex:index];
+    return nil;
+}
+
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    
+    NSString *userId = [StringUitl getSessionVal:LOGIN_USER_ID];
+    if ([self isEmpty:userId]) {
+        LoginViewController *login = (LoginViewController *)[self getVCFromSB:@"userLogin"];
+        [self.navigationController pushViewController:login animated:YES];
+        return;
+    }else{
+        StoryCommentViewController *storyComment = (StoryCommentViewController *)[self getVCFromSB:@"storyComment"];
+        passValelegate = storyComment;
+        [passValelegate passValue:artId];
+        
+        NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+        [param setObject:@"xc" forKey:@"stype"];
+        [passValelegate passDicValue:param];
+        
+        [self.navigationController pushViewController:storyComment animated:YES];
+    }
+    
+}
+
+- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
+    return [NSString stringWithFormat:@"%d / %d", index+1,_photos.count];
+}
+
+
 @end

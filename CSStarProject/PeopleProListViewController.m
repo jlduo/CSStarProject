@@ -77,6 +77,7 @@
     _projectListTable.rowHeight = 80;
     _projectListTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _projectListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _projectListTable.showsVerticalScrollIndicator = NO;
 
 }
 

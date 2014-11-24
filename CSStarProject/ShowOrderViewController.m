@@ -47,6 +47,7 @@
     _showOrderTable.rowHeight = 180;
     _showOrderTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _showOrderTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _showOrderTable.showsVerticalScrollIndicator = NO;
     
 }
 

@@ -51,6 +51,7 @@
     //添加手势
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [_contentView addGestureRecognizer:singleTapWeb];
+    _contentView.scrollView.showsVerticalScrollIndicator = NO;
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
     

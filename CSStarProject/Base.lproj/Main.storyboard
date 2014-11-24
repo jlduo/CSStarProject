@@ -391,8 +391,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lXC-zm-BN7">
-                                <rect key="frame" x="0.0" y="65" width="320" height="454"/>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lXC-zm-BN7">
+                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dq3-Ky-gZw">
@@ -409,13 +409,14 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rcJ-iK-Efo">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <gestureRecognizers/>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="标题信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7Y-cp-2Ce">
-                                            <rect key="frame" x="0.0" y="151" width="320" height="29"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="标题信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7Y-cp-2Ce">
+                                            <rect key="frame" x="0.0" y="155" width="320" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -433,9 +434,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="lXC-zm-BN7" secondAttribute="trailing" id="1mI-HG-ng2"/>
+                            <constraint firstAttribute="trailing" secondItem="lXC-zm-BN7" secondAttribute="trailing" id="TcQ-LN-xou"/>
                             <constraint firstItem="lXC-zm-BN7" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="aex-dx-r7w"/>
-                            <constraint firstItem="lXC-zm-BN7" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="65" id="dMD-RO-Mc5"/>
-                            <constraint firstAttribute="bottom" secondItem="lXC-zm-BN7" secondAttribute="bottom" constant="49" id="gex-78-A5H"/>
+                            <constraint firstAttribute="bottom" secondItem="lXC-zm-BN7" secondAttribute="bottom" constant="49" id="dgO-BM-sUg"/>
+                            <constraint firstItem="lXC-zm-BN7" firstAttribute="leading" secondItem="qRg-y6-2hW" secondAttribute="leading" id="kgy-Lf-cOm"/>
+                            <constraint firstItem="lXC-zm-BN7" firstAttribute="top" secondItem="qRg-y6-2hW" secondAttribute="top" constant="64" id="wMJ-09-sGm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hGs-S2-uNo"/>
@@ -444,26 +447,27 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LWl-7f-pHL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="A7t-FI-6bg"/>
             </objects>
             <point key="canvasLocation" x="884" y="-837"/>
         </scene>
-        <!--Girls Photo List View Controller-->
-        <scene sceneID="7cZ-9v-QXv">
+        <!--美女私房列表-->
+        <scene sceneID="7qB-aN-P42">
             <objects>
-                <viewController storyboardIdentifier="GirlsPhotoView" id="o9B-hG-PiM" customClass="GirlsPhotoListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="girlsPhoto" title="美女私房列表" id="CJm-OK-9mF" userLabel="美女私房列表" customClass="GirlsPhotoListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="wtM-zP-8n0"/>
-                        <viewControllerLayoutGuide type="bottom" id="dXL-LE-pcr"/>
+                        <viewControllerLayoutGuide type="top" id="nqv-2D-idM"/>
+                        <viewControllerLayoutGuide type="bottom" id="6z5-wy-fxc"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="VEd-YF-KvN">
+                    <view key="view" contentMode="scaleToFill" id="dbw-S5-ceG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gvZ-OW-1gB" userLabel="美女私房相册">
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2ar-90-Y7T">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TgM-EB-91c">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Lgb-Uf-hHx">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -471,26 +475,26 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                                 <connections>
-                                    <outlet property="dataSource" destination="o9B-hG-PiM" id="dXp-n2-Qca"/>
-                                    <outlet property="delegate" destination="o9B-hG-PiM" id="jri-zF-nhC"/>
+                                    <outlet property="dataSource" destination="CJm-OK-9mF" id="Du6-La-Urc"/>
+                                    <outlet property="delegate" destination="CJm-OK-9mF" id="kNs-91-rjs"/>
                                 </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gvZ-OW-1gB" firstAttribute="top" secondItem="VEd-YF-KvN" secondAttribute="top" constant="64" id="FVJ-ow-zU7"/>
-                            <constraint firstItem="gvZ-OW-1gB" firstAttribute="leading" secondItem="VEd-YF-KvN" secondAttribute="leading" id="NzW-ee-KLe"/>
-                            <constraint firstAttribute="bottom" secondItem="gvZ-OW-1gB" secondAttribute="bottom" id="XOS-D2-KJX"/>
-                            <constraint firstAttribute="trailing" secondItem="gvZ-OW-1gB" secondAttribute="trailing" id="vbm-I5-a3c"/>
+                            <constraint firstItem="2ar-90-Y7T" firstAttribute="top" secondItem="dbw-S5-ceG" secondAttribute="top" constant="64" id="CPP-fV-qDg"/>
+                            <constraint firstItem="2ar-90-Y7T" firstAttribute="leading" secondItem="dbw-S5-ceG" secondAttribute="leading" id="PSf-SN-ecE"/>
+                            <constraint firstAttribute="trailing" secondItem="2ar-90-Y7T" secondAttribute="trailing" id="axO-Yh-qMj"/>
+                            <constraint firstAttribute="bottom" secondItem="2ar-90-Y7T" secondAttribute="bottom" id="hkE-M8-UAf"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="girlsPhotoTableView" destination="gvZ-OW-1gB" id="qJ7-XM-5mF"/>
+                        <outlet property="girlsPhotoTableView" destination="2ar-90-Y7T" id="cmH-FZ-fBX"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nmb-hS-Vof" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KrW-RP-034" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1336" y="-837"/>
+            <point key="canvasLocation" x="1324" y="-837"/>
         </scene>
         <!--美女视频-->
         <scene sceneID="KKA-S5-SR0">

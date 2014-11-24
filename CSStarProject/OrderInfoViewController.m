@@ -64,6 +64,7 @@
     _orderInfoTable.rowHeight = 180;
     _orderInfoTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _orderInfoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _orderInfoTable.showsVerticalScrollIndicator = NO;
 }
 
 -(void)loadView{
@@ -149,6 +150,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     //[self loadDefaultAddress];
+    [self.orderInfoTable setContentOffset:CGPointMake(0, self.orderInfoTable.contentSize.height -self.orderInfoTable.bounds.size.height) animated:YES];
     [_orderInfoTable reloadData];
     
 }
@@ -415,6 +417,7 @@
         remarkCell.selectionStyle =UITableViewCellSelectionStyleNone;
         remarkTextField = [[UITextField alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 60)];
         remarkTextField.backgroundColor = [StringUitl colorWithHexString:@"#F2F2F2"];
+        remarkTextField.textColor = [UIColor grayColor];
         remarkTextField.layer.cornerRadius = 5.0;
         remarkTextField.layer.masksToBounds = YES;
         remarkTextField.delegate = self;
@@ -571,6 +574,18 @@
     orderCell.sendMoney.text = [NSString  stringWithFormat:@"￥%.2f",send_money];
     orderCell.totalMoney.text = [NSString  stringWithFormat:@"￥%.2f",total_money];
     
+}
+
+
+- (void)scrollTableToFoot:(BOOL)animated {
+    NSInteger s = [self.orderInfoTable numberOfSections];
+	if (s<1) return;
+	NSInteger r = [self.orderInfoTable numberOfRowsInSection:s-1];
+	if (r<1) return;
+	
+	NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
+	
+	[self.orderInfoTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:animated];
 }
 
 

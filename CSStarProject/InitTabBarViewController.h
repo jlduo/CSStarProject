@@ -10,7 +10,6 @@
 #import "common.h"
 #import "StringUitl.h"
 #import "LoginViewController.h"
-#import "GirlsViewController.h"
 #import "ViewPassValueDelegate.h"
 @interface InitTabBarViewController : UITabBarController<ViewPassValueDelegate>{
     __weak NSObject<ViewPassValueDelegate> *passDelegate;

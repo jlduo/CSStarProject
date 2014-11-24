@@ -39,6 +39,7 @@
     [super viewDidLoad];
     [self showLoading:@"加载中..."];
     _userProjectNums = [[NSMutableDictionary alloc]init];
+    _otherUserCenterTable.showsVerticalScrollIndicator = NO;
     
     [self initLoadData];
     [self initLoadUserData];

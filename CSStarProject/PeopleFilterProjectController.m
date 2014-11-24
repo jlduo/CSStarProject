@@ -63,6 +63,7 @@
     _peopleFilterTable.rowHeight = 300;
     _peopleFilterTable.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:CONTENT_BACKGROUND]];
     _peopleFilterTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _peopleFilterTable.showsVerticalScrollIndicator = NO;
 }
 
 -(void)dealloc{

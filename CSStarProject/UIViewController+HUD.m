@@ -100,7 +100,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.dimBackground = YES;
 	[self setHUD:hud];
     [hud show:YES];
-    [hud hide:YES afterDelay:0.5];
+    [hud hide:YES afterDelay:1.0];
     
 }
 

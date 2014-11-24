@@ -9,7 +9,7 @@
 #ifndef CSStarProject_common_h
 #define CSStarProject_common_h
 
-#define CONNECT_MODE 1 //访问模式 1 测试版 2 正式版
+#define CONNECT_MODE 2 //访问模式 1 测试版 2 正式版
 #define TIPS_TYPE 2 //提示信息样式 1 白色底图标 2 细线图标
 #define PAGESIZE @"5"//列表分页数据
 #define CF_PAGESIZE @"5"//列表分页数据
@@ -39,7 +39,8 @@
 #define Font_Size(x) [UIFont systemFontOfSize:x]//字体函数
 #define Main_Font_Size Font_Size(14)//主字体
 
-#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",28)//标题字体
+//#define BANNER_FONT DIY_FONT_SIZE(@"ZHSRXT-GBK",28)//标题字体
+#define BANNER_FONT Font_Size(24)//标题字体
 #define TITLE_FONT main_font(18)//标题字体
 #define DESC_FONT main_font(14)//描述字体
 
@@ -105,9 +106,9 @@
 
 #define LOAD_NEW_DATA @"/cms/GetArticlesById"
 
-#define PHOTO_BANNER_URL @"/cms/GetArticles/albums/1/is_top=1"
+#define PHOTO_BANNER_URL @"/cms/GetArticles/girl/1/is_top=1"
 #define GIRLS_CLIST @"/cms/GetChildList/"
-#define GIRLS_SCLIST @"cms/GetArticleListByCategoryid/"
+#define GIRLS_SCLIST @"/cms/GetArticleListByCategoryid/"
 #define GIRLS_LIST @"/cms/GetArticleList/girl"
 #define GET_PHOTO_LIST @"/cms/GetAlbums"
 
@@ -116,8 +117,8 @@
 
 //活动众筹接口
 #define HOME_PEOPLE_URL @"/cf/getTopProject"
-#define SILDER_PEOPLE_URL @"/cf/getTjProjects"
-#define PEOPLE_LIST_URL @"/cf/getTopProjects"
+#define PEOPLE_LIST_URL @"/cf/getTjProjects"
+#define SILDER_PEOPLE_URL @"/cf/getTopProjects"
 #define GET_PPLIST_URL @"/cf/getprojectlist/"
 #define GET_MORE_LIST_URL @"/cf/getMoreprojectlist/"
 #define GET_PROJECT_URL @"/cf/getProjectById"
