@@ -136,7 +136,7 @@
              [self.girlsPhotoTableView reloadData];
          }else{
              [self hideHud];
-             [self showNo:@"没有数据了"];
+             [self showHint:@"暂时没有数据"];
          }
          
      }

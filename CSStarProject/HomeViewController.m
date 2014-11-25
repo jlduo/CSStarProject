@@ -207,8 +207,8 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     //[tabBarController changeTabsFrame];
-    [self initLoadData];
-    [_homeTableView reloadData];
+    //[self initLoadData];
+    //[_homeTableView reloadData];
     
     
 }

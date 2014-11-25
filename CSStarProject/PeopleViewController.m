@@ -242,12 +242,12 @@
     [tabBarController showDIYTaBar];
     
     
-    [self loadSliderPic];
-    [self loadTableList];
-    [self initScroll];
+    //[self loadSliderPic];
+    //[self loadTableList];
+    //[self initScroll];
     
-    [filterBgView removeFromSuperview];
-    [self initFilterView];
+    //[filterBgView removeFromSuperview];
+    //[self initFilterView];
 }
 
 //加载头部刷新
@@ -260,6 +260,19 @@
         [self.peopleTableView addSubview:topPullView];
         isHeaderSeted = YES;
     }
+}
+
+-(void)reloadTData{
+    
+    [self loadTableList];
+    [self loadSliderPic];
+    [self initScroll];
+    
+    [filterBgView removeFromSuperview];
+    [self initFilterView];
+    
+    [self.peopleTableView reloadData];
+    
 }
 
 //加底部部刷新
@@ -277,9 +290,7 @@
 //这是一个模拟方法，请求完成之后，回调方法
 -(void)callBackMethod:(id) obj
 {
-    [self initScroll];
-    [self loadTableList];
-    [self.peopleTableView reloadData];
+    [self reloadTData];
 }
 
 -(void)initScroll{
@@ -430,7 +441,7 @@
     NSLog(@"go detail......!");
     if(![StringUitl checkLogin]==TRUE){
         [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
+        LoginViewController *loginView = (LoginViewController *)[self getVCFromSB:@"userLogin"];
         [self.navigationController pushViewController:loginView animated:YES];
     }else{
         cellDic = [self.peopleDataList objectAtIndex:indexPath.row];

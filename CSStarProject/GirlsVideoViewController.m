@@ -170,13 +170,9 @@
 -(void) initNumButton{
     //加入按钮
     numBtn = [[UIButton alloc]initWithFrame:CGRectMake(textField.frame.size.width+12, 5, 45, 30)];
-    [numBtn.layer setMasksToBounds:YES];
-    [numBtn.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
-    [numBtn.layer setBorderWidth:0.5];   //边框宽度
+    [StringUitl setCornerRadius:numBtn withRadius:5.0];
+    [StringUitl setViewBorder:numBtn withColor:@"#cccccc" Width:0.5];
     
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 1 });
-    [numBtn.layer setBorderColor:colorref];
     [numBtn setBackgroundImage:[UIImage imageNamed:CONTENT_BACKGROUND] forState:UIControlStateNormal];
     
     //给按钮默认显示评论数据

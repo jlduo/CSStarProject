@@ -61,8 +61,8 @@
     InitTabBarViewController *tabBarController = (InitTabBarViewController *)self.tabBarController;
     [tabBarController showDIYTaBar];
     
-    [self reloadTBData];
-    [self.girlsCollectionView reloadData];
+    //[self reloadTBData];
+    //[self.girlsCollectionView reloadData];
     
 }
 
@@ -213,12 +213,19 @@
 {
     UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
+    if (![StringUitl checkLogin]) {
+        
+        LoginViewController *login = (LoginViewController *)[self getVCFromSB:@"userLogin"];
+        [self.navigationController pushViewController:login animated:YES];
+        
+    }else{
     
-    GirlsPhotoListViewController *girlsPhotoView = (GirlsPhotoListViewController *)[self getVCFromSB:@"girlsPhoto"];
-    passValelegate = girlsPhotoView;
-    [passValelegate passDicValue:[_girlsDataList objectAtIndex:indexPath.row]];
-    [self.navigationController pushViewController:girlsPhotoView animated:YES];
-    
+        GirlsPhotoListViewController *girlsPhotoView = (GirlsPhotoListViewController *)[self getVCFromSB:@"girlsPhoto"];
+        passValelegate = girlsPhotoView;
+        [passValelegate passDicValue:[_girlsDataList objectAtIndex:indexPath.row]];
+        [self.navigationController pushViewController:girlsPhotoView animated:YES];
+        
+    }
 }
 
 
@@ -254,36 +261,45 @@
 
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
-    NSString *dataId = [[bannberData valueForKey:@"_id"] stringValue];
-    NSString *data_Type = [bannberData valueForKey:@"_category_call_index"];
-    artId = dataId;
-    if([self isNotEmpty:dataId]){
+    if (![StringUitl checkLogin]) {
+        
+        LoginViewController *login = (LoginViewController *)[self getVCFromSB:@"userLogin"];
+        [self.navigationController pushViewController:login animated:YES];
+        
+    }else{
+    
+        NSString *dataId = [[bannberData valueForKey:@"_id"] stringValue];
+        NSString *data_Type = [bannberData valueForKey:@"_category_call_index"];
+        artId = dataId;
+        if([self isNotEmpty:dataId]){
 
-        if([data_Type isEqual:@"video"]){//视频
-            
-            if([StringUitl checkLogin]){
-                [self goVideoView:dataId];
+            if([data_Type isEqual:@"video"]){//视频
+                
+                if([StringUitl checkLogin]){
+                    [self goVideoView:dataId];
+                }
+                
             }
             
-        }
-        
-        if([data_Type isEqual:@"albums"]){//相册
-            
-            if([StringUitl checkLogin]){
-                [self loadGirlPics:dataId];
-                [self goPhotoView:dataId];
+            if([data_Type isEqual:@"albums"]){//相册
+                
+                if([StringUitl checkLogin]){
+                    [self loadGirlPics:dataId];
+                    [self goPhotoView:dataId];
+                }
+                
             }
             
-        }
-        
-        
-        if([data_Type isEqual:@"article"]||[data_Type isEqual:@"slide"]||[data_Type isEqual:@"city"]){//文章
             
-            if([StringUitl checkLogin]){
-                [self goArticelView:dataId];
+            if([data_Type isEqual:@"article"]||[data_Type isEqual:@"slide"]||[data_Type isEqual:@"city"]){//文章
+                
+                if([StringUitl checkLogin]){
+                    [self goArticelView:dataId];
+                }
+                
             }
-            
         }
+        
     }
     
 }

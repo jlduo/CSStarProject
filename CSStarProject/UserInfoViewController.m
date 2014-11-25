@@ -332,7 +332,7 @@
 - (void)saveImage:(UIImage *)image {
     NSLog(@"保存头像！");
     [self showLoading:@"上传照片中..."];
-    BOOL success;
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     
@@ -340,7 +340,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *imageFilePath = [documentsDirectory stringByAppendingPathComponent:@"selfPhoto.jpg"];
     NSLog(@"imageFile->>%@",imageFilePath);
-    success = [fileManager fileExistsAtPath:imageFilePath];
+    BOOL success = [fileManager fileExistsAtPath:imageFilePath];
     if(success) {
         success = [fileManager removeItemAtPath:imageFilePath error:&error];
     }

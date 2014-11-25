@@ -60,12 +60,12 @@
     
     [self.scrollView addSubview:lastImageView];
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height-25, width, 25)];
-    self.pageControl.backgroundColor = [UIColor blackColor];
-    self.pageControl.alpha = 0.35;
+    self.pageControl.backgroundColor = [UIColor clearColor];
+    self.pageControl.alpha = 0.85;
     self.pageControl.numberOfPages = sourceArr.count;
     self.pageControl.currentPage = 0;
-    self.pageControl.pageIndicatorTintColor = [UIColor whiteColor];
-    self.pageControl.currentPageIndicatorTintColor = [StringUitl colorWithHexString:@"#0099FF"];
+    self.pageControl.pageIndicatorTintColor = [StringUitl colorWithHexString:@"#dcdedd"];
+    self.pageControl.currentPageIndicatorTintColor = [StringUitl colorWithHexString:@"#FFFFFF"];
     self.pageControl.enabled = YES;
     [self.pageControl addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventValueChanged];
     

@@ -219,7 +219,7 @@
         NSDictionary *dicComment = [tableArray objectAtIndex:currentIndex];
         if (typeComment == 0) {
             url = [[NSString alloc] initWithFormat:@"%@/Comment/DeleteComment/%@",REMOTE_URL,[dicComment valueForKey:@"_id"]];
-            
+            parameters = [[NSDictionary alloc]init];
         }else{
             
             url = [[NSString alloc] initWithFormat:@"%@/AndroidApi/CFService/deleteTalk",REMOTE_URL];
@@ -228,12 +228,12 @@
         }
         
         [HttpClient POST:url
-              parameters:nil
+              parameters:parameters
                   isjson:TRUE
                  success:^(AFHTTPRequestOperation *operation, id responseObject)
          {
              
-             NSDictionary *jsonDic = [StringUitl getDicFromData:responseObject];
+             NSDictionary *jsonDic = (NSDictionary *)responseObject;
              if (typeComment == 0) {
                  //处理返回
                  if([[jsonDic valueForKey:@"result"] isEqualToString:@"True"]){
