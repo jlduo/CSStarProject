@@ -199,7 +199,7 @@
         commentCell.lblContent.frame = CGRectMake(commentCell.lblContent.frame.origin.x,commentCell.lblContent.frame.origin.y, commentCell.lblContent.frame.size.width, labelsize.height);
     }
     [commentCell.btnDelete addTarget:self action:@selector(deleteComment:) forControlEvents:UIControlEventTouchDown];
-    commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    commentCell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
     return commentCell;
 }
@@ -332,6 +332,8 @@
         [passValelegate passValue:[row valueForKey:@"projectId"]];
         [self.navigationController pushViewController:deatilViewController animated:YES];
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(void)loadView{
@@ -344,20 +346,24 @@
 }
 
 - (IBAction)cstarBtnClick:(id)sender {
-    [self showLoading:@"加载中..."];
+   
     [self.zcBtn setImage:[UIImage imageNamed:@"mydiscu_zhongchou.png"] forState:UIControlStateNormal];
     [self.cstarBtn setImage:[UIImage imageNamed:@"mydiscu_star_on.png"] forState:UIControlStateNormal];
-    typeComment = 0;
-    [self getCommentList];
-    
+    if(typeComment!=0){
+        typeComment = 0;
+        [self showLoading:@"加载中..."];
+        [self getCommentList];
+    }
 }
 
 - (IBAction)zcBtnClick:(id)sender {
-    [self showLoading:@"加载中..."];
     [self.zcBtn setImage:[UIImage imageNamed:@"mydiscu_zhongchou_on.png"] forState:UIControlStateNormal];
     [self.cstarBtn setImage:[UIImage imageNamed:@"mydiscu_star.png"] forState:UIControlStateNormal];
-    typeComment = 1;
-    [self getCommentList];
+    if(typeComment!=1){
+        typeComment = 1;
+        [self showLoading:@"加载中..."];
+        [self getCommentList];
+    }
 }
 
 

@@ -29,7 +29,7 @@
     
     [self showLoading:@"初始化中..."];
     [super viewDidLoad];
-    
+    [self getMyProjectsNums];
     _userProjectNums = [[NSMutableDictionary alloc]init];
 
     //处理头部信息
@@ -69,11 +69,6 @@
     
     
 }
-
--(void)viewWillLayoutSubviews{
-    [self getMyProjectsNums];
-}
-
 
 -(void)setImgBtnImage{
     
@@ -298,7 +293,7 @@
         userCell.dataTitle.alpha = 0.8f;
         userCell.dataNum.font = main_font(9);
         [userCell.dataNum setText:[_userProjectNums valueForKey:valKey]];
-        userCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        userCell.selectionStyle = UITableViewCellSelectionStyleBlue;
         return userCell;
 
         
@@ -306,13 +301,14 @@
         
         UserTableViewCell *newUserCell = [_userCenterTable dequeueReusableCellWithIdentifier:@"UserViewCell"];
         newUserCell.backgroundColor = [UIColor clearColor];
-        newUserCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        newUserCell.selectionStyle = UITableViewCellSelectionStyleBlue;
         
         [newUserCell.cellPic setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
         [newUserCell.tagBgView setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
         [newUserCell.arrowPic setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
         [newUserCell.dataTitle setTextColor:[UIColor darkGrayColor]];
         [newUserCell.dataTitle setText:@"清空缓存数据"];
+        [newUserCell.tagNum setText:@""];
         [newUserCell.dataTitle setTextAlignment:NSTextAlignmentCenter];
         
         [StringUitl setViewBorder:newUserCell.cellView withColor:@"#cccccc" Width:0.5f];
@@ -361,6 +357,7 @@
         [self clearCacheFile];
     }
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(NSString *)getCacheFileSize{

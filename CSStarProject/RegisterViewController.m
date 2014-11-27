@@ -49,9 +49,8 @@
 
 //点击事件
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
-    int btag = self.agreenIconView.tag;
-    NSLog(@"tag==%d",btag);
-    if(btag==88){
+    //NSLog(@"tag==%d",btag);
+    if(self.agreenIconView.tag==88){
         
         self.agreenIconView.tag = 99;
         [self.agreenIconView setImage:CG_IMG(@"iconnochecked.png")];

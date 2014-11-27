@@ -111,6 +111,8 @@
     passValelegate = showOrderController;
     [passValelegate passValue:[cellDic valueForKey:@"id"]];
     [self.navigationController pushViewController:showOrderController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -129,7 +131,7 @@
             projectCell = [nib objectAtIndex:0];
         }
         
-        projectCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        projectCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         projectCell.backgroundColor = [UIColor clearColor];
         
         //[StringUitl setCornerRadius:projectCell.cellContentView withRadius:5.0];

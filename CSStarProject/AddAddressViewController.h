@@ -11,6 +11,7 @@
 #import "UIViewController+HUD.h"
 #import "UIViewController+DismissKeyboard.h"
 #import "EditCityViewController.h"
+#import "NSString+STRegex.h"
 
 @interface AddAddressViewController : CommonViewController<ViewPassValueDelegate,UITextViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 

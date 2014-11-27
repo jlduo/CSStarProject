@@ -110,7 +110,7 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:YES];
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     [self hideHud];
@@ -214,6 +214,8 @@
         }
 
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -510,7 +512,7 @@
             UINib *nibCell = [UINib nibWithNibName:@"UserBigTableViewCell" bundle:nil];
             [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserBigCell"];
             bigCell= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserBigCell"];
-            bigCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            bigCell.selectionStyle = UITableViewCellSelectionStyleBlue;
             //处理圆形图片
             NSString *userLogo = [StringUitl getSessionVal:USER_LOGO];
             NSRange range = [userLogo rangeOfString:@"upload"];
@@ -541,7 +543,7 @@
             UINib *nibCell = [UINib nibWithNibName:@"UserSmallTableViewCell" bundle:nil];
             [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
             smallCell1= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserSmallCell"];
-            smallCell1.selectionStyle = UITableViewCellSelectionStyleNone;
+            smallCell1.selectionStyle = UITableViewCellSelectionStyleBlue;
             smallCell1.smallCellValue.font = main_font(14);
             smallCell1.smallCellTitle.font = main_font(14);
             switch (indexPath.row) {
@@ -568,7 +570,7 @@
         UINib *nibCell = [UINib nibWithNibName:@"UserSmallTableViewCell" bundle:nil];
         [_userInfoTable registerNib:nibCell forCellReuseIdentifier:@"UserSmallCell"];
         UserSmallTableViewCell *smallCell= [_userInfoTable dequeueReusableCellWithIdentifier:@"UserSmallCell"];
-        smallCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        smallCell.selectionStyle = UITableViewCellSelectionStyleBlue;
         smallCell.smallCellValue.font = main_font(14);
         smallCell.smallCellTitle.font = main_font(14);
         switch (indexPath.row) {

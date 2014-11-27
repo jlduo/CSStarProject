@@ -645,6 +645,8 @@
             }
             
         }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -678,8 +680,8 @@
         }
         
         VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
-        videoCell.selectionStyle =UITableViewCellSelectionStyleNone;
-        videoCell.backgroundColor = [UIColor clearColor];
+        videoCell.selectionStyle =UITableViewCellSelectionStyleBlue;
+        videoCell.backgroundColor = [UIColor blueColor];
         //[StringUitl setCornerRadius:videoCell.cellBgView withRadius:5.0f];
         //[StringUitl setCornerRadius:videoCell.videoPic withRadius:5.0f];
         //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
@@ -706,7 +708,7 @@
         }
         
         PicTableViewCell *picCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
-        picCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        picCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         picCell.backgroundColor = [UIColor clearColor];
         //[StringUitl setCornerRadius:picCell.cellBgView withRadius:5.0f];
         //[StringUitl setCornerRadius:picCell.picView withRadius:5.0f];

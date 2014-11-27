@@ -47,7 +47,7 @@
 #define CONTENT_BACK_COLOR @"#F5F5F5"//正文背景
 #define CONTENT_BACKGROUND @"background.jpeg"//正文背景
 #define TABR_BG_ICON @"tabbarbg@2x.png"//底部导航图
-#define TABR_SBG_ICON @"tabBar_selected_7@2x.png"//底部导航选中图
+#define TABR_SBG_ICON @"tabbarbgon@2x.png"//底部导航选中图
 #define NAVBAR_BG_ICON @"titlebar-gray@2x"//导航背景
 #define NAVBAR_LEFT_ICON @"nav_back@2x.png"//返回按钮图标
 #define NAVBAR_RIGHT_ICON @"iconi.png"//个人中心图标

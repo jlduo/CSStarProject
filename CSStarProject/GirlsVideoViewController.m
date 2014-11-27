@@ -84,7 +84,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:YES];
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     
@@ -592,7 +592,7 @@
 -(void)myMoviePlayStateCallback:(NSNotification*)notify{
     
     MPMoviePlayerController *player = notify.object;
-    NSLog(@"state==%d",player.playbackState);
+    //NSLog(@"state==%d",player.playbackState);
     switch (player.playbackState) {
         case MPMoviePlaybackStateStopped:
             [moviePlayer setFullscreen:NO animated:YES];

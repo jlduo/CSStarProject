@@ -6,7 +6,10 @@
 //  Copyright (c) 2014年 jialiduo. All rights reserved.
 //
 
+#import "Order.h"
+#import "DataSigner.h"
 #import "PayOrderViewController.h"
+#import <AlipaySDK/AlipaySDK.h>
 
 @interface PayOrderViewController (){
     NSMutableArray *titleArr;
@@ -167,112 +170,55 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section==0){
         NSLog(@"支付宝支付！");
+        //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
         NSString *appScheme = @"AlipaySdkJlduo";
-        NSString *order = [self getOrderInfo];
-        NSString *signedStr = [self doRsa:order];
         
-        NSString *orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
-                                 order, signedStr, @"RSA"];
-        NSLog(@"orderString=%@",orderString);
-        [AlixLibService payOrder:orderString AndScheme:appScheme seletor:_result target:self];
+        Order *order = [[Order alloc] init];
+        order.partner = PartnerID;
+        order.seller = SellerID;
+        
+        order.tradeNO = [orderInfo valueForKey:@"orderCode"]; //订单ID（由商家自行制定）
+        order.productName = [orderInfo valueForKey:@"projectName"]; //商品标题
+        order.productDescription = [orderInfo valueForKey:@"returnContent"]; //商品描述
+        float price = [[orderInfo valueForKey:@"amount"] floatValue];
+        order.amount = [NSString stringWithFormat:@"%.2f",price]; //商品价格
+        order.notifyURL = Notify_Url; //回调URL
+        
+        order.service = @"mobile.securitypay.pay";
+        order.paymentType = @"1";
+        order.inputCharset = @"utf-8";
+        order.itBPay = @"30m";
+        order.showUrl = @"m.alipay.com";
+        
+        //将商品信息拼接成字符串
+        NSString *orderSpec = [order description];
+        NSLog(@"orderSpec = %@",orderSpec);
+        
+        //获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
+        id<DataSigner> signer = CreateRSADataSigner(PartnerPrivKey);
+        NSString *signedString = [signer signString:orderSpec];
+
+        
+        //将签名成功字符串格式化为订单字符串,请严格按照该格式
+        NSString *orderString = nil;
+        if (signedString != nil) {
+            orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
+                           orderSpec, signedString, @"RSA"];
+            
+            [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+                NSLog(@"reslut = %@",resultDic);
+            }];
+            
+        }
+
         
     }else{
         NSLog(@"网银支付！");
     }
     
-}
-
-
--(NSString*)getOrderInfo
-{
-    /*
-     *点击获取prodcut实例并初始化订单信息
-     */
-    AlixPayOrder *order = [[AlixPayOrder alloc] init];
-    order.partner = PartnerID;
-    order.seller = SellerID;
-    
-    order.tradeNO = [orderInfo valueForKey:@"orderCode"]; //订单ID（由商家自行制定）
-    order.productName = [orderInfo valueForKey:@"projectName"]; //商品标题
-    order.productDescription = [orderInfo valueForKey:@"returnContent"]; //商品描述
-    float price = [[orderInfo valueForKey:@"amount"] floatValue];
-    order.amount = [NSString stringWithFormat:@"%.2f",price]; //商品价格
-    order.notifyURL = Notify_Url; //回调URL
-    order.returnUrl = Notify_Url;
-    
-    return [order description];
-}
-
-- (NSString *)generateTradeNO
-{
-    const int N = 15;
-    
-    NSString *sourceString = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    NSMutableString *result = [[NSMutableString alloc] init] ;
-    srand(time(0));
-    for (int i = 0; i < N; i++)
-    {
-        unsigned index = rand() % [sourceString length];
-        NSString *s = [sourceString substringWithRange:NSMakeRange(index, 1)];
-        [result appendString:s];
-    }
-    return result;
-}
-
--(NSString*)doRsa:(NSString*)order
-{
-    id<DataSigner> signer;
-    signer = CreateRSADataSigner(PartnerPrivKey);
-    NSString *signedString = [signer signString:order];
-    return signedString;
-}
-
--(void)paymentResultDelegate:(NSString *)result
-{
-    NSLog(@"result=%@",result);
-}
-
-//wap回调函数
--(void)paymentResult:(NSString *)resultd
-{
-    //结果处理
-#if ! __has_feature(objc_arc)
-    AlixPayResult* result = [[[AlixPayResult alloc] initWithString:resultd] autorelease];
-#else
-    AlixPayResult* result = [[AlixPayResult alloc] initWithString:resultd];
-#endif
-    if (result)
-    {
-        
-        if (result.statusCode == 9000)
-        {
-            /*
-             *用公钥验证签名 严格验证请使用result.resultString与result.signString验签
-             */
-            
-            //交易成功
-            NSString* key = AlipayPubKey;//签约帐户后获取到的支付宝公钥
-            id<DataVerifier> verifier;
-            verifier = CreateRSADataVerifier(key);
-            
-            if ([verifier verifyString:result.resultString withSign:result.signString])
-            {
-                [self showPageInfo];
-            }
-        }
-        else
-        {
-            //交易失败
-        }
-    }
-    else
-    {
-        //失败
-    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
-
-
 
 
 #pragma mark 设置行高
@@ -295,7 +241,7 @@
         payCell = [nib objectAtIndex:0];
     }
     
-    payCell.selectionStyle =UITableViewCellSelectionStyleNone;
+    payCell.selectionStyle =UITableViewCellSelectionStyleBlue;
     payCell.backgroundColor = [UIColor clearColor];
     
     payCell.conBgView.layer.masksToBounds = YES;

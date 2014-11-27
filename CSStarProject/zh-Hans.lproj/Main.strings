@@ -1,33 +1,33 @@
 
 /* Class = "IBUIViewController"; title = "首页_ViewController"; ObjectID = "Dzb-sy-isU"; */
-"Dzb-sy-isU.title" = "首页_ViewController";
+"Dzb-sy-isU.title" = "首页";
 
 /* Class = "IBUIViewController"; title = "朋友圈_ViewController"; ObjectID = "HyK-ek-DHZ"; */
-"HyK-ek-DHZ.title" = "朋友圈_ViewController";
+"HyK-ek-DHZ.title" = "朋友圈";
 
 /* Class = "IBUITabBarItem"; title = "首页"; ObjectID = "VMW-tR-qEl"; */
 "VMW-tR-qEl.title" = "首页";
 
 /* Class = "IBUIViewController"; title = "星城故事_ViewController"; ObjectID = "aGx-Wv-JVF"; */
-"aGx-Wv-JVF.title" = "星城故事_ViewController";
+"aGx-Wv-JVF.title" = "星城故事";
 
 /* Class = "IBUITabBarItem"; title = "美女私房"; ObjectID = "cUk-qe-19n"; */
 "cUk-qe-19n.title" = "美女私房";
 
 /* Class = "IBUIViewController"; title = "星城故事详情_ViewController"; ObjectID = "ciz-TT-mdh"; */
-"ciz-TT-mdh.title" = "星城故事详情_ViewController";
+"ciz-TT-mdh.title" = "星城故事详情";
 
 /* Class = "IBUIViewController"; title = "美女私房_ViewController"; ObjectID = "kdO-5D-qrW"; */
-"kdO-5D-qrW.title" = "美女私房_ViewController";
+"kdO-5D-qrW.title" = "美女私房";
 
 /* Class = "IBUIViewController"; title = "星城故事评论_ViewController"; ObjectID = "lkv-1K-pr1"; */
-"lkv-1K-pr1.title" = "星城故事评论_ViewController";
+"lkv-1K-pr1.title" = "星城故事评论";
 
 /* Class = "IBUITabBarItem"; title = "朋友圈"; ObjectID = "mvX-YJ-YXh"; */
 "mvX-YJ-YXh.title" = "朋友圈";
 
 /* Class = "IBUIViewController"; title = "活动众筹个_ViewController"; ObjectID = "oMW-WD-uXC"; */
-"oMW-WD-uXC.title" = "活动众筹个_ViewController";
+"oMW-WD-uXC.title" = "活动众筹";
 
 /* Class = "IBUITabBarItem"; title = "活动众筹"; ObjectID = "wJ3-ZW-y2N"; */
 "wJ3-ZW-y2N.title" = "活动众筹";

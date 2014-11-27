@@ -68,33 +68,43 @@
 }
 
 - (IBAction)clickLikeBtn:(id)sender {
-    [self showLoading:@"加载中..."];
+    
     [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like_on.png"]];
     [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport.png"]];
     [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-    
-    current_index = 1;
-    [self loadTableList:1];
+    if(current_index!=1){
+        current_index = 1;
+        [self showLoading:@"加载中..."];
+        [self loadTableList:1];
+    }
     
 }
 
 - (IBAction)clickSupportBtn:(id)sender {
-    [self showLoading:@"加载中..."];
+
     [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like.png"]];
     [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport_on.png"]];
     [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor.png"]];
-    current_index = 2;
-    [self loadTableList:3];
+    if(current_index!=2){
+        current_index = 2;
+        [self showLoading:@"加载中..."];
+        [self loadTableList:2];
+    }
+
     
 }
 
 - (IBAction)clickSponsorBtn:(id)sender {
-    [self showLoading:@"加载中..."];
+
     [self.likeIconView setImage:[UIImage imageNamed:@"myzone_like.png"]];
     [self.supportIconView setImage:[UIImage imageNamed:@"myzone_suport.png"]];
     [self.sponsorIconView setImage:[UIImage imageNamed:@"myzone_sponsor_on.png"]];
-    current_index = 3;
-    [self loadTableList:3];
+    if(current_index!=3){
+        current_index = 3;
+        [self showLoading:@"加载中..."];
+        [self loadTableList:3];
+    }
+
 
 }
 
@@ -214,6 +224,8 @@
         [self.navigationController pushViewController:deatilViewController animated:YES];
         
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -232,7 +244,7 @@
             projectCell = [nib objectAtIndex:0];
         }
         
-        projectCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        projectCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         projectCell.backgroundColor = [UIColor clearColor];
         
         

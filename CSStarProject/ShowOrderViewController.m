@@ -136,7 +136,7 @@
     [payBox setBackgroundColor:[UIColor redColor]];
     [payBox setTitle:@"重新支付" forState:UIControlStateNormal];
     [payBox setTitle:@"重新支付" forState:UIControlStateSelected];
-    payBox.titleLabel.font = main_font(16);
+    payBox.titleLabel.font = main_font(22);
     [payBox.layer setCornerRadius:5.0];
     [payBox.layer setMasksToBounds:YES];
     payBox.tag = -1;
@@ -144,7 +144,7 @@
     
     [footerView addSubview:payBox];
     int orderState = [[_orderInfoData valueForKey:@"orderStatus"] intValue];
-    if(orderState!=3 && orderState!=4){
+    if(orderState==1){
        [_showOrderTable setTableFooterView:footerView];
     }
     
@@ -161,7 +161,7 @@
 
 -(void)goPreviou{
     UIViewController *previousViewController;
-    int viewsCount = self.navigationController.viewControllers.count;
+    NSInteger viewsCount = self.navigationController.viewControllers.count;
     if(viewsCount>5){
        previousViewController = [self.navigationController.viewControllers objectAtIndex:2];
     }else{

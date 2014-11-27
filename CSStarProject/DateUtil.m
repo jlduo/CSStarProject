@@ -14,7 +14,7 @@
 //获取当前日期
 -(NSDate *)getCurDate{
     NSDate *date = [NSDate date];
-    NSLog(@"当前日期:%@",date);
+    //NSLog(@"当前日期:%@",date);
     return date;
 }
 
@@ -31,7 +31,7 @@
     NSDateFormatter *dateToStringFormatter=[[NSDateFormatter alloc] init];
     [dateToStringFormatter setDateFormat:formater];
     NSString *nsDate=[dateToStringFormatter stringFromDate:[self getCurDate]];
-    NSLog(@"当前日期:%@", nsDate);
+    //NSLog(@"当前日期:%@", nsDate);
     return nsDate;
 }
 
@@ -40,7 +40,7 @@
     NSDateFormatter *dateToStringFormatter=[[NSDateFormatter alloc] init];
     [dateToStringFormatter setDateFormat:formater];
     NSString *nsDate=[dateToStringFormatter stringFromDate:date];
-    NSLog(@"格式化指定日期:%@", nsDate);
+    //NSLog(@"格式化指定日期:%@", nsDate);
     return nsDate;
 }
 
@@ -50,7 +50,7 @@
     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     [dateFormatter setDateFormat:formater];
     NSString *fixString = [dateFormatter stringFromDate:date];
-    NSLog(@"修正当前日期:%@",fixString);
+    //NSLog(@"修正当前日期:%@",fixString);
     return fixString;
 }
 

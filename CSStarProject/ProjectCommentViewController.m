@@ -409,6 +409,7 @@
         [textField setText:@""];
         [textField becomeFirstResponder];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -450,7 +451,7 @@
             projectCommCell = [nib objectAtIndex:0];
         }
         
-        projectCommCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        projectCommCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         projectCommCell.backgroundColor = [UIColor whiteColor];
 
         NSString *creatName = [cellDic valueForKey:@"creatName"];

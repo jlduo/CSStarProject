@@ -50,7 +50,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:YES];
     InitTabBarViewController * customTabar = (InitTabBarViewController *)self.tabBarController;
     [customTabar hiddenDIYTaBar];
     
@@ -189,7 +189,7 @@
          
          
 -(void)goOrderInfo1:(UITapGestureRecognizer *)gester{
-    NSLog(@"gester.view.tag==%d",gester.view.tag);
+    //NSLog(@"gester.view.tag==%d",gester.view.tag);
     OrderInfoViewController *orderController = (OrderInfoViewController*)[self getVCFromSB:@"orderInfo"];
     passValelegate = orderController;
     [passValelegate passDicValue:[self.peopleReturnList objectAtIndex:gester.view.tag]];

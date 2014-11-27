@@ -158,7 +158,7 @@
 -(void)imgBtnClick:(UIButton *)sender{
     
     if([StringUitl checkLogin]==TRUE){
-        NSLog(@"tag==%d",sender.tag);
+        //NSLog(@"tag==%d",sender.tag);
         PeopleFilterProjectController *filterController = (PeopleFilterProjectController *)[self getVCFromSB:@"peopleFilter"];
         passValelegate = filterController;
         [passValelegate passValue:[NSString stringWithFormat:@"%d",sender.tag]];
@@ -313,7 +313,7 @@
 
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
-    int tag =  tap.view.tag;
+    NSInteger tag =  tap.view.tag;
     NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
     if(slideDic!=nil){
         
@@ -453,6 +453,7 @@
             [self.navigationController pushViewController:deatilViewController animated:YES];
         }
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark 加载数据
@@ -470,7 +471,7 @@
             peopelCell = [nib objectAtIndex:0];
         }
         
-        peopelCell.selectionStyle =UITableViewCellSelectionStyleNone;
+        peopelCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         peopelCell.backgroundColor = [UIColor clearColor];
 
         NSString *imgUrl =[cellDic valueForKey:@"imgUrl"];
@@ -593,9 +594,14 @@
 
 
 - (UIImage *)imageFromImage:(UIImage *)image inRect:(CGRect)rect {
+    
     CGImageRef sourceImageRef = [image CGImage];
     CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
-    return [UIImage imageWithCGImage:newImageRef];
+    UIImage *newImage =[UIImage imageWithCGImage:newImageRef];
+    //释放资源
+    CGImageRelease(newImageRef);
+    
+    return newImage;
 }
 
 @end

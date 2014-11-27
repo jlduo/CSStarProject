@@ -207,6 +207,8 @@
         [self.navigationController pushViewController:detailController animated:YES];
         
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -239,7 +241,7 @@
         
         StoryTableViewSmallCell *storySMCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StorySMCell"];
         storySMCell.backgroundColor = [UIColor clearColor];
-        storySMCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        storySMCell.selectionStyle = UITableViewCellSelectionStyleBlue;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
         [storySMCell.cellImg md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
@@ -258,7 +260,7 @@
         StoryTableViewBigCell *storyBCell = [_storyTableView dequeueReusableCellWithIdentifier:@"StoryBCell"];
         
         storyBCell.backgroundColor = [UIColor clearColor];
-        storyBCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        storyBCell.selectionStyle = UITableViewCellSelectionStyleBlue;
         
         NSString *imgUrl = [parray valueForKey:@"_img_url"];
         [storyBCell.cellImgView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];

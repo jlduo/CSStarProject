@@ -472,9 +472,14 @@
 
 
 - (UIImage *)imageFromImage:(UIImage *)image inRect:(CGRect)rect {
+    
     CGImageRef sourceImageRef = [image CGImage];
     CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);
-    return [UIImage imageWithCGImage:newImageRef];
+    UIImage *newImage =[UIImage imageWithCGImage:newImageRef];
+    //释放资源
+    CGImageRelease(newImageRef);
+    
+    return newImage;
 }
 
 @end

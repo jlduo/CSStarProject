@@ -150,6 +150,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     //[self loadDefaultAddress];
+    [super viewWillAppear:YES];
     [self.orderInfoTable setContentOffset:CGPointMake(0, self.orderInfoTable.contentSize.height -self.orderInfoTable.bounds.size.height) animated:YES];
     [_orderInfoTable reloadData];
     

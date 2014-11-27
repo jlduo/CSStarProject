@@ -8,7 +8,7 @@
         <!--朋友圈-->
         <scene sceneID="8g0-Fc-4ge">
             <objects>
-                <viewController title="朋友圈_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="HyK-ek-DHZ" userLabel="朋友圈" customClass="FriendViewController" sceneMemberID="viewController">
+                <viewController title="朋友圈" automaticallyAdjustsScrollViewInsets="NO" id="HyK-ek-DHZ" userLabel="朋友圈" customClass="FriendViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y0Y-al-qBh"/>
                         <viewControllerLayoutGuide type="bottom" id="eMC-jo-Kqd"/>
@@ -42,7 +42,7 @@
         <!--用户中心-->
         <scene sceneID="11l-C7-QfV">
             <objects>
-                <viewController storyboardIdentifier="userCenter" automaticallyAdjustsScrollViewInsets="NO" id="W3f-fJ-v68" userLabel="用户中心" customClass="UserViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="userCenter" title="用户中心" automaticallyAdjustsScrollViewInsets="NO" id="W3f-fJ-v68" userLabel="用户中心" customClass="UserViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jpm-o5-rYh"/>
                         <viewControllerLayoutGuide type="bottom" id="YIc-0F-TQS"/>
@@ -177,7 +177,7 @@
         <!--个人信息-->
         <scene sceneID="SZK-sf-YBp">
             <objects>
-                <viewController storyboardIdentifier="userInfo" automaticallyAdjustsScrollViewInsets="NO" id="gGP-qM-xoB" userLabel="个人信息" customClass="UserInfoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="userInfo" title="个人信息" automaticallyAdjustsScrollViewInsets="NO" id="gGP-qM-xoB" userLabel="个人信息" customClass="UserInfoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fye-1F-YzC"/>
                         <viewControllerLayoutGuide type="bottom" id="7L1-0u-trk"/>
@@ -324,7 +324,7 @@
         <!--首页-->
         <scene sceneID="HRF-6I-O9P">
             <objects>
-                <viewController title="首页_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="Dzb-sy-isU" userLabel="首页" customClass="HomeViewController" sceneMemberID="viewController">
+                <viewController title="首页" automaticallyAdjustsScrollViewInsets="NO" id="Dzb-sy-isU" userLabel="首页" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="B5C-SA-kna"/>
                         <viewControllerLayoutGuide type="bottom" id="MOI-9q-qSX"/>
@@ -362,7 +362,7 @@
         <!--美女私房-->
         <scene sceneID="Sb7-x3-X96">
             <objects>
-                <viewController storyboardIdentifier="girlsInfo" title="美女私房_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsInfoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="girlsInfo" title="美女私房" automaticallyAdjustsScrollViewInsets="NO" id="kdO-5D-qrW" userLabel="美女私房" customClass="GirlsInfoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2VX-Ee-d2V"/>
                         <viewControllerLayoutGuide type="bottom" id="Uv1-g8-3ip"/>
@@ -511,7 +511,7 @@
         <!--众筹列表-->
         <scene sceneID="L3F-fL-ZPQ">
             <objects>
-                <viewController storyboardIdentifier="peopleProList" automaticallyAdjustsScrollViewInsets="NO" id="BCc-Bt-FKb" userLabel="众筹列表" customClass="PeopleProListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="peopleProList" title="众筹列表" automaticallyAdjustsScrollViewInsets="NO" id="BCc-Bt-FKb" userLabel="众筹列表" customClass="PeopleProListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="XRX-PZ-kV1"/>
                         <viewControllerLayoutGuide type="bottom" id="Ejh-Tv-Scb"/>
@@ -696,7 +696,7 @@
         <!--活动众筹-->
         <scene sceneID="bp3-Pq-Adq">
             <objects>
-                <viewController title="活动众筹个_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="oMW-WD-uXC" userLabel="活动众筹" customClass="PeopleViewController" sceneMemberID="viewController">
+                <viewController title="活动众筹" automaticallyAdjustsScrollViewInsets="NO" id="oMW-WD-uXC" userLabel="活动众筹" customClass="PeopleViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RQm-eW-vjD"/>
                         <viewControllerLayoutGuide type="bottom" id="YFX-DV-uf5"/>
@@ -1036,7 +1036,7 @@
         <!--星城故事-->
         <scene sceneID="9hq-Y2-9rs">
             <objects>
-                <viewController title="星城故事_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="aGx-Wv-JVF" userLabel="星城故事" customClass="StoryViewController" sceneMemberID="viewController">
+                <viewController title="星城故事" automaticallyAdjustsScrollViewInsets="NO" id="aGx-Wv-JVF" userLabel="星城故事" customClass="StoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3Nt-YM-Jjg"/>
                         <viewControllerLayoutGuide type="bottom" id="bUC-5V-IZv"/>
@@ -1074,7 +1074,7 @@
         <!--星城故事详情-->
         <scene sceneID="s72-QE-N4T">
             <objects>
-                <viewController storyboardIdentifier="storyDetail" title="星城故事详情_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="ciz-TT-mdh" userLabel="星城故事详情" customClass="StoryDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="storyDetail" title="星城故事详情" automaticallyAdjustsScrollViewInsets="NO" id="ciz-TT-mdh" userLabel="星城故事详情" customClass="StoryDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qPJ-EK-9xL"/>
                         <viewControllerLayoutGuide type="bottom" id="rPL-NE-sJR"/>
@@ -1171,89 +1171,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hfV-NB-kBB">
-                                <rect key="frame" x="10" y="75" width="300" height="245"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="收 件 人:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gxd-8A-V1N">
-                                        <rect key="frame" x="11" y="9" width="73" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入收件人" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sWh-q5-xHO">
-                                        <rect key="frame" x="82" y="5" width="216" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qKM-3D-BJC">
-                                        <rect key="frame" x="0.0" y="38" width="300" height="1"/>
-                                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="手机号码:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0K-pF-VIB">
-                                        <rect key="frame" x="12" y="47" width="71" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EoD-UU-1JU">
-                                        <rect key="frame" x="82" y="43" width="216" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
-                                    </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.49999999999999961" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APj-EE-4hH">
-                                        <rect key="frame" x="0.0" y="75" width="300" height="1"/>
-                                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="详细地址:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QI5-4v-64i">
-                                        <rect key="frame" x="12" y="152" width="71" height="93"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="owH-Xq-ymI">
-                                        <rect key="frame" x="85" y="183" width="215" height="59"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="所在地区:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5o-cE-Ora">
-                                        <rect key="frame" x="12" y="122" width="71" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入所在地区" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-Wx-FK2">
-                                        <rect key="frame" x="82" y="117" width="216" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVs-LN-2lN">
-                                        <rect key="frame" x="0.0" y="112" width="300" height="1"/>
-                                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="邮政编码:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nN0-BO-vFy">
-                                        <rect key="frame" x="12" y="84" width="71" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入邮政编码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H1f-kh-Waq">
-                                        <rect key="frame" x="82" y="80" width="216" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                    </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dMJ-nv-MZ8">
-                                        <rect key="frame" x="0.0" y="151" width="300" height="1"/>
-                                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
                             <button opaque="NO" tag="-1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofd-8J-E3Q">
-                                <rect key="frame" x="10" y="340" width="300" height="45"/>
+                                <rect key="frame" x="10" y="382" width="300" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -1265,6 +1184,87 @@
                                     <action selector="clickDeleteBtn:" destination="vXx-BE-uUk" eventType="touchUpInside" id="JG5-3W-25X"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hfV-NB-kBB">
+                                <rect key="frame" x="10" y="75" width="300" height="245"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="收 件 人:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gxd-8A-V1N">
+                                        <rect key="frame" x="11" y="18" width="73" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入收件人" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sWh-q5-xHO">
+                                        <rect key="frame" x="82" y="14" width="216" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qKM-3D-BJC">
+                                        <rect key="frame" x="80" y="37" width="211" height="1"/>
+                                        <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="手机号码:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0K-pF-VIB">
+                                        <rect key="frame" x="12" y="56" width="71" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EoD-UU-1JU">
+                                        <rect key="frame" x="82" y="52" width="216" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.49999999999999961" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APj-EE-4hH">
+                                        <rect key="frame" x="80" y="75" width="218" height="1"/>
+                                        <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="详细地址:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QI5-4v-64i">
+                                        <rect key="frame" x="12" y="152" width="71" height="93"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="所在地区:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5o-cE-Ora">
+                                        <rect key="frame" x="12" y="131" width="71" height="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入所在地区" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-Wx-FK2">
+                                        <rect key="frame" x="82" y="126" width="216" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVs-LN-2lN">
+                                        <rect key="frame" x="80" y="112" width="218" height="1"/>
+                                        <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="邮政编码:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nN0-BO-vFy">
+                                        <rect key="frame" x="12" y="92" width="71" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入邮政编码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H1f-kh-Waq">
+                                        <rect key="frame" x="82" y="88" width="216" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dMJ-nv-MZ8">
+                                        <rect key="frame" x="80" y="150" width="218" height="1"/>
+                                        <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="owH-Xq-ymI">
+                                        <rect key="frame" x="85" y="182" width="213" height="64"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1280,12 +1280,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bfy-Dd-qvV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2764" y="-837"/>
+            <point key="canvasLocation" x="2764" y="-835"/>
         </scene>
         <!--星城故事评论-->
         <scene sceneID="8Ww-Gb-4iq">
             <objects>
-                <viewController storyboardIdentifier="storyComment" title="星城故事评论_ViewController" automaticallyAdjustsScrollViewInsets="NO" id="lkv-1K-pr1" userLabel="星城故事评论" customClass="StoryCommentViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="storyComment" title="星城故事评论" automaticallyAdjustsScrollViewInsets="NO" id="lkv-1K-pr1" userLabel="星城故事评论" customClass="StoryCommentViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MCI-wC-KVn"/>
                         <viewControllerLayoutGuide type="bottom" id="O8d-QU-9WU"/>

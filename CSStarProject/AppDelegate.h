@@ -14,6 +14,7 @@
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <CoreData/CoreData.h>
+#import <Foundation/Foundation.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
     BOOL _isFull; // 是否全屏
@@ -26,8 +27,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-- (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
 
 
 @end

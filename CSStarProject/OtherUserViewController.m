@@ -92,7 +92,7 @@
 
 -(void)getMyProjectsNums{
     
-    NSString *userid = [StringUitl getSessionVal:LOGIN_USER_ID];
+    NSString *userid = [params valueForKey:@"userId"];
     NSLog(@"userid=%@",userid);
     [HttpClient getOTUserCenterData:userid
                            isjson:FALSE
@@ -237,6 +237,7 @@
             break;
     }
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -292,7 +293,7 @@
        [userCell.dataNum setText:@"0"];
     }
    
-    userCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    userCell.selectionStyle = UITableViewCellSelectionStyleBlue;
     return userCell;
 
 }

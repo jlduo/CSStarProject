@@ -129,7 +129,7 @@
 - (void)changeViewController:(UIButton *)sender
 {
     current_index = sender.tag;
-    NSLog(@"index=%d",current_index);
+    //NSLog(@"index=%d",current_index);
     if(sender.tag==0){
         
         self.selectedIndex = 0;

@@ -74,6 +74,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
     
     NSString *name = [_provinceArray objectAtIndex:selectedProvinceIndex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",name];
@@ -164,7 +165,7 @@
 }
 
 -(void)goPreviou{
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -383,8 +384,8 @@
     
     NSInteger proInex = [self.cityPciker selectedRowInComponent:0];
     NSInteger cityInex = [self.cityPciker selectedRowInComponent:1];
-    NSLog(@"proInex=%d",proInex);
-    NSLog(@"cityInex=%d",cityInex);
+    //NSLog(@"proInex=%d",proInex);
+    //NSLog(@"cityInex=%d",cityInex);
     
     NSString *pname = [_provinceArray objectAtIndex:proInex];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.name == %@",pname];

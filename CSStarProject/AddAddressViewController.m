@@ -89,6 +89,7 @@
 }
 
 -(void)goPreviou{
+    [super goPreviou];
     [self dismissViewControllerAnimated:YES completion:^{
         [self clearAddress];
     }];
@@ -184,6 +185,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
     otype = [params valueForKey:@"oType"];
     if([otype isEqualToString:@"edit"]){//修改动作
         self.recPeopleTxt.text = [params valueForKey:@"userName"];
@@ -291,6 +293,13 @@
         [self showNo:@"详细地址为空"];
         return;
     }
+    
+    //验证手机号码
+    if (![phone isValidPhoneNum]) {
+        [self showNo:@"手机号码不正确!"];
+        return;
+    };
+    
 
     [self dismissKeyBoard];
     [self showLoading:@"数据保存中..."];
