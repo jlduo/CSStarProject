@@ -230,7 +230,7 @@
     
     UIBarButtonItem *leftBtnItem = [[UIBarButtonItem alloc] initWithCustomView:lbtn];
     int orderState = [[_orderInfoData valueForKey:@"orderStatus"] intValue];
-    if(orderState!=3 && orderState!=4){
+    if(orderState==1){
         //设置右侧按钮
         rbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [rbtn setFrame:CGRectMake(0, 0, 45, 45)];
@@ -309,7 +309,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 

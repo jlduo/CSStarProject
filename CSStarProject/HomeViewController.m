@@ -17,7 +17,7 @@
     NSArray *slideArr;
     NSArray *commonArr;
     NSString * artId;
-    
+
     NSMutableArray *imageArr;
     MWPhoto *photo;
     
@@ -113,7 +113,7 @@
 
 - (void)tapImage:(UITapGestureRecognizer *)tap{
     
-    int tag =  tap.view.tag;
+    int tag = tap.view.tag;
     NSDictionary *slideDic = [slideArr objectAtIndex:tag-1];
     NSString *dataId = [[slideDic valueForKey:@"_id"] stringValue];
     NSString *data_Type = [slideDic valueForKey:@"_category_call_index"];
@@ -355,9 +355,10 @@
                     _headTitleArray = [NSMutableArray arrayWithArray:@[@"美女私房",@"星城故事",@"活动众筹"]];
                     [_homeTableView reloadData];
                     showflag++;
-                    if (showflag==4) {
-                        [friendlyLoadingView removeFromSuperview];
+                    if(showflag>2){
+                       [friendlyLoadingView removeFromSuperview];
                     }
+                
                     
                     
                 }//end if
@@ -381,7 +382,7 @@
     NSLog(@"error->%@",error);
     [self initLoading];
     [self showLoading];
-    [self showNo:@"请求失败,网络错误!"];
+    //[self showNo:@"请求失败,网络错误!"];
     
 }
 
@@ -653,85 +654,76 @@
 #pragma mark 加载数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    switch (indexPath.section) {
-        case 0:
-            cellDic = [self.girlsDataList objectAtIndex:indexPath.row];
-            break;
-        case 1:
-            cellDic = [self.storyDataList objectAtIndex:indexPath.row];
-            break;
-        case 2:
-            cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
-            break;
-        default:
-            break;
-    }
-    
-    
-    
-    dataType = [cellDic valueForKey:@"_category_call_index"];
-    if([dataType isEqual:@"video"]){//判断是否为视频
+    if(indexPath.section==0){//美女私房
         
-        static BOOL isNibregistered = NO;
-        if(!isNibregistered){
-            UINib *nibCell = [UINib nibWithNibName:@"VideoTableViewCell" bundle:nil];
-            [tableView registerNib:nibCell forCellReuseIdentifier:@"VideoCell"];
-            isNibregistered = YES;
-        }
+        cellDic = [self.girlsDataList objectAtIndex:indexPath.row];
+
+        UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
+        [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
         
-        VideoTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
+        PicTableViewCell *videoCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
         videoCell.selectionStyle =UITableViewCellSelectionStyleBlue;
-        videoCell.backgroundColor = [UIColor blueColor];
-        //[StringUitl setCornerRadius:videoCell.cellBgView withRadius:5.0f];
-        //[StringUitl setCornerRadius:videoCell.videoPic withRadius:5.0f];
-        //[StringUitl setViewBorder:videoCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
+        videoCell.backgroundColor = [UIColor clearColor];
         
         NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
-        [videoCell.videoPic md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+        [videoCell.picView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         
-        videoCell.videoTitle.text = [cellDic valueForKey:@"_title"];
-        videoCell.videoTitle.font = TITLE_FONT;
-        videoCell.videoDesc.text = [cellDic valueForKey:@"_zhaiyao"];
-        videoCell.videoDesc.font = DESC_FONT;
-        NSNumber * clickNum =[cellDic valueForKey:@"_click"];
-        videoCell.clickNum.text = [clickNum stringValue];
-        videoCell.videoTime.text = [cellDic valueForKey:@"_call_index"];
+        videoCell.titleView.text = [cellDic valueForKey:@"_title"];
+        videoCell.titleView.font = TITLE_FONT;
+        videoCell.descView.text = [cellDic valueForKey:@"_zhaiyao"];
+        videoCell.descView.font = DESC_FONT;
+        
         return videoCell;
-
-    }else{
         
-        static BOOL isNibregistered = NO;
-        if(!isNibregistered){
-            UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
-            [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
-            isNibregistered = YES;
-        }
+    }else if(indexPath.section==1){//星城故事
+        
+        cellDic = [self.storyDataList objectAtIndex:indexPath.row];
+    
+        UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
+        [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
         
         PicTableViewCell *picCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
         picCell.selectionStyle =UITableViewCellSelectionStyleBlue;
         picCell.backgroundColor = [UIColor clearColor];
-        //[StringUitl setCornerRadius:picCell.cellBgView withRadius:5.0f];
-        //[StringUitl setCornerRadius:picCell.picView withRadius:5.0f];
-        //[StringUitl setViewBorder:picCell.cellBgView withColor:@"#F5F5F5" Width:0.5f];
-        
-        
         
         NSString *imgUrl =[cellDic valueForKey:@"_img_url"];
         NSString *labelText = [cellDic valueForKey:@"_zhaiyao"];
         NSString *ctitle = [cellDic valueForKey:@"_title"];
-        if (indexPath.section==2) {//处理众筹
-            imgUrl = [cellDic valueForKey:@"imgurl"];
-            labelText = [cellDic valueForKey:@"introduction"];
-            ctitle = [cellDic valueForKey:@"projectName"];
-        }
-
+        
         [picCell.picView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
         picCell.titleView.text = ctitle;
+        
         picCell.titleView.font = TITLE_FONT;
         picCell.descView.text = labelText;
         picCell.descView.font = DESC_FONT;
+        
         return picCell;
         
+    }else{//众筹
+        
+        cellDic = [self.peopleDataList objectAtIndex:indexPath.row];
+        
+        UINib *nibCell = [UINib nibWithNibName:@"PicTableViewCell" bundle:nil];
+        [tableView registerNib:nibCell forCellReuseIdentifier:@"PicCell"];
+        
+        PicTableViewCell *peopleCell = [tableView dequeueReusableCellWithIdentifier:@"PicCell"];
+        peopleCell.selectionStyle =UITableViewCellSelectionStyleBlue;
+        peopleCell.backgroundColor = [UIColor clearColor];
+        
+        
+        NSString *imgUrl =[cellDic valueForKey:@"imgurl"];
+        NSString *labelText = [cellDic valueForKey:@"introduction"];
+        NSString *ctitle = [cellDic valueForKey:@"projectName"];
+        
+        [peopleCell.picView md_setImageWithURL:imgUrl placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+        peopleCell.titleView.text = ctitle;
+        
+        peopleCell.titleView.font = TITLE_FONT;
+        peopleCell.descView.text = labelText;
+        peopleCell.descView.font = DESC_FONT;
+        
+        return peopleCell;
+    
     }
     
 }

@@ -145,7 +145,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -273,7 +273,6 @@
     NSString *beizhu = remarkTextField.text;
     NSString *snum = numTextField.text;
     NSString *returnId = [[_orderInfoData valueForKey:@"id"] stringValue];
-    
     if([StringUitl isEmpty:addressId] && checkBox.tag==99){
         [self showNo:@"收货地址不能为空"];
         return;
@@ -281,6 +280,11 @@
     
     if([StringUitl isEmpty:snum]){
         [self showNo:@"数量不能为空"];
+        return;
+    }
+    
+    if(![snum isValidNum]){
+        [self showNo:@"数量必须大于0"];
         return;
     }
     
@@ -362,23 +366,24 @@
        return 120;
         
     }if(indexPath.section==sectionNum-4){
-        static NSString *CustomCellIdentifier = @"SReturnCell";
-        ReturnTableViewCell *returnCell =  (ReturnTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
-        
-        if (returnCell == nil) {
-            NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"ReturnTableViewCell" owner:self options:nil] ;
-            returnCell = [nib objectAtIndex:0];
-        }
-        
-        NSString *returnContent = [self.orderInfoData valueForKey:@"description"];
-        returnCell.returnText.text = returnContent;
-        returnCell.returnText.font = main_font(12);
-        CGSize labelsize = [returnCell.returnText contentSize];
-        if(labelsize.height>20){
-           return 23 +labelsize.height;
-        }else{
-           return 50;
-        }
+        return 100;
+//        static NSString *CustomCellIdentifier = @"SReturnCell";
+//        ReturnTableViewCell *returnCell =  (ReturnTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+//        
+//        if (returnCell == nil) {
+//            NSArray * nib = [[NSBundle mainBundle] loadNibNamed:@"ReturnTableViewCell" owner:self options:nil] ;
+//            returnCell = [nib objectAtIndex:0];
+//        }
+//        
+//        NSString *returnContent = [self.orderInfoData valueForKey:@"description"];
+//        returnCell.returnText.text = returnContent;
+//        returnCell.returnText.font = main_font(12);
+//        CGSize labelsize = [returnCell.returnText contentSize];
+//        if(labelsize.height>20){
+//           return labelsize.height;
+//        }else{
+//           return 50;
+//        }
         
     }else{
      return 80;

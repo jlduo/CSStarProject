@@ -54,6 +54,7 @@
     UITapGestureRecognizer *singleTapWeb = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [_detailContentView addGestureRecognizer:singleTapWeb];
     _detailContentView.scrollView.showsVerticalScrollIndicator = NO;
+    _detailContentView.scrollView.showsHorizontalScrollIndicator = NO;
     singleTapWeb.delegate= self;
     singleTapWeb.cancelsTouchesInView = NO;
     //加载网页数据
@@ -106,7 +107,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{

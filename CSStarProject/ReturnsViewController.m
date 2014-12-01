@@ -119,7 +119,7 @@
 //    }else{
 //        return 170;
 //    }
-    return 170;
+    return 200;
     
 }
 
@@ -153,7 +153,7 @@
         peopelCell.descText.text = [cellDic valueForKey:@"description"];
         peopelCell.descText.font = DESC_FONT;
         
-        peopelCell.saveBtn.titleLabel.font = main_font(16);
+        peopelCell.saveBtn.titleLabel.font = main_font(20);
         peopelCell.saveBtn.layer.cornerRadius = 5.0;
         peopelCell.saveBtn.layer.masksToBounds = TRUE;
         
@@ -168,7 +168,7 @@
 //        [peopelCell addSubview:textBtn];
         
         if(indexPath.row%2==1){
-            peopelCell.backgroundColor = [StringUitl colorWithHexString:@"#cccccc"];
+            peopelCell.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
             peopelCell.descText.backgroundColor = [UIColor clearColor];
         }else{
             peopelCell.backgroundColor = [UIColor whiteColor];

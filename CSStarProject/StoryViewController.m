@@ -180,7 +180,7 @@
     [self initLoading];
     [self setHeaderRereshing];
     [self showLoading];
-    [self showNo:@"请求失败,网络错误!"];
+    //[self showNo:@"请求失败,网络错误!"];
     
 }
 

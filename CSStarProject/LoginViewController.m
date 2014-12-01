@@ -135,26 +135,27 @@
 
 -(void)goRegister{
     RegisterViewController *userRegView = [[RegisterViewController alloc] init];
-    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"NAV"]) {
     
-        [self presentViewController:userRegView animated:YES completion:nil];
+        
+        [self.navigationController pushViewController:userRegView animated:YES];
         
     }else{
         
-        [self.navigationController pushViewController:userRegView animated:YES];
+        [self presentViewController:userRegView animated:YES completion:nil];
         
     }
 }
 
 -(void)getPassword{
     FogetPasswordViewController *getPassword = [[FogetPasswordViewController alloc] init];
-    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]) {
+    if ([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"NAV"]) {
 
-        [self presentViewController:getPassword animated:YES completion:nil];
+        [self.navigationController pushViewController:getPassword animated:YES];
         
     }else{
         
-        [self.navigationController pushViewController:getPassword animated:YES];
+       [self presentViewController:getPassword animated:YES completion:nil];
         
     }
 }
@@ -306,8 +307,9 @@
                                      
                                  }else{
                                      
-                                     UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
-                                     [self.navigationController pushViewController:userView animated:YES];
+                                     //UserViewController *userView = (UserViewController *)[self getVCFromSB:@"userCenter"];
+                                     //[self.navigationController pushViewController:userView animated:YES];
+                                     [self.navigationController popViewControllerAnimated:YES];
                                      
                                  }
                                  

@@ -15,6 +15,8 @@
 		7E17D5D219F8E13700FB7535 /* profile_btn_like@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E17D5D019F8E13700FB7535 /* profile_btn_like@2x.png */; };
 		7E17D5D519F8E14A00FB7535 /* profile_btn_unlike.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E17D5D319F8E14A00FB7535 /* profile_btn_unlike.png */; };
 		7E17D5D619F8E14A00FB7535 /* profile_btn_unlike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E17D5D419F8E14A00FB7535 /* profile_btn_unlike@2x.png */; };
+		7E2039D61A26F44D003DF722 /* DXPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2039D51A26F44D003DF722 /* DXPopover.m */; };
+		7E2039D91A270BB0003DF722 /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2039D81A270BB0003DF722 /* MarqueeLabel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7E24EFA719F75BFC00E4BDCE /* XHFriendlyLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E24EFA619F75BFC00E4BDCE /* XHFriendlyLoadingView.m */; };
 		7E24EFB019F7682A00E4BDCE /* tips_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E24EFAD19F7682A00E4BDCE /* tips_error.png */; };
 		7E24EFB119F7682A00E4BDCE /* tips_success.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E24EFAE19F7682A00E4BDCE /* tips_success.png */; };
@@ -215,6 +217,8 @@
 		7EA1BB051A08A04100995F46 /* nonetwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1BB041A08A04100995F46 /* nonetwork@2x.png */; };
 		7EA1BB0A1A08B24C00995F46 /* save34.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1BB081A08B24C00995F46 /* save34.png */; };
 		7EA1BB0C1A08B7BA00995F46 /* save17.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1BB0B1A08B7BA00995F46 /* save17.png */; };
+		7EA1DC9B1A2828B80037DFDB /* SubCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1DC9A1A2828B80037DFDB /* SubCollectionViewCell.xib */; };
+		7EA1DC9E1A2828EB0037DFDB /* SubCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DC9D1A2828EB0037DFDB /* SubCollectionViewCell.m */; };
 		7EA1E62719EE0EA20055158C /* OrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */; };
 		7EA1E62F19EE28EC0055158C /* OrderMoneyTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1E62D19EE28EC0055158C /* OrderMoneyTableCell.m */; };
 		7EA1E63019EE28EC0055158C /* OrderMoneyTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA1E62E19EE28EC0055158C /* OrderMoneyTableCell.xib */; };
@@ -326,7 +330,6 @@
 		7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA616E519B16D1B00FD319B /* UILabel+VerticalAlign.m */; };
 		7EA616FE19B1BF6500FD319B /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA616FC19B1BF6500FD319B /* UserTableViewCell.m */; };
 		7EA616FF19B1BF6500FD319B /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA616FD19B1BF6500FD319B /* UserTableViewCell.xib */; };
-		7EA8FF841A1C324E005354C4 /* DirectionMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FF821A1C324E005354C4 /* DirectionMPMoviePlayerViewController.m */; };
 		7EA8FFB81A1C8B54005354C4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FFA61A1C8B54005354C4 /* AFHTTPRequestOperation.m */; };
 		7EA8FFB91A1C8B54005354C4 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FFA81A1C8B54005354C4 /* AFHTTPRequestOperationManager.m */; };
 		7EA8FFBA1A1C8B54005354C4 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FFAA1A1C8B54005354C4 /* AFHTTPSessionManager.m */; };
@@ -338,7 +341,6 @@
 		7EA8FFC01A1C8B54005354C4 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FFB71A1C8B54005354C4 /* AFURLSessionManager.m */; };
 		7EA8FFC21A1C8D48005354C4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA8FFC11A1C8D48005354C4 /* CoreLocation.framework */; };
 		7EA8FFC51A1C9758005354C4 /* HttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8FFC41A1C9758005354C4 /* HttpClient.m */; };
-		7EA9525619FE134100620249 /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA9525519FE134100620249 /* MarqueeLabel.m */; };
 		7EAF2A9E19F6087E0047BF3D /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EAF2A9619F6087E0047BF3D /* MWPhotoBrowser.m */; };
 		7EAF2A9F19F6087E0047BF3D /* MWGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EAF2A9819F6087E0047BF3D /* MWGridViewController.m */; };
 		7EAF2AA019F6087E0047BF3D /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EAF2A9A19F6087E0047BF3D /* MWPhoto.m */; };
@@ -459,6 +461,10 @@
 		7E17D5D019F8E13700FB7535 /* profile_btn_like@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_btn_like@2x.png"; sourceTree = "<group>"; };
 		7E17D5D319F8E14A00FB7535 /* profile_btn_unlike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_btn_unlike.png; sourceTree = "<group>"; };
 		7E17D5D419F8E14A00FB7535 /* profile_btn_unlike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_btn_unlike@2x.png"; sourceTree = "<group>"; };
+		7E2039D41A26F44D003DF722 /* DXPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DXPopover.h; sourceTree = "<group>"; };
+		7E2039D51A26F44D003DF722 /* DXPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DXPopover.m; sourceTree = "<group>"; };
+		7E2039D71A270BB0003DF722 /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
+		7E2039D81A270BB0003DF722 /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
 		7E24EFA519F75BFC00E4BDCE /* XHFriendlyLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHFriendlyLoadingView.h; sourceTree = "<group>"; };
 		7E24EFA619F75BFC00E4BDCE /* XHFriendlyLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHFriendlyLoadingView.m; sourceTree = "<group>"; };
 		7E24EFAD19F7682A00E4BDCE /* tips_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tips_error.png; sourceTree = "<group>"; };
@@ -711,6 +717,9 @@
 		7EA1BB041A08A04100995F46 /* nonetwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nonetwork@2x.png"; sourceTree = "<group>"; };
 		7EA1BB081A08B24C00995F46 /* save34.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = save34.png; sourceTree = "<group>"; };
 		7EA1BB0B1A08B7BA00995F46 /* save17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = save17.png; sourceTree = "<group>"; };
+		7EA1DC9A1A2828B80037DFDB /* SubCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubCollectionViewCell.xib; sourceTree = "<group>"; };
+		7EA1DC9C1A2828EB0037DFDB /* SubCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubCollectionViewCell.h; sourceTree = "<group>"; };
+		7EA1DC9D1A2828EB0037DFDB /* SubCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubCollectionViewCell.m; sourceTree = "<group>"; };
 		7EA1E62519EE0EA20055158C /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
 		7EA1E62619EE0EA20055158C /* OrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInfoViewController.m; sourceTree = "<group>"; };
 		7EA1E62C19EE28EC0055158C /* OrderMoneyTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderMoneyTableCell.h; sourceTree = "<group>"; };
@@ -871,8 +880,6 @@
 		7EA616FB19B1BF6500FD319B /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewCell.h; sourceTree = "<group>"; };
 		7EA616FC19B1BF6500FD319B /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableViewCell.m; sourceTree = "<group>"; };
 		7EA616FD19B1BF6500FD319B /* UserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserTableViewCell.xib; sourceTree = "<group>"; };
-		7EA8FF821A1C324E005354C4 /* DirectionMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionMPMoviePlayerViewController.m; sourceTree = "<group>"; };
-		7EA8FF831A1C324E005354C4 /* DirectionMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionMPMoviePlayerViewController.h; sourceTree = "<group>"; };
 		7EA8FFA51A1C8B54005354C4 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		7EA8FFA61A1C8B54005354C4 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		7EA8FFA71A1C8B54005354C4 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -895,8 +902,6 @@
 		7EA8FFC11A1C8D48005354C4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7EA8FFC31A1C9758005354C4 /* HttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpClient.h; sourceTree = "<group>"; };
 		7EA8FFC41A1C9758005354C4 /* HttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpClient.m; sourceTree = "<group>"; };
-		7EA9525419FE134100620249 /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
-		7EA9525519FE134100620249 /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
 		7EAF2A9319F6087E0047BF3D /* MWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCommon.h; sourceTree = "<group>"; };
 		7EAF2A9419F6087E0047BF3D /* MWPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoBrowser.h; sourceTree = "<group>"; };
 		7EAF2A9519F6087E0047BF3D /* MWPhotoBrowserPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoBrowserPrivate.h; sourceTree = "<group>"; };
@@ -1190,6 +1195,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E2039D31A26F440003DF722 /* DXPopover */ = {
+			isa = PBXGroup;
+			children = (
+				7E2039D41A26F44D003DF722 /* DXPopover.h */,
+				7E2039D51A26F44D003DF722 /* DXPopover.m */,
+			);
+			name = DXPopover;
+			sourceTree = "<group>";
+		};
 		7E24EFA419F75B4800E4BDCE /* FriendPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1297,6 +1311,9 @@
 				7E9F546119F0E0A3009EF83C /* OrderTableViewCell.h */,
 				7E9F546219F0E0A3009EF83C /* OrderTableViewCell.m */,
 				7E9F546319F0E0A3009EF83C /* OrderTableViewCell.xib */,
+				7EA1DC9C1A2828EB0037DFDB /* SubCollectionViewCell.h */,
+				7EA1DC9D1A2828EB0037DFDB /* SubCollectionViewCell.m */,
+				7EA1DC9A1A2828B80037DFDB /* SubCollectionViewCell.xib */,
 			);
 			name = people;
 			sourceTree = "<group>";
@@ -1409,8 +1426,6 @@
 				7E9D342C19B6ED71005498D0 /* InitNavBarViewController.h */,
 				7E9D342D19B6ED71005498D0 /* InitNavBarViewController.m */,
 				7E99296D19BFE6A900481A48 /* ViewPassValueDelegate.h */,
-				7EA8FF821A1C324E005354C4 /* DirectionMPMoviePlayerViewController.m */,
-				7EA8FF831A1C324E005354C4 /* DirectionMPMoviePlayerViewController.h */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -1434,6 +1449,7 @@
 		7E971F4F19ADC93A00858D44 /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
+				7E2039D31A26F440003DF722 /* DXPopover */,
 				7EAF2AB119F608CF0047BF3D /* PSTCollectionView  */,
 				7E24EFA419F75B4800E4BDCE /* FriendPage */,
 				7EAF2ADB19F608EB0047BF3D /* DACircularProgress */,
@@ -2019,8 +2035,8 @@
 		7EA9525319FE133800620249 /* MarqueeLabel */ = {
 			isa = PBXGroup;
 			children = (
-				7EA9525419FE134100620249 /* MarqueeLabel.h */,
-				7EA9525519FE134100620249 /* MarqueeLabel.m */,
+				7E2039D71A270BB0003DF722 /* MarqueeLabel.h */,
+				7E2039D81A270BB0003DF722 /* MarqueeLabel.m */,
 			);
 			name = MarqueeLabel;
 			sourceTree = "<group>";
@@ -2364,6 +2380,7 @@
 				7E9F659A19EF56070041AB5E /* wrong@2x.png in Resources */,
 				7EA5E33019FF6FA8006E58F1 /* ShareSDKFlatShareViewUI.bundle in Resources */,
 				7EF4087619FA33C100B62DB8 /* btncategory.png in Resources */,
+				7EA1DC9B1A2828B80037DFDB /* SubCollectionViewCell.xib in Resources */,
 				7E9F546F19F103C1009EF83C /* payment_cancel.png in Resources */,
 				7E9F657119EF56070041AB5E /* progressbar-success.png in Resources */,
 				7E9F651B19EF56070041AB5E /* background.jpeg in Resources */,
@@ -2621,6 +2638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EA8FFB81A1C8B54005354C4 /* AFHTTPRequestOperation.m in Sources */,
+				7E2039D91A270BB0003DF722 /* MarqueeLabel.m in Sources */,
 				7EA8FFBF1A1C8B54005354C4 /* AFURLResponseSerialization.m in Sources */,
 				7EE6519719F61D2C0080AEDC /* PSTCollectionView.m in Sources */,
 				7EA4B9F619D11CAF000FF50E /* PhotoScrollViewCell.m in Sources */,
@@ -2666,7 +2684,7 @@
 				7E7A78DA1A1F325F005CE7B3 /* GirlsPhotoCollectionCell.m in Sources */,
 				7EE651A219F61D2C0080AEDC /* PSTGridLayoutSection.m in Sources */,
 				7E9C548819B85A0D00851CAB /* UserBigTableViewCell.m in Sources */,
-				7EA8FF841A1C324E005354C4 /* DirectionMPMoviePlayerViewController.m in Sources */,
+				7E2039D61A26F44D003DF722 /* DXPopover.m in Sources */,
 				7EAF2AAD19F608AF0047BF3D /* MWGridCell.m in Sources */,
 				7E9C548319B844BC00851CAB /* StringUitl.m in Sources */,
 				7EE6519919F61D2C0080AEDC /* PSTCollectionViewController.m in Sources */,
@@ -2695,7 +2713,6 @@
 				7EA616E619B16D1B00FD319B /* UILabel+VerticalAlign.m in Sources */,
 				7EAF2B1419F625DB0047BF3D /* UIImage+GIF.m in Sources */,
 				7EA32F5B19AEC4C2007FE086 /* FriendViewController.m in Sources */,
-				7EA9525619FE134100620249 /* MarqueeLabel.m in Sources */,
 				7E24EFA719F75BFC00E4BDCE /* XHFriendlyLoadingView.m in Sources */,
 				7EAF2B1919F625DB0047BF3D /* MKAnnotationView+WebCache.m in Sources */,
 				7EA32F5519AEC3EE007FE086 /* CommonViewController.m in Sources */,
@@ -2746,6 +2763,7 @@
 				7EA036DC19EB5FC000EF10A9 /* ContentDetailViewController.m in Sources */,
 				7EA5E27E19FF2F3F006E58F1 /* NSString+URLEncoding.m in Sources */,
 				7E7A78CB1A1F1202005CE7B3 /* GirlsCollectionCell.m in Sources */,
+				7EA1DC9E1A2828EB0037DFDB /* SubCollectionViewCell.m in Sources */,
 				7E9F65A619EF68980041AB5E /* AddAddressViewController.m in Sources */,
 				7EA8FFC01A1C8B54005354C4 /* AFURLSessionManager.m in Sources */,
 				7EA32F5219AEB56D007FE086 /* UserViewController.m in Sources */,
@@ -2908,7 +2926,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2949,7 +2967,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Hunan Zhoucheng Metro Media Co., Ltd (9S6AGN4QLP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

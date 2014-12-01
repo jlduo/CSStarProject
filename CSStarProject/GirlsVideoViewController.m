@@ -359,7 +359,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 
@@ -383,18 +383,10 @@
 
 -(void)setVideoView:(BOOL)isRemote{
     
-    if(isRemote){
-         //NSString *remoteUrl = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-         NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
-        moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
-        // moviePlayer = [[DirectionMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
-    }else{
-        NSString *moviePath = [[NSBundle mainBundle] pathForResource:@"testVideo" ofType:@"MOV"];
-        if(moviePath){
-          NSURL *movieURL = [NSURL fileURLWithPath:moviePath];
-          moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:movieURL];
-        }
-    }
+    //NSString *remoteUrl = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
+    NSString *remoteUrl = [bannerData valueForKey:@"_link_url"];
+    moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:remoteUrl]];
+    
     //设置播放器高度参数
     [[moviePlayer view] setFrame:CGRectMake(0,0, SCREEN_WIDTH, 180)];
     //[self.view addSubview:moviePlayer.view];

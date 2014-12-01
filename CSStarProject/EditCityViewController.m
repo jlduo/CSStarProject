@@ -165,7 +165,11 @@
 }
 
 -(void)goPreviou{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if([[StringUitl getSessionVal:FORWARD_TYPE] isEqualToString:@"TAB"]){
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

@@ -100,6 +100,10 @@
         [self showNo:@"请先输入手机号码"];
         return;
     }
+    if(![phoneNum isValidPhoneNum]){
+        [self showNo:@"输入的手机号有误!"];
+        return;
+    }
     
     [self resetFBtn:1];
     //开始处理

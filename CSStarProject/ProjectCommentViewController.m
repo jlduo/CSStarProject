@@ -322,7 +322,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 
@@ -375,7 +375,7 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[self setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:NO leftIcon:nil rightIcon:nil]];
+    [self.view addSubview:[self setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
     
 }
 

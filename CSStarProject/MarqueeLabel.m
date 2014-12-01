@@ -149,6 +149,7 @@
     UILabel *newLabel = [[UILabel alloc] initWithFrame:self.bounds];
     self.subLabel = newLabel;
     [self addSubview:self.subLabel];
+    [newLabel release];
     
     // Add notification observers
     // UINavigationController view controller change notifications
@@ -213,15 +214,14 @@
     // Perform animation
     self.awayFromHome = YES;
     [UIView animateWithDuration:interval
-                          delay:0.5
+                          delay:1.0 
                         options:self.animationOptions
                      animations:^{
                          self.subLabel.frame = self.awayLabelFrame;
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [self restartLabel];
-                             //[self scrollRightWithInterval:interval];
+                             [self scrollRightWithInterval:interval];
                          }
                      }];
 }
@@ -230,7 +230,7 @@
     
     // Perform animation
     [UIView animateWithDuration:animationDuration
-                          delay:0.5
+                          delay:0.3
                         options:self.animationOptions
                      animations:^{
                          self.subLabel.frame = self.homeLabelFrame;
@@ -238,7 +238,7 @@
                      completion:^(BOOL finished){
                          if (finished) {
                              // Set awayFromHome
-                             self.awayFromHome = YES;
+                             self.awayFromHome = NO;
                              [self scrollLeftWithInterval:interval];
                          }
                      }];
@@ -427,6 +427,9 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [labelText release];
+    [subLabel release];
+    [super dealloc];
 }
 
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ReturnTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *returnText;
+@property (weak, nonatomic) IBOutlet UITextView *returnText;
 @property (weak, nonatomic) IBOutlet UILabel *descText;
 
 @end

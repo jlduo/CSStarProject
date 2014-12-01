@@ -708,23 +708,40 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rds-N1-qqR">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="oMW-WD-uXC" id="asg-Gp-Nso"/>
                                     <outlet property="delegate" destination="oMW-WD-uXC" id="n1N-PE-m4S"/>
                                 </connections>
                             </tableView>
+                            <collectionView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Frc-H3-P3E">
+                                <rect key="frame" x="320" y="64" width="320" height="260"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0cn-tB-aCp">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="oMW-WD-uXC" id="ovw-sJ-CrH"/>
+                                    <outlet property="delegate" destination="oMW-WD-uXC" id="HJn-Ec-tgd"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="Pv2-nc-Y0G"/>
-                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="aJI-ha-Wm5"/>
-                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="hTF-By-H2j"/>
-                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="rDV-cB-Xgi"/>
+                            <constraint firstAttribute="bottom" secondItem="rds-N1-qqR" secondAttribute="bottom" constant="49" id="8SD-an-k1t"/>
+                            <constraint firstAttribute="trailing" secondItem="rds-N1-qqR" secondAttribute="trailing" id="TbH-qI-7v4"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="top" secondItem="620-OQ-8TU" secondAttribute="top" constant="64" id="UW8-38-VxF"/>
+                            <constraint firstItem="rds-N1-qqR" firstAttribute="leading" secondItem="620-OQ-8TU" secondAttribute="leading" id="o1x-BG-yzg"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rZm-zf-UuU"/>
                     <connections>
                         <outlet property="peopleTableView" destination="rds-N1-qqR" id="LhR-wE-BHb"/>
+                        <outlet property="subClloectionView" destination="Frc-H3-P3E" id="Gci-xn-Qde"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BqL-1v-6IF" userLabel="First Responder" sceneMemberID="firstResponder"/>

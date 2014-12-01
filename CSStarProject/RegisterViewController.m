@@ -124,6 +124,11 @@
         return;
     }
     
+    if(![phoneNum isValidPhoneNum]){
+        [self showNo:@"您输入的手机号有误!"];
+        return;
+    }
+    
     //开始获取验证码
     [HttpClient getCheckCode:phoneNum
                       isjson:TRUE
@@ -214,6 +219,7 @@
         [self showNo:@"您输入的手机号码有误"];
         return;
     }
+    
     
     //验证码密码
     if(pass_word.length<6||pass_word.length>14){
@@ -376,7 +382,7 @@
     NSLog(@"error=%@",error);
     [self hideHud];
     [self resetRegBtn:0];
-    [self showNo:@"请求失败,网络错误!"];
+    //[self showNo:@"请求失败,网络错误!"];
 }
 
 @end

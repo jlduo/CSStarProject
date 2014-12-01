@@ -27,7 +27,13 @@ static char imageURLKey;
 }
 
 - (void)md_setImageWithURL:(NSString *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options {
-    [self sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeholder options:options progress:nil completed:nil];
+    
+    if ([url isEqual:[NSNull null]]) {
+        [self sd_setImageWithURL:nil placeholderImage:placeholder options:options progress:nil completed:nil];
+    }else{
+        [self sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeholder options:options progress:nil completed:nil];
+    }
+    
 }
 
 - (void)sd_setImageWithURL:(NSURL *)url completed:(SDWebImageCompletionBlock)completedBlock {

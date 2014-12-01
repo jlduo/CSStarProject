@@ -7,6 +7,7 @@
 //
 #import "common.h"
 #import "StringUitl.h"
+#import "DXPopover.h"
 #import "MBProgressHUD.h"
 #import <UIKit/UIKit.h>
 #import "ConvertJSONData.h"

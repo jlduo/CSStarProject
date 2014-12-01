@@ -107,7 +107,7 @@
 -(void)goForward{
     NSLog(@"go");
     if([StringUitl checkLogin]==TRUE){
-
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UserViewController *userView =  [storyBoard instantiateViewControllerWithIdentifier:@"userCenter"];
         [self.navigationController pushViewController:userView animated:YES];

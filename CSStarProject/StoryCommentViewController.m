@@ -140,7 +140,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 
@@ -463,28 +463,28 @@
 
 -(void)loadView{
     [super loadView];
-    [self.view addSubview:[super setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:SHARE_ICON]];
+    [self.view addSubview:[super setNavBarWithTitle:@"评论列表" hasLeftItem:YES hasRightItem:YES leftIcon:nil rightIcon:nil]];
 }
 
--(void)goForward{
-    NSString *shareContent;
-    NSString *type = [params valueForKey:@"stype"];
-    if([type isEqualToString:@"wz"]){
-       shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_AT,detailId];
-    }else if([type isEqualToString:@"xc"]){
-        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_XC,detailId];
-    }else{
-        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_SP,detailId];
-    }
-    NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
-    [showMsg setObject:@"分享内容" forKey:@"showTitle"];
-    [showMsg setObject:shareContent forKey:@"contentString"];
-    [showMsg setObject:@"很无敌啊！" forKey:@"description"];
-    [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
-    
-    [self showShareAlert:showMsg];
-    
-}
+//-(void)goForward{
+//    NSString *shareContent;
+//    NSString *type = [params valueForKey:@"stype"];
+//    if([type isEqualToString:@"wz"]){
+//       shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_AT,detailId];
+//    }else if([type isEqualToString:@"xc"]){
+//        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_XC,detailId];
+//    }else{
+//        shareContent = [NSString stringWithFormat:@"%@ %@%@",[dicContent valueForKey:@"_title"],SHARE_SP,detailId];
+//    }
+//    NSMutableDictionary * showMsg = [[NSMutableDictionary alloc]init];
+//    [showMsg setObject:@"分享内容" forKey:@"showTitle"];
+//    [showMsg setObject:shareContent forKey:@"contentString"];
+//    [showMsg setObject:@"很无敌啊！" forKey:@"description"];
+//    [showMsg setObject:@"这个是默内容！" forKey:@"defaultContent"];
+//    
+//    [self showShareAlert:showMsg];
+//    
+//}
 
 
 -(void)goPreviou{

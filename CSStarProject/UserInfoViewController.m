@@ -426,7 +426,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:@"请求失败,网络错误!"];
+    //[self showNo:@"请求失败,网络错误!"];
 }
 
 //获取用户信息

@@ -152,7 +152,7 @@
     NSLog(@"error=%@",error);
     [self initLoading];
     [self showLoading];
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 

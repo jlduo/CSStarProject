@@ -12,7 +12,6 @@
     
     FFScrollView *scrollView;
     NSArray *sourceArray;
-    NSArray *projectsArray;
     NSArray *slideArr;
     NSArray *commonArr;
     NSDictionary *cellDic;
@@ -20,8 +19,6 @@
     
     BOOL isHeaderSeted;
     BOOL isFooterSeted;
-    UIView *filterBgView;
-    UIScrollView *photoScroll;
     XHFriendlyLoadingView *friendlyLoadingView;
     
     int showflag;
@@ -41,6 +38,7 @@
     _peopleTableView.showsVerticalScrollIndicator = NO;
     _peopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _peopleTableView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
+    
     
     //集成刷新控件
     [self setHeaderRereshing];
@@ -72,107 +70,6 @@
     });
 }
 
-//初始化过来条件层
--(void)initFilterView{
-    
-    UILabel *ptitle;
-    UIButton *imgbtn;
-    UIView *imgBgView;
-    UIImageView *imageView;
-    
-    filterBgView = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH,64, SCREEN_WIDTH, 75)];
-    filterBgView.backgroundColor = [StringUitl colorWithHexString:@"#F5F5F5"];
-    [StringUitl setViewBorder:filterBgView withColor:@"#cccccc" Width:0.5];
-    //处理全部按钮
-    imgBgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 75)];
-    [StringUitl setViewBorder:imgBgView withColor:@"#cccccc" Width:0.5];
-    
-    imageView = CGIMAG(20, 10, 40, 40);
-    imageView.userInteractionEnabled = YES;
-    [imageView setImage:CG_IMG(@"category-all.png")];
-    
-    [imgBgView addSubview:imageView];
-    
-    ptitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 35, 80, 40)];
-    ptitle.text = @"所有";
-    ptitle.font = main_font(12);
-    ptitle.textColor = [UIColor grayColor];
-    ptitle.textAlignment = NSTextAlignmentCenter;
-    [imgBgView addSubview:ptitle];
-    
-    [filterBgView addSubview:imgBgView];
-    
-    imgbtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 80, 75)];
-    [imgbtn setBackgroundColor:[UIColor clearColor]];
-    imgbtn.tag = -1;
-    [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [filterBgView addSubview:imgbtn];
-
-    
-    photoScroll = [[UIScrollView alloc]initWithFrame:CGRectMake(80, 0, SCREEN_WIDTH-80, 75)];
-    if(projectsArray!=nil && projectsArray.count>0){
-        
-        [photoScroll setContentSize:CGSizeMake((projectsArray.count)*80, 75)];
-        [photoScroll setShowsHorizontalScrollIndicator:NO];
-        [photoScroll setBackgroundColor:[StringUitl colorWithHexString:@"#FFFFFF"]];
-        [photoScroll setShowsVerticalScrollIndicator:NO];
-        
-        
-        NSMutableDictionary *picDic;
-        int len = projectsArray.count;
-        for(int i=len;i>0;i--){
-            
-            picDic = (NSMutableDictionary *)[projectsArray objectAtIndex:(i-1)];
-            imgBgView = [[UIView alloc]initWithFrame:CGRectMake(-80*(i-len), 0, 80, 75)];
-            [StringUitl setViewBorder:imgBgView withColor:@"#F5F5F5" Width:0.5];
-            imageView = CGIMAG(15, 15, 50, 30);
-            imageView.userInteractionEnabled = YES;
-            [imageView md_setImageWithURL:[picDic valueForKey:@"imageUrl"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
-            
-            [imgBgView addSubview:imageView];
-            
-            ptitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 35, 80, 40)];
-            ptitle.text = [picDic valueForKey:@"catName"];
-            ptitle.font = main_font(12);
-            ptitle.textColor = [UIColor grayColor];
-            ptitle.textAlignment = NSTextAlignmentCenter;
-            [imgBgView addSubview:ptitle];
-            
-            [photoScroll addSubview:imgBgView];
-            
-            imgbtn = [[UIButton alloc]initWithFrame:CGRectMake(-80*(i-len), 0, 80, 75)];
-            [imgbtn setBackgroundColor:[UIColor clearColor]];
-            imgbtn.tag = [[picDic valueForKey:@"id"] intValue];
-            [imgbtn addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [photoScroll addSubview:imgbtn];
-            
-        }
-        
-    }
-    
-    [filterBgView addSubview:photoScroll];
-    [self.view addSubview:filterBgView];
-    
-}
-
--(void)imgBtnClick:(UIButton *)sender{
-    
-    if([StringUitl checkLogin]==TRUE){
-        //NSLog(@"tag==%d",sender.tag);
-        PeopleFilterProjectController *filterController = (PeopleFilterProjectController *)[self getVCFromSB:@"peopleFilter"];
-        passValelegate = filterController;
-        [passValelegate passValue:[NSString stringWithFormat:@"%d",sender.tag]];
-        [self.navigationController pushViewController:filterController animated:YES];
-        
-    }else{
-        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
-        LoginViewController *loginView = [[LoginViewController alloc] init];
-        [self.navigationController pushViewController:loginView animated:YES];
-    }
-    
-    
-
-}
 
 -(void)setNavgationBar{
     //处理导航开始
@@ -192,7 +89,7 @@
     
     UIButton *cbtn = [[UIButton alloc]initWithFrame:CGRectMake(120, 10, 32, 24)];
     [cbtn setImage:CG_IMG(@"btncategory.png") forState:UIControlStateNormal];
-    [cbtn addTarget:self action:@selector(showFilterView:) forControlEvents:UIControlEventTouchUpInside];
+    [cbtn addTarget:self action:@selector(showSubCllection:) forControlEvents:UIControlEventTouchUpInside];
     [centerView addSubview:cbtn];
     
     //设置右侧按钮
@@ -212,19 +109,41 @@
     
 }
 
--(void)showFilterView:(UIButton *)sender{
+
+//处理二级菜单
+-(void)showSubCllection:(UIButton *)sender{
     
-    [UIView animateWithDuration:0.35 animations:^{
-        NSLog(@"y===%f",filterBgView.frame.origin.x);
-        CGPoint tempCenter = filterBgView.center;
-        if (filterBgView.frame.origin.x == SCREEN_WIDTH) {
-            tempCenter.x -= filterBgView.bounds.size.width;
-        } else {
-            tempCenter.x += filterBgView.bounds.size.width;
+    //动态计算高度
+    NSInteger scut;
+    NSInteger lines;
+    CGFloat viewHeight;
+    if(_subClloectionList!=nil && _subClloectionList.count>0){
+        scut = _subClloectionList.count;
+        if(scut%4==0){
+          lines = (scut/4);
+        }else{
+          lines = (scut/4)+1;
         }
-        filterBgView.center = tempCenter;
+        viewHeight = lines*75+(lines-1)*10;
+        //设置极限高度为400
+        if(viewHeight>400)viewHeight=400;
+//        NSLog(@"scut=%ld",(long)scut);
+//        NSLog(@"lines=%ld",(long)lines);
+//        NSLog(@"viewHeight=%f",viewHeight);
+        [UIView animateWithDuration:0.35 animations:^{
+            CGRect tempFrame = _subClloectionView.frame;
+            if (_subClloectionView.frame.origin.x == SCREEN_WIDTH) {
+                tempFrame.origin.x -= SCREEN_WIDTH;
+            } else {
+                tempFrame.origin.x += SCREEN_WIDTH;
+            }
+            
+            tempFrame.size.height = viewHeight;
+            _subClloectionView.frame = tempFrame;
+            
+        }];
         
-    }];
+    }
     
 }
 
@@ -267,9 +186,6 @@
     [self loadTableList];
     [self loadSliderPic];
     [self initScroll];
-    
-    [filterBgView removeFromSuperview];
-    [self initFilterView];
     
     [self.peopleTableView reloadData];
     
@@ -333,6 +249,9 @@
     
 }
 
+
+
+
 -(void)setTableData{
     [self loadProjectCats];
     [self loadSliderPic];
@@ -369,14 +288,21 @@
              isjson:TRUE
             success:^(AFHTTPRequestOperation *operation, id responseObject)
     {
-        
+        NSDictionary *allDic;
         commonArr = (NSArray *)responseObject;
         if(commonArr!=nil && commonArr.count>0){
             
             switch (type) {
                 case 0:
-                    projectsArray = commonArr;
-                    [self initFilterView];
+                    //projectsArray = commonArr;
+                    //加入全部选项
+                    allDic = @{@"catName":@"全部",@"imageUrl":@"category-all.png",@"id":@"0",@"sortNum":@"0"};
+                    _subClloectionList = [[NSMutableArray alloc]init];
+                    [_subClloectionList addObject:allDic];
+                    [_subClloectionList addObjectsFromArray:commonArr];
+                    //NSLog(@"list==%@",_subClloectionList);
+                    [_subClloectionView reloadData];
+                    //[self initFilterView];
                     break;
                 case 1:
                     sourceArray = [NSMutableArray arrayWithArray:[commonArr valueForKey:@"imgurl"]];
@@ -420,7 +346,7 @@
     NSLog(@"error->%@",error);
     [self initLoading];
     [self showLoading];
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
     
 }
 
@@ -484,15 +410,15 @@
         switch (stateNum) {
             case 1:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart";
+                tagPicName =@"label_nostart_s.png";
                 break;
             case 2:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart";
+                tagPicName =@"label_nostart_s.png";
                 break;
             case 3:
                 stateName = @"筹款中";
-                tagPicName =@"label_fundraising.png";
+                tagPicName =@"label_fundraising_s.png";
                 break;
             case 4:
                 stateName = @"已结束";
@@ -602,6 +528,91 @@
     CGImageRelease(newImageRef);
     
     return newImage;
+}
+
+
+
+
+//定义展示的UICollectionViewCell的个数
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _subClloectionList.count;
+}
+
+
+//定义展示的Section的个数
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    NSDictionary * dicData = [_subClloectionList objectAtIndex:indexPath.row];
+    static NSString * CellIdentifier = @"PeopleSubCell";
+    UINib *nibCell = [UINib nibWithNibName:@"SubCollectionViewCell" bundle:nil];
+    [collectionView registerNib:nibCell forCellWithReuseIdentifier:CellIdentifier];
+    
+    SubCollectionViewCell * peopleSubCell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+    peopleSubCell.backgroundColor = [UIColor whiteColor];
+    
+    if([[dicData valueForKey:@"id"] intValue]==0){
+        [peopleSubCell.imageView setImage:CG_IMG([dicData valueForKey:@"imageUrl"])];
+    }else{
+        [peopleSubCell.imageView md_setImageWithURL:[dicData valueForKey:@"imageUrl"] placeholderImage:NO_IMG options:SDWebImageRefreshCached];
+    }
+    [peopleSubCell.titleView setText:[dicData valueForKey:@"catName"]];
+    
+    return peopleSubCell;
+}
+
+
+#pragma mark --UICollectionViewDelegateFlowLayout
+//定义每个UICollectionView 的大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(70, 70);
+}
+
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(5,5,5,5);
+}
+
+
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
+        
+    if([StringUitl checkLogin]==TRUE){
+        
+        NSDictionary *dicData = [_subClloectionList objectAtIndex:indexPath.row];
+        PeopleFilterProjectController *filterController = (PeopleFilterProjectController *)[self getVCFromSB:@"peopleFilter"];
+        passValelegate = filterController;
+        [passValelegate passValue:[NSString stringWithFormat:@"%d",[[dicData valueForKey:@"id"] intValue]]];
+        [self.navigationController pushViewController:filterController animated:YES];
+        
+    }else{
+        [StringUitl setSessionVal:@"NAV" withKey:FORWARD_TYPE];
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
+    
+}
+
+
+//返回这个UICollectionView是否可以被选择
+-(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
 }
 
 @end

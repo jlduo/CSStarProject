@@ -147,7 +147,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 //传递过来的参数
@@ -190,7 +190,7 @@
 #pragma mark 设置行高
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.row==0){
-        return 395;
+        return 450;
     }else if(indexPath.row==1){
         return 55;
     }else{
@@ -220,15 +220,15 @@
         switch (stateNum) {
             case 1:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart";
+                tagPicName =@"label_nostart_s.png";
                 break;
             case 2:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart";
+                tagPicName =@"label_nostart_s.png";
                 break;
             case 3:
                 stateName = @"筹款中";
-                tagPicName =@"label_fundraising.png";
+                tagPicName =@"label_fundraising_s.png";
                 break;
             case 4:
                 stateName = @"已结束";

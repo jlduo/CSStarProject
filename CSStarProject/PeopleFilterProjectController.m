@@ -245,7 +245,7 @@
     [self setHeaderRereshing];
     [self showLoading];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 
@@ -308,23 +308,23 @@
         switch (stateNum) {
             case 1:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart_s2";
+                tagPicName =@"label_nostart_s";
                 break;
             case 2:
                 stateName = @"未开始";
-                tagPicName =@"label_nostart_s2";
+                tagPicName =@"label_nostart_s";
                 break;
             case 3:
                 stateName = @"筹款中";
-                tagPicName =@"label_fundraising_s2.png";
+                tagPicName =@"label_fundraising_s.png";
                 break;
             case 4:
                 stateName = @"已结束";
-                tagPicName =@"label_fundraising_s2.png";
+                tagPicName =@"label_fundraising_s.png";
                 break;
             default:
                 stateName = @"已失败";
-                tagPicName =@"lable_success_s2.png";
+                tagPicName =@"lable_success_s.png";
                 break;
         }
         

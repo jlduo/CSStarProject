@@ -91,6 +91,7 @@
     AddAddressViewController *addAddressController = (AddAddressViewController *)[self getVCFromSB:@"addAddress"];
     passValelegate = addAddressController;
     [passValelegate passDicValue:param];
+    [StringUitl setSessionVal:FORWARD_TYPE withKey:@"TAB"];
     [self presentViewController:addAddressController animated:YES completion:nil];
     
 }
@@ -130,7 +131,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 

@@ -89,9 +89,19 @@
 }
 
 -(void)goPreviou{
-    [super goPreviou];
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(0.51 * NSEC_PER_SEC)),
+//                   dispatch_get_main_queue(), ^{
+//                       if (![self.presentedViewController isBeingDismissed]) {
+//                           [self clearAddress];
+//                           [self dismissViewControllerAnimated:YES completion:nil];
+//                       }
+//                   });
+    
     [self dismissViewControllerAnimated:YES completion:^{
+        
         [self clearAddress];
+        
     }];
 }
 
@@ -261,7 +271,7 @@
 {
     [self hideHud];
     NSLog(@"error=%@",error);
-    [self showNo:ERROR_INNER];
+    //[self showNo:ERROR_INNER];
 }
 
 -(void)saveAddress{

@@ -28,6 +28,14 @@
     return [emailTest evaluateWithObject:self];
 }
 
+-(BOOL)isValidNum{
+    
+    NSString *numRegex = @"^[1-9]+\\d*$";
+    NSPredicate *numTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", numRegex];
+    return [numTest evaluateWithObject:self];
+    
+}
+
 /* 手机号码验证 MODIFIED BY HELENSONG */
 - (BOOL)isValidPhoneNum
 {

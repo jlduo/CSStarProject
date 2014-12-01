@@ -67,6 +67,8 @@
     [self setImgBtnImage];
     [self setUserTitle];
     
+    [self getMyProjectsNums];
+    
     
 }
 
@@ -121,7 +123,7 @@
 {
     NSLog(@"error=%@",error);
     [self hideHud];
-    [self showNo:@"请求失败,网络错误!"];
+    //[self showNo:@"请求失败,网络错误!"];
 }
 
 -(void)passValue:(NSString *)val{

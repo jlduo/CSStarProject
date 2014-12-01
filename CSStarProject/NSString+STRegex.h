@@ -23,6 +23,9 @@
 /** 车牌号验证 */
 - (BOOL)isValidCarNo;
 
+/** 整数验证 */
+-(BOOL)isValidNum;
+
 /** 网址验证 */
 - (BOOL)isValidUrl;
 
